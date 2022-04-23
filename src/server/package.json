@@ -1,0 +1,39 @@
+{
+  "name": "swipinion-server",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "format": "npx prettier-eslint --write 'src/**/*.ts'",
+    "dev": "npx ts-node-dev src/index.ts --debug",
+    "build": "npx tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-core": "^3.6.7",
+    "apollo-server-fastify": "^3.6.7",
+    "bcrypt": "^5.0.1",
+    "graphql": "^16.3.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "nodemailer": "^6.7.3",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/lodash": "^4.14.182",
+    "@types/node": "^17.0.25",
+    "@types/nodemailer": "^6.4.4",
+    "@types/pg": "^8.6.5",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^8.14.0",
+    "prettier": "^2.6.2",
+    "prettier-eslint": "^14.0.0",
+    "prettier-eslint-cli": "^5.0.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.3"
+  }
+}

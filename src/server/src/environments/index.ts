@@ -11,6 +11,8 @@ export const environment: {
   DB_HOSTNAME: string;
   DB_PORT: number;
   MAIL_SERVICE: string;
+  MAIL_HOST: string;
+  MAIL_PORT: number;
   MAIL_USERNAME: string;
   MAIL_PASSWORD: string;
   ACCESS_TOKEN_EXPIRES_IN: string;
