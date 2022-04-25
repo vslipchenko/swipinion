@@ -1,0 +1,24 @@
+@use 'media';
+
+body {
+  background-color: #263238;
+  color: #fff;
+}
+
+.background-logo {
+  background-image: url('~src/assets/images/swipinion-logo.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+
+  @include media.zero-small {
+    background-size: 15%;
+  }
+
+  @include media.small-huge {
+    background-size: 10%;
+  }
+
+  @include media.above-huge {
+    background-size: 5%;
+  }
+}

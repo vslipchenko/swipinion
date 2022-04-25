@@ -1,0 +1,51 @@
+@use '@angular/material/theming' as mat;
+@use 'sass:map';
+
+/* font */
+$font-size-root: 1rem;
+$font-size-regular-small: 14px; // 1rem for mobile devices
+$font-size-regular: 18px; // 1rem for devices > than mobile
+$font-size-medium: 1.25rem; // 14 - 17.5px, 18 - 22.5px
+$font-size-large: 1.5rem; // 14 - 21px, 18 - 27px
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$mat-error-font-size: 75%;
+
+/* color */
+$color-primary: map.get(mat.$mat-blue, 500); // #2196f3
+$color-accent: map.get(mat.$mat-pink, 500); // #e91e63
+$color-warn: map.get(mat.$mat-orange, 500); // #ff9800
+// $color-error: map.get(mat.$mat-red, 500); // #f44336
+$color-success: #28a745;
+$color-primary-light: #e9f5fe; // which is 0.1 of primary color
+$color-accent-light: #fde9ef; // which is 0.1 of accent color
+$color-success-light: #eaf6ec; // which is 0.1 of success color
+$color-error-light: #feeceb; // which is 0.1 of warn color
+$color-warn-light: #fff9e6; // which is 0.1 of amber color
+
+$color-light: #fff;
+$color-light-darker: #e6e6e6;
+$color-light-dark: #000;
+
+/* base measure unit */
+$unit: 8px;
+$unit-half: $unit * 0.5;
+$unit-2: $unit * 2;
+$unit-3: $unit * 3;
+$unit-4: $unit * 4;
+
+/* responsive breakpoints */
+$breakpoint-small: 568px; // < portrait phones, > landscape phones
+$breakpoint-medium: 768px; // > tablets
+$breakpoint-large: 992px; // > large tablets, laptops, desktops
+$breakpoint-huge: 1200px; // > laptops, desktops
+$unit-interval-px: 1;
+
+/* container */
+$container-max-width: 800px;
+
+/* toolbar */
+$toolbar-height: 60px;
+
+/* profile */
+$profile-image-size: 150px;

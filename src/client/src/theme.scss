@@ -1,0 +1,29 @@
+@use '@angular/material' as mat;
+@use 'variables' as var;
+@include mat.core;
+
+$primary: mat.define-palette(mat.$green-palette, A200);
+$accent: mat.define-palette(mat.$pink-palette);
+$theme: mat.define-dark-theme(
+    (
+      color: (
+        primary: $primary,
+        accent: $accent,
+      ),
+    )
+);
+
+@include mat.all-component-themes($theme);
+
+// https://material.angular.io/guide/typography
+$typography: mat.define-typography-config(
+  $headline: mat.define-typography-level(var.$font-size-large, normal, 500),
+  $title: mat.define-typography-level(var.$font-size-medium, normal, 500),
+  $subheading-2: mat.define-typography-level(var.$font-size-root, normal, 500),
+  $subheading-1: mat.define-typography-level(var.$font-size-root, normal, 500),
+  $body-1: mat.define-typography-level(var.$font-size-root, normal),
+  $body-2: mat.define-typography-level(var.$font-size-root, normal, 500),
+  $button: mat.define-typography-level(var.$font-size-root, normal, 500),
+);
+
+@include mat.core($typography);

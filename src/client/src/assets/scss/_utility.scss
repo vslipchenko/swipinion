@@ -1,0 +1,353 @@
+@use 'variables' as var;
+@use 'media';
+
+.h-100 {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-max {
+  width: max-content;
+}
+
+.d-block {
+  display: block;
+}
+
+/* Flex layout */
+.d-flex {
+  display: flex;
+}
+
+.ai-center {
+  align-items: center;
+}
+
+.jc-center {
+  justify-content: center;
+}
+
+.jc-between {
+  justify-content: space-between;
+}
+
+.jc-evenly {
+  justify-content: space-evenly;
+}
+
+.f-1 {
+  flex: 1;
+}
+
+.f-column {
+  flex-direction: column;
+}
+
+.f-wrap {
+  flex-wrap: wrap;
+}
+
+/* Margin */
+.mt-1 {
+  margin-top: var.$unit;
+}
+
+.mt-2 {
+  margin-top: var.$unit-2;
+}
+
+.mr-h {
+  margin-right: var.$unit-half;
+}
+
+.mr-1 {
+  margin-right: var.$unit;
+}
+
+.mr-2 {
+  margin-right: var.$unit-2;
+}
+
+.mr-2-3 {
+  @include media.zero-small {
+    margin-right: var.$unit-2;
+  }
+
+  @include media.above-small {
+    margin-right: var.$unit-3;
+  }
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-1 {
+  margin-bottom: var.$unit !important;
+}
+
+.mb-2 {
+  margin-bottom: var.$unit-2;
+}
+
+.mb-3 {
+  margin-bottom: var.$unit-3;
+}
+
+.mb-4 {
+  margin-bottom: var.$unit-4 !important; // use of !important might be a breaking issue; check sign-up page
+}
+
+.mb-1-2 {
+  @include media.zero-small {
+    margin-bottom: var.$unit;
+  }
+
+  @include media.above-small {
+    margin-bottom: var.$unit-2;
+  }
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.ml-1 {
+  margin-left: var.$unit;
+}
+
+.ml-2-3 {
+  @include media.zero-small {
+    margin-left: var.$unit-2;
+  }
+
+  @include media.above-small {
+    margin-left: var.$unit-3;
+  }
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mx-2 {
+  margin-left: var.$unit-2;
+  margin-right: var.$unit-2;
+}
+
+/* Padding */
+.p-1 {
+  padding: var.$unit;
+}
+
+.p-2 {
+  padding: var.$unit-2;
+}
+
+.pt-1 {
+  padding-top: var.$unit;
+}
+
+.pt-2 {
+  padding-top: var.$unit-2;
+}
+
+// as mobile-first approach is followed; 1 - for mobile, 2 - for others
+.p-1-2 {
+  @include media.zero-small {
+    padding: var.$unit;
+  }
+
+  @include media.above-small {
+    padding: var.$unit-2;
+  }
+}
+
+.p-2-3 {
+  @include media.zero-small {
+    padding: var.$unit-2;
+  }
+
+  @include media.above-small {
+    padding: var.$unit-3;
+  }
+}
+
+.pt-2-3 {
+  @include media.zero-small {
+    padding-top: var.$unit-2;
+  }
+
+  @include media.above-small {
+    padding-top: var.$unit-3;
+  }
+}
+
+.pb-1 {
+  padding-bottom: var.$unit;
+}
+
+.pb-2-3 {
+  @include media.zero-small {
+    padding-bottom: var.$unit-2;
+  }
+
+  @include media.above-small {
+    padding-bottom: var.$unit-3;
+  }
+}
+
+.px-2 {
+  padding-left: var.$unit-2;
+  padding-right: var.$unit-2;
+}
+
+.px-2-3 {
+  @include media.zero-small {
+    padding-left: var.$unit-2;
+    padding-right: var.$unit-2;
+  }
+
+  @include media.above-small {
+    padding-left: var.$unit-3;
+    padding-right: var.$unit-3;
+  }
+}
+
+.py-2 {
+  padding-bottom: var.$unit-2;
+  padding-top: var.$unit-2;
+}
+
+.fw-medium {
+  font-weight: var.$font-weight-medium;
+}
+
+.fw-bold {
+  font-weight: var.$font-weight-bold;
+}
+
+.fs-italic {
+  font-style: italic;
+}
+
+/* Border */
+.bd-primary-light {
+  border: 4px solid var.$color-primary-light;
+}
+
+.br-h {
+  border-radius: var.$unit-half;
+}
+
+.br-t-0 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+/* Background */
+.bg-primary {
+  background-color: var.$color-primary;
+}
+
+.bg-primary-light {
+  background-color: var.$color-primary-light !important;
+}
+
+.bg-success {
+  background-color: var.$color-success-light;
+}
+
+.bg-accent {
+  background-color: var.$color-accent-light;
+}
+
+.bg-warn {
+  background-color: var.$color-warn-light;
+}
+
+.bg-error {
+  background-color: var.$color-error-light;
+}
+
+.bg-light {
+  background-color: var.$color-light;
+}
+
+.bg-light-fog {
+  // stylelint-disable-next-line
+  background-color: rgba(var.$color-light, 0.8);
+}
+
+/* Color */
+.c-primary {
+  color: var.$color-primary;
+}
+
+.c-accent {
+  color: var.$color-accent;
+}
+
+.c-light {
+  color: var.$color-light;
+}
+
+.c-success {
+  color: var.$color-success;
+}
+
+.c-warn {
+  color: var.$color-warn !important;
+}
+
+/* Box shadow */
+.bs-none {
+  box-shadow: none !important;
+}
+
+/* Text */
+//.capitalize {
+//  text-transform: capitalize;
+//}
+
+.t-center {
+  text-align: center;
+}
+
+.t-left {
+  text-align: left !important;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Cursor */
+.pointer {
+  cursor: pointer;
+}
+
+/* Position */
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+/* Positioning */
+.t-0 {
+  top: 0;
+}
+
+/* Overflow */
+.visible {
+  overflow: visible !important;
+}
