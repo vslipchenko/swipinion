@@ -7,3 +7,11 @@ export const USER_WITH_EMAIL_EXISTS = gql`
     }
   }
 `;
+
+export const USER_WITH_USERNAME_EXISTS = gql`
+  query ($username: String!) {
+    userWithUsernameExists(username: $username) {
+      exists
+    }
+  }
+`;

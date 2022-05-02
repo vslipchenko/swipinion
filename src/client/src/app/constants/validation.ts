@@ -8,3 +8,6 @@ export const PASSWORD_MAX_LENGTH = 50;
 export const PASSWORD_REGEXP = RegExp(
   '^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z!"#$%&\'()\\[\\]*+,./\\\\:;<=>?@^_`{|}~-]*$',
 );
+
+export const USERNAME_REGEXP = /^[a-z\d]+(?:(\.)[a-z\d]+)*$/;
+export const USERNAME_MAX_LENGTH = 30;

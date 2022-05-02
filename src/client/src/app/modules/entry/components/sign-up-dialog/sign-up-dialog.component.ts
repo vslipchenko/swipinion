@@ -2,7 +2,14 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, map, Observable} from 'rxjs';
-import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
+import {
+  EMAIL_REGEXP,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_REGEXP,
+  USERNAME_MAX_LENGTH,
+  USERNAME_REGEXP,
+} from '~app/constants/validation';
 
 @Component({
   selector: 'app-sign-up-component',
@@ -14,8 +21,7 @@ export class SignUpDialogComponent {
   public readonly loading$ = new BehaviorSubject(false);
   private readonly signUpForm = this.signUpFormGroup;
 
-  public constructor(private readonly userService: UserService) {
-  }
+  public constructor(private readonly userService: UserService) {}
 
   public signUp(): void {
     this.signUpForm.markAllAsTouched();
@@ -24,22 +30,96 @@ export class SignUpDialogComponent {
 
     this.loading$.next(true);
 
-    this.userService.create(this.signUpForm.value).pipe(finalize(() => this.loading$.next(false))).subscribe();
+    this.userService
+      .create(this.signUpForm.value)
+      .pipe(finalize(() => this.loading$.next(false)))
+      .subscribe();
+  }
+
+  public usernameErrorMessage(errors: ValidationErrors | null): string | void {
+    if (!errors) return;
+
+    switch (true) {
+      case 'required' in errors:
+        return 'Required field';
+      case 'pattern' in errors:
+        return 'Can contain lowercase letters separated with dot';
+      case 'duplicateUsername' in errors:
+        return 'Username already taken';
+    }
+  }
+
+  public emailErrorMessage(errors: ValidationErrors | null): string | void {
+    if (!errors) return;
+
+    switch (true) {
+      case 'required' in errors:
+        return 'Required field';
+      case 'pattern' in errors:
+        return 'Invalid format';
+      case 'duplicateEmail' in errors:
+        return 'User with such an email already exists';
+    }
+  }
+
+  public passwordErrorMessage(errors: ValidationErrors | null): string | void {
+    if (!errors) return;
+
+    switch (true) {
+      case 'required' in errors:
+        return 'Required';
+      case 'minlength' in errors:
+        return `${PASSWORD_MIN_LENGTH} characters at least`;
+      case 'maxlength' in errors:
+        return `${PASSWORD_MAX_LENGTH} characters at max`;
+      case 'pattern' in errors:
+        return 'Should contain at least one letter and digit. Allowed special characters';
+    }
+  }
+
+  private duplicateUsernameValidator(control: AbstractControl): Observable<null | ValidationErrors> {
+    const email = control.value;
+
+    return this.userService.checkExistenceByEmail(email).pipe(
+      map(({data}) => {
+        return data.userWithEmailExists.exists ? {duplicateEmail: true} : null;
+      }),
+    );
   }
 
   private duplicateEmailValidator(control: AbstractControl): Observable<null | ValidationErrors> {
     const email = control.value;
 
     return this.userService.checkExistenceByEmail(email).pipe(
-      map(({data}: {data: any}) => {
+      map(({data}) => {
         return data.userWithEmailExists.exists ? {duplicateEmail: true} : null;
       }),
     );
   }
 
+  public get username(): FormControl {
+    return this.signUpForm.controls['username'] as FormControl;
+  }
+
+  public get email(): FormControl {
+    return this.signUpForm.controls['email'] as FormControl;
+  }
+
+  public get password(): FormControl {
+    return this.signUpForm.controls['username'] as FormControl;
+  }
+
   private get signUpFormGroup(): FormGroup {
     return new FormGroup({
-      username: new FormControl(null, Validators.required),
+      username: new FormControl(null, {
+        validators: [
+          Validators.required,
+          Validators.pattern(USERNAME_REGEXP),
+          Validators.maxLength(USERNAME_MAX_LENGTH),
+        ],
+        asyncValidators: this.duplicateUsernameValidator.bind(this),
+        updateOn: 'blur', // Make API call on blur
+      }),
       email: new FormControl(null, {
         validators: [Validators.required, Validators.pattern(EMAIL_REGEXP)],
         asyncValidators: this.duplicateEmailValidator.bind(this),

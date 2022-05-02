@@ -15,3 +15,7 @@ export interface CreateUserMutationResult {
 export interface UserWithEmailExistsQueryResult {
   userWithEmailExists: ExistsResponse;
 }
+
+export interface UserWithUsernameExistsQueryResult {
+  userWithUsernameExists: ExistsResponse;
+}

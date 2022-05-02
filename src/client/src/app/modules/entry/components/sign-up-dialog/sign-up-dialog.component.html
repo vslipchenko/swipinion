@@ -6,19 +6,25 @@
     class="d-block"
     extendClass="w-100 mb-0"
     appearance="outline"
-    label="Email"
+    label="Username"
+    [control]="username"
+    [errorMessage]="usernameErrorMessage"
   ></app-input>
   <app-input
     class="d-block"
     extendClass="w-100 mb-0"
     appearance="outline"
-    label="Username"
+    label="Email"
+    [control]="email"
+    [errorMessage]="emailErrorMessage"
   ></app-input>
   <app-input
     class="d-block"
     extendClass="w-100 mb-0"
     appearance="outline"
     label="Password"
+    [control]="password"
+    [errorMessage]="passwordErrorMessage"
   ></app-input>
 </mat-dialog-content>
 <mat-dialog-actions>
