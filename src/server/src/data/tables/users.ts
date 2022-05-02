@@ -1,4 +1,4 @@
-import {Table} from "../../typings/data/data.interfaces";
+import {Table} from '../../typings/data/data.interfaces';
 
 export const UsersTable: Table = {
   name: 'users',
@@ -8,6 +8,7 @@ export const UsersTable: Table = {
       id BIGSERIAL PRIMARY KEY,
       access_key CHAR (24),
       confirmation_key CHAR (36) UNIQUE,
+      username VARCHAR (30) UNIQUE,
       email VARCHAR (254) UNIQUE,
       password CHAR (60),
       language CHAR (2),

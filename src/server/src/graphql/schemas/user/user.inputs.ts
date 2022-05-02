@@ -2,11 +2,12 @@ import {gql} from 'apollo-server-core';
 
 export const userInputs = gql`
   input CreateUser {
+    username: String!
     email: String!
     password: String!
     language: Language!
   }
-  
+
   input RecoverPassword {
     email: String!
     language: Language!

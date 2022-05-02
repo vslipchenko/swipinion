@@ -1,6 +1,7 @@
-import {Translations} from "../typings/i18n/i18n.types";
+import {Translations} from '../typings/i18n/i18n.types';
+import {environment} from '../environments';
 
-export const EMAIL_FROM = '"Swipinion"';
+export const EMAIL_FROM = `"Swipinion" <${environment.MAIL_USERNAME}>`;
 export const EMAIL_CONFIRMATION_SUBJECT: Translations = {
   en: 'Account confirmation',
   ru: 'Регистрация аккаунта',

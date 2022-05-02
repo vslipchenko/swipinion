@@ -7,7 +7,7 @@ export = {
   DB_HOSTNAME: '127.0.0.1',
   DB_PORT: 5432,
   MAIL_HOST: 'smtp.ethereal.email',
-  MAIL_PORT: 465,
+  MAIL_PORT: 587,
   MAIL_USERNAME: 'alek.rolfson32@ethereal.email',
   MAIL_PASSWORD: 'JrsGEMwSXjrMngMeAG',
   ACCESS_TOKEN_EXPIRES_IN: '5m',

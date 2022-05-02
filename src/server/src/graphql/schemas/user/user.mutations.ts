@@ -45,13 +45,11 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
   const accessKey = randomBytes(18).toString('base64'); // Produces string of 24 char length
 
   const result = await db.query(
-    queryUserCreate(
-      {
-        ...input,
-        confirmationKey: randomUUID(),
-        accessKey,
-      },
-    ),
+    queryUserCreate({
+      ...input,
+      confirmationKey: randomUUID(),
+      accessKey,
+    }),
   );
 
   if (!result.rowCount) return {success: false};
@@ -63,7 +61,8 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
       subject: EMAIL_CONFIRMATION_SUBJECT[input.language],
       html: imprint(EMAIL_CONFIRMATION_HTML[input.language], {confirmationKey, appOrigin: environment.APP_ORIGIN}),
     });
-  } catch {
+  } catch (error) {
+    console.log(error);
     await db.query(queryUserDeleteByEmail(input.email));
 
     return {success: false};

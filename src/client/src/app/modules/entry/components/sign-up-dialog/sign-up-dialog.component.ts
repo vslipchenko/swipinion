@@ -8,6 +8,7 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEXP,
   USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
   USERNAME_REGEXP,
 } from '~app/constants/validation';
 
@@ -26,14 +27,23 @@ export class SignUpDialogComponent {
   public signUp(): void {
     this.signUpForm.markAllAsTouched();
 
-    if (!this.signUpForm.valid) return;
+    this.username.updateValueAndValidity();
+    this.email.updateValueAndValidity();
+    this.password.updateValueAndValidity();
 
-    this.loading$.next(true);
+    setTimeout(() => {
+      console.log(this.signUpForm, this.signUpForm.valid, !this.signUpForm.valid);
+      if (!this.signUpForm.valid) return;
 
-    this.userService
-      .create(this.signUpForm.value)
-      .pipe(finalize(() => this.loading$.next(false)))
-      .subscribe();
+      this.loading$.next(true);
+
+      console.log('send');
+
+      this.userService
+        .create({...this.signUpForm.value, language: 'en'})
+        .pipe(finalize(() => this.loading$.next(false)))
+        .subscribe(console.log);
+    });
   }
 
   public usernameErrorMessage(errors: ValidationErrors | null): string | void {
@@ -43,7 +53,11 @@ export class SignUpDialogComponent {
       case 'required' in errors:
         return 'Required field';
       case 'pattern' in errors:
-        return 'Can contain lowercase letters separated with dot';
+        return 'Should contain lowercase letters (separated with dot)';
+      case 'minlength' in errors:
+        return `${USERNAME_MIN_LENGTH} characters at least`;
+      case 'maxlength' in errors:
+        return `${USERNAME_MAX_LENGTH} characters at max`;
       case 'duplicateUsername' in errors:
         return 'Username already taken';
     }
@@ -78,11 +92,11 @@ export class SignUpDialogComponent {
   }
 
   private duplicateUsernameValidator(control: AbstractControl): Observable<null | ValidationErrors> {
-    const email = control.value;
+    const username = control.value;
 
-    return this.userService.checkExistenceByEmail(email).pipe(
+    return this.userService.checkExistenceByUsername(username).pipe(
       map(({data}) => {
-        return data.userWithEmailExists.exists ? {duplicateEmail: true} : null;
+        return data.userWithUsernameExists.exists ? {duplicateUsername: true} : null;
       }),
     );
   }
@@ -106,7 +120,7 @@ export class SignUpDialogComponent {
   }
 
   public get password(): FormControl {
-    return this.signUpForm.controls['username'] as FormControl;
+    return this.signUpForm.controls['password'] as FormControl;
   }
 
   private get signUpFormGroup(): FormGroup {
@@ -115,6 +129,7 @@ export class SignUpDialogComponent {
         validators: [
           Validators.required,
           Validators.pattern(USERNAME_REGEXP),
+          Validators.minLength(USERNAME_MIN_LENGTH),
           Validators.maxLength(USERNAME_MAX_LENGTH),
         ],
         asyncValidators: this.duplicateUsernameValidator.bind(this),

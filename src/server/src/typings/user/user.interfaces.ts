@@ -1,6 +1,7 @@
-import {Language} from "../i18n/i18n.types";
+import {Language} from '../i18n/i18n.types';
 
 export interface CreateUser {
+  username: string;
   email: string;
   password: string;
   language: Language;

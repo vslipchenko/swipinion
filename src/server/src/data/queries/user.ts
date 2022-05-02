@@ -1,4 +1,6 @@
 import {QueryConfig} from 'pg';
+import {Language} from '../../typings/i18n/i18n.types';
+import {CreateUser} from '../../typings/user/user.interfaces';
 
 export const queryUserCheckExistenceByEmail = (email: string): QueryConfig => ({
   text: `
@@ -9,13 +11,28 @@ export const queryUserCheckExistenceByEmail = (email: string): QueryConfig => ({
   values: [email],
 });
 
-export const queryUserCreate = (email: any): QueryConfig => ({ // TODO
+export const queryUserCheckExistenceByUsername = (username: string): QueryConfig => ({
   text: `
     SELECT 1
     FROM users
-    WHERE email = $1
+    WHERE username = $1
   `,
-  values: [email],
+  values: [username],
+});
+
+export const queryUserCreate = ({
+  username,
+  email,
+  password,
+  accessKey,
+  confirmationKey,
+  language,
+}: CreateUser & {accessKey: string; confirmationKey: string; language: Language}): QueryConfig => ({
+  text: `
+    INSERT INTO users (username, email, password, access_key, confirmation_key, language)
+      VALUES ($1, $2, $3, $4, $5, $6)
+  `,
+  values: [username, email, password, accessKey, confirmationKey, language],
 });
 
 export const queryUserDeleteByEmail = (email: string): QueryConfig => ({
