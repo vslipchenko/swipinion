@@ -1,3 +1,11 @@
+@use 'media';
+
 .brand-logo {
   width: 36px;
+}
+
+.brand-name {
+  @include media.zero-small {
+    display: none;
+  }
 }

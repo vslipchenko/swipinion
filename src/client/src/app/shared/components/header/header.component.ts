@@ -1,4 +1,6 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {SignUpDialogComponent} from '~app/modules/entry/components/sign-up-dialog/sign-up-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -6,11 +8,12 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  public constructor(private readonly dialog: MatDialog) {
   }
 
+  public signUp(): void {
+    this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+  }
 }

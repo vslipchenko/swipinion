@@ -1,0 +1,9 @@
+@use 'variables' as var;
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+.mat-dialog-container {
+  background-color: var.$color-background-dark;
+}

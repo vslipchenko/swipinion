@@ -3,10 +3,15 @@ import {CommonModule} from '@angular/common';
 import {EntryComponent} from './entry.component';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '~app/shared/shared.module';
+import {SignInDialogComponent} from './components/sign-in-dialog/sign-in-dialog.component';
+import {SignUpDialogComponent} from './components/sign-up-dialog/sign-up-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     EntryComponent,
+    SignInDialogComponent,
+    SignUpDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -17,6 +22,7 @@ import {SharedModule} from '~app/shared/shared.module';
       },
     ]),
     SharedModule,
+    MatDialogModule,
   ],
 })
 export class EntryModule {

@@ -1,0 +1,21 @@
+@use 'variables' as var;
+@use 'media';
+
+.dialog {
+  @include media.zero-small {
+    max-width: initial !important;
+    width: 100%;
+  }
+}
+
+.mat-dialog-container {
+  @include media.zero-small {
+    border-radius: 0 !important;
+  }
+}
+
+.extended-dialog {
+  @include media.above-small {
+    min-width: 500px;
+  }
+}

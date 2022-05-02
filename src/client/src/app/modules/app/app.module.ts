@@ -4,6 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import {RouterModule} from '@angular/router';
 import {AppRoutingModule} from '~app/modules/app/app-routing.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {GraphQLModule} from '~app/graphql/graphql.module';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -11,6 +14,9 @@ import {AppRoutingModule} from '~app/modules/app/app-routing.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    GraphQLModule,
+    HttpClientModule,
     RouterModule,
     AppRoutingModule
   ],

@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api: {
+    host: 'localhost',
+    // host: 'df94-37-54-90-139.ngrok.io',
+    port: 4000,
+  },
 };
 
 /*

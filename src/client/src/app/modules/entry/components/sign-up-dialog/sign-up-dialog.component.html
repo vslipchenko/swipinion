@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Sign up</h2>
+<mat-dialog-content class="visible relative">
+<!--  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-light-fog"></app-progress-spinner>-->
+
+  <app-input
+    class="d-block"
+    extendClass="w-100 mb-0"
+    appearance="outline"
+    label="Email"
+  ></app-input>
+  <app-input
+    class="d-block"
+    extendClass="w-100 mb-0"
+    appearance="outline"
+    label="Username"
+  ></app-input>
+  <app-input
+    class="d-block"
+    extendClass="w-100 mb-0"
+    appearance="outline"
+    label="Password"
+  ></app-input>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button color="primary" text="Sign up" (clicked)="signUp()"></app-button>
+</mat-dialog-actions>
