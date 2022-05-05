@@ -1,0 +1,9 @@
+@use 'variables' as var;
+
+.snackbar-success {
+  border-top: 5px solid var.$color-primary;
+}
+
+.snackbar-error {
+  border-top: 5px solid var.$color-warn;
+}

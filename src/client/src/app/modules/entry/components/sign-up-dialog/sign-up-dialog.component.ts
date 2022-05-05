@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, map, Observable} from 'rxjs';
@@ -11,6 +11,7 @@ import {
   USERNAME_MIN_LENGTH,
   USERNAME_REGEXP,
 } from '~app/constants/validation';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-up-component',
@@ -19,10 +20,12 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpDialogComponent {
+  @Output() public readonly signedUp = new EventEmitter();
+
   public readonly loading$ = new BehaviorSubject(false);
   private readonly signUpForm = this.signUpFormGroup;
 
-  public constructor(private readonly userService: UserService) {}
+  public constructor(private readonly userService: UserService, private readonly snackbar: MatSnackBar) {}
 
   public signUp(): void {
     this.signUpForm.markAllAsTouched();
@@ -31,19 +34,7 @@ export class SignUpDialogComponent {
     this.email.updateValueAndValidity();
     this.password.updateValueAndValidity();
 
-    setTimeout(() => {
-      console.log(this.signUpForm, this.signUpForm.valid, !this.signUpForm.valid);
-      if (!this.signUpForm.valid) return;
-
-      this.loading$.next(true);
-
-      console.log('send');
-
-      this.userService
-        .create({...this.signUpForm.value, language: 'en'})
-        .pipe(finalize(() => this.loading$.next(false)))
-        .subscribe(console.log);
-    });
+    setTimeout(this.createUser.bind(this));
   }
 
   public usernameErrorMessage(errors: ValidationErrors | null): string | void {
@@ -109,6 +100,28 @@ export class SignUpDialogComponent {
         return data.userWithEmailExists.exists ? {duplicateEmail: true} : null;
       }),
     );
+  }
+
+  private createUser(): void {
+    if (!this.signUpForm.valid) return;
+
+    this.loading$.next(true);
+
+    this.userService
+      .create({...this.signUpForm.value, language: 'en'})
+      .pipe(finalize(() => this.loading$.next(false)))
+      .subscribe(
+        ({data}) => {
+          if (!data?.createUser.success) return;
+          this.snackbar.open('Success! Please follow confirmation link that was sent to the email', 'OK', {
+            panelClass: 'snackbar-success',
+          });
+          this.signedUp.emit();
+        },
+        () => {
+          this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
+        },
+      );
   }
 
   public get username(): FormControl {

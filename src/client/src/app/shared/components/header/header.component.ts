@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {SignUpDialogComponent} from '~app/modules/entry/components/sign-up-dialog/sign-up-dialog.component';
+import {takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -9,11 +10,11 @@ import {SignUpDialogComponent} from '~app/modules/entry/components/sign-up-dialo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-
-  public constructor(private readonly dialog: MatDialog) {
-  }
+  public constructor(private readonly dialog: MatDialog) {}
 
   public signUp(): void {
-    this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    const dialog = this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+
+    dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe(dialog.close.bind(this));
   }
 }
