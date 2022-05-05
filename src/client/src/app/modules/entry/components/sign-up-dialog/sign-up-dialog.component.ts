@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {BehaviorSubject, finalize, map, Observable} from 'rxjs';
+import {BehaviorSubject, finalize, map, Observable, Subject, takeUntil} from 'rxjs';
 import {
   EMAIL_REGEXP,
   PASSWORD_MAX_LENGTH,
@@ -12,6 +12,7 @@ import {
   USERNAME_REGEXP,
 } from '~app/constants/validation';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-sign-up-component',
@@ -19,13 +20,20 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['./sign-up-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignUpDialogComponent {
+export class SignUpDialogComponent implements Destroyable {
   @Output() public readonly signedUp = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
+  public readonly destroy$ = new Subject<void>();
   private readonly signUpForm = this.signUpFormGroup;
 
   public constructor(private readonly userService: UserService, private readonly snackbar: MatSnackBar) {}
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.loading$.complete();
+  }
 
   public signUp(): void {
     this.signUpForm.markAllAsTouched();
@@ -108,8 +116,11 @@ export class SignUpDialogComponent {
     this.loading$.next(true);
 
     this.userService
-      .create({...this.signUpForm.value, language: 'en'})
-      .pipe(finalize(() => this.loading$.next(false)))
+      .create({...this.signUpForm.value, language: 'en'}) // TODO replace with generic language value
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.loading$.next(false)),
+      )
       .subscribe(
         ({data}) => {
           if (!data?.createUser.success) return;

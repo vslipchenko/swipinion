@@ -1,1 +1,31 @@
-<p>sign-in-dialog works!</p>
+<h2 mat-dialog-title>Sign in</h2>
+<mat-dialog-content class="visible relative">
+  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
+
+  <app-input
+    type="email"
+    appearance="outline"
+    label="Email"
+    extendClass="w-100"
+    [control]="email"
+    [errorMessage]="errorMessage"
+  ></app-input>
+  <app-input
+    #input
+    type="password"
+    appearance="outline"
+    label="Пароль"
+    extendClass="w-100"
+    [suffix]="suffix"
+    [control]="password"
+    [errorMessage]="errorMessage"
+  >
+    <ng-template #suffix>
+      <app-input-hide-suffix [input]="input"></app-input-hide-suffix>
+    </ng-template>
+  </app-input>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button color="primary" text="Sign in" (clicked)="signIn()"></app-button>
+</mat-dialog-actions>
