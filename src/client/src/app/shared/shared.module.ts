@@ -12,6 +12,8 @@ import {InputHideSuffixComponent} from './components/input/suffixes/input-hide-s
 import {MatIconModule} from '@angular/material/icon';
 import {ProgressSpinnerComponent} from './components/progress-spinner/progress-spinner.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {CheckboxComponent} from './components/checkbox/checkbox.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     InputComponent,
     InputHideSuffixComponent,
     ProgressSpinnerComponent,
+    CheckboxComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +33,15 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
   ],
-  exports: [HeaderComponent, ButtonComponent, InputComponent, InputHideSuffixComponent, ProgressSpinnerComponent],
+  exports: [
+    HeaderComponent,
+    ButtonComponent,
+    InputComponent,
+    InputHideSuffixComponent,
+    ProgressSpinnerComponent,
+    CheckboxComponent,
+  ],
 })
 export class SharedModule {}

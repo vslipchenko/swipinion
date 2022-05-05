@@ -24,6 +24,11 @@
       <app-input-hide-suffix [input]="input"></app-input-hide-suffix>
     </ng-template>
   </app-input>
+
+  <div class="d-flex jc-between f-wrap">
+    <app-checkbox class="mb-1 mr-1" [control]="rememberMe" label="Remember me"></app-checkbox>
+    <a routerLink="/recovery" class="action-text">Forgot password ?</a>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <app-button mat-dialog-close text="Cancel"></app-button>
