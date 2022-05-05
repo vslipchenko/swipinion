@@ -59,3 +59,21 @@ export const queryUserResetPassword = (email: string, password: string): QueryCo
   `,
   values: [password, email],
 });
+
+export const queryUserSignIn = (email: string): QueryConfig => ({
+  text: `
+    SELECT id, password, access_key, confirmation_key, language
+    FROM users
+    WHERE email = $1
+  `,
+  values: [email],
+});
+
+export const queryUserRefreshAccessToken = (userId: string): QueryConfig => ({
+  text: `
+    SELECT access_key, tariff, language, paid_at
+    FROM users
+    WHERE id = $1
+  `,
+  values: [userId],
+});
