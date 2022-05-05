@@ -20,6 +20,6 @@ export class HeaderComponent {
   public signUp(): void {
     const dialog = this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 
-    dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe(dialog.close.bind(this));
+    dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe(() => dialog.close());
   }
 }
