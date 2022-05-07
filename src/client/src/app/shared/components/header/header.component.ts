@@ -5,6 +5,7 @@ import {of, Subject, takeUntil} from 'rxjs';
 import {SignInDialogComponent} from '~app/modules/entry/components/sign-in-dialog/sign-in-dialog.component';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {RecoveryDialogComponent} from '~app/modules/entry/components/recovery-dialog/recovery-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 export class HeaderComponent implements OnInit, Destroyable {
   @Input() public showSignIn = of<void>();
   @Input() public showSignUp = of<void>();
+  @Input() public showPasswordRecovery = of<void>();
 
   public readonly destroy$ = new Subject<void>();
 
@@ -30,6 +32,11 @@ export class HeaderComponent implements OnInit, Destroyable {
       // console.log('SIGN IN');
       this.signUp();
     });
+
+    this.showPasswordRecovery.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      // console.log('SIGN IN');
+      this.recoverPassword();
+    });
   }
 
   public ngOnDestroy(): void {
@@ -37,10 +44,25 @@ export class HeaderComponent implements OnInit, Destroyable {
     this.destroy$.complete();
   }
 
+  public recoverPassword(): void {
+    this.location.go('/recovery');
+
+    const dialog = this.dialog.open(RecoveryDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+
+    dialog.componentInstance.emailSent.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
+      dialog.close();
+    });
+  }
+
   public signIn(): void {
     this.location.go('/sign-in');
 
-    this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+
+    dialog.componentInstance.recover.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
+      dialog.close();
+      this.recoverPassword();
+    });
   }
 
   public signUp(): void {
@@ -50,4 +72,8 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe(() => dialog.close());
   }
+
+  // private resetLocation(): void {
+  //   this.location.go('/');
+  // }
 }

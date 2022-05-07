@@ -28,6 +28,13 @@ const routes: Routes = [
     },
   },
   {
+    path: 'recovery',
+    ...entryModule,
+    data: {
+      path: 'recovery',
+    },
+  },
+  {
     path: '**',
     loadChildren: (): Promise<typeof PageNotFoundModule> =>
       import('~app/modules/page-not-found/page-not-found.module').then((m) => m.PageNotFoundModule),

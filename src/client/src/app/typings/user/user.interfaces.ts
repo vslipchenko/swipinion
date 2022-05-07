@@ -19,3 +19,12 @@ export interface UserWithEmailExistsQueryResult {
 export interface UserWithUsernameExistsQueryResult {
   userWithUsernameExists: ExistsResponse;
 }
+
+export interface RecoverPassword {
+  email: string;
+  language: Language;
+}
+
+export interface RecoverPasswordMutationResult {
+  recoverPassword: SuccessResponse;
+}

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
@@ -15,6 +15,8 @@ import {SignInFailReason} from '~app/typings/authentication/authentication.enums
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInDialogComponent implements Destroyable {
+  @Output() public readonly recover = new EventEmitter();
+
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public readonly rememberMe = new FormControl(false);
@@ -22,8 +24,7 @@ export class SignInDialogComponent implements Destroyable {
 
   public constructor(
     private readonly authenticationService: AuthenticationService,
-    private readonly snackbar: MatSnackBar,
-    // private readonly router: Router,
+    private readonly snackbar: MatSnackBar, // private readonly router: Router,
   ) {}
 
   public ngOnDestroy(): void {
@@ -52,11 +53,12 @@ export class SignInDialogComponent implements Destroyable {
           return this.snackbar.open(
             'Account is not activated. Please follow confirmation link sent to your email',
             'OK',
+            {panelClass: 'snackbar-error'},
           );
         }
 
         if (data.signIn.reason === SignInFailReason.Blocked) {
-          return this.snackbar.open('Account is blocked', 'OK');
+          return this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
         }
 
         this.authenticationService.resetTokens(); // Clear active session
@@ -84,7 +86,9 @@ export class SignInDialogComponent implements Destroyable {
   }
 
   private showErrorSnackbar(): void {
-    this.snackbar.open('Something went wrong. ...', 'OK', {panelClass: 'snackbar-error'});
+    this.snackbar.open('Something went wrong. Check data correctness or try again later', 'OK', {
+      panelClass: 'snackbar-error',
+    });
   }
 
   public get email(): FormControl {

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecoveryComponent } from './recovery.component';
+import { RecoveryDialogComponent } from './recovery-dialog.component';
 
-describe('RecoveryComponent', () => {
-  let component: RecoveryComponent;
-  let fixture: ComponentFixture<RecoveryComponent>;
+describe('RecoveryDialogComponent', () => {
+  let component: RecoveryDialogComponent;
+  let fixture: ComponentFixture<RecoveryDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecoveryComponent ]
+      declarations: [ RecoveryDialogComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RecoveryComponent);
+    fixture = TestBed.createComponent(RecoveryDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

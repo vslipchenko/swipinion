@@ -12,6 +12,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 export class EntryComponent implements OnInit, Destroyable {
   public readonly signIn$ = new ReplaySubject<void>(1);
   public readonly signUp$ = new ReplaySubject<void>(1);
+  public readonly recover$ = new ReplaySubject<void>(1);
   public readonly destroy$ = new Subject<void>();
 
   public constructor(private readonly activatedRoute: ActivatedRoute) {}
@@ -20,6 +21,7 @@ export class EntryComponent implements OnInit, Destroyable {
     this.activatedRoute.data.pipe(first(), takeUntil(this.destroy$)).subscribe((data) => {
       if (data['path'] === 'sign-in') this.signIn$.next();
       if (data['path'] === 'sign-up') this.signUp$.next();
+      if (data['path'] === 'recovery') this.recover$.next();
     });
   }
 

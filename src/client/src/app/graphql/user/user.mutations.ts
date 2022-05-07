@@ -16,13 +16,13 @@ export const CREATE_USER = gql`
 //   }
 // `;
 //
-// export const RECOVER_PASSWORD = gql`
-//   mutation ($input: RecoverPassword!) {
-//     recoverPassword(input: $input) {
-//       success
-//     }
-//   }
-// `;
+export const RECOVER_PASSWORD = gql`
+  mutation ($input: RecoverPassword!) {
+    recoverPassword(input: $input) {
+      success
+    }
+  }
+`;
 //
 // export const RESET_PASSWORD = gql`
 //   mutation ($input: ResetPassword!) {

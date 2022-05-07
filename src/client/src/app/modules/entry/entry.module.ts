@@ -7,9 +7,10 @@ import {SignInDialogComponent} from './components/sign-in-dialog/sign-in-dialog.
 import {SignUpDialogComponent} from './components/sign-up-dialog/sign-up-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { RecoveryDialogComponent } from './components/recovery-dialog/recovery-dialog.component';
 
 @NgModule({
-  declarations: [EntryComponent, SignInDialogComponent, SignUpDialogComponent],
+  declarations: [EntryComponent, SignInDialogComponent, SignUpDialogComponent, RecoveryDialogComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([

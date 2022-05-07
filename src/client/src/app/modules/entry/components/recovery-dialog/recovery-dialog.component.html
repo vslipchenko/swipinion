@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Password recovery</h2>
+<mat-dialog-content class="visible relative py-2">
+  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
+
+  <app-input
+    type="email"
+    [control]="email"
+    appearance="outline"
+    label="Email"
+    [hint]="hint"
+    [errorMessage]="errorMessage"
+    extendClass="w-100"
+  >
+    <ng-template #hint>Confirmation email will be sent to this address</ng-template>
+  </app-input>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button color="primary" text="Recover" (clicked)="recover()"></app-button>
+</mat-dialog-actions>

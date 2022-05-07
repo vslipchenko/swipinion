@@ -27,7 +27,7 @@
 
   <div class="d-flex jc-between f-wrap">
     <app-checkbox class="mb-2 mr-1" [control]="rememberMe" label="Remember me"></app-checkbox>
-    <a routerLink="/recovery" class="action-text">Forgot password ?</a>
+    <p class="action-text" (click)="recover.emit()"> Forgot password ?</p>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
