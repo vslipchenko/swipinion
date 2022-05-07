@@ -1,28 +1,18 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-
 import {AppComponent} from './app.component';
 import {RouterModule} from '@angular/router';
 import {AppRoutingModule} from '~app/modules/app/app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GraphQLModule} from '~app/graphql/graphql.module';
 import {HttpClientModule} from '@angular/common/http';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {catchError, Observable, of, tap} from 'rxjs';
 import {AuthenticationInterceptorProvider} from '~app/interceptors/authentication/authentication.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    GraphQLModule,
-    HttpClientModule,
-    RouterModule,
-    AppRoutingModule,
-    MatSnackBarModule,
-  ],
+  imports: [BrowserModule, BrowserAnimationsModule, GraphQLModule, HttpClientModule, RouterModule, AppRoutingModule],
   providers: [
     AuthenticationInterceptorProvider,
     {

@@ -282,6 +282,10 @@
   background-color: rgba(var.$color-background-dark, 0.8);
 }
 
+.bg-dark {
+  background-color: var.$color-background-dark;
+}
+
 //.bg-light-fog {
 //  // stylelint-disable-next-line
 //  background-color: rgba(var.$color-light, 0.8);
@@ -338,6 +342,10 @@
 }
 
 /* Position */
+.absolute {
+  position: absolute;
+}
+
 .relative {
   position: relative;
 }

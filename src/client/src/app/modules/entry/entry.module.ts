@@ -6,13 +6,10 @@ import {SharedModule} from '~app/shared/shared.module';
 import {SignInDialogComponent} from './components/sign-in-dialog/sign-in-dialog.component';
 import {SignUpDialogComponent} from './components/sign-up-dialog/sign-up-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
-  declarations: [
-    EntryComponent,
-    SignInDialogComponent,
-    SignUpDialogComponent,
-  ],
+  declarations: [EntryComponent, SignInDialogComponent, SignUpDialogComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -23,7 +20,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     ]),
     SharedModule,
     MatDialogModule,
+    MatSnackBarModule,
   ],
 })
-export class EntryModule {
-}
+export class EntryModule {}

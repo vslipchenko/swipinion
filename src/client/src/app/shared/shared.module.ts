@@ -14,6 +14,7 @@ import {ProgressSpinnerComponent} from './components/progress-spinner/progress-s
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {CheckboxComponent} from './components/checkbox/checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatIconModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    RouterModule,
   ],
   exports: [
     HeaderComponent,
