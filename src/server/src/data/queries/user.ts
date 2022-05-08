@@ -71,7 +71,7 @@ export const queryUserSignIn = (email: string): QueryConfig => ({
 
 export const queryUserRefreshAccessToken = (userId: string): QueryConfig => ({
   text: `
-    SELECT access_key, tariff, language, paid_at
+    SELECT access_key, language
     FROM users
     WHERE id = $1
   `,
