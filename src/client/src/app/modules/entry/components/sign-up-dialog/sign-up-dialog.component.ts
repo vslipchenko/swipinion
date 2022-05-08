@@ -81,7 +81,7 @@ export class SignUpDialogComponent implements Destroyable {
 
     switch (true) {
       case 'required' in errors:
-        return 'Required';
+        return 'Required field';
       case 'minlength' in errors:
         return `${PASSWORD_MIN_LENGTH} characters at least`;
       case 'maxlength' in errors:
@@ -125,7 +125,7 @@ export class SignUpDialogComponent implements Destroyable {
       .subscribe(
         ({data}) => {
           if (!data?.createUser.success) return;
-          this.snackbar.open('Success! Please follow confirmation link that was sent to the email', 'OK', {
+          this.snackbar.open('Success! Please follow confirmation link that has been sent to the email', 'OK', {
             panelClass: 'snackbar-success',
           });
           this.signedUp.emit(this.email.value);

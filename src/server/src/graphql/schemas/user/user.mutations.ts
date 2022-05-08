@@ -1,14 +1,20 @@
 import {randomBytes} from 'crypto';
 import {gql} from 'apollo-server-core';
-import {CreateUser, RecoverPassword, ResetPassword} from '../../../typings/user/user.interfaces';
+import {CreateUser, RecoverPassword, ResetPassword, SetNewPassword} from '../../../typings/user/user.interfaces';
 import {hashSync} from 'bcrypt';
 import {db} from '../../../data';
-import {userCodeValidator, createUserValidator, recoverPasswordValidator} from '../../../validators/user';
+import {
+  userCodeValidator,
+  createUserValidator,
+  recoverPasswordValidator,
+  setNewPasswordValidator,
+} from '../../../validators/user';
 import {mailer} from '../../../utilities/mail';
 import {
   queryUserConfirmEmail,
   queryUserCreate,
   queryUserDeleteByEmail,
+  queryUserRecoverPassword,
   queryUserResetPassword,
   queryUserResetRecoveryCode,
   queryUserSetRecoveryCodeByEmail,
@@ -32,6 +38,7 @@ export const userMutationTypeDefinitions = gql`
     confirmEmail(input: UserCode!): Success
     recoverPassword(input: RecoverPassword!): Success
     resetPassword(input: ResetPassword!): Success
+    setNewPassword(input: SetNewPassword!): Success
   }
 `;
 
@@ -138,11 +145,27 @@ const resetPassword = async (_: unknown, {input}: {input: ResetPassword}): Promi
   }
 };
 
+const setNewPassword = async (_: unknown, {input}: {input: SetNewPassword}): Promise<{success: boolean} | null> => {
+  // Validate key with the use of jwt lib instead
+  const {error} = setNewPasswordValidator.validate(input);
+
+  if (error) return null;
+
+  input.password = hashSync(input.password, 10);
+
+  const result = await db.query(queryUserRecoverPassword(input));
+
+  if (!result.rowCount) return {success: false};
+
+  return {success: true};
+};
+
 export const userMutationResolvers = {
   Mutation: {
     createUser,
     confirmEmail,
     recoverPassword,
     resetPassword,
+    setNewPassword,
   },
 };

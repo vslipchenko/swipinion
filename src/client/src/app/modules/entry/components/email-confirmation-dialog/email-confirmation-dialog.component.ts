@@ -40,10 +40,14 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   }
 
   public confirm(): void {
+    if (!this.code.valid) return;
+
     const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
 
     const validCode = CODE_REGEXP.test(this.code.value);
     const validEmail = EMAIL_REGEXP.test(email);
+
+    console.log(validEmail, validCode);
 
     if (!(validCode && validEmail)) return this.showErrorSnackbar();
 
@@ -59,7 +63,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
         ({data}) => {
           if (!data?.confirmEmail.success) return this.showErrorSnackbar();
 
-          this.snackbar.open('Email successfully confirmed. You can now sign in into account', 'OK', {
+          this.snackbar.open('Email successfully confirmed. You can now sign in to your account', 'OK', {
             panelClass: 'snackbar-success',
           });
 

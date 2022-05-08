@@ -25,6 +25,12 @@ export interface RecoverPassword {
   language: Language;
 }
 
+export interface SetNewPassword {
+  email: string;
+  code: string;
+  password: string;
+}
+
 // export interface VerifyRecoveryCode {
 //   email: string;
 //   code: string;
@@ -32,6 +38,10 @@ export interface RecoverPassword {
 
 export interface RecoverPasswordMutationResult {
   recoverPassword: SuccessResponse;
+}
+
+export interface SetNewPasswordMutationResult {
+  setNewPassword: SuccessResponse;
 }
 
 export interface UserWithRecoveryCodeExistsQueryResult {

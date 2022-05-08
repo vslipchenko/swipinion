@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
-import {CONFIRM_EMAIL, CREATE_USER, RECOVER_PASSWORD} from '~app/graphql/user/user.mutations';
+import {CONFIRM_EMAIL, CREATE_USER, RECOVER_PASSWORD, SET_NEW_PASSWORD} from '~app/graphql/user/user.mutations';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
   USER_WITH_EMAIL_EXISTS,
@@ -18,6 +18,8 @@ import {
   UserWithEmailExistsQueryResult,
   UserWithRecoveryCodeExistsQueryResult,
   UserWithUsernameExistsQueryResult,
+  SetNewPassword,
+  SetNewPasswordMutationResult,
 } from '~app/typings/user/user.interfaces';
 
 @Injectable({
@@ -55,9 +57,18 @@ export class UserService {
     });
   }
 
-  public checkRecoveryCodeExistenceByEmail(input: UserCode): Observable<MutationResult<UserWithRecoveryCodeExistsQueryResult>> {
+  public checkRecoveryCodeExistenceByEmail(
+    input: UserCode,
+  ): Observable<MutationResult<UserWithRecoveryCodeExistsQueryResult>> {
     return this.apollo.mutate<UserWithRecoveryCodeExistsQueryResult>({
       mutation: USER_WITH_RECOVERY_CODE_EXISTS,
+      variables: {input},
+    });
+  }
+
+  public setNewPassword(input: SetNewPassword): Observable<MutationResult<SetNewPasswordMutationResult>> {
+    return this.apollo.mutate<SetNewPasswordMutationResult>({
+      mutation: SET_NEW_PASSWORD,
       variables: {input},
     });
   }

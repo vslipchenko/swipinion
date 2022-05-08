@@ -1,6 +1,6 @@
 import {QueryConfig} from 'pg';
 import {Language} from '../../typings/i18n/i18n.types';
-import {CreateUser} from '../../typings/user/user.interfaces';
+import {CreateUser, SetNewPassword} from '../../typings/user/user.interfaces';
 
 export const queryUserCheckExistenceByEmail = (email: string): QueryConfig => ({
   text: `
@@ -18,6 +18,15 @@ export const queryUserWithRecoveryCodeByEmail = (email: string, code: string): Q
     WHERE email = $1 AND recovery_code = $2
   `,
   values: [email, code],
+});
+
+export const queryUserRecoverPassword = ({password, email, code}: SetNewPassword): QueryConfig => ({
+  text: `
+    UPDATE users
+    SET recovery_code = NULL, password = $1
+    WHERE email = $2 AND recovery_code = $3
+  `,
+  values: [password, email, code],
 });
 
 export const queryUserSetRecoveryCodeByEmail = (code: string, email: string): QueryConfig => ({

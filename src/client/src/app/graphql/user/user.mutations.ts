@@ -9,7 +9,7 @@ export const CREATE_USER = gql`
 `;
 
 export const CONFIRM_EMAIL = gql`
-  mutation ($input: ConfirmEmail!) {
+  mutation ($input: UserCode!) {
     confirmEmail(input: $input) {
       success
     }
@@ -19,6 +19,14 @@ export const CONFIRM_EMAIL = gql`
 export const RECOVER_PASSWORD = gql`
   mutation ($input: RecoverPassword!) {
     recoverPassword(input: $input) {
+      success
+    }
+  }
+`;
+
+export const SET_NEW_PASSWORD = gql`
+  mutation ($input: SetNewPassword!) {
+    setNewPassword(input: $input) {
       success
     }
   }

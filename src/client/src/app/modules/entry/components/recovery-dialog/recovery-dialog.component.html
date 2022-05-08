@@ -33,21 +33,33 @@
 
   <ng-container *ngIf="(recoverStage$ | async) === recoveryStage.NewPassword">
     <app-input
-      [control]="password"
+      #passwordInput
+      extendClass="w-100"
       appearance="outline"
       label="New password"
-      [errorMessage]="errorMessage"
-      extendClass="w-100"
+      type="password"
+      [control]="password"
+      [errorMessage]="passwordErrorMessage"
+      [suffix]="passwordSuffix"
     >
+      <ng-template #passwordSuffix>
+        <app-input-hide-suffix [input]="passwordInput"></app-input-hide-suffix>
+      </ng-template>
     </app-input>
 
     <app-input
-      [control]="repeatPassword"
+      #repeatPasswordInput
+      extendClass="w-100"
       appearance="outline"
       label="Repeat password"
-      [errorMessage]="errorMessage"
-      extendClass="w-100"
+      type="password"
+      [control]="repeatPassword"
+      [errorMessage]="repeatPasswordErrorMessage"
+      [suffix]="repeatPasswordSuffix"
     >
+      <ng-template #repeatPasswordSuffix>
+        <app-input-hide-suffix [input]="repeatPasswordInput"></app-input-hide-suffix>
+      </ng-template>
     </app-input>
   </ng-container>
 </mat-dialog-content>

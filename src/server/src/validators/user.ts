@@ -16,3 +16,9 @@ export const recoverPasswordValidator = Joi.object({
   email: emailValidator,
   language: languageValidator,
 });
+
+export const setNewPasswordValidator = Joi.object({
+  email: emailValidator,
+  code: codeValidator,
+  password: passwordValidator,
+});

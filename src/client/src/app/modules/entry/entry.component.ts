@@ -21,9 +21,9 @@ export class EntryComponent implements OnInit, Destroyable {
   public ngOnInit(): void {
     this.activatedRoute.data.pipe(first(), takeUntil(this.destroy$)).subscribe((data) => {
       if (data['path'] === 'sign-in') this.signIn$.next();
-      if (data['path'] === 'sign-up') this.signUp$.next();
-      if (data['path'] === 'recovery') this.recover$.next();
-      if (data['path'] === 'confirmation') this.confirm$.next();
+      else if (data['path'] === 'sign-up') this.signUp$.next();
+      else if (data['path'] === 'recovery') this.recover$.next();
+      else if (data['path'] === 'confirmation') this.confirm$.next();
     });
   }
 

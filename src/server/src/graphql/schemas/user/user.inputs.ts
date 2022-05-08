@@ -22,4 +22,10 @@ export const userInputs = gql`
     password: String!
     key: String!
   }
+
+  input SetNewPassword {
+    email: String!
+    password: String!
+    code: String!
+  }
 `;
