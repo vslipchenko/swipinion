@@ -28,3 +28,12 @@ export interface RecoverPassword {
 export interface RecoverPasswordMutationResult {
   recoverPassword: SuccessResponse;
 }
+
+export interface ConfirmEmail {
+  email: string;
+  code: string;
+}
+
+export interface ConfirmEmailMutationResult {
+  confirmEmail: SuccessResponse;
+}

@@ -8,13 +8,13 @@ export const CREATE_USER = gql`
   }
 `;
 
-// export const CONFIRM_ACCOUNT = gql`
-//   mutation ($key: String!) {
-//     confirmAccount(key: $key) {
-//       success
-//     }
-//   }
-// `;
+export const CONFIRM_EMAIL = gql`
+  mutation ($input: ConfirmEmail!) {
+    confirmEmail(input: $input) {
+      success
+    }
+  }
+`;
 //
 export const RECOVER_PASSWORD = gql`
   mutation ($input: RecoverPassword!) {

@@ -1,13 +1,13 @@
-import {randomBytes, randomUUID} from 'crypto';
+import {randomBytes} from 'crypto';
 import {gql} from 'apollo-server-core';
 import {CreateUser, RecoverPassword, ResetPassword} from '../../../typings/user/user.interfaces';
 import {hashSync} from 'bcrypt';
 import {db} from '../../../data';
-import {confirmationKeyValidator, createUserValidator, recoverPasswordValidator} from '../../../validators/user';
+import {confirmEmailValidator, createUserValidator, recoverPasswordValidator} from '../../../validators/user';
 import {mailer} from '../../../utilities/mail';
 import {
   queryUserCheckExistenceByEmail,
-  queryUserConfirmAccount,
+  queryUserConfirmEmail,
   queryUserCreate,
   queryUserDeleteByEmail,
   queryUserResetPassword,
@@ -28,7 +28,7 @@ import {passwordValidator} from '../../../validators/shared';
 export const userMutationTypeDefinitions = gql`
   type Mutation {
     createUser(input: CreateUser!): Success
-    confirmAccount(key: String!): Success
+    confirmEmail(input: ConfirmEmail!): Success
     recoverPassword(input: RecoverPassword!): Success
     resetPassword(input: ResetPassword!): Success
   }
@@ -41,13 +41,15 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
 
   input.password = hashSync(input.password, 10);
 
-  const confirmationKey = randomUUID();
+  // const confirmationCode = randomUUID();
+  const confirmationCode = randomBytes(3).toString('hex').toUpperCase();
   const accessKey = randomBytes(18).toString('base64'); // Produces string of 24 char length
 
   const result = await db.query(
     queryUserCreate({
       ...input,
-      confirmationKey: randomUUID(),
+      // confirmationCode: randomUUID(),
+      confirmationCode,
       accessKey,
     }),
   );
@@ -59,7 +61,7 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
       from: EMAIL_FROM,
       to: input.email,
       subject: EMAIL_CONFIRMATION_SUBJECT[input.language],
-      html: imprint(EMAIL_CONFIRMATION_HTML[input.language], {confirmationKey, appOrigin: environment.APP_ORIGIN}),
+      html: imprint(EMAIL_CONFIRMATION_HTML[input.language], {confirmationCode, appOrigin: environment.APP_ORIGIN}),
     });
   } catch (error) {
     console.log(error);
@@ -71,12 +73,15 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
   return {success: true};
 };
 
-const confirmAccount = async (_: unknown, {key}: {key: string}): Promise<{success: boolean} | null> => {
-  const {error} = confirmationKeyValidator.validate(key);
+const confirmEmail = async (
+  _: unknown,
+  {input}: {input: {email: string; code: string}},
+): Promise<{success: boolean} | null> => {
+  const {error} = confirmEmailValidator.validate(input);
 
   if (error) return null;
 
-  const result = await db.query(queryUserConfirmAccount(key));
+  const result = await db.query(queryUserConfirmEmail(input.email, input.code.toUpperCase()));
 
   return {success: Boolean(result.rowCount)};
 };
@@ -131,7 +136,7 @@ const resetPassword = async (_: unknown, {input}: {input: ResetPassword}): Promi
 export const userMutationResolvers = {
   Mutation: {
     createUser,
-    confirmAccount,
+    confirmEmail,
     recoverPassword,
     resetPassword,
   },

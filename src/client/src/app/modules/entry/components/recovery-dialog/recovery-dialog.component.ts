@@ -37,7 +37,7 @@ export class RecoveryDialogComponent implements Destroyable {
   public recover(): void {
     if (!this.email.valid) return;
 
-    if (!EMAIL_REGEXP.test(this.email.value)) return this.showErrorMessage();
+    if (!EMAIL_REGEXP.test(this.email.value)) return this.showErrorSnackbar();
 
     this.loading$.next(true);
 
@@ -49,16 +49,19 @@ export class RecoveryDialogComponent implements Destroyable {
           this.loading$.next(false);
         }),
       )
-      .subscribe(({data}) => {
-        if (!data?.recoverPassword.success) return this.showErrorMessage();
+      .subscribe(
+        ({data}) => {
+          if (!data?.recoverPassword.success) return this.showErrorSnackbar();
 
-        this.snackbar.open('Confirmation email was sent', 'OK', {panelClass: 'snackbar-success'});
+          this.snackbar.open('Confirmation email was sent', 'OK', {panelClass: 'snackbar-success'});
 
-        this.emailSent.emit();
-      });
+          this.emailSent.emit();
+        },
+        () => this.showErrorSnackbar(),
+      );
   }
 
-  private showErrorMessage(): void {
+  private showErrorSnackbar(): void {
     this.snackbar.open('Something went wrong. Please check email correctness or try again later', 'OK', {
       panelClass: 'snackbar-error',
     });

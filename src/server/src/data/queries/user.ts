@@ -25,14 +25,14 @@ export const queryUserCreate = ({
   email,
   password,
   accessKey,
-  confirmationKey,
+  confirmationCode,
   language,
-}: CreateUser & {accessKey: string; confirmationKey: string; language: Language}): QueryConfig => ({
+}: CreateUser & {accessKey: string; confirmationCode: string; language: Language}): QueryConfig => ({
   text: `
-    INSERT INTO users (username, email, password, access_key, confirmation_key, language)
+    INSERT INTO users (username, email, password, access_key, confirmation_code, language)
       VALUES ($1, $2, $3, $4, $5, $6)
   `,
-  values: [username, email, password, accessKey, confirmationKey, language],
+  values: [username, email, password, accessKey, confirmationCode, language],
 });
 
 export const queryUserDeleteByEmail = (email: string): QueryConfig => ({
@@ -42,13 +42,13 @@ export const queryUserDeleteByEmail = (email: string): QueryConfig => ({
   values: [email],
 });
 
-export const queryUserConfirmAccount = (key: string): QueryConfig => ({
+export const queryUserConfirmEmail = (email: string, code: string): QueryConfig => ({
   text: `
     UPDATE users
-    SET confirmation_key = NULL
-    WHERE confirmation_key = $1
+    SET confirmation_code = NULL
+    WHERE email = $1 AND confirmation_code = $2
   `,
-  values: [key],
+  values: [email, code],
 });
 
 export const queryUserResetPassword = (email: string, password: string): QueryConfig => ({
@@ -62,7 +62,7 @@ export const queryUserResetPassword = (email: string, password: string): QueryCo
 
 export const queryUserSignIn = (email: string): QueryConfig => ({
   text: `
-    SELECT id, password, access_key, confirmation_key, language
+    SELECT id, password, access_key, confirmation_code, language
     FROM users
     WHERE email = $1
   `,

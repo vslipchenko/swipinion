@@ -10,9 +10,11 @@ export const PASSWORD_REGEXP = RegExp(
 );
 
 // See https://github.com/uuidjs/uuid/blob/main/src/regex.js
-export const UUID_REGEXP =
-  /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+// export const UUID_REGEXP =
+//   /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
 
 export const USERNAME_REGEXP = /^[a-z\d]+(?:(\.)[a-z\d]+)*$/;
 export const USERNAME_MIN_LENGTH = 2;
 export const USERNAME_MAX_LENGTH = 30;
+
+export const EMAIL_CONFIRMATION_CODE_REGEXP = /^[0-9a-fA-F]{6}$/;

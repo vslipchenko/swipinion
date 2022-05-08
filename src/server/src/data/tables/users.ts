@@ -7,7 +7,7 @@ export const UsersTable: Table = {
     CREATE TABLE IF NOT EXISTS users (
       id BIGSERIAL PRIMARY KEY,
       access_key CHAR (24),
-      confirmation_key CHAR (36) UNIQUE,
+      confirmation_code CHAR (6),
       username VARCHAR (30) UNIQUE,
       email VARCHAR (254) UNIQUE,
       password CHAR (60),

@@ -35,6 +35,13 @@ const routes: Routes = [
     },
   },
   {
+    path: 'confirmation',
+    ...entryModule,
+    data: {
+      path: 'confirmation',
+    },
+  },
+  {
     path: '**',
     loadChildren: (): Promise<typeof PageNotFoundModule> =>
       import('~app/modules/page-not-found/page-not-found.module').then((m) => m.PageNotFoundModule),

@@ -1,8 +1,11 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
+import {EMAIL_CONFIRMATION_CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {UserService} from '~app/services/user/user.service';
 
 @Component({
   selector: 'app-email-confirmation-dialog',
@@ -11,11 +14,17 @@ import {BehaviorSubject, Subject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailConfirmationDialogComponent implements Destroyable {
+  @Output() public readonly emailConfirmed = new EventEmitter();
+
   public readonly code = new FormControl('', Validators.required);
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
-  public constructor(private readonly activatedRoute: ActivatedRoute) {}
+  public constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly snackbar: MatSnackBar,
+    private readonly userService: UserService,
+  ) {}
 
   public ngOnDestroy(): void {
     this.destroy$.next();
@@ -31,5 +40,37 @@ export class EmailConfirmationDialogComponent implements Destroyable {
 
   public confirm(): void {
     const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
+
+    const validCode = EMAIL_CONFIRMATION_CODE_REGEXP.test(this.code.value);
+    const validEmail = EMAIL_REGEXP.test(email);
+
+    if (!(validCode && validEmail)) return this.showErrorSnackbar();
+
+    this.loading$.next(true);
+
+    this.userService
+      .confirmEmail({email, code: this.code.value})
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.loading$.next(false)),
+      )
+      .subscribe(
+        ({data}) => {
+          if (!data?.confirmEmail.success) return this.showErrorSnackbar();
+
+          this.snackbar.open('Email successfully confirmed. You can now sign in into account', 'OK', {
+            panelClass: 'snackbar-success',
+          });
+
+          this.emailConfirmed.emit();
+        },
+        () => this.showErrorSnackbar(),
+      );
+  }
+
+  private showErrorSnackbar(): void {
+    this.snackbar.open('Something went wrong. Please check code correctness or try again later', 'OK', {
+      panelClass: 'snackbar-error',
+    });
   }
 }

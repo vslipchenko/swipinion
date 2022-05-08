@@ -8,9 +8,10 @@ import {SignUpDialogComponent} from './components/sign-up-dialog/sign-up-dialog.
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { RecoveryDialogComponent } from './components/recovery-dialog/recovery-dialog.component';
+import { EmailConfirmationDialogComponent } from './components/email-confirmation-dialog/email-confirmation-dialog.component';
 
 @NgModule({
-  declarations: [EntryComponent, SignInDialogComponent, SignUpDialogComponent, RecoveryDialogComponent],
+  declarations: [EntryComponent, SignInDialogComponent, SignUpDialogComponent, RecoveryDialogComponent, EmailConfirmationDialogComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([

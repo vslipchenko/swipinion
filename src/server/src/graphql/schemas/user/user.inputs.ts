@@ -8,6 +8,11 @@ export const userInputs = gql`
     language: Language!
   }
 
+  input ConfirmEmail {
+    email: String!
+    code: String!
+  }
+
   input RecoverPassword {
     email: String!
     language: Language!

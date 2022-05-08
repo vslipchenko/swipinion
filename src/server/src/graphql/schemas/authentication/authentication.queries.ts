@@ -28,7 +28,7 @@ const signIn = async (
   const result = await db.query<{
     id: string;
     access_key: string;
-    confirmation_key: string;
+    confirmation_code: string;
     password: string;
     language: Language;
   }>(queryUserSignIn(input.email));
@@ -39,7 +39,7 @@ const signIn = async (
 
   if (!row.access_key) return {reason: SignInFailReason.Blocked};
 
-  if (row.confirmation_key) return {reason: SignInFailReason.Unconfirmed};
+  if (row.confirmation_code) return {reason: SignInFailReason.Unconfirmed};
 
   const correctPassword = compareSync(input.password, row.password);
 

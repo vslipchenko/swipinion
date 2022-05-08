@@ -46,27 +46,30 @@ export class SignInDialogComponent implements Destroyable {
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
       )
-      .subscribe(({data}) => {
-        if (!data.signIn) return this.showErrorSnackbar();
+      .subscribe(
+        ({data}) => {
+          if (!data.signIn) return this.showErrorSnackbar();
 
-        if (data.signIn.reason === SignInFailReason.Unconfirmed) {
-          return this.snackbar.open(
-            'Account is not activated. Please follow confirmation link sent to your email',
-            'OK',
-            {panelClass: 'snackbar-error'},
-          );
-        }
+          if (data.signIn.reason === SignInFailReason.Unconfirmed) {
+            return this.snackbar.open(
+              'Account is not activated. Please follow confirmation link sent to your email',
+              'OK',
+              {panelClass: 'snackbar-error'},
+            );
+          }
 
-        if (data.signIn.reason === SignInFailReason.Blocked) {
-          return this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
-        }
+          if (data.signIn.reason === SignInFailReason.Blocked) {
+            return this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
+          }
 
-        this.authenticationService.resetTokens(); // Clear active session
+          this.authenticationService.resetTokens(); // Clear active session
 
-        this.authenticationService.accessToken = data.signIn.accessToken;
-        this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
-        // void this.router.navigate(['/profile']);
-      });
+          this.authenticationService.accessToken = data.signIn.accessToken;
+          this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
+          // void this.router.navigate(['/profile']);
+        },
+        () => this.showErrorSnackbar(),
+      );
   }
 
   public errorMessage(errors: ValidationErrors | null): string | void {

@@ -21,7 +21,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpDialogComponent implements Destroyable {
-  @Output() public readonly signedUp = new EventEmitter();
+  @Output() public readonly signedUp = new EventEmitter<string>();
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
@@ -127,7 +127,7 @@ export class SignUpDialogComponent implements Destroyable {
           this.snackbar.open('Success! Please follow confirmation link that was sent to the email', 'OK', {
             panelClass: 'snackbar-success',
           });
-          this.signedUp.emit();
+          this.signedUp.emit(this.email.value);
         },
         () => {
           this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
