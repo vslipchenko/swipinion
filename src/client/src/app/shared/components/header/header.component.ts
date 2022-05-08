@@ -1,13 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {SignUpDialogComponent} from '~app/modules/entry/components/sign-up-dialog/sign-up-dialog.component';
-import {of, Subject, takeUntil} from 'rxjs';
+import {merge, of, Subject, takeUntil} from 'rxjs';
 import {SignInDialogComponent} from '~app/modules/entry/components/sign-in-dialog/sign-in-dialog.component';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {RecoveryDialogComponent} from '~app/modules/entry/components/recovery-dialog/recovery-dialog.component';
 import {EmailConfirmationDialogComponent} from '~app/modules/entry/components/email-confirmation-dialog/email-confirmation-dialog.component';
-import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -23,32 +22,28 @@ export class HeaderComponent implements OnInit, Destroyable {
 
   public readonly destroy$ = new Subject<void>();
 
-  public constructor(
-    private readonly dialog: MatDialog,
-    private readonly location: Location,
-    private readonly activatedRoute: ActivatedRoute,
-  ) {}
+  public constructor(private readonly dialog: MatDialog, private readonly location: Location) {}
 
   public ngOnInit(): void {
     this.showSignIn.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // console.log('SIGN IN');
-      this.signIn();
+      this.signIn(false);
     });
 
     this.showSignUp.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // console.log('SIGN IN');
-      this.signUp();
+      this.signUp(false);
     });
 
     this.showPasswordRecovery.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // console.log('SIGN IN');
-      this.recoverPassword();
+      this.recoverPassword(false);
     });
 
     this.showEmailConfirmation.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // console.log('SIGN IN');
-      const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
-      this.confirmEmail(email);
+      // const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
+      this.confirmEmail(false);
     });
   }
 
@@ -57,50 +52,66 @@ export class HeaderComponent implements OnInit, Destroyable {
     this.destroy$.complete();
   }
 
-  public signIn(): void {
-    this.location.go('/sign-in');
+  public signIn(changeLocation: boolean): void {
+    if (changeLocation) this.location.go('/sign-in');
 
     const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 
     dialog.componentInstance.recover.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.recoverPassword();
+      this.recoverPassword(true);
     });
+
+    this.listenDialogCancel(dialog);
   }
 
-  public signUp(): void {
-    this.location.go('/sign-up');
+  public signUp(changeLocation: boolean): void {
+    if (changeLocation) this.location.go('/sign-up');
 
     const dialog = this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 
     dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe((email) => {
       dialog.close();
-      this.confirmEmail(email);
+      this.confirmEmail(true, email);
     });
+
+    this.listenDialogCancel(dialog);
   }
 
-  private confirmEmail(email: string): void {
-    this.location.go('/confirmation', `email=${encodeURI(email)}`);
+  private confirmEmail(changeLocation: boolean, email = ''): void {
+    if (changeLocation) this.location.go('/confirmation', `email=${encodeURI(email)}`);
 
     const dialog = this.dialog.open(EmailConfirmationDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 
     dialog.componentInstance.emailConfirmed.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.signIn(); // TODO pass & set email as well
+      this.signIn(true); // TODO pass & set email as well
     });
+
+    this.listenDialogCancel(dialog);
   }
 
-  private recoverPassword(): void {
-    this.location.go('/recovery');
+  private recoverPassword(changeLocation: boolean): void {
+    if (changeLocation) this.location.go('/recovery');
 
     const dialog = this.dialog.open(RecoveryDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 
     dialog.componentInstance.emailSent.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
     });
+
+    this.listenDialogCancel(dialog);
   }
 
-  // private resetLocation(): void {
-  //   this.location.go('/');
-  // }
+  private listenDialogCancel(dialog: MatDialogRef<any>): void {
+    merge(dialog.backdropClick(), dialog.componentInstance.cancel)
+      .pipe(takeUntil(dialog.afterClosed()))
+      .subscribe(() => {
+        this.resetLocation();
+      });
+  }
+
+  private resetLocation(): void {
+    this.location.go('/');
+  }
 }

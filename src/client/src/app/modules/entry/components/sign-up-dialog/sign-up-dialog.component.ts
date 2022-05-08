@@ -22,6 +22,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 })
 export class SignUpDialogComponent implements Destroyable {
   @Output() public readonly signedUp = new EventEmitter<string>();
+  @Output() public readonly cancel = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();

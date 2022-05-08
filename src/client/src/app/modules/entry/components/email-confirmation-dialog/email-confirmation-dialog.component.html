@@ -17,6 +17,6 @@
   </app-input>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
   <app-button color="primary" text="Confirm" (clicked)="confirm()"></app-button>
 </mat-dialog-actions>

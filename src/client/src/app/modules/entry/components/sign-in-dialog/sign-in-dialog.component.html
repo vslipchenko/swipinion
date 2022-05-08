@@ -31,6 +31,6 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
   <app-button color="primary" text="Sign in" (clicked)="signIn()"></app-button>
 </mat-dialog-actions>

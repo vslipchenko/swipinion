@@ -15,6 +15,7 @@ import {Language} from '~app/typings/i18n/i18n.types';
 })
 export class RecoveryDialogComponent implements Destroyable {
   @Output() public readonly emailSent = new EventEmitter();
+  @Output() public readonly cancel = new EventEmitter();
 
   public readonly email = new FormControl(null, Validators.required);
   public readonly loading$ = new BehaviorSubject(false);

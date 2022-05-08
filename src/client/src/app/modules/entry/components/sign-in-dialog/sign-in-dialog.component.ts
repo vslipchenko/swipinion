@@ -16,6 +16,7 @@ import {SignInFailReason} from '~app/typings/authentication/authentication.enums
 })
 export class SignInDialogComponent implements Destroyable {
   @Output() public readonly recover = new EventEmitter();
+  @Output() public readonly cancel = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();

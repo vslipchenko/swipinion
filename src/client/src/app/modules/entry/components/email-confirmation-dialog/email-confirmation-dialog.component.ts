@@ -15,6 +15,7 @@ import {UserService} from '~app/services/user/user.service';
 })
 export class EmailConfirmationDialogComponent implements Destroyable {
   @Output() public readonly emailConfirmed = new EventEmitter();
+  @Output() public readonly cancel = new EventEmitter();
 
   public readonly code = new FormControl('', Validators.required);
   public readonly loading$ = new BehaviorSubject(false);

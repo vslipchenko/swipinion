@@ -8,7 +8,7 @@ export const EMAIL_CONFIRMATION_SUBJECT: Translations = {
 };
 export const EMAIL_CONFIRMATION_HTML: Translations = {
   // en: 'Please follow the <a href="{{appOrigin}}/#/confirmation?key={{confirmationCode}}">link</a> in order to activate account.',
-  en: 'Email confirmation code: {{confirmationCode}}. Please enter this code in order to finish sign up process.',
+  en: 'Email confirmation code: {{confirmationCode}}. Please enter this code in order to finish sign up process. Make use of sign in if you accidentally closed code input window.',
   //ru: 'Для активации аккаунта, пожалуйста, перейдите по <a href="{{appOrigin}}/#/confirmation?key={{confirmationCode}}">ссылке</a>.',
 };
 
