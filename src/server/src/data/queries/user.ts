@@ -11,6 +11,33 @@ export const queryUserCheckExistenceByEmail = (email: string): QueryConfig => ({
   values: [email],
 });
 
+export const queryUserWithRecoveryCodeByEmail = (email: string, code: string): QueryConfig => ({
+  text: `
+    SELECT 1
+    FROM users
+    WHERE email = $1 AND recovery_code = $2
+  `,
+  values: [email, code],
+});
+
+export const queryUserSetRecoveryCodeByEmail = (code: string, email: string): QueryConfig => ({
+  text: `
+    UPDATE users
+    SET recovery_code = $1
+    WHERE email = $2
+  `,
+  values: [code, email],
+});
+
+export const queryUserResetRecoveryCode = (email: string): QueryConfig => ({
+  text: `
+    UPDATE users
+    SET recovery_code = NULL
+    WHERE email = $1
+  `,
+  values: [email],
+});
+
 export const queryUserCheckExistenceByUsername = (username: string): QueryConfig => ({
   text: `
     SELECT 1

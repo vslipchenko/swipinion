@@ -3,15 +3,20 @@ import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {CONFIRM_EMAIL, CREATE_USER, RECOVER_PASSWORD} from '~app/graphql/user/user.mutations';
 import {ApolloQueryResult} from '@apollo/client/core';
-import {USER_WITH_EMAIL_EXISTS, USER_WITH_USERNAME_EXISTS} from '~app/graphql/user/user.queries';
 import {
-  ConfirmEmail,
+  USER_WITH_EMAIL_EXISTS,
+  USER_WITH_RECOVERY_CODE_EXISTS,
+  USER_WITH_USERNAME_EXISTS,
+} from '~app/graphql/user/user.queries';
+import {
+  UserCode,
   ConfirmEmailMutationResult,
   CreateUser,
   CreateUserMutationResult,
   RecoverPassword,
   RecoverPasswordMutationResult,
   UserWithEmailExistsQueryResult,
+  UserWithRecoveryCodeExistsQueryResult,
   UserWithUsernameExistsQueryResult,
 } from '~app/typings/user/user.interfaces';
 
@@ -50,7 +55,14 @@ export class UserService {
     });
   }
 
-  public confirmEmail(input: ConfirmEmail): Observable<MutationResult<ConfirmEmailMutationResult>> {
+  public checkRecoveryCodeExistenceByEmail(input: UserCode): Observable<MutationResult<UserWithRecoveryCodeExistsQueryResult>> {
+    return this.apollo.mutate<UserWithRecoveryCodeExistsQueryResult>({
+      mutation: USER_WITH_RECOVERY_CODE_EXISTS,
+      variables: {input},
+    });
+  }
+
+  public confirmEmail(input: UserCode): Observable<MutationResult<ConfirmEmailMutationResult>> {
     return this.apollo.mutate<ConfirmEmailMutationResult>({
       mutation: CONFIRM_EMAIL,
       variables: {input},

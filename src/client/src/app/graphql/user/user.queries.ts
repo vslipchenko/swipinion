@@ -15,3 +15,11 @@ export const USER_WITH_USERNAME_EXISTS = gql`
     }
   }
 `;
+
+export const USER_WITH_RECOVERY_CODE_EXISTS = gql`
+  query ($input: UserCode!) {
+    userWithRecoveryCodeExists(input: $input) {
+      exists
+    }
+  }
+`;

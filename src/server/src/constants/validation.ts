@@ -17,4 +17,4 @@ export const USERNAME_REGEXP = /^[a-z\d]+(?:(\.)[a-z\d]+)*$/;
 export const USERNAME_MIN_LENGTH = 2;
 export const USERNAME_MAX_LENGTH = 30;
 
-export const EMAIL_CONFIRMATION_CODE_REGEXP = /^[0-9a-fA-F]{6}$/;
+export const CODE_REGEXP = /^[0-9a-fA-F]{6}$/;

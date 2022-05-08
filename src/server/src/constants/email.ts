@@ -17,6 +17,6 @@ export const PASSWORD_RECOVERY_SUBJECT: Translations = {
   //ru: 'Восстановление пароля',
 };
 export const PASSWORD_RECOVERY_HTML: Translations = {
-  en: 'Please follow the <a href="{{appOrigin}}/#/reset?key={{resetKey}}">link</a> (lasts for 30 minutes). If you have not used password recovery, please ignore this message.',
+  en: 'Password recovery code: {{recoveryCode}}. If you have not used password recovery, please ignore this message.',
   //ru: 'Для восстановления пароля, пожалуйста, перейдите по <a href="{{appOrigin}}/#/reset?key={{resetKey}}">ссылке</a> (действительна в течение 30 минут). Если вы не совершали никаких действий по восстановлению пароля, проигнорируйте данное сообщение.',
 };

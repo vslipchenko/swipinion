@@ -1,10 +1,9 @@
 import Joi from 'joi';
-import {emailValidator, languageValidator, passwordValidator, usernameValidator} from './shared';
-import {EMAIL_CONFIRMATION_CODE_REGEXP} from '../constants/validation';
+import {codeValidator, emailValidator, languageValidator, passwordValidator, usernameValidator} from './shared';
 
-export const confirmEmailValidator = Joi.object({
+export const userCodeValidator = Joi.object({
   email: emailValidator,
-  code: Joi.string().pattern(EMAIL_CONFIRMATION_CODE_REGEXP),
+  code: codeValidator,
 });
 export const createUserValidator = Joi.object({
   username: usernameValidator,

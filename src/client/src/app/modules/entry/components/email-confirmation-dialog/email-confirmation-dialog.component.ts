@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
-import {EMAIL_CONFIRMATION_CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
+import {CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '~app/services/user/user.service';
 
@@ -42,7 +42,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   public confirm(): void {
     const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
 
-    const validCode = EMAIL_CONFIRMATION_CODE_REGEXP.test(this.code.value);
+    const validCode = CODE_REGEXP.test(this.code.value);
     const validEmail = EMAIL_REGEXP.test(email);
 
     if (!(validCode && validEmail)) return this.showErrorSnackbar();

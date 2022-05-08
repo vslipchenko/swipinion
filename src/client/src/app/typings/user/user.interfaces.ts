@@ -25,11 +25,20 @@ export interface RecoverPassword {
   language: Language;
 }
 
+// export interface VerifyRecoveryCode {
+//   email: string;
+//   code: string;
+// }
+
 export interface RecoverPasswordMutationResult {
   recoverPassword: SuccessResponse;
 }
 
-export interface ConfirmEmail {
+export interface UserWithRecoveryCodeExistsQueryResult {
+  userWithRecoveryCodeExists: ExistsResponse;
+}
+
+export interface UserCode {
   email: string;
   code: string;
 }

@@ -43,3 +43,7 @@ body {
   width: max-content;
   height: max-content;
 }
+
+.cdk-overlay-backdrop {
+  z-index: 999 !important; // Let snackbar render above dialog's overlay
+}

@@ -3,6 +3,7 @@
   <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
 
   <app-input
+    *ngIf="(recoverStage$ | async) === recoveryStage.Email"
     type="email"
     [control]="email"
     appearance="outline"
@@ -13,8 +14,46 @@
   >
     <ng-template #hint>Confirmation email will be sent to this address</ng-template>
   </app-input>
+
+  <app-input
+    *ngIf="(recoverStage$ | async) === recoveryStage.Code"
+    class="d-block mb-1"
+    extendClass="w-100"
+    appearance="outline"
+    label="Code"
+    maxlength="6"
+    [control]="code"
+    [errorMessage]="errorMessage"
+    [hint]="hint"
+  >
+    <ng-template #hint>
+      Confirmation code received by the email
+    </ng-template>
+  </app-input>
+
+  <ng-container *ngIf="(recoverStage$ | async) === recoveryStage.NewPassword">
+    <app-input
+      [control]="password"
+      appearance="outline"
+      label="New password"
+      [errorMessage]="errorMessage"
+      extendClass="w-100"
+    >
+    </app-input>
+
+    <app-input
+      [control]="repeatPassword"
+      appearance="outline"
+      label="Repeat password"
+      [errorMessage]="errorMessage"
+      extendClass="w-100"
+    >
+    </app-input>
+  </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions>
   <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
-  <app-button color="primary" text="Recover" (clicked)="recover()"></app-button>
+  <app-button *ngIf="(recoverStage$ | async) === recoveryStage.Email" color="primary" text="Next" (clicked)="recover()"></app-button>
+  <app-button *ngIf="(recoverStage$ | async) === recoveryStage.Code" color="primary" text="Next" (clicked)="verifyCode()"></app-button>
+  <app-button *ngIf="(recoverStage$ | async) === recoveryStage.NewPassword" color="primary" text="Save" (clicked)="setNewPassword()"></app-button>
 </mat-dialog-actions>

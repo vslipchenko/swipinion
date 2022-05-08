@@ -8,7 +8,7 @@ export const userInputs = gql`
     language: Language!
   }
 
-  input ConfirmEmail {
+  input UserCode {
     email: String!
     code: String!
   }
