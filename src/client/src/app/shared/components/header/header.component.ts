@@ -1,12 +1,13 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {SignUpDialogComponent} from '~app/modules/entry/components/sign-up-dialog/sign-up-dialog.component';
-import {merge, of, Subject, takeUntil} from 'rxjs';
+import {merge, Observable, of, Subject, takeUntil} from 'rxjs';
 import {SignInDialogComponent} from '~app/modules/entry/components/sign-in-dialog/sign-in-dialog.component';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {RecoveryDialogComponent} from '~app/modules/entry/components/recovery-dialog/recovery-dialog.component';
 import {EmailConfirmationDialogComponent} from '~app/modules/entry/components/email-confirmation-dialog/email-confirmation-dialog.component';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -21,11 +22,15 @@ export class HeaderComponent implements OnInit, Destroyable {
   @Input() public showEmailConfirmation = of<void>();
 
   public readonly destroy$ = new Subject<void>();
+  public readonly authenticated$: Observable<boolean>;
 
   public constructor(
     private readonly dialog: MatDialog,
     private readonly location: Location,
-  ) {}
+    private readonly authenticationService: AuthenticationService,
+  ) {
+    this.authenticated$ = this.authenticationService.authenticated$;
+  }
 
   public ngOnInit(): void {
     this.showSignIn.pipe(takeUntil(this.destroy$)).subscribe(() => {

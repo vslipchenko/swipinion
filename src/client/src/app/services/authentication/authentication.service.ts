@@ -6,7 +6,7 @@ import {
   SignIn,
   SignInQueryResult,
 } from '~app/typings/authentication/authentication.interfaces';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, map, Observable} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authentication.queries';
 // import jwt_decode from 'jwt-decode';
@@ -53,6 +53,10 @@ export class AuthenticationService {
     this.accessToken$.next('');
     sessionStorage.removeItem('token');
     localStorage.removeItem('token');
+  }
+
+  public get authenticated$(): Observable<boolean> {
+    return this.accessToken$.asObservable().pipe(map((token) => Boolean(token)));
   }
 
   // public logout(): void {
