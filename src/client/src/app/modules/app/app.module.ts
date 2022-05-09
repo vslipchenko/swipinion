@@ -9,10 +9,11 @@ import {HttpClientModule} from '@angular/common/http';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {catchError, Observable, of, tap} from 'rxjs';
 import {AuthenticationInterceptorProvider} from '~app/interceptors/authentication/authentication.interceptor';
-import {NgxsModule} from '@ngxs/store';
+import {NgxsModule, Store} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
+import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,7 +32,7 @@ import {AppState} from '~app/modules/app/store/app.state';
     {
       provide: APP_INITIALIZER,
       useFactory: authenticationFactory,
-      deps: [AuthenticationService],
+      deps: [AuthenticationService, Store],
       multi: true,
     },
   ],
@@ -40,7 +41,10 @@ import {AppState} from '~app/modules/app/store/app.state';
 export class AppModule {}
 
 // Could be dropped once any other factory is used that triggers access token refresh
-function authenticationFactory(authenticationService: AuthenticationService): () => void | Observable<any> {
+function authenticationFactory(
+  authenticationService: AuthenticationService,
+  store: Store,
+): () => void | Observable<any> {
   return (): void | Observable<any> => {
     const refreshToken = authenticationService.getRefreshToken();
 
@@ -49,6 +53,13 @@ function authenticationFactory(authenticationService: AuthenticationService): ()
     return authenticationService.refreshAccessToken().pipe(
       tap(({data}) => {
         authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
+
+        store.dispatch(
+          new UpdateUserProfile({
+            thumbnail: data.refreshAccessToken.thumbnail,
+            username: data.refreshAccessToken.username,
+          }),
+        );
       }),
       catchError(() => {
         return of(); // Ignore error; let auth interceptor handle authentication

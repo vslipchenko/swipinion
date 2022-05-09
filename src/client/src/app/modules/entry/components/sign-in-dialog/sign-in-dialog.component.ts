@@ -8,6 +8,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {SignInFailReason} from '~app/typings/authentication/authentication.enums';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
+import {Store} from '@ngxs/store';
+import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-sign-in-dialog',
@@ -30,6 +32,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
     @Inject(MAT_DIALOG_DATA) private readonly data: SignIn,
     private readonly authenticationService: AuthenticationService,
     private readonly snackbar: MatSnackBar, // private readonly router: Router,
+    private readonly store: Store,
   ) {}
 
   public ngOnInit(): void {
@@ -81,6 +84,10 @@ export class SignInDialogComponent implements OnInit, Destroyable {
 
           this.authenticationService.accessToken$.next(data.signIn.accessToken);
           this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
+
+          this.store.dispatch(
+            new UpdateUserProfile({thumbnail: data.signIn.thumbnail, username: data.signIn.username}),
+          );
 
           this.authenticated.emit();
         },
