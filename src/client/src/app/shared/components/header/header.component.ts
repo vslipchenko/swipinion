@@ -72,6 +72,7 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.authenticated.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
+      this.resetLocation();
     });
 
     this.listenDialogClose(dialog);
