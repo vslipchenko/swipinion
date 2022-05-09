@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
@@ -6,7 +6,8 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SignInFailReason} from '~app/typings/authentication/authentication.enums';
-// import {Router} from '@angular/router';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {SignIn} from '~app/typings/authentication/authentication.interfaces';
 
 @Component({
   selector: 'app-sign-in-dialog',
@@ -14,9 +15,10 @@ import {SignInFailReason} from '~app/typings/authentication/authentication.enums
   styleUrls: ['./sign-in-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignInDialogComponent implements Destroyable {
+export class SignInDialogComponent implements OnInit, Destroyable {
+  @Output() public readonly authenticated = new EventEmitter();
   @Output() public readonly recover = new EventEmitter();
-  @Output() public readonly confirm = new EventEmitter<string>();
+  @Output() public readonly confirm = new EventEmitter<SignIn>();
   @Output() public readonly cancel = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
@@ -25,9 +27,14 @@ export class SignInDialogComponent implements Destroyable {
   private readonly signInForm = this.signInFormGroup;
 
   public constructor(
+    @Inject(MAT_DIALOG_DATA) private readonly data: SignIn,
     private readonly authenticationService: AuthenticationService,
     private readonly snackbar: MatSnackBar, // private readonly router: Router,
   ) {}
+
+  public ngOnInit(): void {
+    if (this.data) this.authenticateUser(this.data);
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
@@ -40,10 +47,20 @@ export class SignInDialogComponent implements Destroyable {
 
     if (!valid) return this.showErrorSnackbar();
 
+    this.authenticateUser(this.signInForm.value);
+  }
+
+  public errorMessage(errors: ValidationErrors | null): string | void {
+    if (!errors) return;
+
+    return 'Required field';
+  }
+
+  private authenticateUser(credentials: SignIn): void {
     this.loading$.next(true);
 
     this.authenticationService
-      .signIn(this.signInForm.value)
+      .signIn(credentials)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
@@ -53,7 +70,7 @@ export class SignInDialogComponent implements Destroyable {
           if (!data.signIn) return this.showErrorSnackbar();
 
           if (data.signIn.reason === SignInFailReason.Unconfirmed) {
-            this.confirm.emit(this.email.value);
+            this.confirm.emit(credentials);
           }
 
           if (data.signIn.reason === SignInFailReason.Blocked) {
@@ -64,16 +81,11 @@ export class SignInDialogComponent implements Destroyable {
 
           this.authenticationService.accessToken = data.signIn.accessToken;
           this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
-          // void this.router.navigate(['/profile']);
+
+          this.authenticated.emit();
         },
         () => this.showErrorSnackbar(),
       );
-  }
-
-  public errorMessage(errors: ValidationErrors | null): string | void {
-    if (!errors) return;
-
-    return 'Required field';
   }
 
   private validateForm(): boolean {

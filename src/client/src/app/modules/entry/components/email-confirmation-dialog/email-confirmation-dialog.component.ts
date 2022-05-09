@@ -64,7 +64,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
         ({data}) => {
           if (!data?.confirmEmail.success) return this.showErrorSnackbar();
 
-          this.snackbar.open('Email successfully confirmed. You can now sign in to your account', 'OK', {
+          this.snackbar.open('Email successfully confirmed', 'OK', {
             panelClass: 'snackbar-success',
           });
 

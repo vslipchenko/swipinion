@@ -22,27 +22,25 @@ export class HeaderComponent implements OnInit, Destroyable {
 
   public readonly destroy$ = new Subject<void>();
 
-  public constructor(private readonly dialog: MatDialog, private readonly location: Location) {}
+  public constructor(
+    private readonly dialog: MatDialog,
+    private readonly location: Location,
+  ) {}
 
   public ngOnInit(): void {
     this.showSignIn.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      // console.log('SIGN IN');
       this.signIn(false);
     });
 
     this.showSignUp.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      // console.log('SIGN IN');
       this.signUp(false);
     });
 
     this.showPasswordRecovery.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      // console.log('SIGN IN');
       this.recoverPassword(false);
     });
 
     this.showEmailConfirmation.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      // console.log('SIGN IN');
-      // const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
       this.confirmEmail(false);
     });
   }
@@ -52,22 +50,26 @@ export class HeaderComponent implements OnInit, Destroyable {
     this.destroy$.complete();
   }
 
-  public signIn(changeLocation: boolean): void {
+  public signIn(changeLocation: boolean, data?: {email: string; password: string}): void {
     if (changeLocation) this.location.go('/sign-in');
 
-    const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog'], data});
 
     dialog.componentInstance.recover.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
       this.recoverPassword(true);
     });
 
-    dialog.componentInstance.confirm.pipe(takeUntil(dialog.afterClosed())).subscribe((email) => {
+    dialog.componentInstance.confirm.pipe(takeUntil(dialog.afterClosed())).subscribe((data) => {
       dialog.close();
-      this.confirmEmail(true, email);
+      this.confirmEmail(true, data.email, data);
     });
 
-    this.listenDialogCancel(dialog);
+    dialog.componentInstance.authenticated.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
+      dialog.close();
+    });
+
+    this.listenDialogClose(dialog);
   }
 
   public signUp(changeLocation: boolean): void {
@@ -80,10 +82,10 @@ export class HeaderComponent implements OnInit, Destroyable {
       this.confirmEmail(true, email);
     });
 
-    this.listenDialogCancel(dialog);
+    this.listenDialogClose(dialog);
   }
 
-  private confirmEmail(changeLocation: boolean, email = ''): void {
+  private confirmEmail(changeLocation: boolean, email = '', data?: {email: string; password: string}): void {
     if (changeLocation) this.location.go('/confirmation', `email=${encodeURI(email)}`);
 
     const dialog = this.dialog.open(EmailConfirmationDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
@@ -91,10 +93,10 @@ export class HeaderComponent implements OnInit, Destroyable {
     dialog.componentInstance.email = email;
     dialog.componentInstance.emailConfirmed.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.signIn(true);
+      this.signIn(true, data);
     });
 
-    this.listenDialogCancel(dialog);
+    this.listenDialogClose(dialog);
   }
 
   private recoverPassword(changeLocation: boolean): void {
@@ -107,10 +109,10 @@ export class HeaderComponent implements OnInit, Destroyable {
       this.signIn(true);
     });
 
-    this.listenDialogCancel(dialog);
+    this.listenDialogClose(dialog);
   }
 
-  private listenDialogCancel(dialog: MatDialogRef<any>): void {
+  private listenDialogClose(dialog: MatDialogRef<any>): void {
     merge(dialog.backdropClick(), dialog.componentInstance.cancel)
       .pipe(takeUntil(dialog.afterClosed()))
       .subscribe(() => {
