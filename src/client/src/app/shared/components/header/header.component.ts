@@ -83,9 +83,10 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     const dialog = this.dialog.open(EmailConfirmationDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 
+    dialog.componentInstance.email = email;
     dialog.componentInstance.emailConfirmed.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.signIn(true); // TODO pass & set email as well
+      this.signIn(true);
     });
 
     this.listenDialogCancel(dialog);

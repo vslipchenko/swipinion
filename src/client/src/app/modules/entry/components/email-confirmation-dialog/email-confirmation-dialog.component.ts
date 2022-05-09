@@ -17,6 +17,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   @Output() public readonly emailConfirmed = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
+  public email = '';
   public readonly code = new FormControl('', Validators.required);
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
@@ -42,7 +43,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   public confirm(): void {
     if (!this.code.valid) return;
 
-    const email = decodeURI(this.activatedRoute.snapshot.queryParams['email']);
+    const email = this.email || decodeURI(this.activatedRoute.snapshot.queryParams['email']);
 
     const validCode = CODE_REGEXP.test(this.code.value);
     const validEmail = EMAIL_REGEXP.test(email);
