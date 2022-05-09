@@ -9,6 +9,7 @@ export const UsersTable: Table = {
       access_key CHAR (24),
       confirmation_code CHAR (6),
       recovery_code CHAR (6),
+      thumbnail VARCHAR (150),
       username VARCHAR (30) UNIQUE,
       email VARCHAR (254) UNIQUE,
       password CHAR (60),

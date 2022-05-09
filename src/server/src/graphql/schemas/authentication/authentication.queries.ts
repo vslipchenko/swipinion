@@ -13,14 +13,14 @@ import {signInValidator} from '../../../validators/authentication';
 export const authenticationQueryTypeDefinitions = gql`
   type Query {
     signIn(input: SignIn!): SignInResult
-    refreshAccessToken(refreshToken: String!): String
+    refreshAccessToken(refreshToken: String!): RefreshAccessTokenResult
   }
 `;
 
 const signIn = async (
   _: unknown,
   {input}: {input: SignIn},
-): Promise<{accessToken: string; refreshToken: string} | {reason: SignInFailReason} | null> => {
+): Promise<{accessToken: string; refreshToken: string; thumbnail: string; username: string} | {reason: SignInFailReason} | null> => {
   const {error} = signInValidator.validate(input);
 
   if (error) return null;
@@ -29,6 +29,8 @@ const signIn = async (
     id: string;
     access_key: string;
     confirmation_code: string;
+    thumbnail: string;
+    username: string;
     password: string;
     language: Language;
   }>(queryUserSignIn(input.email));
@@ -54,13 +56,13 @@ const signIn = async (
     expiresIn: environment.REFRESH_TOKEN_EXPIRES_IN,
   });
 
-  return {accessToken, refreshToken};
+  return {accessToken, refreshToken, thumbnail: row.thumbnail, username: row.username};
 };
 
 const refreshAccessToken = async (
   _: unknown,
   {refreshToken}: {refreshToken: string},
-): Promise<ApolloError | string> => {
+): Promise<ApolloError | {accessToken: string; thumbnail: string; username: string}> => {
   if (!refreshToken) return new ApolloError('', AuthenticationErrorCode.EmptyRefreshToken);
 
   const userId = (decode(refreshToken) as AccessTokenData)?.userId;
@@ -69,6 +71,8 @@ const refreshAccessToken = async (
 
   const result = await db.query<{
     access_key: string;
+    thumbnail: string;
+    username: string;
     language: Language;
   }>(queryUserRefreshAccessToken(userId));
   // Invalid refresh token data
@@ -88,10 +92,12 @@ const refreshAccessToken = async (
   }
 
   // Token is valid; issue fresh access token
-  return sign({userId, language: row.language}, environment.ACCESS_TOKEN_SECRET, {
+  const accessToken = sign({userId, language: row.language}, environment.ACCESS_TOKEN_SECRET, {
     algorithm: JWT_ALGORITHM,
     expiresIn: environment.ACCESS_TOKEN_EXPIRES_IN,
   });
+
+  return {accessToken, thumbnail: row.thumbnail, username: row.username};
 };
 
 export const authenticationQueryResolvers = {

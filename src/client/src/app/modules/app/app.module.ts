@@ -9,10 +9,23 @@ import {HttpClientModule} from '@angular/common/http';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {catchError, Observable, of, tap} from 'rxjs';
 import {AuthenticationInterceptorProvider} from '~app/interceptors/authentication/authentication.interceptor';
+import {NgxsModule} from '@ngxs/store';
+import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
+import {environment} from '~environments/environment';
+import {AppState} from '~app/modules/app/store/app.state';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, GraphQLModule, HttpClientModule, RouterModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    GraphQLModule,
+    HttpClientModule,
+    RouterModule,
+    AppRoutingModule,
+    NgxsModule.forRoot([AppState]),
+    NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
+  ],
   providers: [
     AuthenticationInterceptorProvider,
     {
@@ -35,7 +48,7 @@ function authenticationFactory(authenticationService: AuthenticationService): ()
 
     return authenticationService.refreshAccessToken().pipe(
       tap(({data}) => {
-        authenticationService.accessToken$.next(data.refreshAccessToken);
+        authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
       }),
       catchError(() => {
         return of(); // Ignore error; let auth interceptor handle authentication

@@ -5,6 +5,8 @@ export interface SignInQueryResult {
   signIn: {
     accessToken: string;
     refreshToken: string;
+    thumbnail: string;
+    username: string;
     reason: SignInFailReason;
   };
 }
@@ -15,7 +17,11 @@ export interface SignIn {
 }
 
 export interface AccessTokenByRefreshTokenQueryResult {
-  refreshAccessToken: string;
+  refreshAccessToken:  {
+    accessToken: string;
+    thumbnail: string;
+    username: string;
+  };
 }
 
 export interface AccessTokenData {

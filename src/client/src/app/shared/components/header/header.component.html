@@ -9,7 +9,9 @@
   </div>
 
   <ng-template #buttons>
-    <app-button class="mr-2" color="primary" text="Sign in" (clicked)="signIn(true)"></app-button>
-    <app-flat-button color="accent" text="Sign up" (clicked)="signUp(true)"></app-flat-button>
+    <div>
+      <app-button class="mr-2" color="primary" text="Sign in" (clicked)="signIn(true)"></app-button>
+      <app-flat-button color="accent" text="Sign up" (clicked)="signUp(true)"></app-flat-button>
+    </div>
   </ng-template>
 </header>
