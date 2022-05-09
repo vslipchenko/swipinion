@@ -62,6 +62,11 @@ export class HeaderComponent implements OnInit, Destroyable {
       this.recoverPassword(true);
     });
 
+    dialog.componentInstance.confirm.pipe(takeUntil(dialog.afterClosed())).subscribe((email) => {
+      dialog.close();
+      this.confirmEmail(true, email);
+    });
+
     this.listenDialogCancel(dialog);
   }
 

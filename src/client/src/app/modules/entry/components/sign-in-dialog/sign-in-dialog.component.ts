@@ -16,6 +16,7 @@ import {SignInFailReason} from '~app/typings/authentication/authentication.enums
 })
 export class SignInDialogComponent implements Destroyable {
   @Output() public readonly recover = new EventEmitter();
+  @Output() public readonly confirm = new EventEmitter<string>();
   @Output() public readonly cancel = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
@@ -52,11 +53,7 @@ export class SignInDialogComponent implements Destroyable {
           if (!data.signIn) return this.showErrorSnackbar();
 
           if (data.signIn.reason === SignInFailReason.Unconfirmed) {
-            return this.snackbar.open(
-              'Account is not activated. Please follow confirmation link sent to your email',
-              'OK',
-              {panelClass: 'snackbar-error'},
-            );
+            this.confirm.emit(this.email.value);
           }
 
           if (data.signIn.reason === SignInFailReason.Blocked) {
