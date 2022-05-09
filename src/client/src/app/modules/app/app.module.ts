@@ -35,7 +35,7 @@ function authenticationFactory(authenticationService: AuthenticationService): ()
 
     return authenticationService.refreshAccessToken().pipe(
       tap(({data}) => {
-        authenticationService.accessToken = data.refreshAccessToken;
+        authenticationService.accessToken$.next(data.refreshAccessToken);
       }),
       catchError(() => {
         return of(); // Ignore error; let auth interceptor handle authentication

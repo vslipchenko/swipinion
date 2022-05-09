@@ -35,7 +35,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
     if (isExternalApiCall) return next.handle(request); // Pass forward
 
-    const token = this.authenticationService.accessToken;
+    const token = this.authenticationService.accessToken$.value;
 
     if (token) {
       // If we have a token, we set it to the header

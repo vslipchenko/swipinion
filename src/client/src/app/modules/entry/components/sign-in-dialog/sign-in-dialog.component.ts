@@ -79,7 +79,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
 
           this.authenticationService.resetTokens(); // Clear active session
 
-          this.authenticationService.accessToken = data.signIn.accessToken;
+          this.authenticationService.accessToken$.next(data.signIn.accessToken);
           this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
 
           this.authenticated.emit();

@@ -2,20 +2,20 @@ import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {
   AccessTokenByRefreshTokenQueryResult,
-  AccessTokenData,
+  // AccessTokenData,
   SignIn,
   SignInQueryResult,
 } from '~app/typings/authentication/authentication.interfaces';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authentication.queries';
-import jwt_decode from 'jwt-decode';
+// import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  public accessToken = '';
+  public accessToken$ = new BehaviorSubject('');
 
   public constructor(private readonly apollo: Apollo) {}
 
@@ -35,9 +35,10 @@ export class AuthenticationService {
     });
   }
 
-  public getAccessTokenData(): AccessTokenData {
-    return this.accessToken ? jwt_decode(this.accessToken) : ({} as AccessTokenData);
-  }
+  // public getAccessTokenData(): AccessTokenData {
+  //   const accessToken = this.accessToken$.value;
+  //   return accessToken ? jwt_decode(accessToken) : ({} as AccessTokenData);
+  // }
 
   public getRefreshToken(): string | null {
     return sessionStorage.getItem('token') || localStorage.getItem('token');
@@ -49,18 +50,18 @@ export class AuthenticationService {
   }
 
   public resetTokens(): void {
-    this.accessToken = '';
+    this.accessToken$.next('');
     sessionStorage.removeItem('token');
     localStorage.removeItem('token');
   }
 
-  public logout(): void {
-    this.resetTokens();
-    // This will reset app's state & redirect to sign-in page if protected route is requested
-    window.location.reload(); // TODO review whether its necessary
-  }
+  // public logout(): void {
+  //   this.resetTokens();
+  //   // This will reset app's state & redirect to sign-in page if protected route is requested
+  //   // window.location.reload(); // TODO review whether its necessary
+  // }
 
-  public get authenticated(): boolean {
-    return Boolean(this.accessToken);
-  }
+  // public get authenticated(): boolean {
+  //   return Boolean(this.accessToken$.value);
+  // }
 }
