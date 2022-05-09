@@ -7,6 +7,7 @@
     extendClass="w-100"
     appearance="outline"
     label="Username"
+    [render]="renderUsername$.asObservable()"
     [control]="username"
     [errorMessage]="usernameErrorMessage"
     [hint]="usernameHint"
@@ -21,6 +22,7 @@
     appearance="outline"
     label="Email"
     type="email"
+    [render]="renderEmail$.asObservable()"
     [control]="email"
     [errorMessage]="emailErrorMessage"
   ></app-input>

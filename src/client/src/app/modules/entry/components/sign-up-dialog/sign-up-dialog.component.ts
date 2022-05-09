@@ -26,14 +26,30 @@ export class SignUpDialogComponent implements Destroyable {
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
+  public readonly renderUsername$ = new Subject<void>();
+  public readonly renderEmail$ = new Subject<void>();
   private readonly signUpForm = this.signUpFormGroup;
 
-  public constructor(private readonly userService: UserService, private readonly snackbar: MatSnackBar) {}
+  public constructor(private readonly userService: UserService, private readonly snackbar: MatSnackBar) {
+    this.username.statusChanges.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+      if (status !== 'INVALID') return;
+
+      this.renderUsername$.next();
+    });
+
+    this.email.statusChanges.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+      if (status !== 'INVALID') return;
+
+      this.renderEmail$.next();
+    });
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     this.loading$.complete();
+    this.renderUsername$.complete();
+    this.renderEmail$.complete();
   }
 
   public signUp(): void {

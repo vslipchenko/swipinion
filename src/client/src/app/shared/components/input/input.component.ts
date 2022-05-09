@@ -1,8 +1,10 @@
-import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {InputType} from '~app/typings/input/input.types';
 import {FormControl, ValidationErrors} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import {FloatLabelType, MatFormFieldAppearance} from '@angular/material/form-field';
+import {Observable, Subject, takeUntil} from 'rxjs';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-input',
@@ -10,7 +12,7 @@ import {FloatLabelType, MatFormFieldAppearance} from '@angular/material/form-fie
   styleUrls: ['./input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent {
+export class InputComponent implements OnInit, Destroyable {
   @Input() public type: InputType = 'text';
   @Input() public control = new FormControl();
   @Input() public errorMessage?: (errors: ValidationErrors | null) => string | void;
@@ -21,6 +23,7 @@ export class InputComponent {
   @Input() public extendClass = '';
   @Input() public label = '';
   @Input() public placeholder = '';
+  @Input() public render?: Observable<void>;
   // @Input() public prefix?: TemplateRef<unknown>;
   @Input() public suffix?: TemplateRef<unknown>;
   @Input() public prefix?: TemplateRef<unknown>;
@@ -31,6 +34,22 @@ export class InputComponent {
   @Input() public maxlength?: string | number;
 
   public hide = true;
+  public readonly destroy$ = new Subject<void>();
+
+  public constructor(private readonly changeDetector: ChangeDetectorRef) {}
+
+  public ngOnInit(): void {
+    if (this.render) {
+      this.render.pipe(takeUntil(this.destroy$)).subscribe(() => {
+        this.changeDetector.detectChanges();
+      });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   public toggleVisibility(): void {
     if (this.type === 'password') this.hide = !this.hide;
