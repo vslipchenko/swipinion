@@ -1,0 +1,17 @@
+@use 'variables' as var;
+
+.container {
+  max-width: 500px;
+}
+
+.author {
+  background: rgba(var.$color-background-dark, 0.6);
+  border-radius: 15px 0;
+}
+
+.author-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
