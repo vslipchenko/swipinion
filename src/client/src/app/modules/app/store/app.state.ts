@@ -1,12 +1,10 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
+import {UserProfile} from '~app/typings/user/user.interfaces';
 
 export interface AppStateModel {
-  profile: {
-    username: string;
-    thumbnail: string;
-  };
+  profile: UserProfile;
 }
 
 const APP_STATE = new StateToken<AppStateModel>('app');

@@ -218,6 +218,11 @@
   }
 }
 
+.py-1 {
+  padding-bottom: var.$unit !important;
+  padding-top: var.$unit !important;
+}
+
 .py-2 {
   padding-bottom: var.$unit-2 !important;
   padding-top: var.$unit-2 !important;

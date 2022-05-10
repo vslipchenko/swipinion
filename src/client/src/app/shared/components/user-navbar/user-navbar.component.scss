@@ -1,0 +1,24 @@
+@use 'variables' as var;
+@use 'media';
+
+.navbar {
+  border-radius: 20px;
+  background-color: rgba(var.$color-light, 0.15);
+}
+
+.image {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.username {
+  @include media.zero-small {
+    max-width: 70px;
+  }
+
+  @include media.small-medium {
+    max-width: 170px;
+  }
+}

@@ -56,3 +56,8 @@ export interface UserCode {
 export interface ConfirmEmailMutationResult {
   confirmEmail: SuccessResponse;
 }
+
+export interface UserProfile {
+  thumbnail: string;
+  username: string;
+}

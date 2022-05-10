@@ -4,9 +4,7 @@
     <h1 class="ml-1 brand-name">Swipinion</h1>
   </a>
 
-  <div *ngIf="authenticated$ | async; else buttons">
-    Authenticated
-  </div>
+  <app-user-navbar *ngIf="authenticated$ | async; else buttons"></app-user-navbar>
 
   <ng-template #buttons>
     <div>

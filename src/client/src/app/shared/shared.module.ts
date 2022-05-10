@@ -15,6 +15,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {CheckboxComponent} from './components/checkbox/checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {RouterModule} from '@angular/router';
+import { UserNavbarComponent } from './components/user-navbar/user-navbar.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {RouterModule} from '@angular/router';
     InputHideSuffixComponent,
     ProgressSpinnerComponent,
     CheckboxComponent,
+    UserNavbarComponent,
   ],
   imports: [
     CommonModule,
