@@ -1,12 +1,23 @@
 @use 'variables' as var;
 
-.container {
-  max-width: 500px;
+.wrapper {
+  overflow: hidden;
 }
 
-.author {
-  background: rgba(var.$color-background-dark, 0.6);
-  border-radius: 15px 0;
+.glass {
+  background: rgba(var.$color-background-dark, 0.7);
+}
+
+.background {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+.container {
+  max-width: 500px;
 }
 
 .author-image {

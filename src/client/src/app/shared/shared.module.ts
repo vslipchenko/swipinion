@@ -15,7 +15,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {CheckboxComponent} from './components/checkbox/checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {RouterModule} from '@angular/router';
-import { UserNavbarComponent } from './components/user-navbar/user-navbar.component';
+import {UserNavbarComponent} from './components/user-navbar/user-navbar.component';
+import {CardComponent} from './components/card/card.component';
+import { FabButtonComponent } from './components/fab-button/fab-button.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { UserNavbarComponent } from './components/user-navbar/user-navbar.compon
     ProgressSpinnerComponent,
     CheckboxComponent,
     UserNavbarComponent,
+    CardComponent,
+    FabButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +50,7 @@ import { UserNavbarComponent } from './components/user-navbar/user-navbar.compon
     InputHideSuffixComponent,
     ProgressSpinnerComponent,
     CheckboxComponent,
+    CardComponent,
   ],
 })
 export class SharedModule {}
