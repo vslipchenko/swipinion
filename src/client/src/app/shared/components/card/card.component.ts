@@ -8,4 +8,12 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 })
 export class CardComponent {
   @Input() public backgroundThumbnail = '';
+
+  public readonly stats = [
+    {icon: 'thumb_up', value: 12},
+    {icon: 'thumb_down', value: 10},
+    {svgIcon: 'like-n-comment', value: 10},
+    {svgIcon: 'dislike-n-comment', value: 10},
+    {icon: 'visibility', value: 14},
+  ];
 }

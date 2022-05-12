@@ -2,12 +2,21 @@
   <div class="background absolute h-100 w-100" [style.background-image]="'url(' + backgroundThumbnail +  ')'"></div>
 
   <div class="container mx-auto d-flex f-column h-100">
-    <a class="glass d-flex ai-center p-1" routerLink="/user/{{'someone'}}">
-      <img class="author-image mr-1" src="https://i.imgur.com/8E4PsPL.jpeg" alt="">
-      <span class="name">someone</span>
-    </a>
+    <div class="glass p-1">
+      <div class="d-flex jc-between ai-center">
+        <a class="d-flex ai-center" routerLink="/user/{{'someone'}}">
+          <img class="author-image mr-1" src="https://i.imgur.com/8E4PsPL.jpeg" alt="">
+          <span class="name">someone</span>
+        </a>
+
+        <mat-icon>more_horiz</mat-icon>
+      </div>
+
+      <app-card-stats class="d-block pt-2" [stats]="stats"></app-card-stats>
+    </div>
+
     <div style="overflow-y: auto">
-      <div class="d-flex relative">
+      <div class="d-flex image-container t-0">
 
         <img class="w-100"
              [src]="backgroundThumbnail"
@@ -42,10 +51,11 @@
           1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original
           form, accompanied by English versions from the 1914 translation by H. Rackham.
         </p>
+        <app-card-tags [tags]="['good', 'wow']" class="d-block mt-1"></app-card-tags>
       </div>
     </div>
 
-    <div class="actions d-flex jc-around py-2 glass">
+    <div class="actions d-flex jc-between p-1 glass">
       <app-fab-button color="warn" svgIcon="dislike-n-comment"></app-fab-button>
       <app-fab-button icon="thumb_down" color="warn"></app-fab-button>
       <app-fab-button icon="close"></app-fab-button>

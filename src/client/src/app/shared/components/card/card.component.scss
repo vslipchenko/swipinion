@@ -26,3 +26,8 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
+.image-container {
+  position: sticky;
+  z-index: -1;
+}

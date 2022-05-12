@@ -1,0 +1,5 @@
+<div class="d-flex">
+  <a *ngFor="let tag of tags; let last = last" routerLink="/tags/{{ tag }}" class="fw-medium" [class.mr-1]="!last"
+    ><span class="hash">#</span>{{ tag }}</a
+  >
+</div>

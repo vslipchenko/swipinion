@@ -17,7 +17,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {RouterModule} from '@angular/router';
 import {UserNavbarComponent} from './components/user-navbar/user-navbar.component';
 import {CardComponent} from './components/card/card.component';
-import { FabButtonComponent } from './components/fab-button/fab-button.component';
+import {FabButtonComponent} from './components/fab-button/fab-button.component';
+import {CardStatsComponent} from './components/card-stats/card-stats.component';
+import { CardTagsComponent } from './components/card-tags/card-tags.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { FabButtonComponent } from './components/fab-button/fab-button.component
     UserNavbarComponent,
     CardComponent,
     FabButtonComponent,
+    CardStatsComponent,
+    CardTagsComponent,
   ],
   imports: [
     CommonModule,
