@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Share opinion</h2>
+<mat-dialog-content class="visible relative py-2">
+  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
+
+  <app-select
+    class="d-block mb-1"
+    extendClass="w-100"
+    appearance="outline"
+    label="Type"
+    [items]="options"
+    [control]="type"
+  ></app-select>
+
+  <app-input
+    class="d-block mb-1"
+    extendClass="w-100"
+    appearance="outline"
+    label="Title"
+    [control]="title"
+    [errorMessage]="errorMessage"
+  ></app-input>
+
+  <app-textarea
+    appearance="outline"
+    label="Description"
+    class="d-block w-100"
+    extendClass="w-100"
+  ></app-textarea>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button color="primary" text="Share" (clicked)="(null)"></app-button>
+</mat-dialog-actions>

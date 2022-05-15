@@ -22,6 +22,11 @@ import {CardStatsComponent} from './components/card-stats/card-stats.component';
 import {CardTagsComponent} from './components/card-tags/card-tags.component';
 import {MenuItemsComponent} from './components/menu-items/menu-items.component';
 import {MatMenuModule} from '@angular/material/menu';
+import {AddOpinionDialogComponent} from './components/add-opinion-dialog/add-opinion-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {TextareaComponent} from './components/textarea/textarea.component';
+import {SelectComponent} from './components/select/select.component';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -38,6 +43,9 @@ import {MatMenuModule} from '@angular/material/menu';
     CardStatsComponent,
     CardTagsComponent,
     MenuItemsComponent,
+    AddOpinionDialogComponent,
+    TextareaComponent,
+    SelectComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +58,8 @@ import {MatMenuModule} from '@angular/material/menu';
     MatCheckboxModule,
     RouterModule,
     MatMenuModule,
+    MatDialogModule,
+    MatSelectModule,
   ],
   exports: [
     HeaderComponent,
