@@ -19,7 +19,9 @@ import {UserNavbarComponent} from './components/user-navbar/user-navbar.componen
 import {CardComponent} from './components/card/card.component';
 import {FabButtonComponent} from './components/fab-button/fab-button.component';
 import {CardStatsComponent} from './components/card-stats/card-stats.component';
-import { CardTagsComponent } from './components/card-tags/card-tags.component';
+import {CardTagsComponent} from './components/card-tags/card-tags.component';
+import {MenuItemsComponent} from './components/menu-items/menu-items.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { CardTagsComponent } from './components/card-tags/card-tags.component';
     FabButtonComponent,
     CardStatsComponent,
     CardTagsComponent,
+    MenuItemsComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +49,7 @@ import { CardTagsComponent } from './components/card-tags/card-tags.component';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     RouterModule,
+    MatMenuModule,
   ],
   exports: [
     HeaderComponent,
