@@ -30,13 +30,13 @@
     [control]="description"
   ></app-textarea>
 
-  <app-chips appearance="outline" label="Tags" extendClass="d-block w-100" [regexp]="hashtagRegexp" [hint]="chipsHint" placeholder="E.g. champinion, prove-me-wrong">
+  <app-chips appearance="outline" label="Tags" extendClass="d-block w-100" placeholder="E.g. champinion, prove-me-wrong" [regexp]="hashtagRegexp" [hint]="chipsHint">
     <ng-template #chipsHint>
-      Can contain letters, numbers, dash separators
+      Can contain letters, numbers, dash as separator
     </ng-template>
   </app-chips>
 </mat-dialog-content>
 <mat-dialog-actions>
   <app-button mat-dialog-close text="Cancel"></app-button>
-  <app-button color="primary" text="Share" (clicked)="(null)"></app-button>
+  <app-button color="primary" text="Share" (clicked)="share()"></app-button>
 </mat-dialog-actions>

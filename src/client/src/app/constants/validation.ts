@@ -16,3 +16,4 @@ export const USERNAME_MAX_LENGTH = 30;
 export const CODE_REGEXP = /^[0-9a-fA-F]{6}$/;
 
 export const HASHTAG_REGEXP = /^[a-zA-Z\d]+(?:-[a-zA-Z\d]+)*$/;
+export const MAX_IMAGE_SIZE_MB = 30; // ImgBB image size limit - 32MB

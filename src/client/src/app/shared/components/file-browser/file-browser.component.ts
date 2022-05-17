@@ -13,19 +13,25 @@ export class FileBrowserComponent implements OnDestroy {
   @Output() public fileChange = new EventEmitter<File | void>();
 
   private readonly accept = ['image/jpeg', 'image/png'];
-  private readonly fileInput = this.fileInputElement;
+  private fileInput = this.fileInputElement;
 
   public ngOnDestroy(): void {
     this.fileInput.remove();
   }
 
   public browse(): void {
+    this.reinstantiateFileInput(); // Fixes onchange triggering for the same image upload on subsequent reset
     this.fileInput.click();
   }
 
   public reset(): void {
     this.control.setValue(null);
     this.fileChange.emit();
+  }
+
+  private reinstantiateFileInput(): void {
+    this.fileInput.remove();
+    this.fileInput = this.fileInputElement;
   }
 
   private get fileInputElement(): HTMLInputElement {

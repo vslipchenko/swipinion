@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {FormControl, FormGroup, ValidationErrors} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {SelectItem} from '~app/typings/select/select.interfaces';
-import {HASHTAG_REGEXP} from '~app/constants/validation';
+import {HASHTAG_REGEXP, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -28,10 +28,22 @@ export class AddOpinionDialogComponent implements Destroyable {
     this.loading$.complete();
   }
 
+  public share(): void {
+    console.log(this.addOpinionForm.valid, this.addOpinionForm);
+  }
+
   public errorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return 'Required field';
+  }
+
+  private fileSizeValidator(control: FormControl | AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+
+    if ((control.value as File).size / 1024 ** 2 > MAX_IMAGE_SIZE_MB) return {size: true};
+
+    return null;
   }
 
   public get type(): FormControl {
@@ -62,7 +74,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     return new FormGroup({
       type: new FormControl(OpinionType.Image),
       imageUrl: new FormControl(),
-      file: new FormControl(), // TODO Validate file size <= 30MB
+      file: new FormControl(null, this.fileSizeValidator.bind(this)), // TODO Validate file size <= 30MB
       title: new FormControl(),
       description: new FormControl(),
       tags: new FormControl(),
