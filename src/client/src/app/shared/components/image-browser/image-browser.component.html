@@ -1,0 +1,16 @@
+<img *ngIf="imageSet" [src]="imageUrl.value || imagePreview" alt="" class="image d-block mx-auto mb-3">
+
+<app-input
+  *ngIf="!imagePreview"
+  class="d-block"
+  extendClass="w-100"
+  appearance="outline"
+  label="Image URL"
+  [control]="imageUrl"
+></app-input>
+
+<div *ngIf="!imageSet" class="divider d-flex jc-center ai-center mb-3">
+  OR
+</div>
+
+<app-file-browser *ngIf="!imageUrl.value" class="d-block mb-3" [control]="file" (fileChange)="setImagePreview($event)"></app-file-browser>

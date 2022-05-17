@@ -1,0 +1,22 @@
+@use 'variables' as var;
+
+.divider::before,
+.divider::after {
+  content: '';
+  border-bottom: 1px solid var.$color-light;
+  flex: 1;
+}
+
+.divider::before {
+  margin-right: var.$unit-2;
+}
+
+.divider::after {
+  margin-left: var.$unit-2;
+}
+
+.image {
+  max-height: 300px;
+  max-width: 100%;
+  object-fit: cover;
+}

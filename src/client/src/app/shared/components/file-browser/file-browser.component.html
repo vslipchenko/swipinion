@@ -1,0 +1,2 @@
+<app-flat-button *ngIf="!control.value" text="Browse" color="primary" extendClass="w-100" (clicked)="browse()"></app-flat-button>
+<app-flat-button *ngIf="control.value" text="Remove" color="warn" extendClass="w-100" (clicked)="reset()"></app-flat-button>
