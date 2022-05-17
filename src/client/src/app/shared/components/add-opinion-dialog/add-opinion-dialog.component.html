@@ -29,6 +29,12 @@
     extendClass="w-100"
     [control]="description"
   ></app-textarea>
+
+  <app-chips appearance="outline" label="Tags" extendClass="d-block w-100" [regexp]="hashtagRegexp" [hint]="chipsHint" placeholder="E.g. champinion, prove-me-wrong">
+    <ng-template #chipsHint>
+      Can contain letters, numbers, dash separators
+    </ng-template>
+  </app-chips>
 </mat-dialog-content>
 <mat-dialog-actions>
   <app-button mat-dialog-close text="Cancel"></app-button>

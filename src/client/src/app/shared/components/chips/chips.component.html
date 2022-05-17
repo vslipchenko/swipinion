@@ -1,15 +1,19 @@
 <mat-form-field [class]="extendClass" [appearance]="appearance">
   <mat-label>{{label}}</mat-label>
   <mat-chip-list #chipList>
-    <mat-chip *ngFor="let chip of chips" (removed)="remove()">
+    <mat-chip *ngFor="let chip of chips; let index = index" (removed)="remove(index)">
       {{chip}}
       <button matChipRemove>
         <mat-icon>cancel</mat-icon>
       </button>
     </mat-chip>
-    <input [matChipInputFor]="chipList"
+    <input [placeholder]="placeholder"
+           [matChipInputFor]="chipList"
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
            [matChipInputAddOnBlur]="addOnBlur"
            (matChipInputTokenEnd)="add($event)">
   </mat-chip-list>
+  <mat-hint *ngIf="hint">
+    <ng-container [ngTemplateOutlet]="hint"></ng-container>
+  </mat-hint>
 </mat-form-field>

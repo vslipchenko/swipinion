@@ -4,6 +4,7 @@ import {FormControl, FormGroup, ValidationErrors} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {SelectItem} from '~app/typings/select/select.interfaces';
+import {HASHTAG_REGEXP} from '~app/constants/validation';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -18,6 +19,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     {title: 'Text', value: OpinionType.Text},
     {title: 'Image', value: OpinionType.Image},
   ];
+  public readonly hashtagRegexp = HASHTAG_REGEXP;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
   public ngOnDestroy(): void {
@@ -60,7 +62,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     return new FormGroup({
       type: new FormControl(OpinionType.Image),
       imageUrl: new FormControl(),
-      file: new FormControl(),
+      file: new FormControl(), // TODO Validate file size <= 30MB
       title: new FormControl(),
       description: new FormControl(),
       tags: new FormControl(),

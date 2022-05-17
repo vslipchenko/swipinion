@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatFormFieldAppearance} from '@angular/material/form-field';
@@ -12,28 +12,25 @@ import {MatFormFieldAppearance} from '@angular/material/form-field';
 export class ChipsComponent {
   @Input() public label = '';
   @Input() public extendClass = '';
+  @Input() public placeholder = '';
+  @Input() public regexp?: RegExp;
   // @Input() public color: ThemePalette;
   @Input() public appearance: MatFormFieldAppearance = 'standard';
+  @Input() public hint?: TemplateRef<unknown>;
 
   public addOnBlur = true;
   public chips: Array<string> = [];
   public readonly separatorKeysCodes = [ENTER, COMMA];
 
   public add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    const validValue = this.regexp ? this.regexp.test(event.value) : true;
 
-    if (value) this.chips.push(value);
+    if (validValue) this.chips.push(event.value);
 
     event.chipInput!.clear();
   }
 
-  public remove(): void {}
-
-  // remove(fruit: Fruit): void {
-  //   const index = this.fruits.indexOf(fruit);
-  //
-  //   if (index >= 0) {
-  //     this.fruits.splice(index, 1);
-  //   }
-  // }
+  public remove(index: number): void {
+    this.chips.splice(index, 1);
+  }
 }
