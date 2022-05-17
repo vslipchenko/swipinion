@@ -32,6 +32,10 @@ export class ImageBrowserComponent implements OnDestroy {
     this.imagePreview = null;
   }
 
+  public resetPreviewImage(): void {
+    this.imageUrl.setValue(null);
+  }
+
   public get imageSet(): boolean {
     return this.imageUrl.value || this.imagePreview;
   }

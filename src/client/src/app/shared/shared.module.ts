@@ -29,6 +29,7 @@ import {SelectComponent} from './components/select/select.component';
 import {MatSelectModule} from '@angular/material/select';
 import { FileBrowserComponent } from './components/file-browser/file-browser.component';
 import { ImageBrowserComponent } from './components/image-browser/image-browser.component';
+import { InputResetSuffixComponent } from './components/input/suffixes/input-reset-suffix/input-reset-suffix.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { ImageBrowserComponent } from './components/image-browser/image-browser.
     SelectComponent,
     FileBrowserComponent,
     ImageBrowserComponent,
+    InputResetSuffixComponent,
   ],
   imports: [
     CommonModule,

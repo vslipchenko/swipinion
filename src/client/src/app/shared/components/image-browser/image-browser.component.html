@@ -7,7 +7,12 @@
   appearance="outline"
   label="Image URL"
   [control]="imageUrl"
-></app-input>
+  [suffix]="imagePreviewSuffix"
+>
+  <ng-template #imagePreviewSuffix>
+    <app-input-reset-suffix [show]="imageUrl.value" (resetValue)="resetPreviewImage()"></app-input-reset-suffix>
+  </ng-template>
+</app-input>
 
 <div *ngIf="!imageSet" class="divider d-flex jc-center ai-center mb-3">
   OR
