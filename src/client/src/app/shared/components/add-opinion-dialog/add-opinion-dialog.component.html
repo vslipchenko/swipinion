@@ -1,9 +1,9 @@
 <h2 mat-dialog-title>Share opinion</h2>
-<mat-dialog-content class="visible relative py-2">
+<mat-dialog-content class="relative py-2">
   <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
 
   <app-select
-    class="d-block mb-1"
+    class="d-block"
     extendClass="w-100"
     appearance="outline"
     label="Type"
@@ -11,8 +11,10 @@
     [control]="type"
   ></app-select>
 
+  <app-image-browser [imageUrl]="imageUrl" [file]="file"></app-image-browser>
+
   <app-input
-    class="d-block mb-1"
+    class="d-block"
     extendClass="w-100"
     appearance="outline"
     label="Title"
@@ -25,6 +27,7 @@
     label="Description"
     class="d-block w-100"
     extendClass="w-100"
+    [control]="description"
   ></app-textarea>
 </mat-dialog-content>
 <mat-dialog-actions>

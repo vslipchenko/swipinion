@@ -20,8 +20,6 @@ export class AddOpinionDialogComponent implements Destroyable {
   ];
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
-  public constructor() {}
-
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -42,9 +40,26 @@ export class AddOpinionDialogComponent implements Destroyable {
     return this.addOpinionForm.controls['title'] as FormControl;
   }
 
+  public get imageUrl(): FormControl {
+    return this.addOpinionForm.controls['imageUrl'] as FormControl;
+  }
+
+  public get file(): FormControl {
+    return this.addOpinionForm.controls['file'] as FormControl;
+  }
+
+  public get description(): FormControl {
+    return this.addOpinionForm.controls['description'] as FormControl;
+  }
+
+  public get imageSet(): boolean {
+    return this.imageUrl.value || this.file.value;
+  }
+
   private get addOpinionFormGroup(): FormGroup {
     return new FormGroup({
       type: new FormControl(OpinionType.Image),
+      imageUrl: new FormControl(),
       file: new FormControl(),
       title: new FormControl(),
       description: new FormControl(),
