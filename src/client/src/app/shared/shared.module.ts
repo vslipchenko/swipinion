@@ -27,6 +27,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {TextareaComponent} from './components/textarea/textarea.component';
 import {SelectComponent} from './components/select/select.component';
 import {MatSelectModule} from '@angular/material/select';
+import { FileBrowserComponent } from './components/file-browser/file-browser.component';
+import { ImageBrowserComponent } from './components/image-browser/image-browser.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import {MatSelectModule} from '@angular/material/select';
     AddOpinionDialogComponent,
     TextareaComponent,
     SelectComponent,
+    FileBrowserComponent,
+    ImageBrowserComponent,
   ],
   imports: [
     CommonModule,
