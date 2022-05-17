@@ -27,9 +27,11 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {TextareaComponent} from './components/textarea/textarea.component';
 import {SelectComponent} from './components/select/select.component';
 import {MatSelectModule} from '@angular/material/select';
-import { FileBrowserComponent } from './components/file-browser/file-browser.component';
-import { ImageBrowserComponent } from './components/image-browser/image-browser.component';
-import { InputResetSuffixComponent } from './components/input/suffixes/input-reset-suffix/input-reset-suffix.component';
+import {FileBrowserComponent} from './components/file-browser/file-browser.component';
+import {ImageBrowserComponent} from './components/image-browser/image-browser.component';
+import {InputResetSuffixComponent} from './components/input/suffixes/input-reset-suffix/input-reset-suffix.component';
+import {ChipsComponent} from './components/chips/chips.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,7 @@ import { InputResetSuffixComponent } from './components/input/suffixes/input-res
     FileBrowserComponent,
     ImageBrowserComponent,
     InputResetSuffixComponent,
+    ChipsComponent,
   ],
   imports: [
     CommonModule,
@@ -66,6 +69,7 @@ import { InputResetSuffixComponent } from './components/input/suffixes/input-res
     MatMenuModule,
     MatDialogModule,
     MatSelectModule,
+    MatChipsModule,
   ],
   exports: [
     HeaderComponent,
