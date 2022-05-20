@@ -11,7 +11,9 @@
     [control]="type"
   ></app-select>
 
-  <app-image-browser [imageUrl]="imageUrl" [file]="file"></app-image-browser>
+  <div [class.error-border]="hasImageErrorBorder">
+    <app-image-browser [imageUrl]="imageUrl" [file]="file" [imageUrlErrorMessage]="imageUrlErrorMessage"></app-image-browser>
+  </div>
 
   <app-input
     class="d-block"

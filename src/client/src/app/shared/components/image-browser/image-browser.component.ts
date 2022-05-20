@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, ValidationErrors} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {isValidHttpUrl} from '~app/utilities/url';
 
 @Component({
   selector: 'app-image-browser',
@@ -11,6 +12,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 export class ImageBrowserComponent implements OnDestroy {
   @Input() public imageUrl = new FormControl();
   @Input() public file = new FormControl();
+  @Input() public imageUrlErrorMessage?: (errors: ValidationErrors | null) => string | void;
 
   public imagePreview: SafeUrl | null = '';
   public recentObjectUrl = '';
@@ -36,7 +38,11 @@ export class ImageBrowserComponent implements OnDestroy {
     this.imageUrl.setValue(null);
   }
 
-  public get imageSet(): boolean {
+  public get valueSet(): boolean {
     return this.imageUrl.value || this.imagePreview;
+  }
+
+  public get imageSet(): boolean {
+    return Boolean(this.imagePreview) || isValidHttpUrl(this.imageUrl.value);
   }
 }

@@ -1,0 +1,6 @@
+@use 'variables' as var;
+
+.error-border {
+  border-left: 2px solid var.$color-warn;
+  padding-left: var.$unit;
+}

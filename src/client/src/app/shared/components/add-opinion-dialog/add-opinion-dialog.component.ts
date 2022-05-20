@@ -5,6 +5,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {SelectItem} from '~app/typings/select/select.interfaces';
 import {HASHTAG_REGEXP, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
+import {isValidHttpUrl} from '~app/utilities/url';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -29,6 +30,9 @@ export class AddOpinionDialogComponent implements Destroyable {
   }
 
   public share(): void {
+    this.addOpinionForm.markAllAsTouched();
+    this.imageUrl.updateValueAndValidity();
+
     console.log(this.addOpinionForm.valid, this.addOpinionForm);
   }
 
@@ -36,6 +40,24 @@ export class AddOpinionDialogComponent implements Destroyable {
     if (!errors) return;
 
     return 'Required field';
+  }
+
+  public imageUrlErrorMessage(errors: ValidationErrors | null): string | void {
+    if (!errors) return;
+
+    if ('required' in errors) return 'Either set image url or upload image file';
+
+    return 'Invalid image url';
+  }
+
+  private imageValidator(control: FormControl | AbstractControl): ValidationErrors | null {
+    if (this.addOpinionForm?.controls['type']?.value !== OpinionType.Image) return null;
+
+    if (!control.value && !this.file.value) return {required: true};
+
+    if (!isValidHttpUrl(control.value)) return {url: true};
+
+    return null;
   }
 
   private fileSizeValidator(control: FormControl | AbstractControl): ValidationErrors | null {
@@ -70,10 +92,14 @@ export class AddOpinionDialogComponent implements Destroyable {
     return this.imageUrl.value || this.file.value;
   }
 
+  public get hasImageErrorBorder(): boolean {
+    return !this.file.value && this.imageUrl.touched && this.imageUrl.hasError('required');
+  }
+
   private get addOpinionFormGroup(): FormGroup {
     return new FormGroup({
       type: new FormControl(OpinionType.Image),
-      imageUrl: new FormControl(),
+      imageUrl: new FormControl(null, this.imageValidator.bind(this)),
       file: new FormControl(null, this.fileSizeValidator.bind(this)), // TODO Validate file size <= 30MB
       title: new FormControl(),
       description: new FormControl(),
