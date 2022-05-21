@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {FormControl, ValidationErrors} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {isValidHttpUrl} from '~app/utilities/url';
 
 @Component({
   selector: 'app-image-browser',
@@ -43,6 +42,6 @@ export class ImageBrowserComponent implements OnDestroy {
   }
 
   public get imageSet(): boolean {
-    return Boolean(this.imagePreview) || isValidHttpUrl(this.imageUrl.value);
+    return Boolean(this.imagePreview) || this.imageUrl.valid;
   }
 }

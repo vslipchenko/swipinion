@@ -1,0 +1,4 @@
+.mat-chip {
+  word-break: break-word; // Prevents x overflow
+  box-sizing: content-box;
+}

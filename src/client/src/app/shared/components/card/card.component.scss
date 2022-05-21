@@ -1,6 +1,10 @@
 @use 'variables' as var;
 @use 'media';
 
+.title {
+  word-break: break-word;
+}
+
 .wrapper {
   overflow: hidden;
 }

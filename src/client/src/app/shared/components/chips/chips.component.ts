@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatFormFieldAppearance} from '@angular/material/form-field';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-chips',
@@ -9,8 +10,9 @@ import {MatFormFieldAppearance} from '@angular/material/form-field';
   styleUrls: ['./chips.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChipsComponent {
+export class ChipsComponent implements OnInit {
   @Input() public label = '';
+  @Input() public control = new FormControl();
   @Input() public extendClass = '';
   @Input() public placeholder = '';
   @Input() public regexp?: RegExp;
@@ -21,6 +23,10 @@ export class ChipsComponent {
   public addOnBlur = true;
   public chips: Array<string> = [];
   public readonly separatorKeysCodes = [ENTER, COMMA];
+
+  public ngOnInit(): void {
+    this.control.setValue(this.chips); // Reference value
+  }
 
   public add(event: MatChipInputEvent): void {
     const validValue = this.regexp ? this.regexp.test(event.value) : true;

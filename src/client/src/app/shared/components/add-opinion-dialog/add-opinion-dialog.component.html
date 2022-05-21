@@ -11,8 +11,12 @@
     [control]="type"
   ></app-select>
 
-  <div [class.error-border]="hasImageErrorBorder">
-    <app-image-browser [imageUrl]="imageUrl" [file]="file" [imageUrlErrorMessage]="imageUrlErrorMessage"></app-image-browser>
+  <div *ngIf="imageType" [class.error-border]="hasImageErrorBorder">
+    <app-image-browser
+      [imageUrl]="imageUrl"
+      [file]="file"
+      [imageUrlErrorMessage]="imageUrlErrorMessage"
+    ></app-image-browser>
   </div>
 
   <app-input
@@ -21,7 +25,7 @@
     appearance="outline"
     label="Title"
     [control]="title"
-    [errorMessage]="errorMessage"
+    [errorMessage]="titleErrorMessage.bind(this)"
   ></app-input>
 
   <app-textarea
@@ -32,14 +36,21 @@
     [control]="description"
     hintAlign="end"
     [hint]="descriptionHint"
+    [errorMessage]="descriptionErrorMessage.bind(this)"
   >
-    <ng-template #descriptionHint>{{description.value?.length || 0}} / 3000</ng-template>
+    <ng-template #descriptionHint>{{ description.value?.length || 0 }} / {{ descriptionMaxLength }}</ng-template>
   </app-textarea>
 
-  <app-chips appearance="outline" label="Tags" extendClass="d-block w-100" placeholder="E.g. champinion, prove-me-wrong" [regexp]="hashtagRegexp" [hint]="chipsHint">
-    <ng-template #chipsHint>
-      Can contain letters, numbers, dash as separator
-    </ng-template>
+  <app-chips
+    appearance="outline"
+    label="Tags"
+    extendClass="d-block w-100"
+    placeholder="E.g. champinion, you-decide"
+    [regexp]="hashtagRegexp"
+    [hint]="chipsHint"
+    [control]="tags"
+  >
+    <ng-template #chipsHint> Tag can contain letters, numbers, dash as separator (35 characters at max) </ng-template>
   </app-chips>
 </mat-dialog-content>
 <mat-dialog-actions>
