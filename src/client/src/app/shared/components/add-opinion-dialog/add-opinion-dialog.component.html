@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Share opinion</h2>
-<mat-dialog-content class="relative py-2">
+<mat-dialog-content class="relative py-2 scrollable">
   <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
 
   <app-select
@@ -30,7 +30,11 @@
     class="d-block w-100"
     extendClass="w-100"
     [control]="description"
-  ></app-textarea>
+    hintAlign="end"
+    [hint]="descriptionHint"
+  >
+    <ng-template #descriptionHint>{{description.value?.length || 0}} / 3000</ng-template>
+  </app-textarea>
 
   <app-chips appearance="outline" label="Tags" extendClass="d-block w-100" placeholder="E.g. champinion, prove-me-wrong" [regexp]="hashtagRegexp" [hint]="chipsHint">
     <ng-template #chipsHint>

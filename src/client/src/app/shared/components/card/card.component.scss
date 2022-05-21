@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use 'media';
 
 .wrapper {
   overflow: hidden;
@@ -31,24 +32,27 @@
   overflow-y: auto;
 }
 
-// Mozilla
-@supports (scrollbar-width: thin) {
-  .scrollable {
-    scrollbar-width: thin;
-    scrollbar-color: var.$color-background-dark rgba(var.$color-background-dark, 0.7);
+@include media.above-large {
+  // Mozilla
+  @supports (scrollbar-width: thin) {
+    .scrollable {
+      scrollbar-width: thin;
+      scrollbar-color: var.$color-background-dark rgba(var.$color-background-dark, 0.7);
+    }
+  }
+
+  // Chromium
+  .scrollable::-webkit-scrollbar {
+    width: var.$scrollbar-width;
+  }
+
+  .scrollable::-webkit-scrollbar-thumb {
+    background: var.$color-background-dark;
+  }
+
+  .scrollable::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: rgba(var.$color-background-dark, 0.7);
   }
 }
 
-// Chromium
-.scrollable::-webkit-scrollbar {
-  width: 12px;
-}
-
-.scrollable::-webkit-scrollbar-thumb {
-  background: #263238;
-}
-
-.scrollable::-webkit-scrollbar-track {
-  border-radius: 0;
-  background: rgba(var.$color-background-dark, 0.7);
-}
