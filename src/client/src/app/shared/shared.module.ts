@@ -32,6 +32,7 @@ import {ImageBrowserComponent} from './components/image-browser/image-browser.co
 import {InputResetSuffixComponent} from './components/input/suffixes/input-reset-suffix/input-reset-suffix.component';
 import {ChipsComponent} from './components/chips/chips.component';
 import {MatChipsModule} from '@angular/material/chips';
+import { IconButtonComponent } from './components/icon-button/icon-button.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import {MatChipsModule} from '@angular/material/chips';
     ImageBrowserComponent,
     InputResetSuffixComponent,
     ChipsComponent,
+    IconButtonComponent,
   ],
   imports: [
     CommonModule,
