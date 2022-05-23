@@ -1,11 +1,19 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {SelectItem} from '~app/typings/select/select.interfaces';
-import {HASHTAG_REGEXP, IMAGE_URL_MAX_LENGTH, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
+import {
+  TAG_REGEXP,
+  FILE_URL_MAX_LENGTH,
+  MAX_IMAGE_SIZE_MB,
+  MAX_TAG_COUNT,
+  DESCRIPTION_MAX_LENGTH,
+  TITLE_MAX_LENGTH,
+} from '~app/constants/validation';
 import {isValidHttpUrl} from '~app/utilities/url';
+import {OpinionService} from '~app/services/opinion/opinion.service';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -20,16 +28,17 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     {title: 'Text', value: OpinionType.Text},
     {title: 'Image', value: OpinionType.Image},
   ];
-  public readonly hashtagRegexp = HASHTAG_REGEXP;
-  public readonly titleMaxLength = 100;
-  public readonly descriptionMaxLength = 3000;
-  public readonly maxTagCount = 10;
+  public readonly hashtagRegexp = TAG_REGEXP;
+  public readonly titleMaxLength = TITLE_MAX_LENGTH;
+  public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
   private readonly addOpinionForm = this.addOpinionFormGroup;
+
+  public constructor(private readonly opinionService: OpinionService) {}
 
   public ngOnInit(): void {
     this.type.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.addOpinionForm.markAsUntouched();
-      this.imageUrl.updateValueAndValidity();
+      this.fileUrl.updateValueAndValidity();
       this.description.updateValueAndValidity();
     });
   }
@@ -42,14 +51,36 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
   public share(): void {
     this.addOpinionForm.markAllAsTouched();
-    this.imageUrl.updateValueAndValidity();
+    this.fileUrl.updateValueAndValidity();
     this.description.updateValueAndValidity();
+
+    if (!this.addOpinionForm.valid) return;
+
+    this.loading$.next(true);
+
+    const {type, fileUrl, title, description, tags} = this.addOpinionForm.value;
+
+    this.opinionService
+      .createOpinion({
+        type,
+        fileUrl,
+        title,
+        description,
+        tags,
+      })
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.loading$.next(false)),
+      )
+      .subscribe(({data}) => {
+        console.log(data);
+      });
   }
 
   public titleErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
-    return `${this.titleMaxLength} characters at max`;
+    return `${TITLE_MAX_LENGTH} characters at max`;
   }
 
   public descriptionErrorMessage(errors: ValidationErrors | null): string | void {
@@ -67,7 +98,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
     if ('url' in errors) return 'Invalid image url';
 
-    return `${IMAGE_URL_MAX_LENGTH} characters at max. Consider to use url shortener beforehand`;
+    return `${FILE_URL_MAX_LENGTH} characters at max. Consider to use url shortener`;
   }
 
   private imageValidator(control: FormControl | AbstractControl): ValidationErrors | null {
@@ -79,7 +110,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
     if (!isValidHttpUrl(control.value)) return {url: true};
 
-    if (control.value.length > IMAGE_URL_MAX_LENGTH) return {maxlength: true};
+    if (control.value.length > FILE_URL_MAX_LENGTH) return {maxlength: true};
 
     return null;
   }
@@ -108,8 +139,8 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     return this.addOpinionForm.controls['title'] as FormControl;
   }
 
-  public get imageUrl(): FormControl {
-    return this.addOpinionForm.controls['imageUrl'] as FormControl;
+  public get fileUrl(): FormControl {
+    return this.addOpinionForm.controls['fileUrl'] as FormControl;
   }
 
   public get file(): FormControl {
@@ -125,11 +156,11 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
   }
 
   public get imageSet(): boolean {
-    return this.imageUrl.value || this.file.value;
+    return this.fileUrl.value || this.file.value;
   }
 
   public get hasImageErrorBorder(): boolean {
-    return !this.file.value && this.imageUrl.touched && this.imageUrl.hasError('required');
+    return !this.file.value && this.fileUrl.touched && this.fileUrl.hasError('required');
   }
 
   public get imageType(): boolean {
@@ -139,14 +170,14 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
   private get addOpinionFormGroup(): FormGroup {
     return new FormGroup({
       type: new FormControl(OpinionType.Text),
-      imageUrl: new FormControl(null, this.imageValidator.bind(this)),
+      fileUrl: new FormControl(null, this.imageValidator.bind(this)),
       file: new FormControl(null, this.fileSizeValidator.bind(this)),
-      title: new FormControl(null, Validators.maxLength(this.titleMaxLength)),
+      title: new FormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
       description: new FormControl(null, [
         Validators.maxLength(this.descriptionMaxLength),
         this.descriptionValidator.bind(this),
       ]),
-      tags: new FormControl([], Validators.maxLength(this.maxTagCount)),
+      tags: new FormControl([], Validators.maxLength(MAX_TAG_COUNT)),
     });
   }
 }

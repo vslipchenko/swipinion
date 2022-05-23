@@ -1,6 +1,8 @@
 import {Pool, QueryConfig, QueryResult} from 'pg';
 import {environment} from '../environments';
-import {UsersTable} from "./tables/users";
+import {UsersTable} from './tables/users';
+import {OpinionsTable} from './tables/opinions';
+import {TagsTable} from './tables/tags';
 
 // PostgreSQL v14
 const {DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_PORT} = environment;
@@ -18,7 +20,9 @@ export const db = {
   close: (): Promise<void> => pool.end(),
   sync: function (): Promise<void> {
     const tables = [
-      UsersTable
+      UsersTable,
+      OpinionsTable,
+      TagsTable,
       // ... Append other tables to sync
     ];
     // Sync tables
