@@ -2,7 +2,7 @@
 @use 'media';
 
 body {
-  background-color: #263238;
+  background-color: var.$color-background-dark;
   color: #fff;
   overflow: hidden;
 }
@@ -38,8 +38,8 @@ body {
 }
 
 .action-text {
-  color: var.$color-primary;
-  border-bottom: 1px dashed var.$color-primary;
+  color: var.$color-accent;
+  border-bottom: 1px solid var.$color-accent;
   cursor: pointer;
   width: max-content;
   height: max-content;

@@ -2,7 +2,7 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {createOpinionValidator} from '../../../validators/opinion';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
-import {concatenateTagValues, queryOpinionCreate} from '../../../data/queries/opinion';
+import {concatenateTagValues, queryOpinionCreate, queryOpinionCreateWithTags} from '../../../data/queries/opinion';
 import {CreateOpinion} from '../../../typings/opinion/opinion.interfaces';
 
 export const opinionMutationTypeDefinitions = gql`
@@ -24,9 +24,15 @@ const createOpinion = async (
 
   if (authenticationError) return authenticationError;
 
-  const query = queryOpinionCreate({...input, userId: tokenData.userId});
+  let query;
 
-  query.text = query.text.replace('{{values}}', concatenateTagValues(input.tags));
+  if (input.tags.length) {
+    query = queryOpinionCreateWithTags({...input, userId: tokenData.userId});
+
+    query.text = query.text.replace('{{values}}', concatenateTagValues(input.tags));
+  } else {
+    query = queryOpinionCreate({...input, userId: tokenData.userId});
+  }
 
   const result = await db.query<{id: string}>(query);
 

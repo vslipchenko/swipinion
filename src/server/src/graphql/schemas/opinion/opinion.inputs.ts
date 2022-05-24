@@ -5,7 +5,7 @@ export const opinionInputs = gql`
     type: Int!
     fileUrl: String
     title: String
-    description: String!
+    description: String
     tags: [String]!
   }
 `;

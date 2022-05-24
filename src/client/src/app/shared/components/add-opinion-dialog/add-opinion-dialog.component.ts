@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
+import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
@@ -14,6 +14,8 @@ import {
 } from '~app/constants/validation';
 import {isValidHttpUrl} from '~app/utilities/url';
 import {OpinionService} from '~app/services/opinion/opinion.service';
+import {ImageService} from '~app/services/image/image.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -22,6 +24,8 @@ import {OpinionService} from '~app/services/opinion/opinion.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddOpinionDialogComponent implements OnInit, Destroyable {
+  @ViewChild('successSnackbar', {static: true}) public successSnackbar!: TemplateRef<any>;
+
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public readonly options: Array<SelectItem> = [
@@ -33,7 +37,11 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
   public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
-  public constructor(private readonly opinionService: OpinionService) {}
+  public constructor(
+    private readonly opinionService: OpinionService,
+    private readonly imageService: ImageService,
+    private readonly snackbar: MatSnackBar,
+  ) {}
 
   public ngOnInit(): void {
     this.type.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -58,7 +66,44 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
     this.loading$.next(true);
 
-    const {type, fileUrl, title, description, tags} = this.addOpinionForm.value;
+    const {type, fileUrl, file, title, description, tags} = this.addOpinionForm.value;
+
+    if (type === OpinionType.Image && file) {
+      this.imageService
+        .uploadImage(file)
+        .pipe(
+          switchMap((result) => {
+            if (!result.success) return throwError('');
+
+            return this.opinionService.createOpinion({
+              type,
+              fileUrl: result.data.thumb.url,
+              title,
+              description,
+              tags,
+            });
+          }),
+          takeUntil(this.destroy$),
+          finalize(() => this.loading$.next(false)),
+        )
+        .subscribe(
+          ({data}) => {
+            if (!data?.createOpinion) {
+              this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
+              return;
+            }
+
+            this.snackbar.openFromTemplate(this.successSnackbar, {
+              data: data.createOpinion,
+              panelClass: 'snackbar-success',
+            });
+          },
+          () =>
+            this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'}),
+        );
+
+      return;
+    }
 
     this.opinionService
       .createOpinion({
@@ -72,9 +117,20 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
       )
-      .subscribe(({data}) => {
-        console.log(data);
-      });
+      .subscribe(
+        ({data}) => {
+          if (!data?.createOpinion) {
+            this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
+            return;
+          }
+
+          this.snackbar.openFromTemplate(this.successSnackbar, {
+            data: data.createOpinion,
+            panelClass: 'snackbar-success',
+          });
+        },
+        () => this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'}),
+      );
   }
 
   public titleErrorMessage(errors: ValidationErrors | null): string | void {
