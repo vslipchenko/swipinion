@@ -25,6 +25,16 @@
   max-width: 500px;
 }
 
+.content {
+  @include media.zero-large {
+    padding-bottom: var.$unit-7;
+  }
+  
+  @include media.above-large {
+    padding-bottom: var.$unit-2;
+  }
+}
+
 .author-image {
   width: 30px;
   height: 30px;
