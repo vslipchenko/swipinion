@@ -9,4 +9,5 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 export class IconButtonComponent {
   @Input() public svgIcon = '';
   @Input() public icon = '';
+  @Input() public extendClass = '';
 }

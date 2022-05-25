@@ -191,6 +191,10 @@
   padding-bottom: var.$unit;
 }
 
+.pb-6 {
+  padding-bottom: var.$unit-6;
+}
+
 .pb-2-3 {
   @include media.zero-small {
     padding-bottom: var.$unit-2;

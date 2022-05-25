@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EmbeddedViewRef, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
@@ -16,7 +16,6 @@ import {isValidHttpUrl} from '~app/utilities/url';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatSnackBarRef} from '@angular/material/snack-bar/snack-bar-ref';
 import {MatDialogRef} from '@angular/material/dialog';
 import {OpinionSnackbarComponent} from '~app/shared/components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
 import {MutationResult} from 'apollo-angular';
@@ -38,7 +37,6 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
   public readonly hashtagRegexp = TAG_REGEXP;
   public readonly titleMaxLength = TITLE_MAX_LENGTH;
   public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
-  public snackbarRef!: MatSnackBarRef<EmbeddedViewRef<any>>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
   public constructor(

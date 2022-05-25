@@ -60,3 +60,18 @@
   }
 }
 
+.actions {
+  @include media.zero-large {
+    display: none;
+  }
+}
+
+.action {
+  bottom: 4px;
+  opacity: 0.8;
+  max-width: 500px;
+
+  @include media.above-large {
+    display: none;
+  }
+}
