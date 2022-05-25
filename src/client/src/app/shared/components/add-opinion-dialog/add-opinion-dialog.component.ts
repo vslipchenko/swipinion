@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EmbeddedViewRef, OnInit} from '@angular/core';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
@@ -16,6 +16,11 @@ import {isValidHttpUrl} from '~app/utilities/url';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSnackBarRef} from '@angular/material/snack-bar/snack-bar-ref';
+import {MatDialogRef} from '@angular/material/dialog';
+import {OpinionSnackbarComponent} from '~app/shared/components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
+import {MutationResult} from 'apollo-angular';
+import {CreateOpinionMutationResult} from '~app/typings/opinion/opinion.interfaces';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -24,8 +29,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddOpinionDialogComponent implements OnInit, Destroyable {
-  @ViewChild('successSnackbar', {static: true}) public successSnackbar!: TemplateRef<any>;
-
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public readonly options: Array<SelectItem> = [
@@ -35,12 +38,14 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
   public readonly hashtagRegexp = TAG_REGEXP;
   public readonly titleMaxLength = TITLE_MAX_LENGTH;
   public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
+  public snackbarRef!: MatSnackBarRef<EmbeddedViewRef<any>>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
   public constructor(
     private readonly opinionService: OpinionService,
     private readonly imageService: ImageService,
     private readonly snackbar: MatSnackBar,
+    private readonly dialogRef: MatDialogRef<AddOpinionDialogComponent>,
   ) {}
 
   public ngOnInit(): void {
@@ -86,21 +91,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
           takeUntil(this.destroy$),
           finalize(() => this.loading$.next(false)),
         )
-        .subscribe(
-          ({data}) => {
-            if (!data?.createOpinion) {
-              this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
-              return;
-            }
-
-            this.snackbar.openFromTemplate(this.successSnackbar, {
-              data: data.createOpinion,
-              panelClass: 'snackbar-success',
-            });
-          },
-          () =>
-            this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'}),
-        );
+        .subscribe(this.opinionShared.bind(this), this.errorSnackbar.bind(this));
 
       return;
     }
@@ -117,20 +108,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
       )
-      .subscribe(
-        ({data}) => {
-          if (!data?.createOpinion) {
-            this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
-            return;
-          }
-
-          this.snackbar.openFromTemplate(this.successSnackbar, {
-            data: data.createOpinion,
-            panelClass: 'snackbar-success',
-          });
-        },
-        () => this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'}),
-      );
+      .subscribe(this.opinionShared.bind(this), this.errorSnackbar.bind(this));
   }
 
   public titleErrorMessage(errors: ValidationErrors | null): string | void {
@@ -185,6 +163,21 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     if (!control.value) return {required: true};
 
     return null;
+  }
+
+  private opinionShared({data}: MutationResult<CreateOpinionMutationResult>): void {
+    if (!data?.createOpinion) return this.errorSnackbar();
+
+    this.snackbar.openFromComponent(OpinionSnackbarComponent, {
+      data: data.createOpinion,
+      panelClass: 'snackbar-success',
+    });
+
+    this.dialogRef.close();
+  }
+
+  private errorSnackbar(): void {
+    this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
   }
 
   public get type(): FormControl {

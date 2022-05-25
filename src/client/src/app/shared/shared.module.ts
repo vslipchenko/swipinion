@@ -33,6 +33,7 @@ import {InputResetSuffixComponent} from './components/input/suffixes/input-reset
 import {ChipsComponent} from './components/chips/chips.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { IconButtonComponent } from './components/icon-button/icon-button.component';
+import { OpinionSnackbarComponent } from './components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { IconButtonComponent } from './components/icon-button/icon-button.compon
     InputResetSuffixComponent,
     ChipsComponent,
     IconButtonComponent,
+    OpinionSnackbarComponent,
   ],
   imports: [
     CommonModule,
