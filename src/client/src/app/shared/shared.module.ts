@@ -34,6 +34,7 @@ import {ChipsComponent} from './components/chips/chips.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { IconButtonComponent } from './components/icon-button/icon-button.component';
 import { OpinionSnackbarComponent } from './components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
+import { EmptyOpinionsComponent } from './components/empty-opinions/empty-opinions.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { OpinionSnackbarComponent } from './components/add-opinion-dialog/opinio
     ChipsComponent,
     IconButtonComponent,
     OpinionSnackbarComponent,
+    EmptyOpinionsComponent,
   ],
   imports: [
     CommonModule,

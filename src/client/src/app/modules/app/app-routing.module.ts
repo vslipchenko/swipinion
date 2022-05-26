@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {EntryModule} from '~app/modules/entry/entry.module';
 import {PageNotFoundModule} from '~app/modules/page-not-found/page-not-found.module';
+import {UserModule} from '~app/modules/user/user.module';
 
 const entryModule = {
   pathMatch: 'full',
@@ -40,6 +41,10 @@ const routes: Routes = [
     data: {
       path: 'confirmation',
     },
+  },
+  {
+    path: 'user/:username',
+    loadChildren: (): Promise<typeof UserModule> => import('~app/modules/user/user.module').then((m) => m.UserModule),
   },
   {
     path: '**',
