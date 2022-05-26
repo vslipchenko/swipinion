@@ -1,0 +1,11 @@
+@use 'media';
+
+.image {
+  @include media.zero-small {
+    height: 50px;
+  }
+
+  @include media.above-small {
+    height: 70px;
+  }
+}
