@@ -14,6 +14,7 @@ import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
+import {SharedModule} from '~app/shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
     AppRoutingModule,
     NgxsModule.forRoot([AppState]),
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
+    SharedModule,
   ],
   providers: [
     AuthenticationInterceptorProvider,

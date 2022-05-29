@@ -1,1 +1,8 @@
+<app-header
+  [showSignIn]="signIn$.asObservable()"
+  [showSignUp]="signUp$.asObservable()"
+  [showPasswordRecovery]="recover$.asObservable()"
+  [showEmailConfirmation]="confirm$.asObservable()"
+></app-header>
+
 <router-outlet></router-outlet>

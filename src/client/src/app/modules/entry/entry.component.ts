@@ -1,7 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {first, ReplaySubject, Subject, takeUntil} from 'rxjs';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'app-entry',
@@ -9,26 +6,4 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
   styleUrls: ['./entry.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EntryComponent implements OnInit, Destroyable {
-  public readonly signIn$ = new ReplaySubject<void>(1);
-  public readonly signUp$ = new ReplaySubject<void>(1);
-  public readonly recover$ = new ReplaySubject<void>(1);
-  public readonly confirm$ = new ReplaySubject<void>(1);
-  public readonly destroy$ = new Subject<void>();
-
-  public constructor(private readonly activatedRoute: ActivatedRoute) {}
-
-  public ngOnInit(): void {
-    this.activatedRoute.data.pipe(first(), takeUntil(this.destroy$)).subscribe((data) => {
-      if (data['path'] === 'sign-in') this.signIn$.next();
-      else if (data['path'] === 'sign-up') this.signUp$.next();
-      else if (data['path'] === 'recovery') this.recover$.next();
-      else if (data['path'] === 'confirmation') this.confirm$.next();
-    });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-}
+export class EntryComponent {}
