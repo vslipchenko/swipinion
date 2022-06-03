@@ -77,14 +77,15 @@ import { EmptyOpinionsComponent } from './components/empty-opinions/empty-opinio
     MatSelectModule,
     MatChipsModule,
   ],
-  exports: [
-    HeaderComponent,
-    ButtonComponent,
-    InputComponent,
-    InputHideSuffixComponent,
-    ProgressSpinnerComponent,
-    CheckboxComponent,
-    CardComponent,
-  ],
+    exports: [
+        HeaderComponent,
+        ButtonComponent,
+        InputComponent,
+        InputHideSuffixComponent,
+        ProgressSpinnerComponent,
+        CheckboxComponent,
+        CardComponent,
+        EmptyOpinionsComponent,
+    ],
 })
 export class SharedModule {}

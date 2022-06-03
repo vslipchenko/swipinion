@@ -2,13 +2,13 @@ import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {
   AccessTokenByRefreshTokenQueryResult,
-  // AccessTokenData,
   SignIn,
   SignInQueryResult,
 } from '~app/typings/authentication/authentication.interfaces';
 import {BehaviorSubject, map, Observable} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authentication.queries';
+
 // import jwt_decode from 'jwt-decode';
 
 @Injectable({
@@ -17,7 +17,8 @@ import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authent
 export class AuthenticationService {
   public accessToken$ = new BehaviorSubject('');
 
-  public constructor(private readonly apollo: Apollo) {}
+  public constructor(private readonly apollo: Apollo) {
+  }
 
   public signIn(input: SignIn): Observable<ApolloQueryResult<SignInQueryResult>> {
     return this.apollo.query<SignInQueryResult>({
@@ -65,7 +66,7 @@ export class AuthenticationService {
   //   // window.location.reload(); // TODO review whether its necessary
   // }
 
-  // public get authenticated(): boolean {
-  //   return Boolean(this.accessToken$.value);
-  // }
+  public get authenticated(): boolean {
+    return Boolean(this.accessToken$.value);
+  }
 }
