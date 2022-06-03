@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, UrlTree} from '@angular/router';
+import {CanLoad, Route, Router, UrlSegment, UrlTree} from '@angular/router';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {USERNAME_REGEXP} from '~app/constants/validation';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserCanLoadGuard implements CanActivate {
+export class UserCanLoadGuard implements CanLoad {
   public constructor(private readonly authenticationService: AuthenticationService, private readonly router: Router) {}
 
-  public canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
-    const longLinkNavigation = Boolean(route.params['username']);
+  public canLoad(route: Route, segments: Array<UrlSegment>): boolean | UrlTree {
+    const explicitUserLinkNavigation = segments[0].path === 'user';
 
-    if (longLinkNavigation) {
-      const validUsername = USERNAME_REGEXP.test(route.params['username']);
+    if (explicitUserLinkNavigation) {
+      const validUsername = USERNAME_REGEXP.test(segments[1].path);
 
       if (!validUsername) {
         void this.router.navigateByUrl('**', {skipLocationChange: true}); // createUrlTree unfortunately does not support skipLocationChange parameter

@@ -10,9 +10,9 @@ export class UserCanActivateGuard implements CanActivate {
   public constructor(private readonly authenticationService: AuthenticationService, private readonly router: Router) {}
 
   public canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
-    const longLinkNavigation = Boolean(route.params['username']);
+    const explicitUserLinkNavigation = Boolean(route.params['username']);
 
-    if (longLinkNavigation) {
+    if (explicitUserLinkNavigation) {
       const validUsername = USERNAME_REGEXP.test(route.params['username']);
 
       if (!validUsername) {

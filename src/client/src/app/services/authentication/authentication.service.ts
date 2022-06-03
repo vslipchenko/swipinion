@@ -17,8 +17,7 @@ import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authent
 export class AuthenticationService {
   public accessToken$ = new BehaviorSubject('');
 
-  public constructor(private readonly apollo: Apollo) {
-  }
+  public constructor(private readonly apollo: Apollo) {}
 
   public signIn(input: SignIn): Observable<ApolloQueryResult<SignInQueryResult>> {
     return this.apollo.query<SignInQueryResult>({
@@ -60,11 +59,11 @@ export class AuthenticationService {
     return this.accessToken$.asObservable().pipe(map((token) => Boolean(token)));
   }
 
-  // public logout(): void {
-  //   this.resetTokens();
-  //   // This will reset app's state & redirect to sign-in page if protected route is requested
-  //   // window.location.reload(); // TODO review whether its necessary
-  // }
+  public logout(): void {
+    this.resetTokens();
+    // This will reset app's state & redirect to sign-in page if protected route is requested
+    window.location.reload(); // Reset app's state
+  }
 
   public get authenticated(): boolean {
     return Boolean(this.accessToken$.value);
