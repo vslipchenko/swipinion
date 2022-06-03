@@ -15,6 +15,7 @@ import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 import {SharedModule} from '~app/shared/shared.module';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +28,7 @@ import {SharedModule} from '~app/shared/shared.module';
     AppRoutingModule,
     NgxsModule.forRoot([AppState]),
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
+    MatSnackBarModule,
     SharedModule,
   ],
   providers: [
