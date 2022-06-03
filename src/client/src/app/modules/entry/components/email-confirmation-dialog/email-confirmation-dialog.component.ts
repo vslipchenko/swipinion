@@ -48,8 +48,6 @@ export class EmailConfirmationDialogComponent implements Destroyable {
     const validCode = CODE_REGEXP.test(this.code.value);
     const validEmail = EMAIL_REGEXP.test(email);
 
-    console.log(validEmail, validCode);
-
     if (!(validCode && validEmail)) return this.showErrorSnackbar();
 
     this.loading$.next(true);

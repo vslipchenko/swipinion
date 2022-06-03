@@ -16,7 +16,6 @@ export class AppComponent implements OnInit, Destroyable {
   public readonly signIn$ = new ReplaySubject<void>(1);
   public readonly signUp$ = new ReplaySubject<void>(1);
   public readonly recover$ = new ReplaySubject<void>(1);
-  public readonly confirm$ = new ReplaySubject<void>(1);
   public readonly destroy$ = new Subject<void>();
 
   public constructor(
@@ -36,7 +35,6 @@ export class AppComponent implements OnInit, Destroyable {
       if (event.url === '/sign-in') this.signIn$.next();
       else if (event.url === '/sign-up') this.signUp$.next();
       else if (event.url === '/recovery') this.recover$.next();
-      else if (event.url === '/confirmation') this.confirm$.next();
     });
   }
 

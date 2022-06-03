@@ -19,7 +19,6 @@ export class HeaderComponent implements OnInit, Destroyable {
   @Input() public showSignIn = of<void>();
   @Input() public showSignUp = of<void>();
   @Input() public showPasswordRecovery = of<void>();
-  @Input() public showEmailConfirmation = of<void>();
 
   public readonly destroy$ = new Subject<void>();
   public readonly authenticated$: Observable<boolean>;
@@ -43,10 +42,6 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     this.showPasswordRecovery.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.recoverPassword(false);
-    });
-
-    this.showEmailConfirmation.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.confirmEmail(false);
     });
   }
 

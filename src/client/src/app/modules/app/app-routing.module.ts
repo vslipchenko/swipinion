@@ -44,13 +44,6 @@ const routes: Routes = [
     },
   },
   {
-    path: 'confirmation',
-    ...entryModule,
-    data: {
-      path: 'confirmation',
-    },
-  },
-  {
     path: 'profile',
     ...userModule,
   },
