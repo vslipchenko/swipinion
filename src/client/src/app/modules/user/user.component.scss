@@ -1,0 +1,73 @@
+@use 'variables' as var;
+@use 'media';
+
+$user-profile-image-size: 250px;
+$user-profile-image-radius: 20px;
+
+:host {
+  min-height: 0;
+}
+
+.username {
+  word-break: break-word;
+}
+
+.stripe {
+  height: $user-profile-image-size;
+  background: rgb(105, 240, 174);
+  background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
+  border-radius: 0 $user-profile-image-radius $user-profile-image-radius 0;
+}
+
+.user-info {
+  max-width: $user-profile-image-size;
+}
+
+.image {
+  z-index: 1;
+  width: $user-profile-image-size;
+  height: $user-profile-image-size;
+  object-fit: cover;
+  border-radius: $user-profile-image-radius;
+}
+
+.bio {
+  word-break: break-word;
+}
+
+.container {
+  min-width: 65%;
+  //width: 65%;
+}
+
+.content {
+  max-width: 800px;
+}
+
+.scrollable {
+  overflow-y: auto;
+}
+
+@include media.above-large {
+  // Mozilla
+  @supports (scrollbar-width: thin) {
+    .scrollable {
+      scrollbar-width: thin;
+      scrollbar-color: var.$color-primary var.$color-background-dark;
+    }
+  }
+
+  // Chromium
+  .scrollable::-webkit-scrollbar {
+    width: var.$scrollbar-width;
+  }
+
+  .scrollable::-webkit-scrollbar-thumb {
+    background: var.$color-primary;
+  }
+
+  .scrollable::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: var.$color-background-dark;
+  }
+}
