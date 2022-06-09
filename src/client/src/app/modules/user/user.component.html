@@ -21,9 +21,11 @@
   </div>
 
 
-  <div class="container d-flex f-column h-100 scrollable">
+  <div class="container d-flex f-column h-100 scrollable px-2-3">
+    <app-tabs [tabs]="['Opinions', 'Reactions', 'Shares']" color="accent" headerPosition="below"
+              class="d-block sticky t-0 bg-dark"></app-tabs>
 
-    <div class="content p-2-3">What is Lorem Ipsum?
+    <div class="content mt-1">What is Lorem Ipsum?
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
       standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
       a

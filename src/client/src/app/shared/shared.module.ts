@@ -32,9 +32,11 @@ import {ImageBrowserComponent} from './components/image-browser/image-browser.co
 import {InputResetSuffixComponent} from './components/input/suffixes/input-reset-suffix/input-reset-suffix.component';
 import {ChipsComponent} from './components/chips/chips.component';
 import {MatChipsModule} from '@angular/material/chips';
-import { IconButtonComponent } from './components/icon-button/icon-button.component';
-import { OpinionSnackbarComponent } from './components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
-import { EmptyOpinionsComponent } from './components/empty-opinions/empty-opinions.component';
+import {IconButtonComponent} from './components/icon-button/icon-button.component';
+import {OpinionSnackbarComponent} from './components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
+import {EmptyOpinionsComponent} from './components/empty-opinions/empty-opinions.component';
+import {TabsComponent} from './components/tabs/tabs.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { EmptyOpinionsComponent } from './components/empty-opinions/empty-opinio
     IconButtonComponent,
     OpinionSnackbarComponent,
     EmptyOpinionsComponent,
+    TabsComponent,
   ],
   imports: [
     CommonModule,
@@ -76,16 +79,18 @@ import { EmptyOpinionsComponent } from './components/empty-opinions/empty-opinio
     MatDialogModule,
     MatSelectModule,
     MatChipsModule,
+    MatTabsModule,
   ],
-    exports: [
-        HeaderComponent,
-        ButtonComponent,
-        InputComponent,
-        InputHideSuffixComponent,
-        ProgressSpinnerComponent,
-        CheckboxComponent,
-        CardComponent,
-        EmptyOpinionsComponent,
-    ],
+  exports: [
+    HeaderComponent,
+    ButtonComponent,
+    InputComponent,
+    InputHideSuffixComponent,
+    ProgressSpinnerComponent,
+    CheckboxComponent,
+    CardComponent,
+    EmptyOpinionsComponent,
+    TabsComponent,
+  ],
 })
 export class SharedModule {}
