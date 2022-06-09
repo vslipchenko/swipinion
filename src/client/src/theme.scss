@@ -1,9 +1,10 @@
 @use '@angular/material' as mat;
 @use 'variables' as var;
+
 @include mat.core;
 
 $primary: mat.define-palette(mat.$green-palette, A200);
-$accent: mat.define-palette(mat.$pink-palette);
+$accent: mat.define-palette(mat.$pink-palette, A200);
 $theme: mat.define-dark-theme(
     (
       color: (
