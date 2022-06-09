@@ -13,7 +13,7 @@ $mat-error-font-size: 75%;
 
 /* color */
 $color-primary: map.get(mat.$mat-green, A200); // #69f0ae
-$color-accent: map.get(mat.$mat-pink, 500); // #e91e63
+$color-accent: map.get(mat.$mat-pink, A200); // #ff4081
 $color-warn: map.get(mat.$mat-red, 500); // #f44336
 // $color-error: map.get(mat.$mat-red, 500); // #f44336
 $color-success: #28a745;
