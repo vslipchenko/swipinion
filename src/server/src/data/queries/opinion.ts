@@ -42,3 +42,15 @@ export const queryOpinionCreate = ({
   `,
   values: [userId, type, fileUrl, title, description],
 });
+
+export const queryOpinionsByUsername = (username: string, offset: number): QueryConfig => ({
+  text: `
+    SELECT id, type, file_url, title, description
+    FROM opinions
+    WHERE user_id = $1
+      ORDER BY created_at DESC
+      LIMIT 10
+      OFFSET $2
+  `,
+  values: [username, offset],
+});

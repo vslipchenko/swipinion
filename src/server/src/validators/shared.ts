@@ -17,3 +17,4 @@ export const emailValidator = Joi.string().regex(EMAIL_REGEXP);
 export const codeValidator = Joi.string().pattern(CODE_REGEXP);
 export const passwordValidator = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).regex(PASSWORD_REGEXP);
 export const languageValidator = Joi.string().valid(...getStringEnumValues(LanguageLabel));
+export const offsetValidator = Joi.number().positive();

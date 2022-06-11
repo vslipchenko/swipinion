@@ -8,4 +8,9 @@ export const opinionInputs = gql`
     description: String
     tags: [String]!
   }
+
+  input GetOpinions {
+    username: String!
+    offset: Float!
+  }
 `;

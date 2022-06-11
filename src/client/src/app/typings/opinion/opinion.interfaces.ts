@@ -11,3 +11,12 @@ export interface CreateOpinion {
   description: string;
   tags: Array<string>;
 }
+
+export interface GetOpinionsByUsernameQueryResult {
+  getOpinionsByUsername: string;
+}
+
+export interface GetOpinions {
+  username: string;
+  offset: number;
+}
