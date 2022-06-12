@@ -1,5 +1,14 @@
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
+export interface Opinion {
+  id: number;
+  type: OpinionType;
+  fileUrl: string;
+  title: string;
+  description: string;
+  tags: Array<string>;
+}
+
 export interface CreateOpinionMutationResult {
   createOpinion: string;
 }
@@ -13,7 +22,7 @@ export interface CreateOpinion {
 }
 
 export interface GetOpinionsByUsernameQueryResult {
-  getOpinionsByUsername: string;
+  getOpinionsByUsername: Array<Opinion>;
 }
 
 export interface GetOpinions {

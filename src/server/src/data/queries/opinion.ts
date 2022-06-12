@@ -47,7 +47,7 @@ export const queryOpinionsByUsername = (username: string, offset: number): Query
   text: `
     SELECT id, type, file_url, title, description
     FROM opinions
-    WHERE user_id = $1
+    WHERE user_id = (SELECT id FROM users WHERE username = $1)
       ORDER BY created_at DESC
       LIMIT 10
       OFFSET $2
