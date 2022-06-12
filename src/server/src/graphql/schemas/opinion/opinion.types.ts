@@ -7,5 +7,6 @@ export const opinionTypes = gql`
     file_url: String
     title: String
     description: String
+    tags: [String]!
   }
 `;

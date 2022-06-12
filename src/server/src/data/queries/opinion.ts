@@ -45,10 +45,12 @@ export const queryOpinionCreate = ({
 
 export const queryOpinionsByUsername = (username: string, offset: number): QueryConfig => ({
   text: `
-    SELECT id, type, file_url, title, description
+    SELECT opinions.id, opinions.type, opinions.file_url, opinions.title, opinions.description, array_agg(tags.tag) as tags
     FROM opinions
-    WHERE user_id = (SELECT id FROM users WHERE username = $1)
-      ORDER BY created_at DESC
+    LEFT JOIN tags ON opinions.id = tags.opinion_id
+      WHERE opinions.user_id = (SELECT id FROM users WHERE username = $1)
+      GROUP BY opinions.id
+      ORDER BY opinions.created_at DESC
       LIMIT 10
       OFFSET $2
   `,

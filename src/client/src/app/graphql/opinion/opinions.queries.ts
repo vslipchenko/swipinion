@@ -8,6 +8,7 @@ export const GET_OPINIONS_BY_USERNAME = gql`
       file_url
       title
       description
+      tags
     }
   }
 `;
