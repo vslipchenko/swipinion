@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.confirm.pipe(takeUntil(dialog.afterClosed())).subscribe((data) => {
       dialog.close();
-      this.confirmEmail(true, data.email, data);
+      this.confirmEmail(data.email, data);
     });
 
     dialog.componentInstance.authenticated.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
@@ -80,14 +80,14 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe((email) => {
       dialog.close();
-      this.confirmEmail(true, email);
+      this.confirmEmail(email);
     });
 
     this.listenDialogClose(dialog);
   }
 
-  private confirmEmail(changeLocation: boolean, email = '', data?: {email: string; password: string}): void {
-    if (changeLocation) this.location.go('/confirmation', `email=${encodeURI(email)}`);
+  private confirmEmail(email = '', data?: {email: string; password: string}): void {
+    // if (changeLocation) this.location.go('/confirmation', `email=${encodeURI(email)}`);
 
     const dialog = this.dialog.open(EmailConfirmationDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
 

@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
@@ -22,11 +21,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
-  public constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly snackbar: MatSnackBar,
-    private readonly userService: UserService,
-  ) {}
+  public constructor(private readonly snackbar: MatSnackBar, private readonly userService: UserService) {}
 
   public ngOnDestroy(): void {
     this.destroy$.next();
@@ -43,17 +38,17 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   public confirm(): void {
     if (!this.code.valid) return;
 
-    const email = this.email || decodeURI(this.activatedRoute.snapshot.queryParams['email']);
+    // const email = this.email || decodeURI(this.activatedRoute.snapshot.queryParams['email']);
 
     const validCode = CODE_REGEXP.test(this.code.value);
-    const validEmail = EMAIL_REGEXP.test(email);
+    const validEmail = EMAIL_REGEXP.test(this.email);
 
     if (!(validCode && validEmail)) return this.showErrorSnackbar();
 
     this.loading$.next(true);
 
     this.userService
-      .confirmEmail({email, code: this.code.value})
+      .confirmEmail({email: this.email, code: this.code.value})
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
