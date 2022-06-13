@@ -1,52 +1,104 @@
 @use 'variables' as var;
 @use 'media';
 
-$user-profile-image-size: 250px;
+$user-profile-image-size-default: 250px;
+$user-profile-image-size-small: 120px;
 $user-profile-image-radius: 20px;
 
 :host {
   min-height: 0;
 }
 
+.wrapper {
+  @include media.zero-small {
+    overflow-y: auto;
+    flex-direction: column;
+  }
+}
+
 .username {
   word-break: break-word;
+
+  @include media.zero-small {
+    text-align: center;
+  }
 }
 
 .stripe {
-  height: $user-profile-image-size;
   background: rgb(105, 240, 174);
   background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
-  border-radius: 0 $user-profile-image-radius $user-profile-image-radius 0;
+
+  @include media.zero-small {
+    //display: none;
+    height: $user-profile-image-size-small / 1.5;
+  }
+
+  @include media.above-small {
+    height: $user-profile-image-size-default;
+    border-radius: 0 $user-profile-image-radius $user-profile-image-radius 0;
+  }
+}
+
+.user-block {
+  @include media.above-small {
+    max-width: $user-profile-image-size-default;
+  }
 }
 
 .user-info {
-  max-width: $user-profile-image-size;
+  @include media.zero-small {
+    padding: var.$unit-2;
+  }
+
+  @include media.above-small {
+    margin-top: var.$unit-2;
+  }
 }
 
 .image {
   z-index: 1;
-  width: $user-profile-image-size;
-  height: $user-profile-image-size;
   object-fit: cover;
   border-radius: $user-profile-image-radius;
+
+  @include media.zero-small {
+    margin-top: var.$unit-2;
+    height: $user-profile-image-size-small;
+    width: $user-profile-image-size-small;
+  }
+
+  @include media.above-small {
+    height: $user-profile-image-size-default;
+    width: $user-profile-image-size-default;
+  }
 }
 
 .bio {
   word-break: break-word;
 }
 
+app-tabs {
+  @include media.zero-small {
+    margin-left: -#{var.$unit-2};
+    margin-right: -#{var.$unit-2};
+  }
+}
+
 .container {
   min-width: 70%;
   //width: 65%;
+
+  @include media.above-small {
+    overflow-y: auto;
+  }
 }
 
 .content {
   max-width: 800px;
 }
 
-.scrollable {
-  overflow-y: auto;
-}
+//.scrollable {
+//  overflow-y: auto;
+//}
 
 @include media.above-large {
   // Mozilla
