@@ -2,7 +2,7 @@
 @use 'media';
 
 $user-profile-image-size-default: 250px;
-$user-profile-image-size-small: 120px;
+$user-profile-image-size-small: 128px;
 $user-profile-image-radius: 20px;
 
 :host {
@@ -25,7 +25,7 @@ $user-profile-image-radius: 20px;
 }
 
 .stripe {
-  background: rgb(105, 240, 174);
+  //background: var.$color-primary;
   background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
 
   @include media.zero-small {
@@ -59,6 +59,8 @@ $user-profile-image-radius: 20px;
   z-index: 1;
   object-fit: cover;
   border-radius: $user-profile-image-radius;
+  //background: var.$color-accent;
+  background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
 
   @include media.zero-small {
     margin-top: var.$unit-2;
@@ -80,6 +82,11 @@ app-tabs {
   @include media.zero-small {
     margin-left: -#{var.$unit-2};
     margin-right: -#{var.$unit-2};
+  }
+
+  @include media.above-small {
+    position: sticky;
+    top: 0;
   }
 }
 
