@@ -37,6 +37,9 @@ import {OpinionSnackbarComponent} from './components/add-opinion-dialog/opinion-
 import {EmptyOpinionsComponent} from './components/empty-opinions/empty-opinions.component';
 import {TabsComponent} from './components/tabs/tabs.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import {OpinionPreviewComponent} from './components/opinion-preview/opinion-preview.component';
+// import {MatCardModule} from '@angular/material/card';
+// import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     OpinionSnackbarComponent,
     EmptyOpinionsComponent,
     TabsComponent,
+    OpinionPreviewComponent,
   ],
   imports: [
     CommonModule,
@@ -80,6 +84,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSelectModule,
     MatChipsModule,
     MatTabsModule,
+    // MatCardModule,
+    // MatDividerModule,
   ],
   exports: [
     HeaderComponent,
@@ -91,6 +97,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     CardComponent,
     EmptyOpinionsComponent,
     TabsComponent,
+    OpinionPreviewComponent,
   ],
 })
 export class SharedModule {}
