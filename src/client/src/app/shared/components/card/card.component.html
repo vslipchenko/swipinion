@@ -1,5 +1,6 @@
 <div class="wrapper relative">
-  <div class="background bg-dark absolute h-100 w-100" [style.background-image]="'url(' + backgroundThumbnail +  ')'"></div>
+  <div class="background bg-dark absolute h-100 w-100"
+       [style.background-image]="'url(' + backgroundThumbnail +  ')'"></div>
 
   <div class="container mx-auto d-flex f-column h-100">
     <div class="glass p-1">
@@ -12,7 +13,7 @@
         <mat-icon>more_horiz</mat-icon>
       </div>
 
-      <app-card-stats class="d-block pt-2" [stats]="stats"></app-card-stats>
+      <app-card-stats class="d-flex jc-between pt-2" [stats]="stats"></app-card-stats>
     </div>
 
     <div class="scrollable">
