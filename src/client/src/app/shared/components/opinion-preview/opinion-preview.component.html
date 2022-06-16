@@ -1,7 +1,7 @@
 <div class="preview">
   <div class="d-flex">
-    <img *ngIf="setImage" [src]="fileUrl" alt="">
-    <div class="content p-2 relative" [class.image]="setImage">
+    <img *ngIf="fileUrl" [src]="fileUrl" alt="">
+    <div class="content p-2 relative">
       <p *ngIf="title" class="fw-medium mb-1">{{title}}</p>
       <p>{{description}}</p>
       <div class="dimmer absolute w-100"></div>

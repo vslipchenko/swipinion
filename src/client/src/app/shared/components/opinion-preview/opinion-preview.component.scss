@@ -37,15 +37,13 @@ img {
 
 .content {
   overflow: hidden;
-}
 
-.content.image {
   @include media.zero-small {
-    height: $preview-image-size-small;
+    max-height: $preview-image-size-small;
   }
 
   @include media.above-small {
-    height: $preview-image-size-default;
+    max-height: $preview-image-size-default;
   }
 }
 

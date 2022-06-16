@@ -21,12 +21,4 @@ export class OpinionPreviewComponent {
     {svgIcon: 'dislike-n-comment', value: 10},
     // {icon: 'visibility', value: 14},
   ];
-
-  // public get isPng(): boolean {
-  //   return true;
-  // }
-
-  public get setImage(): boolean {
-    return Boolean(this.type === OpinionType.Image && this.fileUrl);
-  }
 }

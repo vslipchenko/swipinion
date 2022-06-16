@@ -27,7 +27,7 @@
 
     <div class="content pb-2-3">
       <app-opinion-preview *ngFor="let opinion of opinions$ | async" [title]="opinion.title"
-                           [description]="opinion.description" [fileUrl]="opinion.fileUrl"
+                           [description]="opinion.description" [fileUrl]="opinion.file_url"
                            [tags]="opinion.tags" class="d-block mt-2-3"></app-opinion-preview>
       <!--      <div *ngFor="let opinion of opinions$ | async">-->
       <!--        &lt;!&ndash;        TODO: trackBy&ndash;&gt;-->
