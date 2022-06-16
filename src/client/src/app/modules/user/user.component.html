@@ -23,10 +23,12 @@
 
   <div class="container d-flex f-column scrollable px-2-3">
     <app-tabs [tabs]="['Opinions', 'Reactions', 'Shares']" color="accent" headerPosition="below"
-              class="d-block bg-dark"></app-tabs>
+              class="tabs d-block bg-dark"></app-tabs>
 
-    <div class="content mt-1">
-      <app-opinion-preview></app-opinion-preview>
+    <div class="content pb-2-3">
+      <app-opinion-preview *ngFor="let opinion of opinions$ | async" [title]="opinion.title"
+                           [description]="opinion.description" [fileUrl]="opinion.fileUrl"
+                           [tags]="opinion.tags" class="d-block mt-2-3"></app-opinion-preview>
       <!--      <div *ngFor="let opinion of opinions$ | async">-->
       <!--        &lt;!&ndash;        TODO: trackBy&ndash;&gt;-->
       <!--        {{opinion.description}}-->

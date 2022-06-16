@@ -12,6 +12,7 @@ export class OpinionPreviewComponent {
   @Input() public title = '';
   @Input() public description = '';
   @Input() public fileUrl = '';
+  @Input() public tags: Array<string> = [];
 
   public readonly stats = [
     {icon: 'thumb_up', value: 12},
@@ -24,4 +25,8 @@ export class OpinionPreviewComponent {
   // public get isPng(): boolean {
   //   return true;
   // }
+
+  public get setImage(): boolean {
+    return Boolean(this.type === OpinionType.Image && this.fileUrl);
+  }
 }

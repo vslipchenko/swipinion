@@ -104,6 +104,10 @@ app-tabs {
   max-width: 800px;
 }
 
+.tabs {
+  z-index: 1;
+}
+
 //.scrollable {
 //  overflow-y: auto;
 //}

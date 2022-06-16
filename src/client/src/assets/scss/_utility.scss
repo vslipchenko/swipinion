@@ -59,6 +59,16 @@
   margin-top: var.$unit-2;
 }
 
+.mt-2-3 {
+  @include media.zero-small {
+    margin-top: var.$unit-2;
+  }
+
+  @include media.above-small {
+    margin-top: var.$unit-3;
+  }
+}
+
 .mr-h {
   margin-right: var.$unit-half;
 }
