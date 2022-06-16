@@ -2,34 +2,61 @@
 @use 'media';
 //@use '@angular/material' as mat;
 
+$preview-image-size-default: 180px;
+$preview-image-size-small: 80px;
+
 .preview {
 
   border-style: solid;
   //border-width: 1px 1px 1px 0;
   border-width: 1px;
   //border-color: rgba(255, 255, 255, 0.12);
-  border-color: #ffffff1f;
+  border-color: var.$color-light-transparent;
   border-radius: 10px;
   //border-radius: 0 10px 10px 0;
 }
 
 img {
-  background: #ffffff1f;
+  background: var.$color-light-transparent;
   object-fit: cover;
   //background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
   border-radius: 10px 0 0 0;
 
   @include media.zero-small {
-    height: 80px;
-    width: 80px;
-    min-width: 80px;
+    height: $preview-image-size-small;
+    width: $preview-image-size-small;
+    min-width: $preview-image-size-small;
   }
 
   @include media.above-small {
-    height: 180px;
-    width: 180px;
-    min-width: 180px;
+    height: $preview-image-size-default;
+    width: $preview-image-size-default;
+    min-width: $preview-image-size-default;
   }
+}
+
+.content {
+  overflow: hidden;
+
+  @include media.zero-small {
+    height: $preview-image-size-small;
+  }
+
+  @include media.above-small {
+    height: $preview-image-size-default;
+  }
+}
+
+.shader {
+  box-shadow: inset 0px -15px 20px 0px var.$color-background-dark;
+  height: 25px;
+  bottom: 0;
+  left: 0;
+}
+
+.actions,
+.tags {
+  border-bottom: 1px solid var.$color-light-transparent;
 }
 
 //.content {

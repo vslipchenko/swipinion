@@ -10,6 +10,7 @@ import {ThemePalette} from '@angular/material/core';
 export class ButtonComponent {
   @Input() public text = '';
   @Input() public extendClass = '';
+  @Input() public icon = '';
   @Input() public color: ThemePalette;
 
   @Output() public clicked = new EventEmitter<void>();

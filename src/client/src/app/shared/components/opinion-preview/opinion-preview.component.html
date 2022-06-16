@@ -1,15 +1,24 @@
 <div class="preview">
   <div class="d-flex">
     <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png" alt="">
-    <div class="content p-2-3">
-      <p class="fw-medium">Title</p>
+    <div class="content p-2-3 relative">
+      <p class="fw-medium mb-1">Title</p>
       <p>What is Lorem Ipsum?
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
         standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
+        a type specimen book. What is Lorem Ipsum?
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make
         a type specimen book.</p>
+      <div class="shader absolute w-100"></div>
     </div>
   </div>
-  <app-card-stats [stats]="stats" class="d-flex jc-around p-1"></app-card-stats>
+  <app-card-tags [tags]="['good', 'wow']" class="tags d-block p-2"></app-card-tags>
+  <div class="actions d-flex">
+    <app-button class="f-1" extendClass="w-100 p-1 br-0" icon="open_in_new"></app-button>
+    <app-button class="f-1" extendClass="w-100 p-1 br-0" icon="menu"></app-button>
+  </div>
+  <app-card-stats [stats]="stats" class="d-flex jc-around p-2"></app-card-stats>
 </div>
 
 <!--<mat-card class="example-card">-->

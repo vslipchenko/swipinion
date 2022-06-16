@@ -14,6 +14,6 @@ export class CardComponent {
     {icon: 'thumb_down', value: 10},
     {svgIcon: 'like-n-comment', value: 10},
     {svgIcon: 'dislike-n-comment', value: 10},
-    {icon: 'visibility', value: 14},
+    // {icon: 'visibility', value: 14},
   ];
 }
