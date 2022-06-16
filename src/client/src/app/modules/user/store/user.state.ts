@@ -29,9 +29,18 @@ export class UserState {
   ): Observable<MutationResult<GetOpinionsByUsernameQueryResult>> {
     return this.opinionService.getOpinionsByUsername(action.payload).pipe(
       tap(({data}) => {
+        const opinions = data?.getOpinionsByUsername
+          ? data.getOpinionsByUsername.map((opinion) => {
+              return {
+                ...opinion,
+                tags: opinion.tags[0] ? opinion.tags : [],
+              };
+            })
+          : [];
+
         context.setState((state) => ({
           ...state,
-          opinions: data?.getOpinionsByUsername || [],
+          opinions,
         }));
       }),
     );
