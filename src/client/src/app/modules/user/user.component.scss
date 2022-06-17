@@ -112,6 +112,25 @@ app-tabs {
 //  overflow-y: auto;
 //}
 
+.edit-profile {
+  transform: scale(0.7);
+  left: 0px;
+
+  opacity: 0.8;
+
+  @include media.zero-small {
+    bottom: 6px;
+  }
+
+  @include media.above-small {
+    bottom: 8px;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 @include media.above-large {
   // Mozilla
   @supports (scrollbar-width: thin) {
