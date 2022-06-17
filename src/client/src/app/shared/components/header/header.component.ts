@@ -55,6 +55,11 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog'], data});
 
+    dialog.componentInstance.signUp.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
+      dialog.close();
+      this.signUp(true);
+    });
+
     dialog.componentInstance.recover.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
       this.recoverPassword(true);

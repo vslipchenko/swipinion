@@ -20,6 +20,7 @@ import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 export class SignInDialogComponent implements OnInit, Destroyable {
   @Output() public readonly authenticated = new EventEmitter();
   @Output() public readonly recover = new EventEmitter();
+  @Output() public readonly signUp = new EventEmitter();
   @Output() public readonly confirm = new EventEmitter<SignIn>();
   @Output() public readonly cancel = new EventEmitter();
 

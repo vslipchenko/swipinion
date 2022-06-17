@@ -5,9 +5,11 @@ import {RouterModule} from '@angular/router';
 import {SharedModule} from '~app/shared/shared.module';
 import {NgxsModule} from '@ngxs/store';
 import {UserState} from '~app/modules/user/store/user.state';
+import {EditProfileDialogComponent} from './components/edit-profile-dialog/edit-profile-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [UserComponent],
+  declarations: [UserComponent, EditProfileDialogComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -18,6 +20,7 @@ import {UserState} from '~app/modules/user/store/user.state';
     ]),
     NgxsModule.forFeature([UserState]),
     SharedModule,
+    MatDialogModule,
   ],
 })
 export class UserModule {}

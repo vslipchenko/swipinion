@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Sign in</h2>
-<mat-dialog-content class="visible relative">
+<mat-dialog-content class="visible relative py-2">
   <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
 
   <app-input
@@ -27,7 +27,12 @@
 
   <div class="d-flex jc-between f-wrap">
     <app-checkbox class="mb-2 mr-1" [control]="rememberMe" label="Remember me"></app-checkbox>
-    <p class="action-text" (click)="recover.emit()"> Forgot password ?</p>
+    <p class="action-text" (click)="recover.emit()"> Forgot password</p>
+  </div>
+
+  <div class="d-flex jc-between f-wrap">
+    <div>Don't have an account ?</div>
+    <p class="action-text" (click)="signUp.emit()"> Sign up</p>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

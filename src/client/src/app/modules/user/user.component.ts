@@ -5,6 +5,8 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Observable} from 'rxjs';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
+import {MatDialog} from '@angular/material/dialog';
+import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
 
 @Component({
   selector: 'app-user',
@@ -15,7 +17,7 @@ import {UserSelectors} from '~app/modules/user/store/user.selectors';
 export class UserComponent implements OnInit {
   @Select(UserSelectors.opinions) public readonly opinions$!: Observable<Array<Opinion>>;
 
-  public constructor(private readonly store: Store) {}
+  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
 
   public ngOnInit(): void {
     this.store.dispatch(
@@ -24,5 +26,9 @@ export class UserComponent implements OnInit {
         offset: 0,
       }),
     );
+  }
+
+  public openEditProfile(): void {
+    this.dialog.open(EditProfileDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
   }
 }
