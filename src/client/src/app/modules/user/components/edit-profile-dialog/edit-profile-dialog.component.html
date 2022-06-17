@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Edit profile</h2>
+<mat-dialog-content class="relative scrollable">
+  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
+
+  <app-image-browser
+    [imageUrl]="imageUrl"
+    [file]="file"
+    [imageUrlErrorMessage]="imageUrlErrorMessage"
+  ></app-image-browser>
+
+  <app-textarea
+    appearance="outline"
+    label="Description"
+    class="d-block w-100"
+    extendClass="w-100"
+    [control]="description"
+    hintAlign="end"
+    [hint]="descriptionHint"
+    [errorMessage]="descriptionErrorMessage.bind(this)"
+  >
+    <ng-template #descriptionHint>{{ description.value?.length || 0 }} / {{ 300 }}</ng-template>
+  </app-textarea>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <app-button mat-dialog-close text="Cancel"></app-button>
+  <app-button color="primary" text="Save" (clicked)="null"></app-button>
+</mat-dialog-actions>

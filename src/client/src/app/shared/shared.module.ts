@@ -101,6 +101,8 @@ import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-butt
     TabsComponent,
     OpinionPreviewComponent,
     MiniFabButtonComponent,
+    ImageBrowserComponent,
+    TextareaComponent,
   ],
 })
 export class SharedModule {}
