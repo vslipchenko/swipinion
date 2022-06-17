@@ -38,6 +38,7 @@ import {EmptyOpinionsComponent} from './components/empty-opinions/empty-opinions
 import {TabsComponent} from './components/tabs/tabs.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {OpinionPreviewComponent} from './components/opinion-preview/opinion-preview.component';
+import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-button.component';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -68,6 +69,7 @@ import {OpinionPreviewComponent} from './components/opinion-preview/opinion-prev
     EmptyOpinionsComponent,
     TabsComponent,
     OpinionPreviewComponent,
+    MiniFabButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -98,6 +100,7 @@ import {OpinionPreviewComponent} from './components/opinion-preview/opinion-prev
     EmptyOpinionsComponent,
     TabsComponent,
     OpinionPreviewComponent,
+    MiniFabButtonComponent,
   ],
 })
 export class SharedModule {}
