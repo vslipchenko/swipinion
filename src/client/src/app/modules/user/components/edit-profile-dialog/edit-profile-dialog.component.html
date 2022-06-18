@@ -3,6 +3,7 @@
   <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
 
   <app-image-browser
+    extendClass="edit-profile"
     [imageUrl]="imageUrl"
     [file]="file"
     [imageUrlErrorMessage]="imageUrlErrorMessage"
@@ -10,7 +11,7 @@
 
   <app-textarea
     appearance="outline"
-    label="Description"
+    label="Bio"
     class="d-block w-100"
     extendClass="w-100"
     [control]="description"
@@ -23,5 +24,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <app-button mat-dialog-close text="Cancel"></app-button>
-  <app-button color="primary" text="Save" (clicked)="null"></app-button>
+  <app-button color="primary" text="Save" (clicked)="save()"></app-button>
 </mat-dialog-actions>
