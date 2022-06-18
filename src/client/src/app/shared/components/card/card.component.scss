@@ -13,10 +13,15 @@
   background: rgba(var.$color-background-dark, 0.7);
 }
 
+.thumbnail {
+  background-color: var.$color-light;
+}
+
 .background {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  background-color: var.$color-light;
   filter: blur(5px);
   z-index: -1;
 }
@@ -29,7 +34,7 @@
   @include media.zero-large {
     padding-bottom: var.$unit-7;
   }
-  
+
   @include media.above-large {
     padding-bottom: var.$unit-2;
   }
