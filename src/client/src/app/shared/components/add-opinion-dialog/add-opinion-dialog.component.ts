@@ -5,11 +5,11 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {SelectItem} from '~app/typings/select/select.interfaces';
 import {
-  TAG_REGEXP,
+  DESCRIPTION_MAX_LENGTH,
   FILE_URL_MAX_LENGTH,
   MAX_IMAGE_SIZE_MB,
   MAX_TAG_COUNT,
-  DESCRIPTION_MAX_LENGTH,
+  TAG_REGEXP,
   TITLE_MAX_LENGTH,
 } from '~app/constants/validation';
 import {isValidHttpUrl} from '~app/utilities/url';
@@ -127,6 +127,8 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     if (!errors) return;
 
     if ('required' in errors) return 'Either set image url or upload image file';
+
+    if ('size' in errors) return `Invalid image. File size exceeds ${MAX_IMAGE_SIZE_MB}MB`;
 
     if ('url' in errors) return 'Invalid image url';
 
