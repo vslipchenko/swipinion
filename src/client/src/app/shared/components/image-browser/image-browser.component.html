@@ -1,26 +1,35 @@
-<img *ngIf="imageSet" [src]="imageUrl.value || imagePreview" alt="" class="image d-block mx-auto mb-3" />
+<div [class]="extendClass">
+  <img *ngIf="imageSet" [src]="imageUrl.value || imagePreview" alt="" class="image d-block mx-auto" />
 
-<app-input
-  *ngIf="!imagePreview"
-  class="d-block"
-  extendClass="w-100"
-  appearance="outline"
-  label="Image URL"
-  placeholder="E.g. https://img.com/example.jpg"
-  [control]="imageUrl"
-  [errorMessage]="imageUrlErrorMessage"
-  [suffix]="imagePreviewSuffix"
->
-  <ng-template #imagePreviewSuffix>
-    <app-input-reset-suffix [show]="imageUrl.value" (resetValue)="resetPreviewImage()"></app-input-reset-suffix>
-  </ng-template>
-</app-input>
+  <app-input
+    *ngIf="!imageSet"
+    class="d-block"
+    extendClass="w-100"
+    appearance="outline"
+    label="Image URL"
+    placeholder="E.g. https://img.com/example.jpg"
+    [control]="imageUrl"
+    [errorMessage]="imageUrlErrorMessage"
+    [suffix]="imagePreviewSuffix"
+  >
+    <ng-template #imagePreviewSuffix>
+      <app-input-reset-suffix [show]="imageUrl.value" (resetValue)="resetImageUrl()"></app-input-reset-suffix>
+    </ng-template>
+  </app-input>
 
-<div *ngIf="!valueSet" class="divider d-flex jc-center ai-center mb-3">OR</div>
+  <app-flat-button *ngIf="imageUrlSet" text="Remove" color="warn" class="d-block mb-3 mt-2"
+                   extendClass="w-100"
+                   (clicked)="resetImageUrl()"></app-flat-button>
 
-<app-file-browser
-  *ngIf="!imageUrl.value"
-  class="d-block mb-3"
-  [control]="file"
-  (fileChange)="setImagePreview($event)"
-></app-file-browser>
+  <div *ngIf="!valueSet" class="divider d-flex jc-center ai-center mb-3">OR</div>
+
+  <mat-error *ngIf="!file.valid" class="mt-h">{{imageUrlErrorMessage(file.errors)}}</mat-error>
+
+  <app-file-browser
+    *ngIf="!imageUrl.value"
+    class="d-block mt-2 mb-3"
+    [control]="file"
+    (fileChange)="setImagePreview($event)"
+  ></app-file-browser>
+</div>
+

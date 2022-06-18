@@ -11,7 +11,8 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 export class ImageBrowserComponent implements OnDestroy {
   @Input() public imageUrl = new FormControl();
   @Input() public file = new FormControl();
-  @Input() public imageUrlErrorMessage?: (errors: ValidationErrors | null) => string | void;
+  @Input() public imageUrlErrorMessage!: (errors: ValidationErrors | null) => string | void;
+  @Input() public extendClass = '';
 
   public imagePreview: SafeUrl | null = '';
   public recentObjectUrl = '';
@@ -33,7 +34,7 @@ export class ImageBrowserComponent implements OnDestroy {
     this.imagePreview = null;
   }
 
-  public resetPreviewImage(): void {
+  public resetImageUrl(): void {
     this.imageUrl.setValue(null);
   }
 
@@ -41,7 +42,11 @@ export class ImageBrowserComponent implements OnDestroy {
     return this.imageUrl.value || this.imagePreview;
   }
 
+  public get imageUrlSet(): boolean {
+    return this.imageUrl.value && this.imageUrl.valid;
+  }
+
   public get imageSet(): boolean {
-    return Boolean(this.imagePreview) || this.imageUrl.valid;
+    return Boolean(this.imagePreview) || this.imageUrlSet;
   }
 }

@@ -1,4 +1,9 @@
 @use 'variables' as var;
+@use 'media';
+
+$user-profile-image-size-default: 250px;
+$user-profile-image-size-small: 128px;
+$user-profile-image-radius: 20px;
 
 .divider::before,
 .divider::after {
@@ -15,7 +20,22 @@
   margin-left: var.$unit-2;
 }
 
+.edit-profile .image {
+  border-radius: $user-profile-image-radius;
+
+  @include media.zero-small {
+    height: $user-profile-image-size-small;
+    width: $user-profile-image-size-small;
+  }
+
+  @include media.above-small {
+    height: $user-profile-image-size-default;
+    width: $user-profile-image-size-default;
+  }
+}
+
 .image {
+  background: var.$color-light;
   max-height: 300px;
   max-width: 100%;
   object-fit: cover;
