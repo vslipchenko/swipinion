@@ -15,7 +15,7 @@ import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 import {SharedModule} from '~app/shared/shared.module';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -62,6 +62,7 @@ function authenticationFactory(
           new UpdateUserProfile({
             thumbnail: data.refreshAccessToken.thumbnail,
             username: data.refreshAccessToken.username,
+            bio: data.refreshAccessToken.bio,
           }),
         );
       }),

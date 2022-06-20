@@ -14,19 +14,19 @@ const APP_STATE = new StateToken<AppStateModel>('app');
   defaults: {
     profile: {
       username: '',
+      bio: '',
       thumbnail: '',
     },
   },
 })
 @Injectable()
 export class AppState {
-  @Action(UpdateUserProfile) private updateUserProfile(
-    context: StateContext<AppStateModel>,
-    action: UpdateUserProfile,
-  ): void {
+  @Action(UpdateUserProfile)
+  private updateUserProfile(context: StateContext<AppStateModel>, action: UpdateUserProfile): void {
     context.setState((state) => ({
       ...state,
       profile: {
+        ...state.profile,
         ...action.payload,
       },
     }));
