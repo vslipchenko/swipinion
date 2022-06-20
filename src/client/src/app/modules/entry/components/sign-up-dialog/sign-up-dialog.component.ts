@@ -141,7 +141,7 @@ export class SignUpDialogComponent implements Destroyable {
       .subscribe(
         ({data}) => {
           if (!data?.createUser.success) return;
-          this.snackbar.open('Success! Please follow confirmation link that has been sent to the email', 'OK', {
+          this.snackbar.open('Success! Please enter a code that has been sent to the email', 'OK', {
             panelClass: 'snackbar-success',
           });
           this.signedUp.emit(this.email.value);

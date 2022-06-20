@@ -87,7 +87,11 @@ export class SignInDialogComponent implements OnInit, Destroyable {
           this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
 
           this.store.dispatch(
-            new UpdateUserProfile({thumbnail: data.signIn.thumbnail, username: data.signIn.username}),
+            new UpdateUserProfile({
+              thumbnail: data.signIn.thumbnail,
+              bio: data.signIn.bio,
+              username: data.signIn.username,
+            }),
           );
 
           this.authenticated.emit();

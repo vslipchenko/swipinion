@@ -20,7 +20,11 @@ export const authenticationQueryTypeDefinitions = gql`
 const signIn = async (
   _: unknown,
   {input}: {input: SignIn},
-): Promise<{accessToken: string; refreshToken: string; thumbnail: string; username: string} | {reason: SignInFailReason} | null> => {
+): Promise<
+  | {accessToken: string; refreshToken: string; thumbnail: string; bio: string; username: string}
+  | {reason: SignInFailReason}
+  | null
+> => {
   const {error} = signInValidator.validate(input);
 
   if (error) return null;
@@ -30,6 +34,7 @@ const signIn = async (
     access_key: string;
     confirmation_code: string;
     thumbnail: string;
+    bio: string; //  TODO: Might be a room for improvement; i.e. fetch on user profile load instead to save some traffic
     username: string;
     password: string;
     language: Language;
@@ -56,7 +61,7 @@ const signIn = async (
     expiresIn: environment.REFRESH_TOKEN_EXPIRES_IN,
   });
 
-  return {accessToken, refreshToken, thumbnail: row.thumbnail, username: row.username};
+  return {accessToken, refreshToken, thumbnail: row.thumbnail, bio: row.bio, username: row.username};
 };
 
 const refreshAccessToken = async (
@@ -72,6 +77,7 @@ const refreshAccessToken = async (
   const result = await db.query<{
     access_key: string;
     thumbnail: string;
+    bio: string; // Might be a room for improvement; i.e. fetch on user profile load only
     username: string;
     language: Language;
   }>(queryUserRefreshAccessToken(userId));
@@ -97,7 +103,7 @@ const refreshAccessToken = async (
     expiresIn: environment.ACCESS_TOKEN_EXPIRES_IN,
   });
 
-  return {accessToken, thumbnail: row.thumbnail, username: row.username};
+  return {accessToken, thumbnail: row.thumbnail, bio: row.bio, username: row.username};
 };
 
 export const authenticationQueryResolvers = {
