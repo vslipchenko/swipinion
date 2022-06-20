@@ -14,12 +14,12 @@
     label="Bio"
     class="d-block w-100"
     extendClass="w-100"
-    [control]="description"
+    [control]="bio"
     hintAlign="end"
-    [hint]="descriptionHint"
-    [errorMessage]="descriptionErrorMessage.bind(this)"
+    [hint]="bioHint"
+    [errorMessage]="bioErrorMessage.bind(this)"
   >
-    <ng-template #descriptionHint>{{ description.value?.length || 0 }} / {{ 300 }}</ng-template>
+    <ng-template #bioHint>{{ bio.value?.length || 0 }} / {{ 300 }}</ng-template>
   </app-textarea>
 </mat-dialog-content>
 <mat-dialog-actions>
