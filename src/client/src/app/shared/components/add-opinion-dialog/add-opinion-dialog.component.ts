@@ -19,7 +19,9 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialogRef} from '@angular/material/dialog';
 import {OpinionSnackbarComponent} from '~app/shared/components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
 import {MutationResult} from 'apollo-angular';
-import {CreateOpinionMutationResult} from '~app/typings/opinion/opinion.interfaces';
+import {CreateOpinionMutationResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {Store} from '@ngxs/store';
+import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -44,6 +46,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     private readonly imageService: ImageService,
     private readonly snackbar: MatSnackBar,
     private readonly dialogRef: MatDialogRef<AddOpinionDialogComponent>,
+    private readonly store: Store,
   ) {}
 
   public ngOnInit(): void {
@@ -72,15 +75,19 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     const {type, fileUrl, file, title, description, tags} = this.addOpinionForm.value;
 
     if (type === OpinionType.Image && file) {
+      let thumbnail: string;
+
       this.imageService
         .uploadImage(file)
         .pipe(
           switchMap((result) => {
             if (!result.success) return throwError('');
 
+            thumbnail = result.data.thumb.url;
+
             return this.opinionService.createOpinion({
               type,
-              fileUrl: result.data.thumb.url,
+              fileUrl: thumbnail,
               title,
               description,
               tags,
@@ -89,7 +96,18 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
           takeUntil(this.destroy$),
           finalize(() => this.loading$.next(false)),
         )
-        .subscribe(this.opinionShared.bind(this), this.errorSnackbar.bind(this));
+        .subscribe((result) => {
+          if (!result.data?.createOpinion) return this.errorSnackbar();
+
+          this.opinionShared(result, {
+            id: result.data.createOpinion,
+            type,
+            file_url: thumbnail,
+            title,
+            description,
+            tags,
+          });
+        }, this.errorSnackbar.bind(this));
 
       return;
     }
@@ -106,7 +124,18 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
       )
-      .subscribe(this.opinionShared.bind(this), this.errorSnackbar.bind(this));
+      .subscribe((result) => {
+        if (!result.data?.createOpinion) return this.errorSnackbar();
+
+        this.opinionShared(result, {
+          id: result.data.createOpinion,
+          type,
+          file_url: fileUrl,
+          title,
+          description,
+          tags,
+        });
+      }, this.errorSnackbar.bind(this));
   }
 
   public titleErrorMessage(errors: ValidationErrors | null): string | void {
@@ -165,13 +194,15 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     return null;
   }
 
-  private opinionShared({data}: MutationResult<CreateOpinionMutationResult>): void {
+  private opinionShared({data}: MutationResult<CreateOpinionMutationResult>, opinion: Opinion): void {
     if (!data?.createOpinion) return this.errorSnackbar();
 
     this.snackbar.openFromComponent(OpinionSnackbarComponent, {
       data: data.createOpinion,
       panelClass: 'snackbar-success',
     });
+
+    this.store.dispatch(new PrependUserOpinion(opinion));
 
     this.dialogRef.close();
   }
