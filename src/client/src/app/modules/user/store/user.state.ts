@@ -1,7 +1,7 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {GetOpinionsByUsernameQueryResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
-import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
+import {FetchUserOpinions, PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
@@ -44,5 +44,13 @@ export class UserState {
         }));
       }),
     );
+  }
+
+  @Action(PrependUserOpinion)
+  private prependUserOpinion(context: StateContext<UserStateModel>, action: PrependUserOpinion): void {
+    context.setState((state) => ({
+      ...state,
+      opinions: [action.payload, ...state.opinions],
+    }));
   }
 }

@@ -1,7 +1,7 @@
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
 export interface Opinion {
-  id: number;
+  id: string;
   type: OpinionType;
   file_url: string;
   title: string;
