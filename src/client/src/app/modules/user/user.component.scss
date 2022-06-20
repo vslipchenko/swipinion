@@ -7,6 +7,7 @@ $user-profile-image-radius: 20px;
 
 :host {
   min-height: 0;
+  flex: 1;
 }
 
 .wrapper {
@@ -114,17 +115,18 @@ app-tabs {
 
 .edit-profile {
   transform: scale(0.7);
-  left: 0px;
+  left: 0;
+  bottom: 0;
 
   opacity: 0.8;
 
-  @include media.zero-small {
-    bottom: 6px;
-  }
-
-  @include media.above-small {
-    bottom: 8px;
-  }
+  //@include media.zero-small {
+  //  bottom: 6px;
+  //}
+  //
+  //@include media.above-small {
+  //  bottom: 8px;
+  //}
 
   &:hover {
     opacity: 1;

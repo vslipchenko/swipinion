@@ -5,9 +5,12 @@
     <div *ngIf="userProfile$ | async as userProfile" class="user-block d-flex f-column ml-auto">
       <div class="relative mx-auto">
         <img
+          *ngIf="userProfile.thumbnail"
           [src]="userProfile.thumbnail"
-          class="image"
+          class="d-block image"
           alt="">
+
+        <div *ngIf="!userProfile.thumbnail" class="image"></div>
 
         <app-mini-fab-button svgIcon="account-edit" class="edit-profile absolute"
                              (clicked)="openEditProfile()"></app-mini-fab-button>

@@ -84,7 +84,7 @@ export class EditProfileDialogComponent implements Destroyable {
 
             return this.userService.editProfile({
               thumbnail: result.data.thumb.url,
-              bio: this.bio.value,
+              bio: this.bio.value || null,
             });
           }),
           takeUntil(this.destroy$),
