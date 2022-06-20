@@ -116,7 +116,7 @@ export class EditProfileDialogComponent implements Destroyable {
     this.store.dispatch(
       new UpdateUserProfile({
         thumbnail: thumbnail || this.imageUrl.value,
-        bio: this.bio.value,
+        bio: this.bio.value || null,
       }),
     );
 
