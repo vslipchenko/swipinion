@@ -18,7 +18,10 @@
 
 
       <div class="user-info">
-        <div class="username mb-2 fw-medium t-center">@{{userProfile.username}}</div>
+        <div class="username fw-medium t-center">@{{userProfile.username}}</div>
+
+        <div *ngIf="userProfile.bio" class="divider my-2"></div>
+
         <div class="bio">{{userProfile.bio}}</div>
       </div>
     </div>
