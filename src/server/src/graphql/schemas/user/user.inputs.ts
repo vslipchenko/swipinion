@@ -28,4 +28,9 @@ export const userInputs = gql`
     password: String!
     code: String!
   }
+
+  input EditProfile {
+    thumbnail: String
+    bio: String
+  }
 `;

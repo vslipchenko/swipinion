@@ -1,19 +1,27 @@
 import {randomBytes} from 'crypto';
-import {gql} from 'apollo-server-core';
-import {CreateUser, RecoverPassword, ResetPassword, SetNewPassword} from '../../../typings/user/user.interfaces';
+import {ApolloError, gql} from 'apollo-server-core';
+import {
+  CreateUser,
+  EditProfile,
+  RecoverPassword,
+  ResetPassword,
+  SetNewPassword,
+} from '../../../typings/user/user.interfaces';
 import {hashSync} from 'bcrypt';
 import {db} from '../../../data';
 import {
-  userCodeValidator,
   createUserValidator,
+  editProfileValidator,
   recoverPasswordValidator,
   setNewPasswordValidator,
+  userCodeValidator,
 } from '../../../validators/user';
 import {mailer} from '../../../utilities/mail';
 import {
   queryUserConfirmEmail,
   queryUserCreate,
   queryUserDeleteByEmail,
+  queryUserEditProfile,
   queryUserRecoverPassword,
   queryUserResetPassword,
   queryUserResetRecoveryCode,
@@ -31,6 +39,7 @@ import {environment} from '../../../environments';
 import {verify} from 'jsonwebtoken';
 import {JWT_ALGORITHM} from '../../../constants/jwt';
 import {passwordValidator} from '../../../validators/shared';
+import {authenticationGuard} from '../../../utilities/guard';
 
 export const userMutationTypeDefinitions = gql`
   type Mutation {
@@ -39,6 +48,7 @@ export const userMutationTypeDefinitions = gql`
     recoverPassword(input: RecoverPassword!): Success
     resetPassword(input: ResetPassword!): Success
     setNewPassword(input: SetNewPassword!): Success
+    editProfile(input: EditProfile!): Success
   }
 `;
 
@@ -160,6 +170,25 @@ const setNewPassword = async (_: unknown, {input}: {input: SetNewPassword}): Pro
   return {success: true};
 };
 
+const editProfile = async (
+  _: unknown,
+  {input}: {input: EditProfile},
+  {accessToken}: {accessToken: string},
+): Promise<{success: boolean} | ApolloError | null> => {
+  // Validate key with the use of jwt lib instead
+  const {error} = editProfileValidator.validate(input);
+
+  if (error) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.query(queryUserEditProfile({userId: tokenData.userId, ...input}));
+
+  return {success: Boolean(result.rowCount)};
+};
+
 export const userMutationResolvers = {
   Mutation: {
     createUser,
@@ -167,5 +196,6 @@ export const userMutationResolvers = {
     recoverPassword,
     resetPassword,
     setNewPassword,
+    editProfile,
   },
 };

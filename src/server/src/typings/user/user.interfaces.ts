@@ -22,3 +22,8 @@ export interface SetNewPassword {
   code: string;
   password: string;
 }
+
+export interface EditProfile {
+  thumbnail: string;
+  bio: string;
+}
