@@ -2,6 +2,7 @@ import Joi from 'joi';
 import {
   CODE_REGEXP,
   EMAIL_REGEXP,
+  FILE_URL_MAX_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEXP,
@@ -18,3 +19,4 @@ export const codeValidator = Joi.string().pattern(CODE_REGEXP);
 export const passwordValidator = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).regex(PASSWORD_REGEXP);
 export const languageValidator = Joi.string().valid(...getStringEnumValues(LanguageLabel));
 export const offsetValidator = Joi.number().min(0);
+export const fileUrlValidator = Joi.string().max(FILE_URL_MAX_LENGTH).allow(null);

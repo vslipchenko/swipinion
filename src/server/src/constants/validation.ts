@@ -20,5 +20,6 @@ export const USERNAME_MAX_LENGTH = 30;
 export const CODE_REGEXP = /^[0-9a-fA-F]{6}$/;
 
 export const FILE_URL_MAX_LENGTH = 2048;
+export const BIO_MAX_LENGTH = 300;
 export const TAG_REGEXP = /^(?=.{1,35}$)[a-zA-Z\d]+(?:-[a-zA-Z\d]+)*$/;
 export const MAX_TAG_COUNT = 10;

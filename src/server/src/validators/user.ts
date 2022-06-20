@@ -1,5 +1,13 @@
 import Joi from 'joi';
-import {codeValidator, emailValidator, languageValidator, passwordValidator, usernameValidator} from './shared';
+import {
+  codeValidator,
+  emailValidator,
+  fileUrlValidator,
+  languageValidator,
+  passwordValidator,
+  usernameValidator,
+} from './shared';
+import {BIO_MAX_LENGTH} from '../constants/validation';
 
 export const userCodeValidator = Joi.object({
   email: emailValidator,
@@ -21,4 +29,9 @@ export const setNewPasswordValidator = Joi.object({
   email: emailValidator,
   code: codeValidator,
   password: passwordValidator,
+});
+
+export const editProfileValidator = Joi.object({
+  thumbnail: fileUrlValidator,
+  bio: Joi.string().max(BIO_MAX_LENGTH).allow(null),
 });
