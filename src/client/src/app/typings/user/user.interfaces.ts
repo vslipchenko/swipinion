@@ -59,5 +59,15 @@ export interface ConfirmEmailMutationResult {
 
 export interface UserProfile {
   thumbnail: string;
+  bio: string;
   username: string;
+}
+
+export interface EditProfile {
+  thumbnail: string;
+  bio: string;
+}
+
+export interface EditProfileMutationResult {
+  editProfile: SuccessResponse;
 }

@@ -1,7 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
-import {CONFIRM_EMAIL, CREATE_USER, RECOVER_PASSWORD, SET_NEW_PASSWORD} from '~app/graphql/user/user.mutations';
+import {
+  CONFIRM_EMAIL,
+  CREATE_USER,
+  EDIT_PROFILE,
+  RECOVER_PASSWORD,
+  SET_NEW_PASSWORD,
+} from '~app/graphql/user/user.mutations';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
   USER_WITH_EMAIL_EXISTS,
@@ -9,17 +15,19 @@ import {
   USER_WITH_USERNAME_EXISTS,
 } from '~app/graphql/user/user.queries';
 import {
-  UserCode,
   ConfirmEmailMutationResult,
   CreateUser,
   CreateUserMutationResult,
+  EditProfile,
+  EditProfileMutationResult,
   RecoverPassword,
   RecoverPasswordMutationResult,
+  SetNewPassword,
+  SetNewPasswordMutationResult,
+  UserCode,
   UserWithEmailExistsQueryResult,
   UserWithRecoveryCodeExistsQueryResult,
   UserWithUsernameExistsQueryResult,
-  SetNewPassword,
-  SetNewPasswordMutationResult,
 } from '~app/typings/user/user.interfaces';
 
 @Injectable({
@@ -76,6 +84,13 @@ export class UserService {
   public confirmEmail(input: UserCode): Observable<MutationResult<ConfirmEmailMutationResult>> {
     return this.apollo.mutate<ConfirmEmailMutationResult>({
       mutation: CONFIRM_EMAIL,
+      variables: {input},
+    });
+  }
+
+  public editProfile(input: EditProfile): Observable<MutationResult<EditProfileMutationResult>> {
+    return this.apollo.mutate<EditProfileMutationResult>({
+      mutation: EDIT_PROFILE,
       variables: {input},
     });
   }

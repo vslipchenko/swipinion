@@ -31,6 +31,15 @@ export const SET_NEW_PASSWORD = gql`
     }
   }
 `;
+
+export const EDIT_PROFILE = gql`
+  mutation ($input: EditProfile!) {
+    editProfile(input: $input) {
+      success
+    }
+  }
+`;
+
 //
 // export const RESET_PASSWORD = gql`
 //   mutation ($input: ResetPassword!) {
