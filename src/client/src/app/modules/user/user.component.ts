@@ -7,6 +7,7 @@ import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatDialog} from '@angular/material/dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
+import {UserProfile} from '~app/typings/user/user.interfaces';
 
 @Component({
   selector: 'app-user',
@@ -16,6 +17,8 @@ import {EditProfileDialogComponent} from '~app/modules/user/components/edit-prof
 })
 export class UserComponent implements OnInit {
   @Select(UserSelectors.opinions) public readonly opinions$!: Observable<Array<Opinion>>;
+  @Select(AppSelectors.userProfile)
+  public readonly userProfile$!: Observable<UserProfile>;
 
   public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
 

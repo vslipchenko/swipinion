@@ -2,24 +2,21 @@
   <div class="relative w-100">
     <div class="stripe absolute w-100"></div>
 
-    <div class="user-block d-flex f-column ml-auto">
+    <div *ngIf="userProfile$ | async as userProfile" class="user-block d-flex f-column ml-auto">
       <div class="relative mx-auto">
         <img
-          src="https://images.unsplash.com/photo-1616435577207-ca90abc6b732?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bG90dXMlMjBmbG93ZXJ8ZW58MHx8MHx8&w=1000&q=80"
+          [src]="userProfile.thumbnail"
           class="image"
           alt="">
+
         <app-mini-fab-button svgIcon="account-edit" class="edit-profile absolute"
                              (clicked)="openEditProfile()"></app-mini-fab-button>
       </div>
 
 
       <div class="user-info">
-        <div class="username mb-2 fw-medium t-center">@test</div>
-        <div class="bio">
-          Why do we use it? It is a long established fact that a reader will be distracted by the readable content of
-          a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
-          distribution of letters, as opposed to using 'Content here, content here', making it loo
-        </div>
+        <div class="username mb-2 fw-medium t-center">@{{userProfile.username}}</div>
+        <div class="bio">{{userProfile.bio}}</div>
       </div>
     </div>
   </div>
