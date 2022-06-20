@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
@@ -12,6 +12,7 @@ import {Store} from '@ngxs/store';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 import {EditProfileMutationResult} from '~app/typings/user/user.interfaces';
 import {MutationResult} from 'apollo-angular';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -20,9 +21,9 @@ import {MutationResult} from 'apollo-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditProfileDialogComponent implements Destroyable {
-  @Input() public imageUrl = new FormControl(null, this.imageValidator.bind(this));
-  @Input() public file = new FormControl(null, this.fileSizeValidator.bind(this));
-  @Input() public bio = new FormControl(null, Validators.maxLength(BIO_MAX_LENGTH));
+  public readonly imageUrl = new FormControl(null, this.imageValidator.bind(this));
+  public readonly file = new FormControl(null, this.fileSizeValidator.bind(this));
+  public readonly bio = new FormControl(null, Validators.maxLength(BIO_MAX_LENGTH));
 
   public readonly destroy$ = new Subject<void>();
   public readonly loading$ = new BehaviorSubject(false);
@@ -33,7 +34,13 @@ export class EditProfileDialogComponent implements Destroyable {
     private readonly imageService: ImageService,
     private readonly snackbar: MatSnackBar,
     private readonly store: Store,
-  ) {}
+  ) {
+    const {thumbnail, bio} = this.store.selectSnapshot(AppSelectors.userProfile);
+
+    // Set default values
+    this.imageUrl.setValue(thumbnail);
+    this.bio.setValue(bio);
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
