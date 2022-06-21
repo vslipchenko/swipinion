@@ -85,7 +85,8 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
           switchMap((result) => {
             if (!result.success) return throwError('');
 
-            thumbnail = result.data.thumb.url;
+            const isGif = result.data.image.extension === 'gif';
+            thumbnail = isGif ? result.data.image.url : result.data.thumb.url;
 
             return this.opinionService.createOpinion({
               type,
