@@ -7,6 +7,7 @@ import {SelectItem} from '~app/typings/select/select.interfaces';
 import {
   DESCRIPTION_MAX_LENGTH,
   FILE_URL_MAX_LENGTH,
+  IMAGE_EXTENSION,
   MAX_IMAGE_SIZE_MB,
   MAX_TAG_COUNT,
   TAG_REGEXP,
@@ -22,6 +23,7 @@ import {MutationResult} from 'apollo-angular';
 import {CreateOpinionMutationResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
+import {hasExtension} from '~app/utilities/file';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -161,6 +163,8 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
     if ('url' in errors) return 'Invalid image url';
 
+    if ('type' in errors) return 'Invalid image. Unsupported type';
+
     return `${FILE_URL_MAX_LENGTH} characters at max. Consider to use url shortener`;
   }
 
@@ -172,6 +176,8 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     if (!control.value && !this.file.value) return {required: true};
 
     if (!isValidHttpUrl(control.value)) return {url: true};
+
+    if (!hasExtension(control.value, IMAGE_EXTENSION)) return {type: true};
 
     if (control.value.length > FILE_URL_MAX_LENGTH) return {maxlength: true};
 
