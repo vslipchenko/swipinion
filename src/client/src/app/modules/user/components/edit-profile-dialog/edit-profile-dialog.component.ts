@@ -83,10 +83,11 @@ export class EditProfileDialogComponent implements Destroyable {
           switchMap((result) => {
             if (!result.success) return throwError('');
 
-            thumbnail = result.data.thumb.url;
+            const isGif = result.data.image.extension === 'gif';
+            thumbnail = isGif ? result.data.image.url : result.data.thumb.url;
 
             return this.userService.editProfile({
-              thumbnail: result.data.thumb.url,
+              thumbnail,
               bio: this.bio.value || null,
             });
           }),
