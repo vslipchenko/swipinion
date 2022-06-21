@@ -29,6 +29,7 @@
     *ngIf="!imageUrl.value"
     class="d-block mt-2 mb-3"
     [control]="file"
+    [accept]="['image/jpeg', 'image/png', 'image/gif']"
     (fileChange)="setImagePreview($event)"
   ></app-file-browser>
 </div>

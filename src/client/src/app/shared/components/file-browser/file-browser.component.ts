@@ -9,10 +9,9 @@ import {FormControl} from '@angular/forms';
 })
 export class FileBrowserComponent implements OnDestroy {
   @Input() public control = new FormControl();
-
+  @Input() public accept: Array<string> = [];
   @Output() public fileChange = new EventEmitter<File | void>();
 
-  private readonly accept = ['image/jpeg', 'image/png'];
   private fileInput = this.fileInputElement;
 
   public ngOnDestroy(): void {

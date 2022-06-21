@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
-import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
+import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {isValidHttpUrl} from '~app/utilities/url';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 import {EditProfileMutationResult} from '~app/typings/user/user.interfaces';
 import {MutationResult} from 'apollo-angular';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {hasExtension} from '~app/utilities/file';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -52,6 +53,8 @@ export class EditProfileDialogComponent implements Destroyable {
     if (!errors) return;
 
     if ('url' in errors) return 'Invalid image url';
+
+    if ('type' in errors) return 'Invalid image. Unsupported type';
 
     if ('size' in errors) return `Invalid image. File size exceeds ${MAX_IMAGE_SIZE_MB}MB`;
 
@@ -135,6 +138,8 @@ export class EditProfileDialogComponent implements Destroyable {
     if (this.file?.value) return null;
 
     if (!isValidHttpUrl(control.value)) return {url: true};
+
+    if (!hasExtension(control.value, IMAGE_EXTENSION)) return {type: true};
 
     if (control.value.length > FILE_URL_MAX_LENGTH) return {maxlength: true};
 
