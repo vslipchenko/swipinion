@@ -1,5 +1,6 @@
 <button
   mat-button
+  [disabled]="disabled"
   [class]="extendClass"
   [color]="color"
   (click)="clicked.emit()"

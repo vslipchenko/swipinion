@@ -12,6 +12,7 @@ export class ButtonComponent {
   @Input() public extendClass = '';
   @Input() public icon = '';
   @Input() public color: ThemePalette;
+  @Input() public disabled = false;
 
   @Output() public clicked = new EventEmitter<void>();
 }
