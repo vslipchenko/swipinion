@@ -72,9 +72,11 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
     if (!this.addOpinionForm.valid) return;
 
-    this.loading$.next(true);
-
     const {type, fileUrl, file, title, description, tags} = this.addOpinionForm.value;
+
+    this.addOpinionForm.disable();
+
+    this.loading$.next(true);
 
     if (type === OpinionType.Image && file) {
       let thumbnail: string;
@@ -97,7 +99,10 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
             });
           }),
           takeUntil(this.destroy$),
-          finalize(() => this.loading$.next(false)),
+          finalize(() => {
+            this.addOpinionForm.enable();
+            this.loading$.next(false);
+          }),
         )
         .subscribe((result) => {
           if (!result.data?.createOpinion) return this.errorSnackbar();
@@ -125,7 +130,10 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
       })
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => this.loading$.next(false)),
+        finalize(() => {
+          this.addOpinionForm.enable();
+          this.loading$.next(false);
+        }),
       )
       .subscribe((result) => {
         if (!result.data?.createOpinion) return this.errorSnackbar();

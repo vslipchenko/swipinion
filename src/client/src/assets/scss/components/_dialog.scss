@@ -8,6 +8,11 @@
   }
 }
 
+.dialog-progress-bar {
+  width: calc(100% + 48px);
+  right: -#{var.$unit-3};
+}
+
 .mat-dialog-container {
   @include media.zero-small {
     border-radius: 0 !important;
