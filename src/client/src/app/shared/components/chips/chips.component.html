@@ -1,6 +1,6 @@
 <mat-form-field [class]="extendClass" [appearance]="appearance">
   <mat-label>{{label}}</mat-label>
-  <mat-chip-list #chipList>
+  <mat-chip-list #chipList [disabled]="control.disabled">
     <mat-chip *ngFor="let chip of chips; let index = index" (removed)="remove(index)">
       {{chip}}
       <button matChipRemove>
