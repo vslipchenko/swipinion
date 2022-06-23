@@ -39,6 +39,8 @@ import {TabsComponent} from './components/tabs/tabs.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {OpinionPreviewComponent} from './components/opinion-preview/opinion-preview.component';
 import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-button.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -70,6 +72,7 @@ import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-butt
     TabsComponent,
     OpinionPreviewComponent,
     MiniFabButtonComponent,
+    ProgressBarComponent,
   ],
   imports: [
     CommonModule,
@@ -86,6 +89,7 @@ import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-butt
     MatSelectModule,
     MatChipsModule,
     MatTabsModule,
+    MatProgressBarModule,
     // MatCardModule,
     // MatDividerModule,
   ],
