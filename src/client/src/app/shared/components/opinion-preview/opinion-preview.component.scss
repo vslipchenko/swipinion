@@ -16,11 +16,21 @@ $preview-image-size-small: 80px;
   //border-radius: 0 10px 10px 0;
 }
 
+.frame {
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+}
+
+.background-blurred {
+  opacity: 0.25;
+}
+
 img {
-  background: var.$color-light-transparent;
+  background: var.$color-light;
   object-fit: cover;
   //background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
   border-radius: 10px 0 0 0;
+  z-index: 0;
 
   @include media.zero-small {
     height: $preview-image-size-small;
@@ -54,7 +64,11 @@ img {
   left: 0;
 }
 
+.actions {
+  border-bottom: 1px solid var.$color-light-transparent;
+}
+
 .actions,
 .tags {
-  border-bottom: 1px solid var.$color-light-transparent;
+  border-top: 1px solid var.$color-light-transparent;
 }

@@ -1,13 +1,15 @@
 <div class="preview">
-  <div class="d-flex">
+  <div class="d-flex relative frame">
+    <div *ngIf="!title && !description" [style.background-image]="'url(' + fileUrl + ')'"
+         class="background-blurred w-100 h-100 absolute"></div>
     <img *ngIf="fileUrl" [src]="fileUrl" alt="">
-    <div class="content p-2 relative">
+    <div *ngIf="title || description" class="content p-2 relative">
       <p *ngIf="title" class="fw-medium mb-1">{{title}}</p>
       <p>{{description}}</p>
       <div class="dimmer absolute w-100"></div>
     </div>
   </div>
-  <app-card-tags [tags]="tags" class="tags d-block" [class.p-2]="tags.length"></app-card-tags>
+  <app-card-tags *ngIf="tags.length" [tags]="tags" class="tags d-block" [class.p-2]="tags.length"></app-card-tags>
   <div class="actions d-flex">
     <app-button class="f-1" extendClass="w-100 p-1 br-0" icon="open_in_new"></app-button>
     <app-button class="f-1" extendClass="w-100 p-1 br-0" icon="menu"></app-button>
