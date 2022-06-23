@@ -20,6 +20,10 @@
       <div class="user-info">
         <div class="username fw-medium t-center">@{{userProfile.username}}</div>
 
+        <div class="divider my-2"></div>
+
+        <app-profile-action-bar></app-profile-action-bar>
+
         <div *ngIf="userProfile.bio" class="divider my-2"></div>
 
         <div class="bio">{{userProfile.bio}}</div>

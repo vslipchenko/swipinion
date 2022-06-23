@@ -102,7 +102,7 @@ export class EditProfileDialogComponent implements Destroyable {
     }
 
     this.userService
-      .editProfile({thumbnail: this.imageUrl.value, bio: this.bio.value})
+      .editProfile({thumbnail: this.imageUrl.value, bio: this.bio.value || null})
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),
