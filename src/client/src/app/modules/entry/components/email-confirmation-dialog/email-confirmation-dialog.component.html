@@ -1,23 +1,30 @@
 <h2 mat-dialog-title>Email confirmation</h2>
-<mat-dialog-content class="visible relative py-2">
-  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
+<ng-container *ngIf="{loading: loading$ | async} as state">
+  <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
-  <app-input
-    class="d-block mb-1"
-    extendClass="w-100"
-    appearance="outline"
-    label="Code"
-    maxlength="6"
-    [control]="code"
-    [errorMessage]="errorMessage"
-    [hint]="hint"
-  >
-    <ng-template #hint>
-      Confirmation code that was sent to your email during sign up
-    </ng-template>
-  </app-input>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
-  <app-button color="primary" text="Confirm" (clicked)="confirm()"></app-button>
-</mat-dialog-actions>
+  <mat-dialog-content class="visible">
+    <app-input
+      class="d-block mb-1"
+      extendClass="w-100"
+      appearance="outline"
+      label="Code"
+      maxlength="6"
+      [control]="code"
+      [errorMessage]="errorMessage"
+      [hint]="hint"
+    >
+      <ng-template #hint>
+        Confirmation code that was sent to your email during sign up
+      </ng-template>
+    </app-input>
+  </mat-dialog-content>
+  <mat-dialog-actions class="relative">
+    <app-progress-bar
+      *ngIf="state.loading"
+      class="absolute t-0 dialog-progress-bar">
+    </app-progress-bar>
+
+    <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
+    <app-button color="primary" text="Confirm" (clicked)="confirm()" [disabled]="state.loading || false"></app-button>
+  </mat-dialog-actions>
+</ng-container>
