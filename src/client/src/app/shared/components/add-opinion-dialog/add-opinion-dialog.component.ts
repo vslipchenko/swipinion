@@ -74,8 +74,6 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
 
     const {type, fileUrl, file, title, description, tags} = this.addOpinionForm.value;
 
-    this.addOpinionForm.disable();
-
     this.loading$.next(true);
 
     if (type === OpinionType.Image && file) {
@@ -100,7 +98,6 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
           }),
           takeUntil(this.destroy$),
           finalize(() => {
-            this.addOpinionForm.enable();
             this.loading$.next(false);
           }),
         )
@@ -131,7 +128,6 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
-          this.addOpinionForm.enable();
           this.loading$.next(false);
         }),
       )

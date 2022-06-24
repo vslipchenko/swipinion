@@ -1,6 +1,8 @@
 <h2 mat-dialog-title>Share opinion</h2>
 <ng-container *ngIf="{loading: loading$ | async} as state">
-  <mat-dialog-content class="relative py-2 scrollable">
+  <div *ngIf="state.loading" class="dialog-loading-veil"></div>
+
+  <mat-dialog-content class="scrollable">
     <app-select
       class="d-block"
       extendClass="w-100"

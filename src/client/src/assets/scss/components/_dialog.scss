@@ -8,6 +8,18 @@
   }
 }
 
+.dialog-loading-veil {
+  height: calc(100% - 98px);
+  top: 30px;
+  right: -24px;
+  left: -24px;
+  background: #263238;
+  width: calc(100% + 48px);
+  position: absolute;
+  opacity: 0.8;
+  z-index: 1;
+}
+
 .dialog-progress-bar {
   width: calc(100% + 48px);
   right: -#{var.$unit-3};
