@@ -1,28 +1,35 @@
 <h2 mat-dialog-title>Edit profile</h2>
-<mat-dialog-content class="relative scrollable">
-  <app-progress-spinner *ngIf="loading$ | async" class="overlay bg-fog"></app-progress-spinner>
+<ng-container *ngIf="{loading: loading$ | async} as state">
+  <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
-  <app-image-browser
-    extendClass="edit-profile"
-    [imageUrl]="imageUrl"
-    [file]="file"
-    [imageUrlErrorMessage]="imageUrlErrorMessage"
-  ></app-image-browser>
+  <mat-dialog-content class="scrollable">
+    <app-image-browser
+      extendClass="edit-profile"
+      [imageUrl]="imageUrl"
+      [file]="file"
+      [imageUrlErrorMessage]="imageUrlErrorMessage"
+    ></app-image-browser>
 
-  <app-textarea
-    appearance="outline"
-    label="Bio"
-    class="d-block w-100"
-    extendClass="w-100"
-    [control]="bio"
-    hintAlign="end"
-    [hint]="bioHint"
-    [errorMessage]="bioErrorMessage.bind(this)"
-  >
-    <ng-template #bioHint>{{ bio.value?.length || 0 }} / {{ 300 }}</ng-template>
-  </app-textarea>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <app-button mat-dialog-close text="Cancel"></app-button>
-  <app-button color="primary" text="Save" (clicked)="save()"></app-button>
-</mat-dialog-actions>
+    <app-textarea
+      appearance="outline"
+      label="Bio"
+      class="d-block w-100"
+      extendClass="w-100"
+      [control]="bio"
+      hintAlign="end"
+      [hint]="bioHint"
+      [errorMessage]="bioErrorMessage.bind(this)"
+    >
+      <ng-template #bioHint>{{ bio.value?.length || 0 }} / {{ 300 }}</ng-template>
+    </app-textarea>
+  </mat-dialog-content>
+  <mat-dialog-actions class="relative">
+    <app-progress-bar
+      *ngIf="state.loading"
+      class="absolute t-0 dialog-progress-bar">
+    </app-progress-bar>
+
+    <app-button mat-dialog-close text="Cancel"></app-button>
+    <app-button color="primary" text="Save" (clicked)="save()" [disabled]="state.loading || false"></app-button>
+  </mat-dialog-actions>
+</ng-container>

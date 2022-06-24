@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {AbstractControl, FormControl, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {isValidHttpUrl} from '~app/utilities/url';
@@ -22,9 +22,7 @@ import {hasExtension} from '~app/utilities/file';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditProfileDialogComponent implements Destroyable {
-  public readonly imageUrl = new FormControl(null, this.imageValidator.bind(this));
-  public readonly file = new FormControl(null, this.fileSizeValidator.bind(this));
-  public readonly bio = new FormControl(null, Validators.maxLength(BIO_MAX_LENGTH));
+  public readonly editProfileForm = this.editProfileFormGroup;
 
   public readonly destroy$ = new Subject<void>();
   public readonly loading$ = new BehaviorSubject(false);
@@ -110,6 +108,18 @@ export class EditProfileDialogComponent implements Destroyable {
       .subscribe(this.handleSuccessfulResponse.bind(this), () => this.showErrorSnackbar());
   }
 
+  public get imageUrl(): FormControl {
+    return this.editProfileForm.controls['imageUrl'] as FormControl;
+  }
+
+  public get bio(): FormControl {
+    return this.editProfileForm.controls['bio'] as FormControl;
+  }
+
+  public get file(): FormControl {
+    return this.editProfileForm.controls['file'] as FormControl;
+  }
+
   private handleSuccessfulResponse({data}: MutationResult<EditProfileMutationResult>, thumbnail?: string): void {
     if (!data?.editProfile.success) return this.showErrorSnackbar();
 
@@ -153,5 +163,13 @@ export class EditProfileDialogComponent implements Destroyable {
     if ((control.value as File).size / 1024 ** 2 > MAX_IMAGE_SIZE_MB) return {size: true};
 
     return null;
+  }
+
+  private get editProfileFormGroup(): FormGroup {
+    return new FormGroup({
+      imageUrl: new FormControl(null, this.imageValidator.bind(this)),
+      file: new FormControl(null, this.fileSizeValidator.bind(this)),
+      bio: new FormControl(null, Validators.maxLength(BIO_MAX_LENGTH)),
+    });
   }
 }

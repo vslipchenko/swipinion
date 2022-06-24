@@ -40,7 +40,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {OpinionPreviewComponent} from './components/opinion-preview/opinion-preview.component';
 import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-button.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
+import {ProgressBarComponent} from './components/progress-bar/progress-bar.component';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -107,6 +107,7 @@ import { ProgressBarComponent } from './components/progress-bar/progress-bar.com
     MiniFabButtonComponent,
     ImageBrowserComponent,
     TextareaComponent,
+    ProgressBarComponent,
   ],
 })
 export class SharedModule {}
