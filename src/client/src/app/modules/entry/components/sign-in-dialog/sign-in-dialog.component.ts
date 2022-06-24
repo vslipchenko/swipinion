@@ -24,7 +24,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
   @Output() public readonly confirm = new EventEmitter<SignIn>();
   @Output() public readonly cancel = new EventEmitter();
 
-  public readonly loading$ = new BehaviorSubject(false);
+  public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
   public readonly rememberMe = new FormControl(false);
   private readonly signInForm = this.signInFormGroup;
