@@ -2,7 +2,7 @@
 <ng-container *ngIf="{loading: loading$ | async} as state">
   <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
-  <mat-dialog-content class="scrollable">
+  <mat-dialog-content class="primary-scrollbar">
     <app-image-browser
       extendClass="edit-profile"
       [imageUrl]="imageUrl"

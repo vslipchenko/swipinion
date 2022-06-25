@@ -56,3 +56,26 @@ body {
 .cdk-overlay-backdrop {
   z-index: 999 !important; // Let snackbar render above dialog's overlay
 }
+
+@include media.above-large {
+  // Mozilla
+  @supports (scrollbar-width: thin) {
+    * {
+      scrollbar-width: thin;
+    }
+
+    .primary-scrollbar {
+      scrollbar-color: var.$color-primary rgba(var.$color-background-dark, 0.7);
+    }
+  }
+
+  // Chromium
+  ::-webkit-scrollbar {
+    width: var.$scrollbar-width;
+  }
+
+  .primary-scrollbar::-webkit-scrollbar-thumb {
+    background: var.$color-primary;
+    border-radius: 10px;
+  }
+}

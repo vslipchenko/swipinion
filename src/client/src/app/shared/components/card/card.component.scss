@@ -42,29 +42,23 @@
   object-fit: cover;
 }
 
-.scrollable {
+.y-scrollbar {
   overflow-y: auto;
 }
 
 @include media.above-large {
   // Mozilla
   @supports (scrollbar-width: thin) {
-    .scrollable {
-      scrollbar-width: thin;
+    .transparent-scrollbar {
       scrollbar-color: var.$color-background-dark rgba(var.$color-background-dark, 0.7);
     }
   }
 
-  // Chromium
-  .scrollable::-webkit-scrollbar {
-    width: var.$scrollbar-width;
-  }
-
-  .scrollable::-webkit-scrollbar-thumb {
+  .transparent-scrollbar::-webkit-scrollbar-thumb {
     background: var.$color-background-dark;
   }
 
-  .scrollable::-webkit-scrollbar-track {
+  .transparent-scrollbar::-webkit-scrollbar-track {
     border-radius: 0;
     background: rgba(var.$color-background-dark, 0.7);
   }

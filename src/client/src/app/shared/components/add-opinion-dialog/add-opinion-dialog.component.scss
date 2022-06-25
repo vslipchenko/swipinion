@@ -10,23 +10,23 @@
   padding-left: var.$unit;
 }
 
-@include media.above-large {
-  @supports (scrollbar-width: thin) {
-    .scrollable {
-      scrollbar-width: thin;
-      scrollbar-color: var.$color-primary rgba(var.$color-background-dark, 0.7);
-    }
-  }
-
-  .scrollable::-webkit-scrollbar {
-    width: var.$scrollbar-width;
-  }
-
-  .scrollable::-webkit-scrollbar-thumb {
-    background: var.$color-primary;
-    border-radius: 10px;
-  }
-}
+//@include media.above-large {
+//  @supports (scrollbar-width: thin) {
+//    .scrollable {
+//      scrollbar-width: thin;
+//      scrollbar-color: var.$color-primary rgba(var.$color-background-dark, 0.7);
+//    }
+//  }
+//
+//  .scrollable::-webkit-scrollbar {
+//    width: var.$scrollbar-width;
+//  }
+//
+//  .scrollable::-webkit-scrollbar-thumb {
+//    background: var.$color-primary;
+//    border-radius: 10px;
+//  }
+//}
 
 .snackbar-button {
   margin: -8px;
