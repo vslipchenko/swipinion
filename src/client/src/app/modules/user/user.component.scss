@@ -86,7 +86,7 @@ app-tabs {
     margin-right: -#{var.$unit-2};
   }
 
-  @include media.above-small {
+  @include media.small-large {
     margin-left: -#{var.$unit-3};
     margin-right: -#{var.$unit-3};
   }
