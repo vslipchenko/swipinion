@@ -11,7 +11,7 @@ $user-profile-image-radius: 20px;
 }
 
 .wrapper {
-  @include media.zero-small {
+  @include media.zero-large {
     overflow-y: auto;
     flex-direction: column;
   }
@@ -20,7 +20,7 @@ $user-profile-image-radius: 20px;
 .username {
   word-break: break-word;
 
-  @include media.zero-small {
+  @include media.zero-large {
     text-align: center;
   }
 }
@@ -29,29 +29,29 @@ $user-profile-image-radius: 20px;
   //background: var.$color-primary;
   background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
 
-  @include media.zero-small {
+  @include media.zero-large {
     //display: none;
     height: $user-profile-image-size-small / 1.5;
   }
 
-  @include media.above-small {
+  @include media.above-large {
     height: $user-profile-image-size-default;
     border-radius: 0 $user-profile-image-radius $user-profile-image-radius 0;
   }
 }
 
 .user-block {
-  @include media.above-small {
+  @include media.above-large {
     max-width: $user-profile-image-size-default;
   }
 }
 
 .user-info {
-  @include media.zero-small {
+  @include media.zero-large {
     padding: var.$unit-2;
   }
 
-  @include media.above-small {
+  @include media.above-large {
     margin-top: var.$unit-2;
   }
 }
@@ -64,13 +64,13 @@ $user-profile-image-radius: 20px;
   //background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
   background: var.$color-light;
 
-  @include media.zero-small {
+  @include media.zero-large {
     margin-top: var.$unit-2;
     height: $user-profile-image-size-small;
     width: $user-profile-image-size-small;
   }
 
-  @include media.above-small {
+  @include media.above-large {
     height: $user-profile-image-size-default;
     width: $user-profile-image-size-default;
   }
@@ -87,6 +87,11 @@ app-tabs {
   }
 
   @include media.above-small {
+    margin-left: -#{var.$unit-3};
+    margin-right: -#{var.$unit-3};
+  }
+
+  @include media.above-large {
     position: sticky;
     top: 0;
   }
@@ -96,13 +101,19 @@ app-tabs {
   min-width: 70%;
   //width: 65%;
 
-  @include media.above-small {
+  @include media.above-large {
     overflow-y: auto;
   }
 }
 
 .content {
   max-width: 600px;
+
+  @include media.medium-large {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .tabs {
@@ -120,11 +131,11 @@ app-tabs {
 
   opacity: 0.8;
 
-  //@include media.zero-small {
+  //@include media.zero-large {
   //  bottom: 6px;
   //}
   //
-  //@include media.above-small {
+  //@include media.above-large {
   //  bottom: 8px;
   //}
 
