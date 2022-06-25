@@ -1,12 +1,13 @@
 <mat-icon *ngIf="menuItems.menu" [matMenuTriggerFor]="menuItems.menu">bar_chart</mat-icon>
 <app-menu-items
   #menuItems
-  [loading]="true"
+  xPosition="after"
+  [loading]="(loading$ | async) || false"
   [items]="[
-        {title: '999.9k followers'},
-        {title: '999.9k following'},
-        {title: '99999 opinions'},
-        {title: '999 reactions'},
-        {title: '999 shares'}
+        {title: '999.9k followers', svgIcon: 'account-arrow-left'},
+        {title: '999.9k following', svgIcon: 'account-arrow-right'},
+        {title: '99999 opinions', icon: 'article'},
+        {title: '999 reactions', icon: 'thumbs_up_down'},
+        {title: '999 shares', icon: 'share'}
       ]"
 ></app-menu-items>

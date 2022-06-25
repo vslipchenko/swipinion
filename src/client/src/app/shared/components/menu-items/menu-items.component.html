@@ -13,7 +13,8 @@
         [routerLinkActiveOptions]="{exact: true}"
         (click)="item.click && item.click()"
       >
-        <mat-icon *ngIf="item.icon" [color]="item.color">{{ item.icon }}</mat-icon
+        <mat-icon *ngIf="item.icon || item.svgIcon" [color]="item.color"
+                  [svgIcon]="$any(item.svgIcon)">{{ item.icon }}</mat-icon
         >
         {{ item.title }}
       </a>
