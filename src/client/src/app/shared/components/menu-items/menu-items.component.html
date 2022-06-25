@@ -1,16 +1,22 @@
 <mat-menu #menu="matMenu" [xPosition]="xPosition">
-  <ng-container *ngFor="let item of items; let index = index">
-    <a
-      mat-menu-item
-      class="menu-item"
-      [disableRipple]="true"
-      [routerLink]="item.routerLink"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{exact: true}"
-      (click)="item.click && item.click()"
-    >
-      <mat-icon *ngIf="item.icon" [color]="item.color">{{ item.icon }}</mat-icon
-      >{{ item.title }}
-    </a>
-  </ng-container>
+  <app-progress-spinner *ngIf="loading; else default" class="d-flex jc-center spinner"
+                        [strokeWidth]="8"></app-progress-spinner>
+
+  <ng-template #default>
+    <ng-container *ngFor="let item of items; let index = index">
+      <a
+        mat-menu-item
+        class="menu-item"
+        [disableRipple]="true"
+        [routerLink]="item.routerLink"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+        (click)="item.click && item.click()"
+      >
+        <mat-icon *ngIf="item.icon" [color]="item.color">{{ item.icon }}</mat-icon
+        >
+        {{ item.title }}
+      </a>
+    </ng-container>
+  </ng-template>
 </mat-menu>

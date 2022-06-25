@@ -9,9 +9,11 @@ import {EditProfileDialogComponent} from './components/edit-profile-dialog/edit-
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {ProfileActionBarComponent} from './components/profile-action-bar/profile-action-bar.component';
+import {MatMenuModule} from '@angular/material/menu';
+import { StatisticsActionComponent } from './components/statistics-action/statistics-action.component';
 
 @NgModule({
-  declarations: [UserComponent, EditProfileDialogComponent, ProfileActionBarComponent],
+  declarations: [UserComponent, EditProfileDialogComponent, ProfileActionBarComponent, StatisticsActionComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -24,6 +26,7 @@ import {ProfileActionBarComponent} from './components/profile-action-bar/profile
     SharedModule,
     MatDialogModule,
     MatIconModule,
+    MatMenuModule,
   ],
 })
 export class UserModule {}

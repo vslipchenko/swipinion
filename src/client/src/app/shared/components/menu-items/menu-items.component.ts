@@ -11,6 +11,7 @@ import {MenuItem} from '~app/typings/menu/menu.interfaces';
 export class MenuItemsComponent {
   @Input() public items: Array<MenuItem> = [];
   @Input() public xPosition: MenuPositionX = 'before';
+  @Input() public loading = false;
 
   @ViewChild('menu', {static: true}) public menu?: MatMenuPanel;
 }

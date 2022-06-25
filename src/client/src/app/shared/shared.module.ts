@@ -108,6 +108,7 @@ import {ProgressBarComponent} from './components/progress-bar/progress-bar.compo
     ImageBrowserComponent,
     TextareaComponent,
     ProgressBarComponent,
+    MenuItemsComponent,
   ],
 })
 export class SharedModule {}
