@@ -8,6 +8,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {RecoveryDialogComponent} from '~app/modules/entry/components/recovery-dialog/recovery-dialog.component';
 import {EmailConfirmationDialogComponent} from '~app/modules/entry/components/email-confirmation-dialog/email-confirmation-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent implements OnInit, Destroyable {
   public constructor(
     private readonly dialog: MatDialog,
     private readonly location: Location,
-    private readonly authenticationService: AuthenticationService,
+    private readonly authenticationService: AuthenticationService, // private readonly history: Navi,
+    private readonly router: Router,
   ) {
     this.authenticated$ = this.authenticationService.authenticated$;
   }
@@ -57,12 +59,12 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.signUp.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.signUp(true);
+      this.signUp(this.isHomepageScope);
     });
 
     dialog.componentInstance.recover.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.recoverPassword(true);
+      this.recoverPassword(this.isHomepageScope);
     });
 
     dialog.componentInstance.confirm.pipe(takeUntil(dialog.afterClosed())).subscribe((data) => {
@@ -72,7 +74,7 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.authenticated.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.resetLocation();
+      if (this.isHomepageScope) this.resetLocation();
     });
 
     this.listenDialogClose(dialog);
@@ -99,7 +101,7 @@ export class HeaderComponent implements OnInit, Destroyable {
     dialog.componentInstance.email = email;
     dialog.componentInstance.emailConfirmed.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.signIn(true, data);
+      this.signIn(this.isHomepageScope, data);
     });
 
     this.listenDialogClose(dialog);
@@ -112,13 +114,15 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     dialog.componentInstance.recovered.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
-      this.signIn(true);
+      this.signIn(this.isHomepageScope);
     });
 
     this.listenDialogClose(dialog);
   }
 
   private listenDialogClose(dialog: MatDialogRef<any>): void {
+    if (!this.isHomepageScope) return;
+
     merge(dialog.backdropClick(), dialog.componentInstance.cancel)
       .pipe(takeUntil(dialog.afterClosed()))
       .subscribe(() => {
@@ -128,5 +132,9 @@ export class HeaderComponent implements OnInit, Destroyable {
 
   private resetLocation(): void {
     this.location.go('/');
+  }
+
+  public get isHomepageScope(): boolean {
+    return ['/', '/sign-in', '/sign-up', '/recovery'].includes(this.router.url);
   }
 }

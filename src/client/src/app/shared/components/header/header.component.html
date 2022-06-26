@@ -8,8 +8,8 @@
 
   <ng-template #buttons>
     <div>
-      <app-button class="mr-2" color="primary" text="Sign in" (clicked)="signIn(true)"></app-button>
-      <app-flat-button color="accent" text="Sign up" (clicked)="signUp(true)"></app-flat-button>
+      <app-button class="mr-2" color="primary" text="Sign in" (clicked)="signIn(isHomepageScope)"></app-button>
+      <app-flat-button color="accent" text="Sign up" (clicked)="signUp(isHomepageScope)"></app-flat-button>
     </div>
   </ng-template>
 </header>
