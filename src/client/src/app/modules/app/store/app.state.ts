@@ -1,10 +1,12 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
+import {UpdateUserProfile, UpdateUserRole} from '~app/modules/app/store/app.actions';
 import {UserProfile} from '~app/typings/user/user.interfaces';
+import {UserRole} from '~app/typings/user/user.enums';
 
 export interface AppStateModel {
   profile: UserProfile;
+  role: UserRole;
 }
 
 const APP_STATE = new StateToken<AppStateModel>('app');
@@ -17,6 +19,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       bio: '',
       thumbnail: '',
     },
+    role: UserRole.Guest,
   },
 })
 @Injectable()
@@ -29,6 +32,14 @@ export class AppState {
         ...state.profile,
         ...action.payload,
       },
+    }));
+  }
+
+  @Action(UpdateUserRole)
+  private updateUserRole(context: StateContext<AppStateModel>, action: UpdateUserRole): void {
+    context.setState((state) => ({
+      ...state,
+      role: action.payload,
     }));
   }
 }

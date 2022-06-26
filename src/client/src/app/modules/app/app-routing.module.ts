@@ -5,6 +5,7 @@ import {PageNotFoundModule} from '~app/modules/page-not-found/page-not-found.mod
 import {UserModule} from '~app/modules/user/user.module';
 import {UserCanActivateGuard} from '~app/guards/user/can-activate/user-can-activate.guard';
 import {UserCanLoadGuard} from '~app/guards/user/can-load/user-can-load.guard';
+import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
 
 const entryModule = {
   pathMatch: 'full',
@@ -15,6 +16,9 @@ const userModule = {
   loadChildren: (): Promise<typeof UserModule> => import('~app/modules/user/user.module').then((m) => m.UserModule),
   canLoad: [UserCanLoadGuard],
   canActivate: [UserCanActivateGuard],
+  resolve: {
+    role: UserRoleResolver,
+  },
 };
 
 const routes: Routes = [
