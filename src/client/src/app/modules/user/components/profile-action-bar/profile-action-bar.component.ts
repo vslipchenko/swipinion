@@ -6,4 +6,8 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   styleUrls: ['./profile-action-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileActionBarComponent {}
+export class ProfileActionBarComponent {
+  public message(): void {}
+
+  public follow(): void {}
+}

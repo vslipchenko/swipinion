@@ -26,10 +26,10 @@
     <app-statistics-action></app-statistics-action>
   </div>
 
-  <div class="d-flex pointer">
+  <div class="d-flex pointer" [appAuthClick]="message">
     <mat-icon>email</mat-icon>
   </div>
-  <div class="d-flex pointer">
+  <div class="d-flex pointer" [appAuthClick]="follow">
     <!--            <mat-icon svgIcon="account-check"></mat-icon>-->
     <mat-icon color="primary">person_add</mat-icon>
   </div>
