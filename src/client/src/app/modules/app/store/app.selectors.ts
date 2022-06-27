@@ -5,4 +5,8 @@ export class AppSelectors {
   public static userProfile = createSelector([AppState], (state: AppStateModel) => {
     return state.profile;
   });
+
+  public static userRole = createSelector([AppState], (state: AppStateModel) => {
+    return state.role;
+  });
 }

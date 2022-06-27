@@ -41,6 +41,7 @@ import {OpinionPreviewComponent} from './components/opinion-preview/opinion-prev
 import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-button.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {ProgressBarComponent} from './components/progress-bar/progress-bar.component';
+import {AuthClickDirective} from './directives/auth-click.directive';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -73,6 +74,7 @@ import {ProgressBarComponent} from './components/progress-bar/progress-bar.compo
     OpinionPreviewComponent,
     MiniFabButtonComponent,
     ProgressBarComponent,
+    AuthClickDirective,
   ],
   imports: [
     CommonModule,
@@ -109,6 +111,7 @@ import {ProgressBarComponent} from './components/progress-bar/progress-bar.compo
     TextareaComponent,
     ProgressBarComponent,
     MenuItemsComponent,
+    AuthClickDirective,
   ],
 })
 export class SharedModule {}
