@@ -112,6 +112,7 @@ import {AuthClickDirective} from './directives/auth-click.directive';
     ProgressBarComponent,
     MenuItemsComponent,
     AuthClickDirective,
+    FlatButtonComponent,
   ],
 })
 export class SharedModule {}

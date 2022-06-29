@@ -51,7 +51,7 @@ export const queryOpinionsByUsername = (username: string, offset: number): Query
       WHERE opinions.user_id = (SELECT id FROM users WHERE username = $1)
       GROUP BY opinions.id
       ORDER BY opinions.created_at DESC
-      LIMIT 10
+      LIMIT 9
       OFFSET $2
   `,
   values: [username, offset],
