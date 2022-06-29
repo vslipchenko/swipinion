@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {isValidHttpUrl} from '~app/utilities/url';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserService} from '~app/services/user/user.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ImageService} from '~app/services/image/image.service';
@@ -12,7 +12,6 @@ import {Store} from '@ngxs/store';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
 import {EditProfileMutationResult} from '~app/typings/user/user.interfaces';
 import {MutationResult} from 'apollo-angular';
-import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {hasExtension} from '~app/utilities/file';
 
 @Component({
@@ -28,17 +27,16 @@ export class EditProfileDialogComponent implements Destroyable {
   public readonly loading$ = new BehaviorSubject(false);
 
   public constructor(
+    @Inject(MAT_DIALOG_DATA) private readonly data: {thumbnail: string; bio: string},
     private readonly dialogRef: MatDialogRef<EditProfileDialogComponent>,
     private readonly userService: UserService,
     private readonly imageService: ImageService,
     private readonly snackbar: MatSnackBar,
     private readonly store: Store,
   ) {
-    const {thumbnail, bio} = this.store.selectSnapshot(AppSelectors.userProfile);
-
     // Set default values
-    this.imageUrl.setValue(thumbnail);
-    this.bio.setValue(bio);
+    this.imageUrl.setValue(data.thumbnail);
+    this.bio.setValue(data.bio);
   }
 
   public ngOnDestroy(): void {

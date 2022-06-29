@@ -1,12 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatDialog} from '@angular/material/dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
-import {UserProfile} from '~app/typings/user/user.interfaces';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -17,26 +16,29 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class UserComponent implements OnInit {
   @Select(UserSelectors.opinions) public readonly opinions$!: Observable<Array<Opinion>>;
-  public readonly userProfile$: Observable<UserProfile>;
+  public readonly profile: {username: string; thumbnail: string; bio: string};
 
   public constructor(
     private readonly store: Store,
     private readonly dialog: MatDialog,
     private readonly route: ActivatedRoute,
   ) {
-    this.userProfile$ = of(this.route.snapshot.data['profile']);
+    this.profile = this.route.snapshot.data['profile'];
   }
 
   public ngOnInit(): void {
     this.store.dispatch(
       new FetchUserOpinions({
-        username: this.route.snapshot.data['profile']['username'],
+        username: this.profile.username,
         offset: 0,
       }),
     );
   }
 
   public openEditProfile(): void {
-    this.dialog.open(EditProfileDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    this.dialog.open(EditProfileDialogComponent, {
+      panelClass: ['dialog', 'extended-dialog'],
+      data: {thumbnail: this.profile.thumbnail, bio: this.profile.bio},
+    });
   }
 }
