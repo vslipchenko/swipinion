@@ -29,7 +29,7 @@ const routes: Routes = [
     ...entryModule,
   },
   {
-    path: 'opinion/:id',
+    path: 'opinion/:username/:id',
     ...entryModule,
   },
   {
