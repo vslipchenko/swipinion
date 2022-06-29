@@ -5,9 +5,11 @@ import {FetchUserOpinions, PrependUserOpinion} from '~app/modules/user/store/use
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
+import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 
 export interface UserStateModel {
   opinions: Array<Opinion>;
+  canLoadMore: boolean;
 }
 
 const USER_STATE = new StateToken<UserStateModel>('user');
@@ -16,6 +18,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
   name: USER_STATE,
   defaults: {
     opinions: [],
+    canLoadMore: false,
   },
 })
 @Injectable()
@@ -41,6 +44,7 @@ export class UserState {
         context.setState((state) => ({
           ...state,
           opinions: action.payload.offset ? [...state.opinions, ...opinions] : opinions, // Can't just simply mix current state with a new list, as it might cause bug if navigating between different profiles
+          canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
         }));
       }),
     );

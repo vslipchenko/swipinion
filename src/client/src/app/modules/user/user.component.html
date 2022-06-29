@@ -36,8 +36,8 @@
     <app-tabs [tabs]="['Opinions', 'Reactions', 'Shares']" color="accent" headerPosition="below"
               class="tabs d-block bg-dark"></app-tabs>
 
-    <div class="content pb-2-3">
-      <app-opinion-preview *ngFor="let opinion of opinions$ | async" [title]="opinion.title"
+    <div *ngIf="opinions$ | async as opinions" class="content pb-2-3">
+      <app-opinion-preview *ngFor="let opinion of opinions" [title]="opinion.title"
                            [description]="opinion.description" [fileUrl]="opinion.file_url"
                            [tags]="opinion.tags" class="d-block mt-2-3"></app-opinion-preview>
       <!--      <div *ngFor="let opinion of opinions$ | async">-->
@@ -101,6 +101,9 @@
       <!--      1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections-->
       <!--      1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original-->
       <!--      form, accompanied by English versions from the 1914 translation by H. Rackham.-->
+
+      <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
+                       icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"></app-flat-button>
     </div>
   </div>
 </div>

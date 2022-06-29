@@ -15,7 +15,8 @@ import {ActivatedRoute} from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit {
-  @Select(UserSelectors.opinions) public readonly opinions$!: Observable<Array<Opinion>>;
+  @Select(UserSelectors.opinionsSlice) public readonly opinions$!: Observable<Array<Opinion>>;
+  @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
   public readonly profile: {username: string; thumbnail: string; bio: string};
 
   public constructor(
@@ -27,10 +28,14 @@ export class UserComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.fetchUserOpinions(0);
+  }
+
+  public fetchUserOpinions(offset: number): void {
     this.store.dispatch(
       new FetchUserOpinions({
         username: this.profile.username,
-        offset: 0,
+        offset,
       }),
     );
   }
