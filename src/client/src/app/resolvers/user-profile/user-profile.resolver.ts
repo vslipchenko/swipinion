@@ -18,7 +18,8 @@ export class UserProfileResolver implements Resolve<UserProfile> {
 
   public resolve(route: ActivatedRouteSnapshot): Observable<UserProfile> {
     const profile = this.store.selectSnapshot(AppSelectors.userProfile);
-    const username = route.routeConfig?.path === 'profile' ? profile.username : route.params['username'];
+    const navigatingProfile = route.routeConfig?.path === 'profile';
+    const username = navigatingProfile ? profile.username : route.params['username'];
 
     return this.profileService.getProfileData(username).pipe(
       // Query is cached

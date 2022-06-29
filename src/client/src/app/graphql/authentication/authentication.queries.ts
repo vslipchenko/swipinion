@@ -6,7 +6,6 @@ export const SIGN_IN = gql`
       accessToken
       refreshToken
       thumbnail
-      bio
       username
       reason
     }
@@ -18,7 +17,6 @@ export const REFRESH_ACCESS_TOKEN = gql`
     refreshAccessToken(refreshToken: $refreshToken) {
       accessToken
       thumbnail
-      bio
       username
     }
   }

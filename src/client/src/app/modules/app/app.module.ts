@@ -62,7 +62,6 @@ function authenticationFactory(
           new UpdateUserProfile({
             thumbnail: data.refreshAccessToken.thumbnail,
             username: data.refreshAccessToken.username,
-            bio: data.refreshAccessToken.bio, // TODO fetch bio apart from thumbnail & username
           }),
         );
       }),

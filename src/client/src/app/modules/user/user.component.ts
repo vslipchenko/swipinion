@@ -24,12 +24,10 @@ export class UserComponent implements OnInit {
     private readonly dialog: MatDialog,
     private readonly route: ActivatedRoute,
   ) {
-    // console.log(this.route.snapshot.data);
     this.userProfile$ = of(this.route.snapshot.data['profile']);
   }
 
   public ngOnInit(): void {
-    console.log(this.route.snapshot.data);
     this.store.dispatch(
       new FetchUserOpinions({
         username: this.route.snapshot.data['profile']['username'],

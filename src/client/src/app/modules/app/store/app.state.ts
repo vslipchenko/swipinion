@@ -5,7 +5,7 @@ import {UserProfile} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
 
 export interface AppStateModel {
-  profile: UserProfile;
+  profile: Omit<UserProfile, 'bio'>;
   role: UserRole;
 }
 
@@ -16,7 +16,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
   defaults: {
     profile: {
       username: '',
-      bio: '',
+      // bio: '',
       thumbnail: '',
     },
     role: UserRole.Guest,

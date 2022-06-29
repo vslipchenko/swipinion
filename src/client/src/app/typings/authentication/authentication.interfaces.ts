@@ -21,7 +21,6 @@ export interface AccessTokenByRefreshTokenQueryResult {
   refreshAccessToken: {
     accessToken: string;
     thumbnail: string;
-    bio: string;
     username: string;
   };
 }

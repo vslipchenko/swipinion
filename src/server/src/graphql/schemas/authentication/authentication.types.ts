@@ -5,7 +5,6 @@ export const authenticationTypes = gql`
     accessToken: String
     refreshToken: String
     thumbnail: String
-    bio: String
     username: String
     reason: Int
   }
@@ -13,7 +12,6 @@ export const authenticationTypes = gql`
   type RefreshAccessTokenResult {
     accessToken: String
     thumbnail: String
-    bio: String
     username: String
   }
 `;
