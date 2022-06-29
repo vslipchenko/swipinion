@@ -40,7 +40,7 @@ export class UserState {
 
         context.setState((state) => ({
           ...state,
-          opinions,
+          opinions: action.payload.offset ? [...state.opinions, ...opinions] : opinions, // Can't just simply mix current state with a new list, as it might cause bug if navigating between different profiles
         }));
       }),
     );
