@@ -29,6 +29,10 @@ const routes: Routes = [
     ...entryModule,
   },
   {
+    path: 'opinion/:id',
+    ...entryModule,
+  },
+  {
     path: 'sign-in',
     ...entryModule,
     data: {
