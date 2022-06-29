@@ -5,3 +5,11 @@ export const CREATE_OPINION = gql`
     createOpinion(input: $input)
   }
 `;
+
+export const DELETE_OPINION = gql`
+  mutation ($opinionId: String!) {
+    deleteOpinion(opinionId: $opinionId) {
+      success
+    }
+  }
+`;

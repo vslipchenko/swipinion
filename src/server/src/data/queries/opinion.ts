@@ -43,6 +43,14 @@ export const queryOpinionCreate = ({
   values: [userId, type, fileUrl, title, description],
 });
 
+export const queryOpinionDelete = (userId: string, opinionId: string): QueryConfig => ({
+  text: `
+    DELETE FROM opinions
+    WHERE user_id = $1 AND id = $2
+  `,
+  values: [userId, opinionId],
+});
+
 export const queryOpinionsByUsername = (username: string, offset: number): QueryConfig => ({
   text: `
     SELECT opinions.id, opinions.type, opinions.file_url, opinions.title, opinions.description, array_agg(tags.tag) as tags

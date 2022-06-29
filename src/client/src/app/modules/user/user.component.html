@@ -37,7 +37,7 @@
               class="tabs d-block bg-dark"></app-tabs>
 
     <div *ngIf="opinions$ | async as opinions" class="content pb-2-3">
-      <app-opinion-preview *ngFor="let opinion of opinions" [title]="opinion.title"
+      <app-opinion-preview *ngFor="let opinion of opinions" [id]="opinion.id" [title]="opinion.title"
                            [description]="opinion.description" [fileUrl]="opinion.file_url"
                            [tags]="opinion.tags" class="d-block mt-2-3"></app-opinion-preview>
       <!--      <div *ngFor="let opinion of opinions$ | async">-->

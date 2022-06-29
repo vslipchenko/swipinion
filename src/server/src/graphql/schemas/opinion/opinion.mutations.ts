@@ -2,12 +2,20 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {createOpinionValidator} from '../../../validators/opinion';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
-import {concatenateTagValues, queryOpinionCreate, queryOpinionCreateWithTags} from '../../../data/queries/opinion';
+import {
+  concatenateTagValues,
+  queryOpinionCreate,
+  queryOpinionCreateWithTags,
+  queryOpinionDelete,
+} from '../../../data/queries/opinion';
 import {CreateOpinion} from '../../../typings/opinion/opinion.interfaces';
+import {SuccessResponse} from '../../../typings/response/response.interfaces';
+import {bigintValidator} from '../../../validators/shared';
 
 export const opinionMutationTypeDefinitions = gql`
   type Mutation {
     createOpinion(input: CreateOpinion!): ID
+    deleteOpinion(opinionId: String!): Success
   }
 `;
 
@@ -41,8 +49,27 @@ const createOpinion = async (
   return result.rows[0].id;
 };
 
+const deleteOpinion = async (
+  _: unknown,
+  {opinionId}: {opinionId: string},
+  {accessToken}: {accessToken: string},
+): Promise<SuccessResponse | ApolloError | null> => {
+  const {error} = bigintValidator.validate(opinionId);
+
+  if (error) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.query(queryOpinionDelete(opinionId, tokenData.userId));
+
+  return {success: Boolean(result.rowCount)};
+};
+
 export const opinionMutationResolvers = {
   Mutation: {
     createOpinion,
+    deleteOpinion,
   },
 };

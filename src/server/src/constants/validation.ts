@@ -23,3 +23,5 @@ export const FILE_URL_MAX_LENGTH = 2048;
 export const BIO_MAX_LENGTH = 300;
 export const TAG_REGEXP = /^(?=.{1,35}$)[a-zA-Z\d]+(?:-[a-zA-Z\d]+)*$/;
 export const MAX_TAG_COUNT = 10;
+
+export const BIGINT_REGEXP = /^\d{1,19}$/;

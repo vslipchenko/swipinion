@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import {
+  BIGINT_REGEXP,
   CODE_REGEXP,
   EMAIL_REGEXP,
   FILE_URL_MAX_LENGTH,
@@ -13,6 +14,7 @@ import {
 import {getStringEnumValues} from '../utilities/enum';
 import {LanguageLabel} from '../typings/i18n/i18n.enums';
 
+export const bigintValidator = Joi.string().regex(BIGINT_REGEXP);
 export const usernameValidator = Joi.string().regex(USERNAME_REGEXP).min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH);
 export const emailValidator = Joi.string().regex(EMAIL_REGEXP);
 export const codeValidator = Joi.string().pattern(CODE_REGEXP);

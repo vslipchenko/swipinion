@@ -1,7 +1,11 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {GetOpinionsByUsernameQueryResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
-import {FetchUserOpinions, PrependUserOpinion} from '~app/modules/user/store/user.actions';
+import {
+  DeleteOpinionMutationResult,
+  GetOpinionsByUsernameQueryResult,
+  Opinion,
+} from '~app/typings/opinion/opinion.interfaces';
+import {DeleteUserOpinion, FetchUserOpinions, PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
@@ -56,5 +60,22 @@ export class UserState {
       ...state,
       opinions: [action.payload, ...state.opinions],
     }));
+  }
+
+  @Action(DeleteUserOpinion)
+  private deleteUserOpinion(
+    context: StateContext<UserStateModel>,
+    action: DeleteUserOpinion,
+  ): Observable<MutationResult<DeleteOpinionMutationResult>> {
+    return this.opinionService.deleteOpinion(action.payload).pipe(
+      tap(({data}) => {
+        if (!data?.deleteOpinion) return;
+
+        context.setState((state) => ({
+          ...state,
+          opinions: state.opinions.filter((opinion) => opinion.id !== action.payload),
+        }));
+      }),
+    );
   }
 }

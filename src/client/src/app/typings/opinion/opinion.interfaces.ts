@@ -1,4 +1,5 @@
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {SuccessResponse} from '~app/typings/response/response.interfaces';
 
 export interface Opinion {
   id: string;
@@ -11,6 +12,10 @@ export interface Opinion {
 
 export interface CreateOpinionMutationResult {
   createOpinion: string;
+}
+
+export interface DeleteOpinionMutationResult {
+  deleteOpinion: SuccessResponse;
 }
 
 export interface CreateOpinion {
