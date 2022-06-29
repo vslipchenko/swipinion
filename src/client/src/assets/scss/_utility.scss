@@ -65,11 +65,11 @@
 
 .mt-2-3 {
   @include media.zero-small {
-    margin-top: var.$unit-2;
+    margin-top: var.$unit-2 !important;
   }
 
   @include media.above-small {
-    margin-top: var.$unit-3;
+    margin-top: var.$unit-3 !important;
   }
 }
 

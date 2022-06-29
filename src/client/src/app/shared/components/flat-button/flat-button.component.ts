@@ -10,6 +10,8 @@ import {ThemePalette} from '@angular/material/core';
 export class FlatButtonComponent {
   @Input() public text = '';
   @Input() public extendClass = '';
+  @Input() public svgIcon = '';
+  @Input() public icon = '';
   @Input() public color: ThemePalette;
 
   @Output() public clicked = new EventEmitter<void>();
