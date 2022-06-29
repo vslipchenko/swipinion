@@ -130,3 +130,12 @@ export const queryUserEditProfile = ({
   `,
   values: [thumbnail, bio, userId],
 });
+
+export const queryUserProfileData = (username: string): QueryConfig => ({
+  text: `
+    SELECT thumbnail, bio
+    FROM users
+    WHERE username = $1
+  `,
+  values: [username],
+});
