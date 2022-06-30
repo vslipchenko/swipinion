@@ -10,7 +10,9 @@ export class ProfileActionBarComponent {
   @Input() public showBottomBar = false;
   @Input() public wrapper!: HTMLDivElement;
 
-  public message(): void {}
+  public message(): void {
+    console.log('message');
+  }
 
   public follow(): void {
     console.log('follow');

@@ -1,14 +1,7 @@
 <div class="d-flex jc-around ai-center w-100">
-  <div class="pointer">
-    <app-statistics-action class="d-flex"></app-statistics-action>
-  </div>
-
-  <div class="d-flex pointer" [appAuthClick]="message">
-    <mat-icon>email</mat-icon>
-  </div>
-  <div class="d-flex pointer" [appAuthClick]="follow">
-    <mat-icon color="primary">person_add</mat-icon>
-  </div>
+  <app-statistics-action></app-statistics-action>
+  <app-icon-button icon="email" [appAuthClick]="message"></app-icon-button>
+  <app-icon-button icon="person_add" [appAuthClick]="follow" color="primary"></app-icon-button>
 </div>
 
 <div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">

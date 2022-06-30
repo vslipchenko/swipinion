@@ -11,6 +11,7 @@ export class IconButtonComponent {
   @Input() public svgIcon = '';
   @Input() public icon = '';
   @Input() public extendClass = '';
+  @Input() public disabled = false;
   @Input() public color: ThemePalette;
 
   @Output() public clicked = new EventEmitter<void>();
