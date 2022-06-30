@@ -6,7 +6,6 @@ export interface SignInQueryResult {
     accessToken: string;
     refreshToken: string;
     thumbnail: string;
-    bio: string;
     username: string;
     reason: SignInFailReason;
   };

@@ -1,4 +1,4 @@
-<div #wrapper class="wrapper bg-dark h-100 d-flex">
+<div #wrapper *ngIf="profile$ | async as profile" class="wrapper bg-dark h-100 d-flex">
   <div class="relative w-100">
     <div class="stripe absolute w-100"></div>
 

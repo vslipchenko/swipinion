@@ -89,7 +89,6 @@ export class SignInDialogComponent implements OnInit, Destroyable {
           this.store.dispatch(
             new UpdateUserProfile({
               thumbnail: data.signIn.thumbnail,
-              bio: data.signIn.bio,
               username: data.signIn.username,
             }),
           );

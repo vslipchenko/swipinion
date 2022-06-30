@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
@@ -10,7 +10,7 @@ import {ImageService} from '~app/services/image/image.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Store} from '@ngxs/store';
 import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
-import {EditProfileMutationResult} from '~app/typings/user/user.interfaces';
+import {EditProfileMutationResult, UserProfile} from '~app/typings/user/user.interfaces';
 import {MutationResult} from 'apollo-angular';
 import {hasExtension} from '~app/utilities/file';
 
@@ -21,13 +21,15 @@ import {hasExtension} from '~app/utilities/file';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditProfileDialogComponent implements Destroyable {
+  @Output() public saved = new EventEmitter<Omit<UserProfile, 'username'>>();
+
   public readonly editProfileForm = this.editProfileFormGroup;
 
   public readonly destroy$ = new Subject<void>();
   public readonly loading$ = new BehaviorSubject(false);
 
   public constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly data: {thumbnail: string; bio: string},
+    @Inject(MAT_DIALOG_DATA) private readonly data: UserProfile,
     private readonly dialogRef: MatDialogRef<EditProfileDialogComponent>,
     private readonly userService: UserService,
     private readonly imageService: ImageService,
@@ -128,9 +130,13 @@ export class EditProfileDialogComponent implements Destroyable {
     this.store.dispatch(
       new UpdateUserProfile({
         thumbnail: thumbnail || this.imageUrl.value,
-        bio: this.bio.value || null,
       }),
     );
+
+    this.saved.emit({
+      thumbnail: thumbnail || this.imageUrl.value,
+      bio: this.bio.value || null,
+    });
 
     this.dialogRef.close();
   }

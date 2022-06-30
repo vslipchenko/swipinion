@@ -8,6 +8,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
 import {ActivatedRoute} from '@angular/router';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {UserProfile} from '~app/typings/user/user.interfaces';
 
 @Component({
   selector: 'app-user',
@@ -24,14 +25,14 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
 
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
-  public readonly profile: {username: string; thumbnail: string; bio: string}; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
+  public readonly profile$: BehaviorSubject<UserProfile>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
 
   public constructor(
     private readonly store: Store,
     private readonly dialog: MatDialog,
     private readonly route: ActivatedRoute,
   ) {
-    this.profile = this.route.snapshot.data['profile'];
+    this.profile$ = new BehaviorSubject(this.route.snapshot.data['profile']);
   }
 
   public ngOnInit(): void {
@@ -51,16 +52,24 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public fetchUserOpinions(offset: number): void {
     this.store.dispatch(
       new FetchUserOpinions({
-        username: this.profile.username,
+        username: this.profile$.getValue().username,
         offset,
       }),
     );
   }
 
   public openEditProfile(): void {
-    this.dialog.open(EditProfileDialogComponent, {
+    const dialog = this.dialog.open(EditProfileDialogComponent, {
       panelClass: ['dialog', 'extended-dialog'],
-      data: {thumbnail: this.profile.thumbnail, bio: this.profile.bio},
+      data: this.profile$.getValue(),
+    });
+
+    dialog.componentInstance.saved.pipe(takeUntil(dialog.afterClosed())).subscribe((data) => {
+      dialog.close();
+      this.profile$.next({
+        ...this.profile$.getValue(),
+        ...data,
+      });
     });
   }
 
