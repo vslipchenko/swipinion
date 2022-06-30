@@ -1,12 +1,13 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil} from 'rxjs';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatDialog} from '@angular/material/dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
 import {ActivatedRoute} from '@angular/router';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-user',
@@ -14,10 +15,16 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./user.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   @Select(UserSelectors.opinionsSlice) public readonly opinions$!: Observable<Array<Opinion>>;
   @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
-  public readonly profile: {username: string; thumbnail: string; bio: string};
+
+  @ViewChild('wrapper') private readonly wrapper!: ElementRef<HTMLDivElement>;
+  @ViewChild('userBlock') private readonly userBlock!: ElementRef<HTMLDivElement>;
+
+  public readonly showBottomBar$ = new BehaviorSubject(false);
+  public readonly destroy$ = new Subject<void>();
+  public readonly profile: {username: string; thumbnail: string; bio: string}; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
 
   public constructor(
     private readonly store: Store,
@@ -29,6 +36,16 @@ export class UserComponent implements OnInit {
 
   public ngOnInit(): void {
     this.fetchUserOpinions(0);
+  }
+
+  public ngAfterViewInit(): void {
+    this.trackScrollProgress();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.showBottomBar$.complete();
   }
 
   public fetchUserOpinions(offset: number): void {
@@ -45,5 +62,16 @@ export class UserComponent implements OnInit {
       panelClass: ['dialog', 'extended-dialog'],
       data: {thumbnail: this.profile.thumbnail, bio: this.profile.bio},
     });
+  }
+
+  private trackScrollProgress(): void {
+    fromEvent(this.wrapper.nativeElement, 'scroll')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        const userBlockScrolledThrough =
+          (event.target as HTMLDivElement).scrollTop > this.userBlock.nativeElement.clientHeight;
+
+        this.showBottomBar$.next(userBlockScrolledThrough);
+      });
   }
 }

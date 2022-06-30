@@ -113,6 +113,7 @@ import {AuthClickDirective} from './directives/auth-click.directive';
     MenuItemsComponent,
     AuthClickDirective,
     FlatButtonComponent,
+    IconButtonComponent,
   ],
 })
 export class SharedModule {}

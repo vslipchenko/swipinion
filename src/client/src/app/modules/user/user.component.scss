@@ -109,6 +109,14 @@ app-tabs {
 .content {
   max-width: 600px;
 
+  @include media.zero-small {
+    padding-bottom: var.$userbar-height; // - bottom userbar's height
+  }
+
+  @include media.above-small {
+    padding-bottom: var.$unit-3; // - bottom userbar's height
+  }
+
   @include media.medium-large {
     width: 600px;
     margin-left: auto;
