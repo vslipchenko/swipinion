@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ThemePalette} from '@angular/material/core';
 
 @Component({
   selector: 'app-icon-button',
@@ -10,4 +11,7 @@ export class IconButtonComponent {
   @Input() public svgIcon = '';
   @Input() public icon = '';
   @Input() public extendClass = '';
+  @Input() public color: ThemePalette;
+
+  @Output() public clicked = new EventEmitter<void>();
 }
