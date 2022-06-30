@@ -1,0 +1,27 @@
+@use 'variables' as var;
+
+.userbar {
+  bottom: 0;
+  left: 0;
+  background-color: rgb(var.$color-background-dark, 90%);
+  z-index: 1;
+  transition: 0.4s opacity;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.userbar-info {
+  min-width: 0;
+}
+
+.user-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.show {
+  opacity: 1;
+  pointer-events: auto;
+}

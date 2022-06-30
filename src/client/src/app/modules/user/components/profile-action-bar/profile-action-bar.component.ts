@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -7,7 +7,16 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileActionBarComponent {
+  @Input() public showBottomBar = false;
+  @Input() public wrapper!: HTMLDivElement;
+
   public message(): void {}
 
-  public follow(): void {}
+  public follow(): void {
+    console.log('follow');
+  }
+
+  public scrollTop(): void {
+    this.wrapper.scrollTo({top: 0, behavior: 'smooth'});
+  }
 }

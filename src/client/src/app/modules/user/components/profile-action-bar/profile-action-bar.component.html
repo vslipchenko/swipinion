@@ -1,27 +1,4 @@
 <div class="d-flex jc-around ai-center w-100">
-  <!--  <div class="d-flex f-column ai-center fw-medium pointer" style="font-size: 12px">-->
-  <!--    <mat-icon svgIcon="card-text"></mat-icon>-->
-  <!--    999.5m-->
-  <!--  </div>-->
-
-  <!--  <div class="d-flex f-column ai-center fw-medium pointer" style="font-size: 12px">-->
-  <!--    <mat-icon svgIcon="card-text"></mat-icon>-->
-  <!--    999.5m-->
-  <!--  </div>-->
-  <!--  -->
-  <!--  <div class="d-flex f-column ai-center fw-medium pointer" style="font-size: 12px">-->
-  <!--    <mat-icon svgIcon="card-text"></mat-icon>-->
-  <!--    999.5m-->
-  <!--  </div>-->
-
-  <!--    <div class="d-flex f-column ai-center fw-medium pointer" style="font-size: 12px">-->
-  <!--      <mat-icon svgIcon="account-arrow-left"></mat-icon>-->
-  <!--      999.5m-->
-  <!--    </div>-->
-  <!--    <div class="d-flex f-column ai-center fw-medium pointer" style="font-size: 12px">-->
-  <!--      <mat-icon svgIcon="account-arrow-right"></mat-icon>-->
-  <!--      999.5m-->
-  <!--    </div>-->
   <div class="pointer">
     <app-statistics-action class="d-flex"></app-statistics-action>
   </div>
@@ -30,8 +7,15 @@
     <mat-icon>email</mat-icon>
   </div>
   <div class="d-flex pointer" [appAuthClick]="follow">
-    <!--            <mat-icon svgIcon="account-check"></mat-icon>-->
     <mat-icon color="primary">person_add</mat-icon>
   </div>
-  <!--  <app-mini-fab-button icon="person_add" color="primary"></app-mini-fab-button>-->
+</div>
+
+<div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">
+  <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
+    <img src="https://i.ibb.co/3WhDXQv/Ancient-Splendid-Lacewing-size-restricted.gif" alt="" class="user-image mr-1">
+    <span class="fw-medium truncate">someone</span>
+  </div>
+
+  <app-icon-button color="primary" icon="person_add" (clicked)="follow()"></app-icon-button>
 </div>
