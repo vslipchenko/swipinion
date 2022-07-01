@@ -1,7 +1,4 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Select} from '@ngxs/store';
-import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {Observable} from 'rxjs';
 import {UserRole} from '~app/typings/user/user.enums';
 
 @Component({
@@ -11,9 +8,7 @@ import {UserRole} from '~app/typings/user/user.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileActionBarComponent {
-  @Select(AppSelectors.userRole)
-  public readonly role$!: Observable<UserRole>;
-
+  @Input() public role = UserRole.Guest;
   @Input() public username = '';
   @Input() public thumbnail = '';
   @Input() public showBottomBar = false;

@@ -9,6 +9,8 @@ import {EditProfileDialogComponent} from '~app/modules/user/components/edit-prof
 import {ActivatedRoute} from '@angular/router';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserProfile} from '~app/typings/user/user.interfaces';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {UserRole} from '~app/typings/user/user.enums';
 
 @Component({
   selector: 'app-user',
@@ -19,13 +21,17 @@ import {UserProfile} from '~app/typings/user/user.interfaces';
 export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   @Select(UserSelectors.opinionsSlice) public readonly opinions$!: Observable<Array<Opinion>>;
   @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
+  @Select(AppSelectors.userRole)
+  public readonly role$!: Observable<UserRole>;
 
   @ViewChild('wrapper') private readonly wrapper!: ElementRef<HTMLDivElement>;
   @ViewChild('userBlock') private readonly userBlock!: ElementRef<HTMLDivElement>;
 
+  public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public readonly profile$: BehaviorSubject<UserProfile>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
+  public readonly username = '';
 
   public constructor(
     private readonly store: Store,
@@ -33,6 +39,7 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
     private readonly route: ActivatedRoute,
   ) {
     this.profile$ = new BehaviorSubject(this.route.snapshot.data['profile']);
+    this.username = this.route.snapshot.data['profile'].username;
   }
 
   public ngOnInit(): void {

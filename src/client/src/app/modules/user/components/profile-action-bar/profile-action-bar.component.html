@@ -1,23 +1,20 @@
-<ng-container *ngIf="(role$ | async) as role">
-  <div class="d-flex ai-center w-100"
-       [ngClass]="{'jc-around': role !== userRole.User, 'jc-evenly': role === userRole.User}">
-    <app-statistics-action></app-statistics-action>
-    <app-icon-button icon="email" [appAuthClick]="message"></app-icon-button>
-    <app-icon-button *ngIf="role !== userRole.User" icon="person_add" [appAuthClick]="follow"
-                     color="primary"></app-icon-button>
+<div class="d-flex ai-center w-100"
+     [ngClass]="{'jc-around': role !== userRole.User, 'jc-evenly': role === userRole.User}">
+  <app-statistics-action></app-statistics-action>
+  <app-icon-button icon="email" [appAuthClick]="message"></app-icon-button>
+  <app-icon-button *ngIf="role !== userRole.User" icon="person_add" [appAuthClick]="follow"
+                   color="primary"></app-icon-button>
+</div>
+
+<div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">
+  <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
+    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="user-image mr-1">
+    <span class="fw-medium truncate">{{username}}</span>
   </div>
 
-  <div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">
-    <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
-      <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="user-image mr-1">
-      <span class="fw-medium truncate">{{username}}</span>
-    </div>
+  <app-icon-button *ngIf="role !== userRole.User" color="primary" icon="person_add"
+                   (clicked)="follow()"></app-icon-button>
 
-    <app-icon-button *ngIf="role !== userRole.User" color="primary" icon="person_add"
-                     (clicked)="follow()"></app-icon-button>
-
-    <app-icon-button *ngIf="role === userRole.User" icon="keyboard_arrow_up"
-                     (clicked)="scrollTop()"></app-icon-button>
-  </div>
-</ng-container>
-
+  <app-icon-button *ngIf="role === userRole.User" icon="keyboard_arrow_up"
+                   (clicked)="scrollTop()"></app-icon-button>
+</div>
