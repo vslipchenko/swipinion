@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserRole} from '~app/typings/user/user.enums';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -14,6 +15,7 @@ export class ProfileActionBarComponent {
   @Input() public showBottomBar = false;
   @Input() public wrapper!: HTMLDivElement;
 
+  public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
 
   public message(): void {
