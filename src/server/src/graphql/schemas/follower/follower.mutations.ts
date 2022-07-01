@@ -7,12 +7,12 @@ import {db} from '../../../data';
 
 export const followerMutationTypeDefinitions = gql`
   type Mutation {
-    follow(username: String!): Success
-    unfollow(username: String!): Success
+    followUser(username: String!): Success
+    unfollowUser(username: String!): Success
   }
 `;
 
-const follow = async (
+const followUser = async (
   _: unknown,
   {username}: {username: string},
   {accessToken}: {accessToken: string},
@@ -30,7 +30,7 @@ const follow = async (
   return {success: Boolean(result.rowCount)};
 };
 
-const unfollow = async (
+const unfollowUser = async (
   _: unknown,
   {username}: {username: string},
   {accessToken}: {accessToken: string},
@@ -48,7 +48,7 @@ const unfollow = async (
 
 export const followerMutationResolvers = {
   Mutation: {
-    follow,
-    unfollow,
+    followUser,
+    unfollowUser,
   },
 };
