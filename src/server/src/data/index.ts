@@ -3,6 +3,7 @@ import {environment} from '../environments';
 import {UsersTable} from './tables/users';
 import {OpinionsTable} from './tables/opinions';
 import {TagsTable} from './tables/tags';
+import {FollowersTable} from './tables/followers';
 
 // PostgreSQL v14
 const {DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_PORT} = environment;
@@ -23,6 +24,7 @@ export const db = {
       UsersTable,
       OpinionsTable,
       TagsTable,
+      FollowersTable,
       // ... Append other tables to sync
     ];
     // Sync tables
