@@ -19,15 +19,19 @@
 
 
       <div class="user-info">
+        <!--        <a routerLink="/user/jo">jo</a><br>-->
+        <!--        <a routerLink="/user/john">john</a><br>-->
+        <!--        <a routerLink="/user/someone">someone</a>-->
+
         <div class="username fw-medium t-center">{{profile.username}}</div>
 
-        <div class="divider my-2"></div>
+        <div class="divider mt-2 mb-1"></div>
 
         <app-profile-action-bar [role]="role" [username]="profile.username" [thumbnail]="profile.thumbnail"
                                 [showBottomBar]="$any(data.showBottomBar)"
                                 [wrapper]="wrapper"></app-profile-action-bar>
 
-        <div *ngIf="profile.bio" class="divider my-2"></div>
+        <div *ngIf="profile.bio" class="divider mt-1 mb-2"></div>
 
         <div class="bio">{{profile.bio}}</div>
       </div>
