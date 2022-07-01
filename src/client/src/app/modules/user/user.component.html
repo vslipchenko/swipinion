@@ -22,7 +22,8 @@
 
         <div class="divider my-2"></div>
 
-        <app-profile-action-bar [showBottomBar]="$any(showBottomBar$ | async)"
+        <app-profile-action-bar [username]="profile.username" [thumbnail]="profile.thumbnail"
+                                [showBottomBar]="$any(showBottomBar$ | async)"
                                 [wrapper]="wrapper"></app-profile-action-bar>
 
         <div *ngIf="profile.bio" class="divider my-2"></div>
