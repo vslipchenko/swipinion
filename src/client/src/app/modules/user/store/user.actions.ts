@@ -1,7 +1,7 @@
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 
 export class FetchOpinions {
-  public static readonly type = '[User] FetchUserOpinions';
+  public static readonly type = '[User] FetchOpinions';
 
   public constructor(public payload: {username: string; offset: number; isProfilePath: boolean}) {}
 }

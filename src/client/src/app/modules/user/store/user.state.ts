@@ -29,8 +29,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
 })
 @Injectable()
 export class UserState {
-  public constructor(private readonly opinionService: OpinionService) {
-  }
+  public constructor(private readonly opinionService: OpinionService) {}
 
   @Action(FetchOpinions)
   private fetchUserOpinions(
@@ -46,11 +45,11 @@ export class UserState {
         tap(({data}) => {
           const opinions = data?.getOpinionsByUsername
             ? data.getOpinionsByUsername.map((opinion) => {
-              return {
-                ...opinion,
-                tags: opinion.tags[0] ? opinion.tags : [],
-              };
-            })
+                return {
+                  ...opinion,
+                  tags: opinion.tags[0] ? opinion.tags : [],
+                };
+              })
             : [];
 
           context.setState((state) => {
@@ -60,7 +59,7 @@ export class UserState {
             };
             const stateKey = action.payload.isProfilePath ? 'profileOpinions' : 'userOpinions';
 
-            nextState[stateKey] = [...state[stateKey], ...opinions];
+            nextState[stateKey] = action.payload.offset ? [...state[stateKey], ...opinions] : opinions; // Offset check prevents duplicating when navigating back and forth between /profile and /user/:username paths
 
             return nextState;
           });
