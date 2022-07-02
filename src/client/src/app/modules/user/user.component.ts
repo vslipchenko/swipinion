@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
-import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
+import {FetchOpinions} from '~app/modules/user/store/user.actions';
 import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil} from 'rxjs';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
@@ -19,18 +19,19 @@ import {UserRole} from '~app/typings/user/user.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit, AfterViewInit, Destroyable {
-  @Select(UserSelectors.opinionsSlice) public readonly opinions$!: Observable<Array<Opinion>>;
   @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
   @Select(AppSelectors.userRole)
   public readonly role$!: Observable<UserRole>;
 
-  @ViewChild('wrapper') private readonly wrapper!: ElementRef<HTMLDivElement>;
+  @ViewChild('wrapper')
+  private readonly wrapper!: ElementRef<HTMLDivElement>;
   @ViewChild('userBlock') private readonly userBlock!: ElementRef<HTMLDivElement>;
 
+  public readonly opinions$!: Observable<Array<Opinion>>;
   public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
-  public readonly profile$: BehaviorSubject<UserProfile>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
+  public readonly profile$: BehaviorSubject<UserProfile & {isProfilePath: boolean}>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
   public readonly username = '';
 
   public constructor(
@@ -40,6 +41,9 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   ) {
     this.profile$ = new BehaviorSubject(this.route.snapshot.data['profile']);
     this.username = this.route.snapshot.data['profile'].username;
+    this.opinions$ = this.store.select(
+      this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
+    );
   }
 
   public ngOnInit(): void {
@@ -58,9 +62,10 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
 
   public fetchUserOpinions(offset: number): void {
     this.store.dispatch(
-      new FetchUserOpinions({
-        username: this.profile$.getValue().username,
+      new FetchOpinions({
+        username: this.username,
         offset,
+        isProfilePath: this.isProfilePath,
       }),
     );
   }
@@ -89,5 +94,9 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
 
         this.showBottomBar$.next(userBlockScrolledThrough);
       });
+  }
+
+  private get isProfilePath(): boolean {
+    return this.route.snapshot.data['profile'].isProfilePath;
   }
 }

@@ -34,6 +34,7 @@ export class UserProfileResolver implements Resolve<UserProfile> {
           username,
           bio: data.userProfile.bio,
           thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route
+          isProfilePath: navigatingProfile,
         };
       }),
     );

@@ -5,14 +5,15 @@ import {
   GetOpinionsByUsernameQueryResult,
   Opinion,
 } from '~app/typings/opinion/opinion.interfaces';
-import {DeleteUserOpinion, FetchUserOpinions, PrependUserOpinion} from '~app/modules/user/store/user.actions';
+import {DeleteUserOpinion, FetchOpinions, PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 
 export interface UserStateModel {
-  opinions: Array<Opinion>;
+  profileOpinions: Array<Opinion>;
+  userOpinions: Array<Opinion>;
   canLoadMore: boolean;
 }
 
@@ -21,44 +22,57 @@ const USER_STATE = new StateToken<UserStateModel>('user');
 @State({
   name: USER_STATE,
   defaults: {
-    opinions: [],
+    profileOpinions: [],
+    userOpinions: [], // Used 2 separated properties in order to prevent values mixing
     canLoadMore: false,
   },
 })
 @Injectable()
 export class UserState {
-  public constructor(private readonly opinionService: OpinionService) {}
+  public constructor(private readonly opinionService: OpinionService) {
+  }
 
-  @Action(FetchUserOpinions)
+  @Action(FetchOpinions)
   private fetchUserOpinions(
     context: StateContext<UserStateModel>,
-    action: FetchUserOpinions,
+    action: FetchOpinions,
   ): Observable<MutationResult<GetOpinionsByUsernameQueryResult>> {
-    return this.opinionService.getOpinionsByUsername(action.payload).pipe(
-      tap(({data}) => {
-        const opinions = data?.getOpinionsByUsername
-          ? data.getOpinionsByUsername.map((opinion) => {
+    return this.opinionService
+      .getOpinionsByUsername({
+        username: action.payload.username,
+        offset: action.payload.offset,
+      })
+      .pipe(
+        tap(({data}) => {
+          const opinions = data?.getOpinionsByUsername
+            ? data.getOpinionsByUsername.map((opinion) => {
               return {
                 ...opinion,
                 tags: opinion.tags[0] ? opinion.tags : [],
               };
             })
-          : [];
+            : [];
 
-        context.setState((state) => ({
-          ...state,
-          opinions: action.payload.offset ? [...state.opinions, ...opinions] : opinions, // Can't just simply mix current state with a new list, as it might cause bug if navigating between different profiles
-          canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
-        }));
-      }),
-    );
+          context.setState((state) => {
+            const nextState = {
+              ...state,
+              canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
+            };
+            const stateKey = action.payload.isProfilePath ? 'profileOpinions' : 'userOpinions';
+
+            nextState[stateKey] = [...state[stateKey], ...opinions];
+
+            return nextState;
+          });
+        }),
+      );
   }
 
   @Action(PrependUserOpinion)
   private prependUserOpinion(context: StateContext<UserStateModel>, action: PrependUserOpinion): void {
     context.setState((state) => ({
       ...state,
-      opinions: [action.payload, ...state.opinions],
+      profileOpinions: [action.payload, ...state.profileOpinions],
     }));
   }
 
@@ -73,7 +87,7 @@ export class UserState {
 
         context.setState((state) => ({
           ...state,
-          opinions: state.opinions.filter((opinion) => opinion.id !== action.payload),
+          profileOpinions: state.profileOpinions.filter((opinion) => opinion.id !== action.payload),
         }));
       }),
     );
