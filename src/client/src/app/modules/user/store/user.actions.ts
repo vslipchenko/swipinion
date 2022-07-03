@@ -17,3 +17,9 @@ export class DeleteUserOpinion {
 
   public constructor(public payload: string) {}
 }
+
+export class FollowUser {
+  public static readonly type = '[User] FollowUser';
+
+  public constructor(public payload: {username: string; thumbnail: string}) {}
+}

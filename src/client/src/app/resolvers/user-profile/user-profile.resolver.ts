@@ -30,6 +30,8 @@ export class UserProfileResolver implements Resolve<UserProfile> {
           return {} as UserProfile;
         }
 
+        // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
+
         return {
           username,
           bio: data.userProfile.bio,

@@ -1,8 +1,8 @@
 <div class="d-flex ai-center w-100"
      [ngClass]="{'jc-around': role !== userRole.User, 'jc-evenly': role === userRole.User}">
   <app-statistics-action></app-statistics-action>
-  <app-icon-button icon="email" [appAuthClick]="message"></app-icon-button>
-  <app-icon-button *ngIf="role !== userRole.User" icon="person_add" [appAuthClick]="follow"
+  <app-icon-button icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
+  <app-icon-button *ngIf="role !== userRole.User" icon="person_add" [appAuthClick]="follow.bind(this)"
                    color="primary"></app-icon-button>
 </div>
 

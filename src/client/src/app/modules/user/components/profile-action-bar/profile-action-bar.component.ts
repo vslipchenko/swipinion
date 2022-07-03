@@ -1,6 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserRole} from '~app/typings/user/user.enums';
 import {BehaviorSubject} from 'rxjs';
+import {Store} from '@ngxs/store';
+import {FollowUser} from '~app/modules/user/store/user.actions';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -18,12 +20,14 @@ export class ProfileActionBarComponent {
   public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
 
+  public constructor(private readonly store: Store) {}
+
   public message(): void {
     console.log('message');
   }
 
   public follow(): void {
-    console.log('follow');
+    this.store.dispatch(new FollowUser({username: this.username, thumbnail: this.thumbnail}));
   }
 
   public scrollTop(): void {

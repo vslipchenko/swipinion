@@ -18,8 +18,6 @@ $user-profile-image-radius: 20px;
 }
 
 .username {
-  word-break: break-word;
-
   @include media.zero-large {
     text-align: center;
   }

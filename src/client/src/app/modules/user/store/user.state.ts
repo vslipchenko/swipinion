@@ -5,15 +5,19 @@ import {
   GetOpinionsByUsernameQueryResult,
   Opinion,
 } from '~app/typings/opinion/opinion.interfaces';
-import {DeleteUserOpinion, FetchOpinions, PrependUserOpinion} from '~app/modules/user/store/user.actions';
+import {DeleteUserOpinion, FetchOpinions, FollowUser, PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
+import {FollowerService} from '~app/services/follower/follower.service';
+import {FollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
 
 export interface UserStateModel {
   profileOpinions: Array<Opinion>;
   userOpinions: Array<Opinion>;
+  followers: Array<unknown>;
+  following: Array<unknown>;
   canLoadMore: boolean;
 }
 
@@ -24,12 +28,17 @@ const USER_STATE = new StateToken<UserStateModel>('user');
   defaults: {
     profileOpinions: [],
     userOpinions: [], // Used 2 separated properties in order to prevent values mixing
+    followers: [],
+    following: [],
     canLoadMore: false,
   },
 })
 @Injectable()
 export class UserState {
-  public constructor(private readonly opinionService: OpinionService) {}
+  public constructor(
+    private readonly opinionService: OpinionService,
+    private readonly followerService: FollowerService,
+  ) {}
 
   @Action(FetchOpinions)
   private fetchUserOpinions(
@@ -87,6 +96,26 @@ export class UserState {
         context.setState((state) => ({
           ...state,
           profileOpinions: state.profileOpinions.filter((opinion) => opinion.id !== action.payload),
+        }));
+      }),
+    );
+  }
+
+  @Action(FollowUser)
+  private followUser(
+    context: StateContext<UserStateModel>,
+    action: FollowUser,
+  ): Observable<MutationResult<FollowUserMutationResult>> {
+    return this.followerService.followUser(action.payload.username).pipe(
+      tap(({data}) => {
+        if (!data?.followUser.success) return;
+
+        context.setState((state) => ({
+          ...state,
+          following: {
+            [action.payload.username]: action.payload.thumbnail,
+            ...state.following,
+          },
         }));
       }),
     );
