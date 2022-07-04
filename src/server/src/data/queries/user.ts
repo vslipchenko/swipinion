@@ -136,7 +136,7 @@ export const queryUserProfileData = (username: string, followerId: string | null
     SELECT followers.follower_id, users.id, users.thumbnail, users.bio
     FROM users
     LEFT JOIN followers 
-    ON followers.follower_id = $2
+    ON users.id = followers.user_id AND followers.follower_id = $2
     WHERE users.username = $1
   `,
   values: [username, followerId],
