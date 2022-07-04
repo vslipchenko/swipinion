@@ -10,10 +10,10 @@ import {FOLLOW_USER} from '~app/graphql/follower/follower.mutations';
 export class FollowerService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public followUser(username: string): Observable<MutationResult<FollowUserMutationResult>> {
+  public followUser(userId: string): Observable<MutationResult<FollowUserMutationResult>> {
     return this.apollo.mutate<FollowUserMutationResult>({
       mutation: FOLLOW_USER,
-      variables: {username},
+      variables: {userId},
     });
   }
 }

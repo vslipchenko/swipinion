@@ -1,8 +1,8 @@
 import {gql} from 'apollo-angular';
 
 export const FOLLOW_USER = gql`
-  mutation ($username: String!) {
-    followUser(username: $username) {
+  mutation ($userId: String!) {
+    followUser(userId: $userId) {
       success
     }
   }
