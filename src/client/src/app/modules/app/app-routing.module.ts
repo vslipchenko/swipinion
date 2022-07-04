@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {RouteReuseStrategy, RouterModule, Routes} from '@angular/router';
 import {EntryModule} from '~app/modules/entry/entry.module';
 import {PageNotFoundModule} from '~app/modules/page-not-found/page-not-found.module';
 import {UserModule} from '~app/modules/user/user.module';
@@ -7,6 +7,7 @@ import {UserCanActivateGuard} from '~app/guards/user/can-activate/user-can-activ
 import {UserCanLoadGuard} from '~app/guards/user/can-load/user-can-load.guard';
 import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
 import {UserProfileResolver} from '~app/resolvers/user-profile/user-profile.resolver';
+import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
 
 const entryModule = {
   pathMatch: 'full',
@@ -60,6 +61,9 @@ const routes: Routes = [
   {
     path: 'user/:username',
     ...userModule,
+    data: {
+      disableRouteReuse: true, // Allows to reinstantiate components when navigating between different user profile, e.g. /user/boo -> /user/foo
+    },
   },
   {
     path: '**',
@@ -71,5 +75,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule],
+  providers: [{provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy}],
 })
 export class AppRoutingModule {}
