@@ -31,7 +31,7 @@ export class UserProfileResolver implements Resolve<UserProfile> {
           return {} as UserProfile;
         }
 
-        if (data.userProfile.follower_id) this.store.dispatch(new UpdateFollowingStatus(true)); // Authed user follows resolved user
+        this.store.dispatch(new UpdateFollowingStatus(Boolean(data.userProfile.follower_id))); // Authed user follows/unfollows resolved user
 
         // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
 
