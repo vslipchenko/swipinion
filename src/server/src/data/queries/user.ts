@@ -131,11 +131,13 @@ export const queryUserEditProfile = ({
   values: [thumbnail, bio, userId],
 });
 
-export const queryUserProfileData = (username: string): QueryConfig => ({
+export const queryUserProfileData = (username: string, followerId: string | null): QueryConfig => ({
   text: `
-    SELECT thumbnail, bio
+    SELECT followers.follower_id, users.id, users.thumbnail, users.bio
     FROM users
-    WHERE username = $1
+    LEFT JOIN followers 
+    ON followers.follower_id = $2
+    WHERE users.username = $1
   `,
-  values: [username],
+  values: [username, followerId],
 });
