@@ -27,7 +27,8 @@
 
         <div class="divider mt-2 mb-1"></div>
 
-        <app-profile-action-bar [role]="role" [username]="profile.username" [thumbnail]="profile.thumbnail"
+        <app-profile-action-bar [id]="profile.id" [role]="role" [username]="profile.username"
+                                [thumbnail]="profile.thumbnail"
                                 [showBottomBar]="$any(data.showBottomBar)"
                                 [wrapper]="wrapper"></app-profile-action-bar>
 

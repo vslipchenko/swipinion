@@ -13,4 +13,8 @@ export class UserSelectors {
   public static canLoadMore = createSelector([UserState], (state: UserStateModel) => {
     return state.canLoadMore;
   });
+
+  public static following = createSelector([UserState], (state: UserStateModel) => {
+    return state.following;
+  });
 }

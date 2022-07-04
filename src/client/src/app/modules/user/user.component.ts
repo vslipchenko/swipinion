@@ -31,7 +31,7 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
-  public readonly profile$: BehaviorSubject<UserProfile & {isProfilePath: boolean}>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
+  public readonly profile$: BehaviorSubject<UserProfile & {id: string; isProfilePath: boolean}>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
   public readonly username = '';
 
   public constructor(

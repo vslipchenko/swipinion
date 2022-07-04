@@ -5,7 +5,13 @@ import {
   GetOpinionsByUsernameQueryResult,
   Opinion,
 } from '~app/typings/opinion/opinion.interfaces';
-import {DeleteUserOpinion, FetchOpinions, FollowUser, PrependUserOpinion} from '~app/modules/user/store/user.actions';
+import {
+  DeleteUserOpinion,
+  FetchOpinions,
+  FollowUser,
+  PrependUserOpinion,
+  UpdateFollowingStatus,
+} from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
@@ -16,8 +22,7 @@ import {FollowUserMutationResult} from '~app/typings/follower/follower.interface
 export interface UserStateModel {
   profileOpinions: Array<Opinion>;
   userOpinions: Array<Opinion>;
-  followers: Array<unknown>;
-  following: Array<unknown>;
+  following: boolean;
   canLoadMore: boolean;
 }
 
@@ -28,8 +33,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
   defaults: {
     profileOpinions: [],
     userOpinions: [], // Used 2 separated properties in order to prevent values mixing
-    followers: [],
-    following: [],
+    following: false, // Authed user follows resolved user
     canLoadMore: false,
   },
 })
@@ -101,21 +105,26 @@ export class UserState {
     );
   }
 
+  @Action(UpdateFollowingStatus)
+  private updateFollowingStatus(context: StateContext<UserStateModel>, action: UpdateFollowingStatus): void {
+    context.setState((state) => ({
+      ...state,
+      following: action.payload,
+    }));
+  }
+
   @Action(FollowUser)
   private followUser(
     context: StateContext<UserStateModel>,
     action: FollowUser,
   ): Observable<MutationResult<FollowUserMutationResult>> {
-    return this.followerService.followUser(action.payload.username).pipe(
+    return this.followerService.followUser(action.payload.id).pipe(
       tap(({data}) => {
         if (!data?.followUser.success) return;
 
         context.setState((state) => ({
           ...state,
-          following: {
-            [action.payload.username]: action.payload.thumbnail,
-            ...state.following,
-          },
+          following: true,
         }));
       }),
     );

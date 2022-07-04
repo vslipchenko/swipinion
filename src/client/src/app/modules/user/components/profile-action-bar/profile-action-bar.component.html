@@ -2,19 +2,35 @@
      [ngClass]="{'jc-around': role !== userRole.User, 'jc-evenly': role === userRole.User}">
   <app-statistics-action></app-statistics-action>
   <app-icon-button icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
-  <app-icon-button *ngIf="role !== userRole.User" icon="person_add" [appAuthClick]="follow.bind(this)"
-                   color="primary"></app-icon-button>
+
+  <ng-container [ngTemplateOutlet]="followButtons"></ng-container>
 </div>
 
 <div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">
   <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
-    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="user-image mr-1">
-    <span class="fw-medium truncate">{{username}}</span>
+    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="user-image">
+    <span class="fw-medium truncate ml-1">{{username}}</span>
   </div>
 
-  <app-icon-button *ngIf="role !== userRole.User" color="primary" icon="person_add"
-                   (clicked)="follow()"></app-icon-button>
+  <ng-container [ngTemplateOutlet]="followButtons" [ngTemplateOutletContext]="{$implicit: true}"></ng-container>
 
   <app-icon-button *ngIf="role === userRole.User" icon="keyboard_arrow_up"
                    (clicked)="scrollTop()"></app-icon-button>
 </div>
+
+<ng-template #followButtons let-showMessageOnFollowing>
+  <ng-container *ngIf="role !== userRole.User">
+    <ng-container *ngIf="{following: following$ | async} as state">
+      <app-icon-button *ngIf="!state.following" icon="person_add" [appAuthClick]="follow.bind(this)"
+                       color="primary"></app-icon-button>
+
+      <ng-container *ngIf="state.following">
+        <!-- Assume authed -->
+        <app-icon-button *ngIf="showMessageOnFollowing" icon="email" (clicked)="message()"></app-icon-button>
+
+        <app-icon-button *ngIf="!showMessageOnFollowing" svgIcon="account-check" [appAuthClick]="follow.bind(this)"
+        ></app-icon-button>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>

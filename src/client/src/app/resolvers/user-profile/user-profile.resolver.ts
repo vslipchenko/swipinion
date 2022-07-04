@@ -5,6 +5,7 @@ import {ProfileService} from '~app/services/profile/profile.service';
 import {Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserProfile} from '~app/typings/user/user.interfaces';
+import {UpdateFollowingStatus} from '~app/modules/user/store/user.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +31,12 @@ export class UserProfileResolver implements Resolve<UserProfile> {
           return {} as UserProfile;
         }
 
+        if (data.userProfile.follower_id) this.store.dispatch(new UpdateFollowingStatus(true)); // Authed user follows resolved user
+
         // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
 
         return {
+          id: data.userProfile.id,
           username,
           bio: data.userProfile.bio,
           thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route

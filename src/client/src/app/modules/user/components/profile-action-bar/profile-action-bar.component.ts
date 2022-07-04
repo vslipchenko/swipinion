@@ -1,8 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserRole} from '~app/typings/user/user.enums';
-import {BehaviorSubject} from 'rxjs';
-import {Store} from '@ngxs/store';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
 import {FollowUser} from '~app/modules/user/store/user.actions';
+import {UserSelectors} from '~app/modules/user/store/user.selectors';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -12,10 +13,13 @@ import {FollowUser} from '~app/modules/user/store/user.actions';
 })
 export class ProfileActionBarComponent {
   @Input() public role = UserRole.Guest;
+  @Input() public id = '';
   @Input() public username = '';
   @Input() public thumbnail = '';
   @Input() public showBottomBar = false;
   @Input() public wrapper!: HTMLDivElement;
+
+  @Select(UserSelectors.following) public following$!: Observable<boolean>;
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
@@ -27,7 +31,7 @@ export class ProfileActionBarComponent {
   }
 
   public follow(): void {
-    this.store.dispatch(new FollowUser({username: this.username, thumbnail: this.thumbnail}));
+    this.store.dispatch(new FollowUser(this.id));
   }
 
   public scrollTop(): void {
