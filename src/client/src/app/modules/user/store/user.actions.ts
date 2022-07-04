@@ -24,6 +24,12 @@ export class FollowUser {
   public constructor(public payload: string) {}
 }
 
+export class UnfollowUser {
+  public static readonly type = '[User] UnfollowUser';
+
+  public constructor(public payload: string) {}
+}
+
 export class UpdateFollowingStatus {
   public static readonly type = '[User] UpdateFollowingStatus';
 

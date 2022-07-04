@@ -1,14 +1,14 @@
 import {ApolloError, gql} from 'apollo-server-core';
-import {bigintValidator, usernameValidator} from '../../../validators/shared';
+import {bigintValidator} from '../../../validators/shared';
 import {authenticationGuard} from '../../../utilities/guard';
-import {queryFollowUser} from '../../../data/queries/follower';
+import {queryFollowUser, queryUnfollowUser} from '../../../data/queries/follower';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {db} from '../../../data';
 
 export const followerMutationTypeDefinitions = gql`
   type Mutation {
     followUser(userId: String!): Success
-    unfollowUser(username: String!): Success
+    unfollowUser(userId: String!): Success
   }
 `;
 
@@ -32,10 +32,10 @@ const followUser = async (
 
 const unfollowUser = async (
   _: unknown,
-  {username}: {username: string},
+  {userId}: {userId: string},
   {accessToken}: {accessToken: string},
 ): Promise<SuccessResponse | ApolloError | null> => {
-  const {error} = usernameValidator.validate(username);
+  const {error} = bigintValidator.validate(userId);
 
   if (error) return null;
 
@@ -43,7 +43,9 @@ const unfollowUser = async (
 
   if (authenticationError) return authenticationError;
 
-  return null;
+  const result = await db.query(queryUnfollowUser(userId, tokenData.userId));
+
+  return {success: Boolean(result.rowCount)};
 };
 
 export const followerMutationResolvers = {

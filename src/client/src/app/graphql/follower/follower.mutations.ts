@@ -7,3 +7,11 @@ export const FOLLOW_USER = gql`
     }
   }
 `;
+
+export const UNFOLLOW_USER = gql`
+  mutation ($userId: String!) {
+    unfollowUser(userId: $userId) {
+      success
+    }
+  }
+`;

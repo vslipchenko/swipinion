@@ -28,7 +28,7 @@
         <!-- Assume authed -->
         <app-icon-button *ngIf="showMessageOnFollowing" icon="email" (clicked)="message()"></app-icon-button>
 
-        <app-icon-button *ngIf="!showMessageOnFollowing" svgIcon="account-check" [appAuthClick]="follow.bind(this)"
+        <app-icon-button *ngIf="!showMessageOnFollowing" svgIcon="account-check" [appAuthClick]="unfollow.bind(this)"
         ></app-icon-button>
       </ng-container>
     </ng-container>

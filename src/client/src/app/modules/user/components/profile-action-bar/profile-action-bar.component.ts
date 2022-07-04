@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserRole} from '~app/typings/user/user.enums';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
-import {FollowUser} from '~app/modules/user/store/user.actions';
+import {FollowUser, UnfollowUser} from '~app/modules/user/store/user.actions';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 
 @Component({
@@ -32,6 +32,10 @@ export class ProfileActionBarComponent {
 
   public follow(): void {
     this.store.dispatch(new FollowUser(this.id));
+  }
+
+  public unfollow(): void {
+    this.store.dispatch(new UnfollowUser(this.id));
   }
 
   public scrollTop(): void {

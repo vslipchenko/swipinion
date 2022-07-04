@@ -10,6 +10,7 @@ import {
   FetchOpinions,
   FollowUser,
   PrependUserOpinion,
+  UnfollowUser,
   UpdateFollowingStatus,
 } from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
@@ -17,7 +18,7 @@ import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
-import {FollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
+import {FollowUserMutationResult, UnfollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
 
 export interface UserStateModel {
   profileOpinions: Array<Opinion>;
@@ -118,13 +119,30 @@ export class UserState {
     context: StateContext<UserStateModel>,
     action: FollowUser,
   ): Observable<MutationResult<FollowUserMutationResult>> {
-    return this.followerService.followUser(action.payload.id).pipe(
+    return this.followerService.followUser(action.payload).pipe(
       tap(({data}) => {
         if (!data?.followUser.success) return;
 
         context.setState((state) => ({
           ...state,
           following: true,
+        }));
+      }),
+    );
+  }
+
+  @Action(UnfollowUser)
+  private unfollowUser(
+    context: StateContext<UserStateModel>,
+    action: UnfollowUser,
+  ): Observable<MutationResult<UnfollowUserMutationResult>> {
+    return this.followerService.unfollowUser(action.payload).pipe(
+      tap(({data}) => {
+        if (!data?.unfollowUser.success) return;
+
+        context.setState((state) => ({
+          ...state,
+          following: false,
         }));
       }),
     );
