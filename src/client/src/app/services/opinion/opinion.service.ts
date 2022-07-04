@@ -35,6 +35,7 @@ export class OpinionService {
     return this.apollo.query<GetOpinionsByUsernameQueryResult>({
       query: GET_OPINIONS_BY_USERNAME,
       variables: {input},
+      fetchPolicy: 'no-cache',
     });
   }
 }

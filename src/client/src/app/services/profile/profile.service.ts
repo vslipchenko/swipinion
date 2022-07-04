@@ -14,6 +14,7 @@ export class ProfileService {
     return this.apollo.query<GetProfileDataQueryResult>({
       query: GET_PROFILE_DATA,
       variables: {username},
+      fetchPolicy: 'no-cache',
     });
   }
 }
