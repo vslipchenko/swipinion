@@ -1,6 +1,10 @@
 @use 'variables' as var;
 @use 'media';
 
+:host {
+  position: relative;
+}
+
 $user-profile-image-size-default: 250px;
 $user-profile-image-size-small: 128px;
 $user-profile-image-radius: 20px;
@@ -10,8 +14,6 @@ $user-profile-image-radius: 20px;
   object-fit: cover;
   border-radius: $user-profile-image-radius;
   background: var.$color-light;
-  height: $user-profile-image-size-small;
-  width: $user-profile-image-size-small;
 
   @include media.zero-large {
     height: $user-profile-image-size-small;

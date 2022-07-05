@@ -37,7 +37,6 @@ export class ProfileActionBarComponent {
   }
 
   public unfollow(): void {
-    // this.store.dispatch(new UnfollowUser(this.id));
     this.dialog.open(UnfollowUserDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
   }
 
