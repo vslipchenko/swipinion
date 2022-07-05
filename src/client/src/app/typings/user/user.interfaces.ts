@@ -71,3 +71,12 @@ export interface EditProfile {
 export interface EditProfileMutationResult {
   editProfile: SuccessResponse;
 }
+
+export interface ResolvedUserData {
+  id: string;
+  username: string;
+  bio: string;
+  thumbnail: string;
+  isProfilePath: boolean;
+  following: boolean;
+}

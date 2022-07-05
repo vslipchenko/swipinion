@@ -8,7 +8,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
 import {ActivatedRoute} from '@angular/router';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {UserProfile} from '~app/typings/user/user.interfaces';
+import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserRole} from '~app/typings/user/user.enums';
 
@@ -19,9 +19,11 @@ import {UserRole} from '~app/typings/user/user.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit, AfterViewInit, Destroyable {
-  @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
+  @Select(UserSelectors.resolvedUserData)
+  public readonly profile$!: Observable<ResolvedUserData>;
   @Select(AppSelectors.userRole)
   public readonly role$!: Observable<UserRole>;
+  @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
 
   @ViewChild('wrapper')
   private readonly wrapper!: ElementRef<HTMLDivElement>;
@@ -31,16 +33,14 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
-  public readonly profile$: BehaviorSubject<UserProfile & {id: string; isProfilePath: boolean}>; // TODO fix; this is not reactive anymore, i.e. on edit data still the same
-  public readonly username = '';
+  public readonly username: string = '';
 
   public constructor(
     private readonly store: Store,
     private readonly dialog: MatDialog,
     private readonly route: ActivatedRoute,
   ) {
-    this.profile$ = new BehaviorSubject(this.route.snapshot.data['profile']);
-    this.username = this.route.snapshot.data['profile'].username;
+    this.username = this.profileSnapshot.username;
     this.opinions$ = this.store.select(
       this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
     );
@@ -71,17 +71,9 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   }
 
   public openEditProfile(): void {
-    const dialog = this.dialog.open(EditProfileDialogComponent, {
+    this.dialog.open(EditProfileDialogComponent, {
       panelClass: ['dialog', 'extended-dialog'],
-      data: this.profile$.getValue(),
-    });
-
-    dialog.componentInstance.saved.pipe(takeUntil(dialog.afterClosed())).subscribe((data) => {
-      dialog.close();
-      this.profile$.next({
-        ...this.profile$.getValue(),
-        ...data,
-      });
+      data: this.profileSnapshot,
     });
   }
 
@@ -98,5 +90,9 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
 
   private get isProfilePath(): boolean {
     return this.route.snapshot.data['profile'].isProfilePath;
+  }
+
+  private get profileSnapshot(): ResolvedUserData {
+    return this.store.selectSnapshot(UserSelectors.resolvedUserData);
   }
 }

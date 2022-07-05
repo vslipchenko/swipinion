@@ -1,47 +1,49 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
-import {map, Observable} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {ProfileService} from '~app/services/profile/profile.service';
 import {Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UserProfile} from '~app/typings/user/user.interfaces';
-import {UpdateFollowingStatus} from '~app/modules/user/store/user.actions';
+import {UpdateResolvedUserData} from '~app/modules/user/store/user.actions';
+import {MutationResult} from 'apollo-angular';
+import {GetProfileDataQueryResult} from '~app/typings/profile/profile.interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserProfileResolver implements Resolve<UserProfile> {
+export class UserProfileResolver implements Resolve<MutationResult<GetProfileDataQueryResult>> {
   public constructor(
     private readonly profileService: ProfileService,
     private readonly store: Store,
     private readonly router: Router,
   ) {}
 
-  public resolve(route: ActivatedRouteSnapshot): Observable<UserProfile> {
+  public resolve(route: ActivatedRouteSnapshot): Observable<MutationResult<GetProfileDataQueryResult>> {
     const profile = this.store.selectSnapshot(AppSelectors.userProfile);
     const navigatingProfile = route.routeConfig?.path === 'profile';
     const username = navigatingProfile ? profile.username : route.params['username'];
 
     return this.profileService.getProfileData(username).pipe(
       // Query is cached
-      map(({data}) => {
+      tap(({data}) => {
         if (!data?.userProfile) {
           // User was not found, redirect 404
           void this.router.navigate(['**'], {skipLocationChange: true});
-          return {} as UserProfile;
+          return;
         }
-
-        this.store.dispatch(new UpdateFollowingStatus(Boolean(data.userProfile.follower_id))); // Authed user follows/unfollows resolved user
 
         // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
 
-        return {
-          id: data.userProfile.id,
-          username,
-          bio: data.userProfile.bio,
-          thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route
-          isProfilePath: navigatingProfile,
-        };
+        this.store.dispatch(
+          new UpdateResolvedUserData({
+            id: data.userProfile.id,
+            username,
+            bio: data.userProfile.bio,
+            thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route
+            isProfilePath: navigatingProfile,
+            following: Boolean(data.userProfile.follower_id),
+          }),
+        );
       }),
     );
   }

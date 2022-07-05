@@ -1,4 +1,5 @@
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 
 export class FetchOpinions {
   public static readonly type = '[User] FetchOpinions';
@@ -30,8 +31,14 @@ export class UnfollowUser {
   public constructor(public payload: string) {}
 }
 
-export class UpdateFollowingStatus {
-  public static readonly type = '[User] UpdateFollowingStatus';
+// export class UpdateFollowingStatus {
+//   public static readonly type = '[User] UpdateFollowingStatus';
+//
+//   public constructor(public payload: boolean) {}
+// }
 
-  public constructor(public payload: boolean) {}
+export class UpdateResolvedUserData {
+  public static readonly type = '[User] UpdateResolvedUserData';
+
+  public constructor(public payload: ResolvedUserData) {}
 }

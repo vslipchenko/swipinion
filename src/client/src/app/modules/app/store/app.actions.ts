@@ -4,11 +4,12 @@ import {UserProfile} from '~app/typings/user/user.interfaces';
 export class UpdateUserProfile {
   public static readonly type = '[App] UpdateUserProfile';
 
-  public constructor(public payload: Omit<Partial<UserProfile>, 'bio'>) {}
+  public constructor(public payload: Partial<UserProfile>) {}
 }
 
 export class UpdateUserRole {
   public static readonly type = '[App] UpdateUserRole';
 
-  public constructor(public payload: UserRole) {}
+  public constructor(public payload: UserRole) {
+  }
 }

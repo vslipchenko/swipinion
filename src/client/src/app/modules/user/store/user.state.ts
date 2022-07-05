@@ -11,7 +11,7 @@ import {
   FollowUser,
   PrependUserOpinion,
   UnfollowUser,
-  UpdateFollowingStatus,
+  UpdateResolvedUserData,
 } from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Observable, tap} from 'rxjs';
@@ -21,9 +21,14 @@ import {FollowerService} from '~app/services/follower/follower.service';
 import {FollowUserMutationResult, UnfollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
 
 export interface UserStateModel {
-  profileOpinions: Array<Opinion>;
-  userOpinions: Array<Opinion>;
-  following: boolean;
+  id: string; // Resolved user id
+  username: string; // Resolved user username
+  bio: string; // Resolved user bio
+  thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
+  userOpinions: Array<Opinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
+  profileOpinions: Array<Opinion>; // Authed user opinions
+  isProfilePath: boolean; // Used to discern /profile and /user/foo pages
+  following: boolean; // Whether authed user follows resolved
   canLoadMore: boolean;
 }
 
@@ -32,9 +37,14 @@ const USER_STATE = new StateToken<UserStateModel>('user');
 @State({
   name: USER_STATE,
   defaults: {
+    id: '',
+    username: '',
+    bio: '',
+    thumbnail: '',
+    userOpinions: [],
     profileOpinions: [],
-    userOpinions: [], // Used 2 separated properties in order to prevent values mixing
-    following: false, // Authed user follows resolved user
+    isProfilePath: false,
+    following: false,
     canLoadMore: false,
   },
 })
@@ -44,6 +54,14 @@ export class UserState {
     private readonly opinionService: OpinionService,
     private readonly followerService: FollowerService,
   ) {}
+
+  @Action(UpdateResolvedUserData)
+  private updateResolvedUserData(context: StateContext<UserStateModel>, action: UpdateResolvedUserData): void {
+    context.setState((state) => ({
+      ...state,
+      ...action.payload,
+    }));
+  }
 
   @Action(FetchOpinions)
   private fetchUserOpinions(
@@ -106,13 +124,13 @@ export class UserState {
     );
   }
 
-  @Action(UpdateFollowingStatus)
-  private updateFollowingStatus(context: StateContext<UserStateModel>, action: UpdateFollowingStatus): void {
-    context.setState((state) => ({
-      ...state,
-      following: action.payload,
-    }));
-  }
+  // @Action(UpdateFollowingStatus)
+  // private updateFollowingStatus(context: StateContext<UserStateModel>, action: UpdateFollowingStatus): void {
+  //   context.setState((state) => ({
+  //     ...state,
+  //     following: action.payload,
+  //   }));
+  // }
 
   @Action(FollowUser)
   private followUser(
