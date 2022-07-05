@@ -2,8 +2,10 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserRole} from '~app/typings/user/user.enums';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
-import {FollowUser, UnfollowUser} from '~app/modules/user/store/user.actions';
+import {FollowUser} from '~app/modules/user/store/user.actions';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
+import {MatDialog} from '@angular/material/dialog';
+import {UnfollowUserDialogComponent} from '~app/modules/user/components/unfollow-user-dialog/unfollow-user-dialog.component';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -24,7 +26,7 @@ export class ProfileActionBarComponent {
   public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
 
-  public constructor(private readonly store: Store) {}
+  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
 
   public message(): void {
     console.log('message');
@@ -35,7 +37,8 @@ export class ProfileActionBarComponent {
   }
 
   public unfollow(): void {
-    this.store.dispatch(new UnfollowUser(this.id));
+    // this.store.dispatch(new UnfollowUser(this.id));
+    this.dialog.open(UnfollowUserDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
   }
 
   public scrollTop(): void {

@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-unfollow-user-dialog',
@@ -6,8 +7,8 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./unfollow-user-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UnfollowUserDialogComponent implements OnInit {
-  constructor() {}
+export class UnfollowUserDialogComponent {
+  @Output() public unfollow = new EventEmitter();
 
-  ngOnInit(): void {}
+  public readonly loading$ = new BehaviorSubject(false);
 }
