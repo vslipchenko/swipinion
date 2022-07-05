@@ -5,5 +5,7 @@ export const ICONS: Array<string> = [
   'account-check',
   'account-arrow-left',
   'account-arrow-right',
+  'square-edit-outline',
+  'email-multiple',
 ];
 export const ICONS_PATH = '../assets/icons';
