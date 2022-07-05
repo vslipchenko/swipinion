@@ -10,6 +10,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
 import {Store} from '@ngxs/store';
 import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-in-dialog',
@@ -33,6 +34,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
     @Inject(MAT_DIALOG_DATA) private readonly data: SignIn,
     private readonly authenticationService: AuthenticationService,
     private readonly snackbar: MatSnackBar, // private readonly router: Router,
+    private readonly router: Router,
     private readonly store: Store,
   ) {}
 
@@ -92,6 +94,9 @@ export class SignInDialogComponent implements OnInit, Destroyable {
               username: data.signIn.username,
             }),
           );
+
+          const userModule = this.router.url.startsWith('/user/');
+          if (userModule) return window.location.reload(); // Reload in order to actualize a user state; this fixes stale user state data
 
           this.authenticated.emit();
         },
