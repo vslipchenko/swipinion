@@ -1,6 +1,10 @@
 @use 'variables' as var;
 @use 'media';
 
+.cdk-global-scrollblock { // Prevents from unnecessary blocking y scroll attached to the <html>
+  overflow: hidden;
+}
+
 .dialog {
   @include media.zero-small {
     max-width: initial !important;
