@@ -13,7 +13,7 @@ import {NgxsModule, Store} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
-import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
+import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
 import {SharedModule} from '~app/shared/shared.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
@@ -59,7 +59,7 @@ function authenticationFactory(
         authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
 
         store.dispatch(
-          new UpdateUserProfile({
+          new UpdateAuthedUserProfileTeaser({
             thumbnail: data.refreshAccessToken.thumbnail,
             username: data.refreshAccessToken.username,
           }),

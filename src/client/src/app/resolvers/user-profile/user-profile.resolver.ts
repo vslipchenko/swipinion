@@ -19,7 +19,7 @@ export class UserProfileResolver implements Resolve<MutationResult<GetProfileDat
   ) {}
 
   public resolve(route: ActivatedRouteSnapshot): Observable<MutationResult<GetProfileDataQueryResult>> {
-    const profile = this.store.selectSnapshot(AppSelectors.userProfile);
+    const profile = this.store.selectSnapshot(AppSelectors.authedUserProfileTeaser);
     const navigatingProfile = route.routeConfig?.path === 'profile';
     const username = navigatingProfile ? profile.username : route.params['username'];
 

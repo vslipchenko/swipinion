@@ -9,10 +9,11 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ImageService} from '~app/services/image/image.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Store} from '@ngxs/store';
-import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
+import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
 import {EditProfileMutationResult, ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {MutationResult} from 'apollo-angular';
 import {hasExtension} from '~app/utilities/file';
+import {EditUserProfile} from '~app/modules/user/store/user.actions';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -125,10 +126,18 @@ export class EditProfileDialogComponent implements Destroyable {
       panelClass: 'snackbar-success',
     });
 
+    thumbnail = thumbnail || (this.imageUrl.value as string);
+
     this.store.dispatch(
-      new UpdateUserProfile({
-        thumbnail: thumbnail || this.imageUrl.value,
-        bio: this.bio.value || null,
+      new UpdateAuthedUserProfileTeaser({
+        thumbnail,
+      }),
+    );
+
+    this.store.dispatch(
+      new EditUserProfile({
+        thumbnail,
+        bio: this.bio.value,
       }),
     );
 

@@ -15,8 +15,8 @@ import {AuthenticationService} from '~app/services/authentication/authentication
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserNavbarComponent {
-  @Select(AppSelectors.userProfile)
-  public readonly userProfile$!: Observable<UserProfile>;
+  @Select(AppSelectors.authedUserProfileTeaser)
+  public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
 
   public readonly navbarItems: Array<MenuItem> = [
     {title: 'Share opinion', icon: 'post_add', click: (): void => this.shareOpinion()},

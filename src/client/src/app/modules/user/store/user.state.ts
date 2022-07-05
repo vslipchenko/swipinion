@@ -7,6 +7,7 @@ import {
 } from '~app/typings/opinion/opinion.interfaces';
 import {
   DeleteUserOpinion,
+  EditUserProfile,
   FetchOpinions,
   FollowUser,
   PrependUserOpinion,
@@ -164,5 +165,13 @@ export class UserState {
         }));
       }),
     );
+  }
+
+  @Action(EditUserProfile)
+  private editUserProfile(context: StateContext<UserStateModel>, action: EditUserProfile): void {
+    context.setState((state) => ({
+      ...state,
+      ...action.payload,
+    }));
   }
 }

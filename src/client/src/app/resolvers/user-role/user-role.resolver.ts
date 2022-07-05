@@ -17,7 +17,7 @@ export class UserRoleResolver implements Resolve<boolean> {
       return true;
     }
 
-    const {username} = this.store.selectSnapshot(AppSelectors.userProfile);
+    const {username} = this.store.selectSnapshot(AppSelectors.authedUserProfileTeaser);
 
     if (!username) {
       this.store.dispatch(new UpdateUserRole(UserRole.Guest));

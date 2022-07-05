@@ -9,7 +9,7 @@ import {SignInFailReason} from '~app/typings/authentication/authentication.enums
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
 import {Store} from '@ngxs/store';
-import {UpdateUserProfile} from '~app/modules/app/store/app.actions';
+import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-sign-in-dialog',
@@ -87,7 +87,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
           this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
 
           this.store.dispatch(
-            new UpdateUserProfile({
+            new UpdateAuthedUserProfileTeaser({
               thumbnail: data.signIn.thumbnail,
               username: data.signIn.username,
             }),

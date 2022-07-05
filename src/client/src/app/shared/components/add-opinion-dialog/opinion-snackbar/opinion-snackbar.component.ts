@@ -14,10 +14,9 @@ export class OpinionSnackbarComponent {
     @Inject(MAT_SNACK_BAR_DATA) public readonly data: string,
     public readonly store: Store,
     public readonly snackbar: MatSnackBarRef<OpinionSnackbarComponent>,
-  ) {
-  }
+  ) {}
 
   public get username(): string {
-    return this.store.selectSnapshot(AppSelectors.userProfile).username;
+    return this.store.selectSnapshot(AppSelectors.authedUserProfileTeaser).username;
   }
 }
