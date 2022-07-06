@@ -21,6 +21,7 @@ export class UserNavbarComponent {
   public readonly navbarItems: Array<MenuItem> = [
     {title: 'Share opinion', icon: 'post_add', click: (): void => this.shareOpinion()},
     {title: 'Profile', routerLink: '/profile', icon: 'person'},
+    {title: 'Messages', routerLink: '/messages', svgIcon: 'email-multiple'},
     {
       title: 'Logout',
       icon: 'logout',
