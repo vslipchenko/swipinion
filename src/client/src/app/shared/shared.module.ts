@@ -42,6 +42,8 @@ import {MiniFabButtonComponent} from './components/mini-fab-button/mini-fab-butt
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {ProgressBarComponent} from './components/progress-bar/progress-bar.component';
 import {AuthClickDirective} from './directives/auth-click.directive';
+import {AccordionComponent} from './components/accordion/accordion.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -75,6 +77,7 @@ import {AuthClickDirective} from './directives/auth-click.directive';
     MiniFabButtonComponent,
     ProgressBarComponent,
     AuthClickDirective,
+    AccordionComponent,
   ],
   imports: [
     CommonModule,
@@ -92,6 +95,7 @@ import {AuthClickDirective} from './directives/auth-click.directive';
     MatChipsModule,
     MatTabsModule,
     MatProgressBarModule,
+    MatExpansionModule,
     // MatCardModule,
     // MatDividerModule,
   ],
