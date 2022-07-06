@@ -24,6 +24,8 @@ export class ImageBrowserComponent implements OnDestroy {
   }
 
   public setImagePreview(file: File | void): void {
+    this.file.markAsDirty();
+
     if (file) {
       this.recentObjectUrl = URL.createObjectURL(file);
       this.imagePreview = this.domSanitizer.bypassSecurityTrustUrl(this.recentObjectUrl);
@@ -36,6 +38,7 @@ export class ImageBrowserComponent implements OnDestroy {
 
   public resetImageUrl(): void {
     this.imageUrl.setValue(null);
+    this.imageUrl.markAsDirty();
   }
 
   public get valueSet(): boolean {
