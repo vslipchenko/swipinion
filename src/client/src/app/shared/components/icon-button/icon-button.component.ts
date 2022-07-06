@@ -14,5 +14,5 @@ export class IconButtonComponent {
   @Input() public disabled = false;
   @Input() public color: ThemePalette;
 
-  @Output() public clicked = new EventEmitter<void>();
+  @Output() public clicked = new EventEmitter<MouseEvent>();
 }
