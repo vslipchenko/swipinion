@@ -1,3 +1,7 @@
 <mat-tab-group animationDuration="0ms" [color]="color" [headerPosition]="headerPosition">
-  <mat-tab *ngFor="let tab of tabs" [label]="tab"></mat-tab>
+  <mat-tab *ngFor="let tab of tabs">
+    <ng-template mat-tab-label>
+      <mat-icon *ngIf="tab.icon || tab.svgIcon" [svgIcon]="$any(tab.svgIcon)" class="mr-1">{{tab.icon}}</mat-icon>
+      {{tab.text}}</ng-template>
+  </mat-tab>
 </mat-tab-group>

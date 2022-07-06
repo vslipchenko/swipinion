@@ -40,8 +40,11 @@
   </div>
 
   <div class="container d-flex f-column primary-scrollbar px-2-3">
-    <app-tabs [tabs]="['Opinions', 'Reactions', 'Shares']" color="accent" headerPosition="below"
-              class="tabs d-block bg-dark"></app-tabs>
+    <app-tabs
+      [tabs]="[{text: 'Opinions', icon: 'article'}, {text: 'Reactions', icon: 'thumbs_up_down'}, {text: 'Shares', icon: 'share'}]"
+      color="accent"
+      headerPosition="below"
+      class="tabs d-block bg-dark"></app-tabs>
 
     <div *ngIf="opinions$ | async as opinions" class="content" [class.pb-extended]="data.showBottomBar">
       <!-- TODO: Add trackBy -->
