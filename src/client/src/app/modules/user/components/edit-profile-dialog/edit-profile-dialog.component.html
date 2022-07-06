@@ -30,6 +30,7 @@
     </app-progress-bar>
 
     <app-button mat-dialog-close text="Cancel"></app-button>
-    <app-button color="primary" text="Save" (clicked)="save()" [disabled]="state.loading || false"></app-button>
+    <app-button color="primary" text="Save" (clicked)="save()"
+                [disabled]="state.loading || editProfileForm.pristine"></app-button>
   </mat-dialog-actions>
 </ng-container>
