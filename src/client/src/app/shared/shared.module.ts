@@ -118,6 +118,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     AuthClickDirective,
     FlatButtonComponent,
     IconButtonComponent,
+    AccordionComponent,
   ],
 })
 export class SharedModule {}
