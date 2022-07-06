@@ -53,6 +53,9 @@
       <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
                        icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"></app-flat-button>
     </div>
+
+    <!-- 3 types of messages: Inbox, Sent, Saved -->
+    <app-messages></app-messages>
   </div>
 </div>
 

@@ -1,0 +1,50 @@
+@use 'variables' as var;
+@use 'media';
+
+.messages {
+  bottom: 0;
+  right: var.$unit-2;
+
+  @include media.zero-small {
+    display: none;
+  }
+}
+
+.messages .mat-expansion-panel {
+  background-color: var.$color-light-transparent;
+}
+
+.messages .mat-expansion-panel-header-description {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0;
+}
+
+.messages .mat-expanded .expand-arrow {
+  transform: rotate(180deg);
+}
+
+//
+//.imagee {
+//  width: 25px !important;
+//  height: 25px !important;
+//  border-radius: 50%;
+//  object-fit: cover;
+//  background-color: #fff;
+//}
+//
+//.badge {
+//  height: 8px;
+//  width: 8px;
+//  background: #69f0ae;
+//  right: 0;
+//  border-radius: 50%;
+//}
+
+//mat-expansion-panel:not(.mat-expanded) ::ng-deep .mat-expansion-indicator {
+//  transform: rotate(180deg) !important;
+//}
+//
+//mat-expansion-panel.mat-expanded ::ng-deep .mat-expansion-indicator {
+//  transform: rotate(0deg) !important;
+//}
