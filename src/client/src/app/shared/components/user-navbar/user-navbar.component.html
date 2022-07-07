@@ -1,7 +1,9 @@
 <ng-container *ngIf="menuItems.menu">
   <div *ngIf="authedUserProfileTeaser$ | async as userProfile" [matMenuTriggerFor]="menuItems.menu"
        class="navbar d-flex ai-center py-1 px-2 pointer">
-    <img *ngIf="userProfile.thumbnail" [src]="userProfile.thumbnail" class="image mr-1">
+    <img *ngIf="userProfile.thumbnail" [src]="userProfile.thumbnail" class="thumbnail mr-1">
+    <div *ngIf="!userProfile.thumbnail" class="thumbnail mr-1"></div>
+
     <span class="username fw-medium truncate">{{userProfile.username}}</span>
   </div>
 </ng-container>

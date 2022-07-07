@@ -7,7 +7,9 @@
 
 <div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">
   <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
-    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="user-image">
+    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail">
+    <div *ngIf="!thumbnail" class="thumbnail"></div>
+    
     <span class="fw-medium truncate ml-1">{{username}}</span>
   </div>
 
