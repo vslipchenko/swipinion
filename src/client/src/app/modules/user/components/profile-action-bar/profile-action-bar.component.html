@@ -1,5 +1,4 @@
-<div class="d-flex ai-center w-100"
-     [ngClass]="{'jc-around': role !== userRole.User, 'jc-evenly': role === userRole.User}">
+<div class="d-flex ai-center w-100 jc-evenly">
   <app-statistics-action></app-statistics-action>
   <app-icon-button icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
 
