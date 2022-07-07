@@ -4,6 +4,8 @@
 .messages {
   bottom: 0;
   right: var.$unit-2;
+  width: 500px;
+  z-index: 1;
 
   @include media.zero-small {
     display: none;
@@ -11,7 +13,11 @@
 }
 
 .messages .mat-expansion-panel {
-  background-color: var.$color-light-transparent;
+  background-color: var.$color-light-darker;
+}
+
+.messages .mat-tab-label {
+  flex: 1;
 }
 
 .messages .mat-expansion-panel-header-description {
@@ -24,27 +30,6 @@
   transform: rotate(180deg);
 }
 
-//
-//.imagee {
-//  width: 25px !important;
-//  height: 25px !important;
-//  border-radius: 50%;
-//  object-fit: cover;
-//  background-color: #fff;
-//}
-//
-//.badge {
-//  height: 8px;
-//  width: 8px;
-//  background: #69f0ae;
-//  right: 0;
-//  border-radius: 50%;
-//}
-
-//mat-expansion-panel:not(.mat-expanded) ::ng-deep .mat-expansion-indicator {
-//  transform: rotate(180deg) !important;
-//}
-//
-//mat-expansion-panel.mat-expanded ::ng-deep .mat-expansion-indicator {
-//  transform: rotate(0deg) !important;
-//}
+.mat-expansion-panel-body {
+  padding-bottom: 0 !important;
+}
