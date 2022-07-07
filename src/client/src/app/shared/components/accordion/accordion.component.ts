@@ -11,5 +11,4 @@ export class AccordionComponent {
   @Input() public panelDescription?: TemplateRef<any>;
   @Input() public content?: TemplateRef<any>;
   @Input() public hideToggle = false;
-  @Input() public extendClass = '';
 }
