@@ -78,23 +78,6 @@ $user-profile-image-radius: 20px;
   word-break: break-word;
 }
 
-app-tabs {
-  @include media.zero-small {
-    margin-left: -#{var.$unit-2};
-    margin-right: -#{var.$unit-2};
-  }
-
-  @include media.small-large {
-    margin-left: -#{var.$unit-3};
-    margin-right: -#{var.$unit-3};
-  }
-
-  @include media.above-large {
-    position: sticky;
-    top: 0;
-  }
-}
-
 .container {
   min-width: 70%;
   //width: 65%;
@@ -105,14 +88,15 @@ app-tabs {
 }
 
 .content {
-  max-width: 600px;
+  max-width: var.$user-content-width;
+  width: 100%;
 
   @include media.above-small {
     padding-bottom: var.$unit-3; // - bottom userbar's height
   }
 
-  @include media.medium-large {
-    width: 600px;
+  @include media.small-large {
+    //width: var.$user-content-width;
     margin-left: auto;
     margin-right: auto;
   }
@@ -128,8 +112,23 @@ app-tabs {
   }
 }
 
-.tabs {
+.user-content-tabs {
   z-index: 1;
+
+  @include media.zero-small {
+    margin-left: -#{var.$unit-2};
+    margin-right: -#{var.$unit-2};
+  }
+
+  @include media.small-large {
+    margin-left: -#{var.$unit-3};
+    margin-right: -#{var.$unit-3};
+  }
+
+  @include media.above-large {
+    position: sticky;
+    top: 0;
+  }
 }
 
 //.scrollable {

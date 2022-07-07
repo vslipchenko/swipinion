@@ -1,0 +1,17 @@
+@use 'variables' as var;
+@use 'media';
+
+.user-content-tabs .mat-tab-labels {
+  @include media.above-medium {
+    width: var.$user-content-width;
+  }
+
+  @include media.small-large {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.user-content-tabs .mat-tab-label {
+  flex: 1;
+}
