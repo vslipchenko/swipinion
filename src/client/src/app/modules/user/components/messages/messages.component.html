@@ -13,7 +13,7 @@
   </ng-template>
 
   <ng-template #content>
-    <div class="content">
+    <div class="content relative">
       <div [class.h-0]="showChat">
         <app-tabs [tabs]="tabs"></app-tabs>
 
@@ -86,6 +86,8 @@
           </div>
         </div>
       </div>
+
+      <div class="dimmer absolute"></div>
     </div>
   </ng-template>
 </app-accordion>

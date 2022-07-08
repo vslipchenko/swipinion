@@ -36,6 +36,15 @@ $thumbnail-size: 40px;
   max-height: calc(100vh - 75px - 64px - 64px); // 75px - Header height; 64px - Accordion panel header; 64px - Message panel height
 }
 
+.dimmer {
+  box-shadow: inset 0px -20px 12px -12px var.$color-light-darker;
+  width: calc(100% - #{var.$unit-3});
+  height: 20px;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
 .divider {
   border-bottom: 1px solid var.$color-light-transparent; // Update color vars
 }
