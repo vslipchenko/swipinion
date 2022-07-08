@@ -12,9 +12,7 @@ export class UserRoleResolver implements Resolve<boolean> {
   public constructor(private readonly store: Store) {}
 
   public resolve(route: ActivatedRouteSnapshot): boolean {
-    const navigatingProfile = route.url.some((item) => item.path === 'profile');
-
-    if (navigatingProfile) {
+    if (route.routeConfig?.path === 'profile') {
       this.store.dispatch(new UpdateUserRole(UserRole.User));
       return true;
     }

@@ -8,7 +8,6 @@ import {UserCanLoadGuard} from '~app/guards/user/can-load/user-can-load.guard';
 import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
 import {UserProfileResolver} from '~app/resolvers/user-profile/user-profile.resolver';
 import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
-import {pathMatchAny} from '~app/utilities/url';
 
 const entryModule = {
   pathMatch: 'full',
@@ -56,7 +55,7 @@ const routes: Routes = [
     },
   },
   {
-    matcher: pathMatchAny(['profile', 'profile/settings']),
+    path: 'profile',
     ...userModule,
   },
   {

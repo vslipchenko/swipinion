@@ -10,7 +10,6 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserRole} from '~app/typings/user/user.enums';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -36,12 +35,7 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly username: string = '';
   public readonly isProfilePath: boolean = false;
 
-  public constructor(
-    private readonly store: Store,
-    private readonly dialog: MatDialog,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-  ) {
+  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
     const profileSnapshot = this.profileSnapshot;
     this.username = profileSnapshot.username;
     this.isProfilePath = profileSnapshot.isProfilePath;
@@ -53,8 +47,6 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
 
   public ngOnInit(): void {
     this.fetchUserOpinions(0);
-    console.log(this.router.parseUrl(this.router.url).root.children['primary'].segments);
-    debugger;
   }
 
   public ngAfterViewInit(): void {
