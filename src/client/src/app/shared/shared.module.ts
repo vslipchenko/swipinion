@@ -44,6 +44,7 @@ import {ProgressBarComponent} from './components/progress-bar/progress-bar.compo
 import {AuthClickDirective} from './directives/auth-click.directive';
 import {AccordionComponent} from './components/accordion/accordion.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {UserSettingsDialogComponent} from './components/user-settings-dialog/user-settings-dialog.component';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -78,6 +79,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ProgressBarComponent,
     AuthClickDirective,
     AccordionComponent,
+    UserSettingsDialogComponent,
   ],
   imports: [
     CommonModule,

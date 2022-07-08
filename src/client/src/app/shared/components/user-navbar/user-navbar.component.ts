@@ -7,6 +7,7 @@ import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {MatDialog} from '@angular/material/dialog';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {UserSettingsDialogComponent} from '~app/shared/components/user-settings-dialog/user-settings-dialog.component';
 
 @Component({
   selector: 'app-user-navbar',
@@ -22,7 +23,7 @@ export class UserNavbarComponent {
     {title: 'Share opinion', icon: 'post_add', click: (): void => this.shareOpinion()},
     {title: 'Profile', routerLink: '/profile', icon: 'person'},
     {title: 'Messages', routerLink: '/profile/messages', svgIcon: 'email-multiple'},
-    {title: 'Settings', routerLink: '/profile/settings', icon: 'settings'},
+    {title: 'Settings', routerLink: '/profile/settings', icon: 'settings', click: (): void => this.openSettings()},
     {
       title: 'Logout',
       icon: 'logout',
@@ -39,5 +40,9 @@ export class UserNavbarComponent {
 
   public shareOpinion(): void {
     this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+  }
+
+  public openSettings(): void {
+    this.dialog.open(UserSettingsDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
   }
 }
