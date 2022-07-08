@@ -6,7 +6,6 @@ import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatDialog} from '@angular/material/dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
-import {ActivatedRoute} from '@angular/router';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
@@ -34,13 +33,13 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public readonly username: string = '';
+  public readonly isProfilePath: boolean = false;
 
-  public constructor(
-    private readonly store: Store,
-    private readonly dialog: MatDialog,
-    private readonly route: ActivatedRoute,
-  ) {
-    this.username = this.profileSnapshot.username;
+  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
+    const profileSnapshot = this.profileSnapshot;
+    this.username = profileSnapshot.username;
+    this.isProfilePath = profileSnapshot.isProfilePath;
+
     this.opinions$ = this.store.select(
       this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
     );
@@ -86,10 +85,6 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
 
         this.showBottomBar$.next(userBlockScrolledThrough);
       });
-  }
-
-  private get isProfilePath(): boolean {
-    return this.route.snapshot.data['profile'].isProfilePath;
   }
 
   private get profileSnapshot(): ResolvedUserData {
