@@ -13,7 +13,7 @@
   background: rgba(var.$color-background-dark, 0.7);
 }
 
-.thumbnail {
+.card-image {
   background-color: var.$color-light;
 }
 
@@ -35,11 +35,9 @@
   }
 }
 
-.author-image {
+.thumbnail {
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .y-scrollbar {
