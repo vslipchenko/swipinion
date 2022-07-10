@@ -23,13 +23,13 @@ export class AppComponent implements OnInit, Destroyable {
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly route: Router,
+    private readonly router: Router,
   ) {
     this.registerIcons();
   }
 
   public ngOnInit(): void {
-    this.route.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
       if (event.url === '/sign-in') this.headerService.signIn$.next();
