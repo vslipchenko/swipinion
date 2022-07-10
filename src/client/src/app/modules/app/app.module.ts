@@ -16,6 +16,7 @@ import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
 import {SharedModule} from '~app/shared/shared.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {UserModule} from '~app/modules/user/user.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
     MatSnackBarModule,
     SharedModule,
+    UserModule,
   ],
   providers: [
     AuthenticationInterceptorProvider,

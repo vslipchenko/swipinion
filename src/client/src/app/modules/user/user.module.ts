@@ -12,7 +12,7 @@ import {ProfileActionBarComponent} from './components/profile-action-bar/profile
 import {MatMenuModule} from '@angular/material/menu';
 import {StatisticsActionComponent} from './components/statistics-action/statistics-action.component';
 import {UnfollowUserDialogComponent} from './components/unfollow-user-dialog/unfollow-user-dialog.component';
-import {MessagesComponent} from './components/messages/messages.component';
+import {MessagesComponent} from '~app/shared/components/messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -37,5 +37,6 @@ import {MessagesComponent} from './components/messages/messages.component';
     MatIconModule,
     MatMenuModule,
   ],
+  exports: [MessagesComponent],
 })
 export class UserModule {}
