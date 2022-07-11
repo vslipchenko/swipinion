@@ -22,6 +22,7 @@ export class UserNavbarComponent {
     {title: 'Share opinion', icon: 'post_add', click: (): void => this.shareOpinion()},
     {title: 'Profile', routerLink: '/profile', icon: 'person'},
     {title: 'Messages', routerLink: '/profile/messages', svgIcon: 'email-multiple'},
+    {title: 'Search', routerLink: '/search', icon: 'search'},
     {title: 'Settings', routerLink: '/profile/settings', icon: 'settings'},
     {
       title: 'Logout',
