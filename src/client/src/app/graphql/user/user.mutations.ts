@@ -32,6 +32,14 @@ export const SET_NEW_PASSWORD = gql`
   }
 `;
 
+export const CHANGE_PASSWORD = gql`
+  mutation ($input: ChangePassword!) {
+    changePassword(input: $input) {
+      success
+    }
+  }
+`;
+
 export const EDIT_PROFILE = gql`
   mutation ($input: EditProfile!) {
     editProfile(input: $input) {

@@ -7,9 +7,10 @@ import {
   ResetPassword,
   SetNewPassword,
 } from '../../../typings/user/user.interfaces';
-import {hashSync} from 'bcrypt';
+import {compareSync, hashSync} from 'bcrypt';
 import {db} from '../../../data';
 import {
+  changePasswordValidator,
   createUserValidator,
   editProfileValidator,
   recoverPasswordValidator,
@@ -18,10 +19,12 @@ import {
 } from '../../../validators/user';
 import {mailer} from '../../../utilities/mail';
 import {
+  queryUserChangePassword,
   queryUserConfirmEmail,
   queryUserCreate,
   queryUserDeleteByEmail,
   queryUserEditProfile,
+  queryUserPassword,
   queryUserRecoverPassword,
   queryUserResetPassword,
   queryUserResetRecoveryCode,
@@ -48,6 +51,7 @@ export const userMutationTypeDefinitions = gql`
     recoverPassword(input: RecoverPassword!): Success
     resetPassword(input: ResetPassword!): Success
     setNewPassword(input: SetNewPassword!): Success
+    changePassword(input: ChangePassword!): Success
     editProfile(input: EditProfile!): Success
   }
 `;
@@ -170,6 +174,40 @@ const setNewPassword = async (_: unknown, {input}: {input: SetNewPassword}): Pro
   return {success: true};
 };
 
+const changePassword = async (
+  _: unknown,
+  {input}: {input: {currentPassword: string; newPassword: string}},
+  {accessToken}: {accessToken: string},
+): Promise<{success: boolean} | ApolloError | null> => {
+  const {error} = changePasswordValidator.validate(input);
+
+  if (error) return null;
+
+  const duplicatePassword = input.currentPassword === input.newPassword;
+  
+  if (duplicatePassword) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const passwordResult = await db.query<{password: string}>(queryUserPassword(tokenData.userId));
+
+  if (!passwordResult.rowCount) return null;
+
+  const passwordsMatch = compareSync(input.currentPassword, passwordResult.rows[0].password);
+
+  if (!passwordsMatch) return null;
+
+  const newPassword = hashSync(input.newPassword, 10);
+
+  const passwordChangeResult = await db.query<{password: string}>(
+    queryUserChangePassword(tokenData.userId, newPassword),
+  );
+
+  return {success: Boolean(passwordChangeResult.rowCount)};
+};
+
 const editProfile = async (
   _: unknown,
   {input}: {input: EditProfile},
@@ -196,6 +234,7 @@ export const userMutationResolvers = {
     recoverPassword,
     resetPassword,
     setNewPassword,
+    changePassword,
     editProfile,
   },
 };

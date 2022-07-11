@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 
 @Component({
@@ -14,11 +14,11 @@ export class SettingsAccordionComponent {
   @Input() public form = new FormGroup({});
   @Input() public showActions = true;
 
-  public constructor() {}
+  @Output() public save = new EventEmitter();
 
   public cancel(): void {
     this.form.reset();
   }
 
-  public apply(): void {}
+  // public save(): void {}
 }

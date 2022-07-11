@@ -87,6 +87,22 @@ export const queryUserConfirmEmail = (email: string, code: string): QueryConfig 
   values: [email, code],
 });
 
+export const queryUserPassword = (userId: string): QueryConfig => ({
+  text: `
+    SELECT password FROM users WHERE id = $1
+  `,
+  values: [userId],
+});
+
+export const queryUserChangePassword = (userId: string, newPassword: string): QueryConfig => ({
+  text: `
+    UPDATE users
+    SET password = $2
+    WHERE id = $1
+  `,
+  values: [userId, newPassword],
+});
+
 export const queryUserResetPassword = (email: string, password: string): QueryConfig => ({
   text: `
     UPDATE users

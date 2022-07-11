@@ -10,33 +10,38 @@
 
   <div class="primary-scrollbar pb-2">
     <div class="container mx-auto px-2 w-100">
-      <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [content]="passwordContent">
+      <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [content]="passwordContent"
+                              (save)="changePassword()">
         <ng-template #passwordContent>
           <h3 class="mb-1">Change password</h3>
 
           <app-input
-            #passwordInput
+            #currentPasswordInput
             extendClass="w-100"
             appearance="outline"
             label="Current password"
             type="password"
-            [suffix]="passwordSuffix"
+            [control]="currentPassword"
+            [errorMessage]="passwordErrorMessage"
+            [suffix]="currentPasswordSuffix"
           >
-            <ng-template #passwordSuffix>
-              <app-input-hide-suffix [input]="passwordInput"></app-input-hide-suffix>
+            <ng-template #currentPasswordSuffix>
+              <app-input-hide-suffix [input]="currentPasswordInput"></app-input-hide-suffix>
             </ng-template>
           </app-input>
 
           <app-input
-            #passwordInput
+            #newPasswordInput
             extendClass="w-100"
             appearance="outline"
             label="New password"
             type="password"
-            [suffix]="passwordSuffix"
+            [control]="newPassword"
+            [errorMessage]="passwordErrorMessage"
+            [suffix]="newPasswordSuffix"
           >
-            <ng-template #passwordSuffix>
-              <app-input-hide-suffix [input]="passwordInput"></app-input-hide-suffix>
+            <ng-template #newPasswordSuffix>
+              <app-input-hide-suffix [input]="newPasswordInput"></app-input-hide-suffix>
             </ng-template>
           </app-input>
         </ng-template>

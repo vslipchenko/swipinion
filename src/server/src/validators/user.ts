@@ -31,6 +31,11 @@ export const setNewPasswordValidator = Joi.object({
   password: passwordValidator,
 });
 
+export const changePasswordValidator = Joi.object({
+  currentPassword: passwordValidator,
+  newPassword: passwordValidator,
+});
+
 export const editProfileValidator = Joi.object({
   thumbnail: fileUrlValidator,
   bio: Joi.string().max(BIO_MAX_LENGTH).allow(null),

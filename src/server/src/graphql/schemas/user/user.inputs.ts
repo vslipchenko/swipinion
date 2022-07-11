@@ -29,6 +29,11 @@ export const userInputs = gql`
     code: String!
   }
 
+  input ChangePassword {
+    currentPassword: String!
+    newPassword: String!
+  }
+
   input EditProfile {
     thumbnail: String
     bio: String

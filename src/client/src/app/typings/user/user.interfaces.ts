@@ -31,6 +31,11 @@ export interface SetNewPassword {
   password: string;
 }
 
+export interface ChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
+
 // export interface VerifyRecoveryCode {
 //   email: string;
 //   code: string;
@@ -55,6 +60,10 @@ export interface UserCode {
 
 export interface ConfirmEmailMutationResult {
   confirmEmail: SuccessResponse;
+}
+
+export interface ChangePasswordMutationResult {
+  changePassword: SuccessResponse;
 }
 
 export interface UserProfile {
