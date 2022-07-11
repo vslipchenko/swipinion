@@ -6,4 +6,4 @@
 
 <router-outlet></router-outlet>
 
-<app-messages></app-messages>
+<app-messages *ngIf="showMessagesService.showMessages$ | async"></app-messages>

@@ -8,20 +8,27 @@ import {UserCanLoadGuard} from '~app/guards/user/can-load/user-can-load.guard';
 import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
 import {UserProfileResolver} from '~app/resolvers/user-profile/user-profile.resolver';
 import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
+import {UserSettingsModule} from '~app/modules/user-settings/user-settings.module';
 
 const entryModule = {
   pathMatch: 'full',
   loadChildren: (): Promise<typeof EntryModule> => import('~app/modules/entry/entry.module').then((m) => m.EntryModule),
 };
 
-const userModule = {
-  loadChildren: (): Promise<typeof UserModule> => import('~app/modules/user/user.module').then((m) => m.UserModule),
+const userGuards = {
   canLoad: [UserCanLoadGuard],
   canActivate: [UserCanActivateGuard],
-  resolve: {
-    role: UserRoleResolver,
-    profile: UserProfileResolver,
-  },
+};
+
+const userResolvers = {
+  role: UserRoleResolver,
+  profile: UserProfileResolver,
+};
+
+const userModule = {
+  loadChildren: (): Promise<typeof UserModule> => import('~app/modules/user/user.module').then((m) => m.UserModule),
+  ...userGuards,
+  resolve: userResolvers,
 };
 
 const routes: Routes = [
@@ -57,6 +64,13 @@ const routes: Routes = [
   {
     path: 'profile',
     ...userModule,
+  },
+  {
+    path: 'profile/settings',
+    loadChildren: (): Promise<typeof UserSettingsModule> =>
+      import('~app/modules/user-settings/user-settings.module').then((m) => m.UserSettingsModule),
+    ...userGuards,
+    resolve: userResolvers,
   },
   {
     path: 'user/:username',
