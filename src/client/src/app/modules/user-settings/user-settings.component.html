@@ -10,6 +10,8 @@
 
     <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [content]="passwordContent">
       <ng-template #passwordContent>
+        <h3 class="mb-1">Change password</h3>
+
         <app-input
           #passwordInput
           extendClass="w-100"
@@ -37,7 +39,70 @@
         </app-input>
       </ng-template>
     </app-settings-accordion>
-    <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy"></app-settings-accordion>
-    <app-settings-accordion icon="check_circle" title="Verification"></app-settings-accordion>
+    <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy" [content]="privacyContent">
+      <ng-template #privacyContent>
+        <div class="mb-2">
+          <div class="mb-2">
+            <h3 class="mb-1">Following</h3>
+
+            <p class="mb-2">Allow following you:</p>
+
+            <app-radio-group
+              [items]="[{title: 'By approve', value: 1}, {title: 'To anyone', value: 2}]"></app-radio-group>
+          </div>
+
+          <div>
+            <p class="mb-2">Who can see users you follow ?</p>
+
+            <app-radio-group
+              [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <h3 class="mb-1">Messages</h3>
+          <p class="mb-2">Who can message you ?</p>
+
+          <app-radio-group
+            [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+        </div>
+
+        <div class="mb-2">
+          <h3 class="mb-1">Opinions</h3>
+          <p class="mb-2">Who can view your opinions ?</p>
+
+          <app-radio-group
+            [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+        </div>
+
+        <div class="mb-2">
+          <h3 class="mb-1">Reactions</h3>
+          <p class="mb-2">Who can view your reactions ?</p>
+
+          <app-radio-group
+            [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+        </div>
+
+        <div>
+          <h3 class="mb-1">Favorites</h3>
+          <p class="mb-2">Who can view your favorites ?</p>
+
+          <app-radio-group
+            [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+        </div>
+      </ng-template>
+    </app-settings-accordion>
+
+    <app-settings-accordion icon="check_circle" title="Verification" [content]="verificationContent"
+                            [showActions]="false">
+      <ng-template #verificationContent>
+        <p>To request a verified badge, you must be a public figure, celebrity or brand and meet certain account and
+          eligibility requirements.</p>
+        <p class="mb-2">Be sure to have your documents prepared in order to pass identification process.</p>
+
+        <app-flat-button color="primary" text="Request verification" class="d-block"
+                         extendClass="w-100" [disabled]="true"></app-flat-button>
+      </ng-template>
+    </app-settings-accordion>
   </div>
 </div>
