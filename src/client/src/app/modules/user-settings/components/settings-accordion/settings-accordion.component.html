@@ -1,0 +1,16 @@
+<app-accordion [panelTitle]="settingsTitle" [content]="settingsContent">
+  <ng-template #settingsTitle>
+    <mat-icon class="mr-1">{{icon}}</mat-icon>
+    {{title}}
+  </ng-template>
+  <ng-template #settingsContent>
+    <div class="pb-2">
+      <ng-container [ngTemplateOutlet]="content"></ng-container>
+
+      <div class="d-flex jc-end">
+        <app-button text="Cancel" (clicked)="cancel()"></app-button>
+        <app-button text="Save" color="primary" (clicked)="save()"></app-button>
+      </div>
+    </div>
+  </ng-template>
+</app-accordion>
