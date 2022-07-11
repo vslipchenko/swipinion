@@ -8,41 +8,36 @@
       <h2>Settings</h2>
     </div>
 
-    <app-accordion [panelTitle]="passwordTitle" [content]="passwordContent" class="mb-1 d-block">
-      <ng-template #passwordTitle>
-        <mat-icon class="mr-1">key</mat-icon>
-        Password
-      </ng-template>
+    <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [content]="passwordContent">
       <ng-template #passwordContent>
-        <div class="pb-2">
-          <p class="mb-2">Change password</p>
+        <app-input
+          #passwordInput
+          extendClass="w-100"
+          appearance="outline"
+          label="Current password"
+          type="password"
+          [suffix]="passwordSuffix"
+        >
+          <ng-template #passwordSuffix>
+            <app-input-hide-suffix [input]="passwordInput"></app-input-hide-suffix>
+          </ng-template>
+        </app-input>
 
-          <div class="d-flex jc-end">
-            <app-button text="Cancel" class="d-flex jc-end"></app-button>
-            <app-button text="Save" color="primary" class="d-flex jc-end"></app-button>
-          </div>
-        </div>
+        <app-input
+          #passwordInput
+          extendClass="w-100"
+          appearance="outline"
+          label="New password"
+          type="password"
+          [suffix]="passwordSuffix"
+        >
+          <ng-template #passwordSuffix>
+            <app-input-hide-suffix [input]="passwordInput"></app-input-hide-suffix>
+          </ng-template>
+        </app-input>
       </ng-template>
-    </app-accordion>
-
-    <app-accordion [panelTitle]="privacyTitle" [content]="privacyContent" class="mb-1 d-block">
-      <ng-template #privacyTitle>
-        <mat-icon class="mr-1">lock</mat-icon>
-        Privacy
-      </ng-template>
-      <ng-template #privacyContent>
-        Privacy settings
-      </ng-template>
-    </app-accordion>
-
-    <app-accordion [panelTitle]="verificationTitle" [content]="verificationContent">
-      <ng-template #verificationTitle>
-        <mat-icon class="mr-1">check_circle</mat-icon>
-        Verification
-      </ng-template>
-      <ng-template #verificationContent>
-        Profile verification
-      </ng-template>
-    </app-accordion>
+    </app-settings-accordion>
+    <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy"></app-settings-accordion>
+    <app-settings-accordion icon="check_circle" title="Verification"></app-settings-accordion>
   </div>
 </div>
