@@ -5,18 +5,18 @@ $user-profile-image-size-default: 250px;
 $user-profile-image-size-small: 128px;
 $user-profile-image-radius: 20px;
 
-.divider::before,
-.divider::after {
+.separator::before,
+.separator::after {
   content: '';
   border-bottom: 1px solid var.$color-light;
   flex: 1;
 }
 
-.divider::before {
+.separator::before {
   margin-right: var.$unit-2;
 }
 
-.divider::after {
+.separator::after {
   margin-left: var.$unit-2;
 }
 

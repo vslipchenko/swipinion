@@ -90,3 +90,11 @@ body {
     border-radius: 10px;
   }
 }
+
+.divider {
+  border-bottom: 1px solid var.$color-light-darker;
+}
+
+.transparent-divider {
+  border-bottom: 1px solid var.$color-light-transparent;
+}

@@ -45,10 +45,6 @@ $thumbnail-size: 40px;
   z-index: 1;
 }
 
-.divider {
-  border-bottom: 1px solid var.$color-light-transparent; // Update color vars
-}
-
 .item:hover {
   background-color: var.$color-light-transparent;
 }

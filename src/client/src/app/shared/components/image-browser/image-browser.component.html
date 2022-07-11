@@ -21,7 +21,7 @@
                    extendClass="w-100"
                    (clicked)="resetImageUrl()"></app-flat-button>
 
-  <div *ngIf="!valueSet" class="divider d-flex jc-center ai-center mb-3">OR</div>
+  <div *ngIf="!valueSet" class="separator d-flex jc-center ai-center mb-3">OR</div>
 
   <mat-error *ngIf="!file.valid" class="mt-h">{{imageUrlErrorMessage(file.errors)}}</mat-error>
 
