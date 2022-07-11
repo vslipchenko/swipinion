@@ -1,0 +1,9 @@
+<mat-radio-group
+  [color]="color"
+  [ngClass]="{'d-flex f-column vertical': position === 'vertical'}"
+  [formControl]="control"
+>
+  <mat-radio-button class="radio-button" *ngFor="let item of items" [value]="item.value" [disabled]="item.disabled">
+    {{item.title}}
+  </mat-radio-button>
+</mat-radio-group>

@@ -1,0 +1,5 @@
+@use 'variables' as var;
+
+.vertical .radio-button:not(:last-child) {
+  margin-bottom: var.$unit;
+}

@@ -44,6 +44,8 @@ import {ProgressBarComponent} from './components/progress-bar/progress-bar.compo
 import {AuthClickDirective} from './directives/auth-click.directive';
 import {AccordionComponent} from './components/accordion/accordion.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {RadioGroupComponent} from './components/radio-group/radio-group.component';
+import {MatRadioModule} from '@angular/material/radio';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -78,6 +80,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ProgressBarComponent,
     AuthClickDirective,
     AccordionComponent,
+    RadioGroupComponent,
   ],
   imports: [
     CommonModule,
@@ -96,6 +99,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatTabsModule,
     MatProgressBarModule,
     MatExpansionModule,
+    MatRadioModule,
     // MatCardModule,
     // MatDividerModule,
   ],
@@ -119,6 +123,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     FlatButtonComponent,
     IconButtonComponent,
     AccordionComponent,
+    RadioGroupComponent,
   ],
 })
 export class SharedModule {}
