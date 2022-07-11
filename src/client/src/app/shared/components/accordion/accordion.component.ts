@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, TemplateRef, ViewChild} from '@angular/core';
+import {MatExpansionPanel} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-accordion',
@@ -11,4 +12,6 @@ export class AccordionComponent {
   @Input() public panelDescription?: TemplateRef<any>;
   @Input() public content?: TemplateRef<any>;
   @Input() public hideToggle = false;
+
+  @ViewChild(MatExpansionPanel) public panel?: MatExpansionPanel;
 }

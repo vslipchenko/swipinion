@@ -10,7 +10,8 @@
 
   <div class="primary-scrollbar pb-2">
     <div class="container mx-auto px-2 w-100">
-      <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [content]="passwordContent"
+      <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [form]="changePasswordForm"
+                              [content]="passwordContent"
                               (save)="changePassword()">
         <ng-template #passwordContent>
           <h3 class="mb-1">Change password</h3>

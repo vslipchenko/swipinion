@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild} from '@angular/core';
 import {FormGroup} from '@angular/forms';
+import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 
 @Component({
   selector: 'app-settings-accordion',
@@ -16,9 +17,10 @@ export class SettingsAccordionComponent {
 
   @Output() public save = new EventEmitter();
 
+  @ViewChild(AccordionComponent) public accordion?: AccordionComponent;
+
   public cancel(): void {
     this.form.reset();
+    this.accordion?.panel?.close();
   }
-
-  // public save(): void {}
 }
