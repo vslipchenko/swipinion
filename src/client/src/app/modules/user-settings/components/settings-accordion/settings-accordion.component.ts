@@ -12,6 +12,7 @@ export class SettingsAccordionComponent {
   @Input() public icon = '';
   @Input() public title = '';
   @Input() public form = new FormGroup({});
+  @Input() public showActions = true;
 
   public constructor() {}
 
@@ -19,5 +20,5 @@ export class SettingsAccordionComponent {
     this.form.reset();
   }
 
-  public save(): void {}
+  public apply(): void {}
 }

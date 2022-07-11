@@ -7,9 +7,9 @@
     <div class="pb-2">
       <ng-container [ngTemplateOutlet]="content"></ng-container>
 
-      <div class="d-flex jc-end">
+      <div class="d-flex jc-end" *ngIf="showActions">
         <app-button text="Cancel" (clicked)="cancel()"></app-button>
-        <app-button text="Save" color="primary" (clicked)="save()"></app-button>
+        <app-button text="Apply" color="primary" (clicked)="apply()"></app-button>
       </div>
     </div>
   </ng-template>
