@@ -1,0 +1,14 @@
+@use 'variables' as var;
+
+:host {
+  min-height: 0;
+  flex: 1;
+}
+
+.container {
+  max-width: 600px;
+}
+
+.divider {
+  border-bottom: 1px solid var.$color-light-darker;
+}

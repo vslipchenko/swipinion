@@ -1,1 +1,48 @@
-<p>user-settings works!</p>
+<div #wrapper class="wrapper bg-dark h-100 d-flex f-column px-2">
+  <div class="divider mb-2"></div>
+
+  <div class="container mx-auto w-100">
+    <!--    <app-side-tabs></app-side-tabs>-->
+    <div class="d-flex ai-center mb-2">
+      <mat-icon class="mr-1">settings</mat-icon>
+      <h2>Settings</h2>
+    </div>
+
+    <app-accordion [panelTitle]="passwordTitle" [content]="passwordContent" class="mb-1 d-block">
+      <ng-template #passwordTitle>
+        <mat-icon class="mr-1">key</mat-icon>
+        Password
+      </ng-template>
+      <ng-template #passwordContent>
+        <div class="pb-2">
+          <p class="mb-2">Change password</p>
+
+          <div class="d-flex jc-end">
+            <app-button text="Cancel" class="d-flex jc-end"></app-button>
+            <app-button text="Save" color="primary" class="d-flex jc-end"></app-button>
+          </div>
+        </div>
+      </ng-template>
+    </app-accordion>
+
+    <app-accordion [panelTitle]="privacyTitle" [content]="privacyContent" class="mb-1 d-block">
+      <ng-template #privacyTitle>
+        <mat-icon class="mr-1">lock</mat-icon>
+        Privacy
+      </ng-template>
+      <ng-template #privacyContent>
+        Privacy settings
+      </ng-template>
+    </app-accordion>
+
+    <app-accordion [panelTitle]="verificationTitle" [content]="verificationContent">
+      <ng-template #verificationTitle>
+        <mat-icon class="mr-1">check_circle</mat-icon>
+        Verification
+      </ng-template>
+      <ng-template #verificationContent>
+        Profile verification
+      </ng-template>
+    </app-accordion>
+  </div>
+</div>

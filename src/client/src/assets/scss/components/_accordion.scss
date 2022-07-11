@@ -1,0 +1,19 @@
+@use 'variables' as var;
+@use 'media';
+
+@media (hover: none) {
+  .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover {
+    background-color: var.$color-light-darker;
+  }
+}
+
+.mat-expansion-panel {
+  background-color: var.$color-light-darker;
+}
+
+@include media.zero-small {
+  .mat-expansion-panel-body,
+  .mat-expansion-panel-header {
+    padding: 0 var.$unit-2 !important;
+  }
+}
