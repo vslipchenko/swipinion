@@ -2,6 +2,7 @@
   mat-flat-button
   [class]="extendClass"
   [color]="color"
+  [disabled]="disabled"
   (click)="clicked.emit()"
 >
   <mat-icon *ngIf="svgIcon || icon" [svgIcon]="svgIcon">{{ icon }}</mat-icon>

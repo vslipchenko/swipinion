@@ -12,6 +12,7 @@ export class FlatButtonComponent {
   @Input() public extendClass = '';
   @Input() public svgIcon = '';
   @Input() public icon = '';
+  @Input() public disabled = false;
   @Input() public color: ThemePalette;
 
   @Output() public clicked = new EventEmitter<void>();
