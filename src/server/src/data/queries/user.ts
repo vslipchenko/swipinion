@@ -8,7 +8,7 @@ import {
   ViewFollowingSettings,
   ViewOpinions,
   ViewReactions,
-} from '../../typings/user-settings/user-settings.enum';
+} from '../../typings/user-settings/user-settings.enums';
 
 export const queryUserCheckExistenceByEmail = (email: string): QueryConfig => ({
   text: `

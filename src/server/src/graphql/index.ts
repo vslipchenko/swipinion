@@ -6,6 +6,7 @@ import {authenticationResolvers, authenticationTypeDefinitions} from './schemas/
 import {opinionResolvers, opinionTypeDefinitions} from './schemas/opinion/opinion.schema';
 import {profileResolvers, profileTypeDefinitions} from './schemas/profile/profile.schema';
 import {followerResolvers, followerTypeDefinitions} from './schemas/follower/follower.schema';
+import {userSettingsResolvers, userSettingsTypeDefinitions} from './schemas/user-settings/user-settings.schema';
 
 export const schema = makeExecutableSchema({
   typeDefs: [
@@ -15,6 +16,7 @@ export const schema = makeExecutableSchema({
     opinionTypeDefinitions,
     profileTypeDefinitions,
     followerTypeDefinitions,
+    userSettingsTypeDefinitions,
   ],
   resolvers: merge(
     {},
@@ -23,5 +25,6 @@ export const schema = makeExecutableSchema({
     ...opinionResolvers,
     ...profileResolvers,
     ...followerResolvers,
+    ...userSettingsResolvers,
   ),
 });
