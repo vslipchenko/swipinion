@@ -9,6 +9,7 @@ import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
 import {UserProfileResolver} from '~app/resolvers/user-profile/user-profile.resolver';
 import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
 import {UserSettingsModule} from '~app/modules/user-settings/user-settings.module';
+import {UserSettingsResolver} from '~app/resolvers/user-settings/user-settings.resolver';
 
 const entryModule = {
   pathMatch: 'full',
@@ -70,7 +71,10 @@ const routes: Routes = [
     loadChildren: (): Promise<typeof UserSettingsModule> =>
       import('~app/modules/user-settings/user-settings.module').then((m) => m.UserSettingsModule),
     ...userGuards,
-    resolve: userResolvers,
+    resolve: {
+      ...userResolvers,
+      settings: UserSettingsResolver,
+    },
   },
   {
     path: 'user/:username',
