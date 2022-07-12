@@ -37,7 +37,7 @@ export const queryOpinionCreate = ({
   text: `
     INSERT INTO opinions
     (user_id, type, file_url, title, description)
-    VALUES ($1,$2,$3,$4,$5)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING id
   `,
   values: [userId, type, fileUrl, title, description],

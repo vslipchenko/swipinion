@@ -1,6 +1,14 @@
 import {QueryConfig} from 'pg';
 import {Language} from '../../typings/i18n/i18n.types';
 import {CreateUser, SetNewPassword} from '../../typings/user/user.interfaces';
+import {
+  FollowSettings,
+  MessageSettings,
+  ViewFavorites,
+  ViewFollowingSettings,
+  ViewOpinions,
+  ViewReactions,
+} from '../../typings/user-settings/user-settings.enum';
 
 export const queryUserCheckExistenceByEmail = (email: string): QueryConfig => ({
   text: `
@@ -65,8 +73,13 @@ export const queryUserCreate = ({
   language,
 }: CreateUser & {accessKey: string; confirmationCode: string; language: Language}): QueryConfig => ({
   text: `
-    INSERT INTO users (username, email, password, access_key, confirmation_code, language)
+    WITH record AS (
+      INSERT INTO users (username, email, password, access_key, confirmation_code, language)
       VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id
+    )
+    INSERT INTO user_settings (user_id, follow, view_following, message, view_opinions, view_reactions, view_favorites)
+    VALUES ((SELECT id FROM record), ${FollowSettings.Everyone}, ${ViewFollowingSettings.Everyone}, ${MessageSettings.Everyone}, ${ViewOpinions.Everyone}, ${ViewReactions.Everyone}, ${ViewFavorites.Everyone})
   `,
   values: [username, email, password, accessKey, confirmationCode, language],
 });

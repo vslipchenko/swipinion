@@ -4,6 +4,7 @@ import {UsersTable} from './tables/users';
 import {OpinionsTable} from './tables/opinions';
 import {TagsTable} from './tables/tags';
 import {FollowersTable} from './tables/followers';
+import {UserSettingsTable} from './tables/user-settings';
 
 // PostgreSQL v14
 const {DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_PORT} = environment;
@@ -22,6 +23,7 @@ export const db = {
   sync: function (): Promise<void> {
     const tables = [
       UsersTable,
+      UserSettingsTable,
       OpinionsTable,
       TagsTable,
       FollowersTable,

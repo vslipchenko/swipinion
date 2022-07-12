@@ -59,6 +59,8 @@ export const userMutationTypeDefinitions = gql`
 const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{success: boolean} | null> => {
   const {error} = createUserValidator.validate(input);
 
+  console.log(error);
+
   if (error) return null;
 
   input.password = hashSync(input.password, 10);
@@ -76,6 +78,8 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
     }),
   );
 
+  console.log('user create row count ', result.rowCount);
+
   if (!result.rowCount) return {success: false};
 
   try {
@@ -86,6 +90,7 @@ const createUser = async (_: unknown, {input}: {input: CreateUser}): Promise<{su
       html: imprint(EMAIL_CONFIRMATION_HTML[input.language], {confirmationCode}),
     });
   } catch {
+    console.log('cant send email');
     await db.query(queryUserDeleteByEmail(input.email));
 
     return {success: false};
@@ -184,7 +189,7 @@ const changePassword = async (
   if (error) return null;
 
   const duplicatePassword = input.currentPassword === input.newPassword;
-  
+
   if (duplicatePassword) return null;
 
   const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
