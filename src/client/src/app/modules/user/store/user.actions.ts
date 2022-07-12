@@ -48,3 +48,7 @@ export class EditUserProfile {
 
   public constructor(public payload: Omit<UserProfile, 'username'>) {}
 }
+
+export class FetchUserSettings {
+  public static readonly type = '[User] FetchUserSettings';
+}

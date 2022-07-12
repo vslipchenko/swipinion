@@ -9,6 +9,7 @@ import {
   DeleteUserOpinion,
   EditUserProfile,
   FetchOpinions,
+  FetchUserSettings,
   FollowUser,
   PrependUserOpinion,
   UnfollowUser,
@@ -20,12 +21,24 @@ import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
 import {FollowUserMutationResult, UnfollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
+import {GetUserSettingsQueryResult, UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {
+  FollowSettings,
+  MessageSettings,
+  ViewFavorites,
+  ViewFollowingSettings,
+  ViewOpinions,
+  ViewReactions,
+} from '~app/typings/user-settings/user-settings.enums';
+import {UserSettingsService} from '~app/services/user-settings/user-settings.service';
+import {ApolloQueryResult} from '@apollo/client/core';
 
 export interface UserStateModel {
   id: string; // Resolved user id
   username: string; // Resolved user username
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
+  settings: UserSettings;
   userOpinions: Array<Opinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
   profileOpinions: Array<Opinion>; // Authed user opinions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
@@ -42,6 +55,14 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     username: '',
     bio: '',
     thumbnail: '',
+    settings: {
+      follow: FollowSettings.Everyone,
+      view_following: ViewFollowingSettings.Everyone,
+      message: MessageSettings.Everyone,
+      view_opinions: ViewOpinions.Everyone,
+      view_reactions: ViewReactions.Everyone,
+      view_favorites: ViewFavorites.Everyone,
+    },
     userOpinions: [],
     profileOpinions: [],
     isProfilePath: false,
@@ -54,6 +75,7 @@ export class UserState {
   public constructor(
     private readonly opinionService: OpinionService,
     private readonly followerService: FollowerService,
+    private readonly userSettingsService: UserSettingsService,
   ) {}
 
   @Action(UpdateResolvedUserData)
@@ -173,5 +195,24 @@ export class UserState {
       ...state,
       ...action.payload,
     }));
+  }
+
+  @Action(FetchUserSettings)
+  private fetchUserSettings(
+    context: StateContext<UserStateModel>,
+  ): Observable<ApolloQueryResult<GetUserSettingsQueryResult>> {
+    return this.userSettingsService.getUserSettings().pipe(
+      tap(({data}) => {
+        if (!data.userSettings) return;
+
+        context.setState((state) => ({
+          ...state,
+          settings: {
+            ...state.settings,
+            ...data.userSettings,
+          },
+        }));
+      }),
+    );
   }
 }
