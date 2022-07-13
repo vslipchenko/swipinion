@@ -133,7 +133,8 @@ export class UserSettingsComponent implements Destroyable {
     this.userService
       .changePassword(this.changePasswordForm.value)
       .pipe(
-        takeUntil([this.destroy$, this.cancelPasswordChange$]),
+        takeUntil(this.destroy$),
+        takeUntil(this.cancelPasswordChange$),
         finalize(() => this.loading$.next(false)),
       )
       .subscribe(
