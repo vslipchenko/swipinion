@@ -1,19 +1,12 @@
-import {
-  FollowSettings,
-  MessageSettings,
-  ViewFavorites,
-  ViewFollowingSettings,
-  ViewOpinions,
-  ViewReactions,
-} from '~app/typings/user-settings/user-settings.enums';
+import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 
 export interface UserSettings {
   follow: FollowSettings;
-  view_following: ViewFollowingSettings;
-  message: MessageSettings;
-  view_opinions: ViewOpinions;
-  view_reactions: ViewReactions;
-  view_favorites: ViewFavorites;
+  view_following: PrivacyCommonSettings;
+  message: PrivacyCommonSettings;
+  view_opinions: PrivacyCommonSettings;
+  view_reactions: PrivacyCommonSettings;
+  view_favorites: PrivacyCommonSettings;
 }
 
 export interface GetUserSettingsQueryResult {

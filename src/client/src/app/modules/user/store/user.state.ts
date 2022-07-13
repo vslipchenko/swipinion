@@ -22,14 +22,7 @@ import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
 import {FollowUserMutationResult, UnfollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
 import {GetUserSettingsQueryResult, UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
-import {
-  FollowSettings,
-  MessageSettings,
-  ViewFavorites,
-  ViewFollowingSettings,
-  ViewOpinions,
-  ViewReactions,
-} from '~app/typings/user-settings/user-settings.enums';
+import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {UserSettingsService} from '~app/services/user-settings/user-settings.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 
@@ -57,11 +50,11 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     thumbnail: '',
     settings: {
       follow: FollowSettings.Everyone,
-      view_following: ViewFollowingSettings.Everyone,
-      message: MessageSettings.Everyone,
-      view_opinions: ViewOpinions.Everyone,
-      view_reactions: ViewReactions.Everyone,
-      view_favorites: ViewFavorites.Everyone,
+      view_following: PrivacyCommonSettings.Everyone,
+      message: PrivacyCommonSettings.Everyone,
+      view_opinions: PrivacyCommonSettings.Everyone,
+      view_reactions: PrivacyCommonSettings.Everyone,
+      view_favorites: PrivacyCommonSettings.Everyone,
     },
     userOpinions: [],
     profileOpinions: [],
