@@ -1,5 +1,6 @@
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {ResolvedUserData, UserProfile} from '~app/typings/user/user.interfaces';
+import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 
 export class FetchOpinions {
   public static readonly type = '[User] FetchOpinions';
@@ -51,4 +52,10 @@ export class EditUserProfile {
 
 export class FetchUserSettings {
   public static readonly type = '[User] FetchUserSettings';
+}
+
+export class UpdateUserSettings {
+  public static readonly type = '[User] UpdateUserSettings';
+
+  public constructor(public payload: UserSettings) {}
 }

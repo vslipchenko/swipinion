@@ -14,9 +14,10 @@ import {
   PrependUserOpinion,
   UnfollowUser,
   UpdateResolvedUserData,
+  UpdateUserSettings,
 } from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
-import {Observable, tap} from 'rxjs';
+import {map, Observable, tap, throwError} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
@@ -205,6 +206,25 @@ export class UserState {
             ...data.userSettings,
           },
         }));
+      }),
+    );
+  }
+
+  @Action(UpdateUserSettings)
+  private updateUserSettings(context: StateContext<UserStateModel>, action: UpdateUserSettings): Observable<unknown> {
+    return this.userSettingsService.updateUserSettings(action.payload).pipe(
+      map((result) => {
+        if (!result.data?.updateUserSettings?.success) return throwError('');
+
+        context.setState((state) => ({
+          ...state,
+          settings: {
+            ...state.settings,
+            ...action.payload,
+          },
+        }));
+
+        return result;
       }),
     );
   }

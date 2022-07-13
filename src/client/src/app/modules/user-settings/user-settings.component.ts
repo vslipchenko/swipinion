@@ -5,10 +5,11 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
-import {Select, Store} from '@ngxs/store';
+import {Actions, ofActionErrored, ofActionSuccessful, Select, Store} from '@ngxs/store';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
+import {UpdateUserSettings} from '~app/modules/user/store/user.actions';
 
 @Component({
   selector: 'app-user-settings',
@@ -62,12 +63,26 @@ export class UserSettingsComponent implements Destroyable {
     private readonly store: Store,
     private readonly userService: UserService,
     private readonly snackbar: MatSnackBar,
+    private readonly actions$: Actions,
   ) {
     const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
       UserSelectors.settings,
     );
     // Set initial values;
     this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
+
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionSuccessful(UpdateUserSettings)).subscribe(() => {
+      this.loading$.next(false);
+      this.privacyForm.markAsPristine();
+      this.snackbar.open('Privacy settings successfully updated', 'OK', {
+        panelClass: 'snackbar-success',
+      });
+    });
+
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(UpdateUserSettings)).subscribe(() => {
+      this.loading$.next(false);
+      this.showErrorSnackbar();
+    });
   }
 
   public ngOnDestroy(): void {
@@ -88,7 +103,11 @@ export class UserSettingsComponent implements Destroyable {
     this.cancelPrivacy$.next();
   }
 
-  public updatePrivacySettings(): void {}
+  public updatePrivacySettings(): void {
+    this.loading$.next(true);
+
+    this.store.dispatch(new UpdateUserSettings(this.privacyForm.value));
+  }
 
   public cancelPasswordChange(): void {
     this.changePasswordForm.reset();
@@ -107,7 +126,7 @@ export class UserSettingsComponent implements Destroyable {
       this.currentPassword.value.length >= PASSWORD_MIN_LENGTH &&
       this.currentPassword.value.length <= PASSWORD_MAX_LENGTH;
 
-    if (!validCurrentPassword) return this.showErrorSnackbar();
+    if (!validCurrentPassword) return this.showPasswordChangeErrorSnackbar();
 
     this.loading$.next(true);
 
@@ -120,7 +139,7 @@ export class UserSettingsComponent implements Destroyable {
       .subscribe(
         ({data}) => {
           if (!data?.changePassword?.success) {
-            this.showErrorSnackbar();
+            this.showPasswordChangeErrorSnackbar();
             return;
           }
 
@@ -130,7 +149,7 @@ export class UserSettingsComponent implements Destroyable {
 
           this.changePasswordForm.reset();
         },
-        () => this.showErrorSnackbar(),
+        () => this.showPasswordChangeErrorSnackbar(),
       );
   }
 
@@ -152,6 +171,12 @@ export class UserSettingsComponent implements Destroyable {
   }
 
   private showErrorSnackbar(): void {
+    this.snackbar.open('Something went wrong. Please try again later', 'OK', {
+      panelClass: 'snackbar-error',
+    });
+  }
+
+  private showPasswordChangeErrorSnackbar(): void {
     this.snackbar.open('Something went wrong. Please check password correctness or try again later', 'OK', {
       panelClass: 'snackbar-error',
     });
