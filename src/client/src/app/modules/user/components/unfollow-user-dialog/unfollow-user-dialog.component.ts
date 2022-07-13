@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
-import {Store} from '@ngxs/store';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {UnfollowUser} from '~app/modules/user/store/user.actions';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
@@ -23,8 +23,18 @@ export class UnfollowUserDialogComponent implements Destroyable {
     private readonly store: Store,
     private readonly snackbar: MatSnackBar,
     private readonly dialog: MatDialogRef<UnfollowUserDialogComponent>,
+    private readonly actions$: Actions,
   ) {
     this.profile = this.store.selectSnapshot(UserSelectors.resolvedUserData);
+
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionSuccessful(UnfollowUser)).subscribe(() => {
+      this.dialog.close();
+    });
+
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(UnfollowUser)).subscribe(() => {
+      this.loading$.next(false);
+      this.snackbar.open('Something went wrong. Please try again later', 'OK');
+    });
   }
 
   public ngOnDestroy(): void {
@@ -36,15 +46,6 @@ export class UnfollowUserDialogComponent implements Destroyable {
   public unfollow(): void {
     this.loading$.next(true);
 
-    this.store
-      .dispatch(new UnfollowUser(this.profile.id))
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => this.loading$.next(false)),
-      )
-      .subscribe(
-        () => this.dialog.close(),
-        () => this.snackbar.open('Something went wrong. Please try again later', 'OK'),
-      );
+    this.store.dispatch(new UnfollowUser(this.profile.id));
   }
 }
