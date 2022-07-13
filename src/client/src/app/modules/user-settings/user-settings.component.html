@@ -18,7 +18,8 @@
       <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [form]="changePasswordForm"
                               [content]="passwordContent"
                               (save)="changePassword()" (closed)="cancelPasswordChange()"
-                              [loading]="$any(state.loading)">
+
+                              [disabledSave]="state.loading || changePasswordForm.pristine">
         <ng-template #passwordContent>
           <h3 class="py-1">Change password</h3>
 
@@ -55,7 +56,7 @@
       </app-settings-accordion>
       <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy" [form]="privacyForm"
                               [content]="privacyContent" (closed)="cancelPrivacy()" (save)="updatePrivacySettings()"
-                              [loading]="$any(state.loading)">
+                              [disabledSave]="state.loading || privacyForm.pristine">
         <ng-template #privacyContent>
           <div class="mb-2">
             <div class="mb-2">
@@ -123,7 +124,7 @@
       </app-settings-accordion>
 
       <app-settings-accordion icon="check_circle" title="Verification" [content]="verificationContent"
-                              [showActions]="false" [loading]="$any(state.loading)">
+                              [showActions]="false">
         <ng-template #verificationContent>
           <p class="mt-1">To request a verified badge, you must be a public figure, celebrity or brand and meet certain
             account and

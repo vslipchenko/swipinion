@@ -14,7 +14,7 @@ export class SettingsAccordionComponent {
   @Input() public title = '';
   @Input() public form = new FormGroup({});
   @Input() public showActions = true;
-  @Input() public loading = false;
+  @Input() public disabledSave = false;
 
   @Output() public closed = new EventEmitter();
   @Output() public save = new EventEmitter();
