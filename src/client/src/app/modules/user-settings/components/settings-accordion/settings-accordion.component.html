@@ -9,7 +9,7 @@
 
       <div class="d-flex jc-end" *ngIf="showActions">
         <app-button text="Cancel" (clicked)="cancel()"></app-button>
-        <app-button text="Save" color="primary" (clicked)="save.emit()"></app-button>
+        <app-button text="Save" color="primary" (clicked)="save.emit()" [disabled]="loading"></app-button>
       </div>
     </div>
   </ng-template>

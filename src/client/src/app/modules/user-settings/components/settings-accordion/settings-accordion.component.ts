@@ -14,13 +14,15 @@ export class SettingsAccordionComponent {
   @Input() public title = '';
   @Input() public form = new FormGroup({});
   @Input() public showActions = true;
+  @Input() public loading = false;
 
+  @Output() public closed = new EventEmitter();
   @Output() public save = new EventEmitter();
 
   @ViewChild(AccordionComponent) public accordion?: AccordionComponent;
 
   public cancel(): void {
-    this.form.reset();
     this.accordion?.panel?.close();
+    this.closed.emit();
   }
 }
