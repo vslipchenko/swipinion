@@ -2,9 +2,13 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
+import {Select, Store} from '@ngxs/store';
+import {UserSelectors} from '~app/modules/user/store/user.selectors';
+import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 
 @Component({
   selector: 'app-user-settings',
@@ -13,7 +17,36 @@ import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/co
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserSettingsComponent implements Destroyable {
+  @Select(UserSelectors.settings) public settings$!: Observable<UserSettings>;
+
+  public readonly privacyForm = new FormGroup({
+    follow: new FormControl(FollowSettings.Everyone),
+    view_following: new FormControl(PrivacyCommonSettings.Everyone),
+    message: new FormControl(PrivacyCommonSettings.Everyone),
+    view_opinions: new FormControl(PrivacyCommonSettings.Everyone),
+    view_reactions: new FormControl(PrivacyCommonSettings.Everyone),
+    view_favorites: new FormControl(PrivacyCommonSettings.Everyone),
+  });
+
+  public followSettings = [
+    {title: 'To anyone', value: FollowSettings.Everyone},
+    {title: 'By approve', value: FollowSettings.ByApprove},
+  ];
+
+  public otherSettings = [
+    {title: 'Everyone', value: PrivacyCommonSettings.Everyone},
+    {title: 'Followers only', value: PrivacyCommonSettings.FollowersOnly},
+    {
+      title: 'No one',
+      value: PrivacyCommonSettings.NoOne,
+    },
+  ];
+
+  public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
+  public readonly cancelPasswordChange$ = new Subject<void>();
+  public readonly cancelPrivacy$ = new Subject<void>();
+
   public readonly changePasswordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
     newPassword: new FormControl('', [
@@ -25,11 +58,41 @@ export class UserSettingsComponent implements Destroyable {
     ]),
   });
 
-  public constructor(private readonly userService: UserService, private readonly snackbar: MatSnackBar) {}
+  public constructor(
+    private readonly store: Store,
+    private readonly userService: UserService,
+    private readonly snackbar: MatSnackBar,
+  ) {
+    const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
+      UserSelectors.settings,
+    );
+    // Set initial values;
+    this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    this.cancelPasswordChange$.complete();
+    this.cancelPrivacy$.complete();
+    this.loading$.complete();
+  }
+
+  public cancelPrivacy(): void {
+    const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
+      UserSelectors.settings,
+    );
+    // Reset to current values
+    this.privacyForm.reset({follow, view_following, message, view_opinions, view_reactions, view_favorites});
+    this.cancelPrivacy$.next();
+  }
+
+  public updatePrivacySettings(): void {}
+
+  public cancelPasswordChange(): void {
+    this.changePasswordForm.reset();
+    this.cancelPasswordChange$.next();
   }
 
   public changePassword(): void {
@@ -46,9 +109,14 @@ export class UserSettingsComponent implements Destroyable {
 
     if (!validCurrentPassword) return this.showErrorSnackbar();
 
+    this.loading$.next(true);
+
     this.userService
       .changePassword(this.changePasswordForm.value)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil([this.destroy$, this.cancelPasswordChange$]),
+        finalize(() => this.loading$.next(false)),
+      )
       .subscribe(
         ({data}) => {
           if (!data?.changePassword?.success) {
@@ -93,6 +161,30 @@ export class UserSettingsComponent implements Destroyable {
     if (!this.currentPassword?.value && !control.value) return null;
 
     return control.value === this.currentPassword.value ? {duplicate: true} : null;
+  }
+
+  public get follow(): FormControl {
+    return this.privacyForm.controls['follow'] as FormControl;
+  }
+
+  public get viewFollowing(): FormControl {
+    return this.privacyForm.controls['view_following'] as FormControl;
+  }
+
+  public get message(): FormControl {
+    return this.privacyForm.controls['message'] as FormControl;
+  }
+
+  public get viewOpinions(): FormControl {
+    return this.privacyForm.controls['view_opinions'] as FormControl;
+  }
+
+  public get viewReactions(): FormControl {
+    return this.privacyForm.controls['view_reactions'] as FormControl;
+  }
+
+  public get viewFavorites(): FormControl {
+    return this.privacyForm.controls['view_favorites'] as FormControl;
   }
 
   public get currentPassword(): FormControl {

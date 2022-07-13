@@ -29,4 +29,8 @@ export class UserSelectors {
   public static following = createSelector([UserState], (state: UserStateModel) => {
     return state.following;
   });
+
+  public static settings = createSelector([UserState], (state: UserStateModel) => {
+    return state.settings;
+  });
 }

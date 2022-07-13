@@ -1,7 +1,12 @@
-<div class="wrapper bg-dark h-100 d-flex f-column">
-  <div class="px-2">
-    <div class="divider mb-2"></div>
-  </div>
+<div *ngIf="{loading: loading$ | async} as state" class="wrapper bg-dark h-100 d-flex f-column relative">
+  <app-progress-bar
+    *ngIf="state.loading"
+    class="absolute t-0 w-100">
+  </app-progress-bar>
+
+  <!--  <div class="px-2">-->
+  <div class="divider mb-2"></div>
+  <!--  </div>-->
 
   <div class="headline d-flex ai-center px-2 mb-2 w-100 mx-auto">
     <mat-icon class="mr-1">settings</mat-icon>
@@ -12,7 +17,8 @@
     <div class="container mx-auto px-2 w-100">
       <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [form]="changePasswordForm"
                               [content]="passwordContent"
-                              (save)="changePassword()">
+                              (save)="changePassword()" (closed)="cancelPasswordChange()"
+                              [loading]="$any(state.loading)">
         <ng-template #passwordContent>
           <h3 class="mb-1">Change password</h3>
 
@@ -47,7 +53,9 @@
           </app-input>
         </ng-template>
       </app-settings-accordion>
-      <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy" [content]="privacyContent">
+      <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy" [form]="privacyForm"
+                              [content]="privacyContent" (closed)="cancelPrivacy()" (save)="updatePrivacySettings()"
+                              [loading]="$any(state.loading)">
         <ng-template #privacyContent>
           <div class="mb-2">
             <div class="mb-2">
@@ -56,14 +64,15 @@
               <p class="mb-2">Allow following you:</p>
 
               <app-radio-group
-                [items]="[{title: 'By approve', value: 1}, {title: 'To anyone', value: 2}]"></app-radio-group>
+                [items]="followSettings"
+                [control]="follow"></app-radio-group>
             </div>
 
             <div>
               <p class="mb-2">Who can see users you follow ?</p>
 
               <app-radio-group
-                [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+                [items]="otherSettings" [control]="viewFollowing"></app-radio-group>
             </div>
           </div>
 
@@ -74,17 +83,21 @@
             <p class="mb-2">Who can message you ?</p>
 
             <app-radio-group
-              [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+              [items]="otherSettings" [control]="message"></app-radio-group>
           </div>
 
           <div class="transparent-divider mb-2"></div>
 
           <div class="mb-2">
             <h3 class="mb-1">Opinions</h3>
-            <p class="mb-2">Who can view your opinions ?</p>
+            <!--            <p class="mb-1">This only affects other users seeing opinions on your profile page. Other users still can-->
+            <!--              react to them if opinion is present to them.</p>-->
+            <p class="mb-1">It affects other users possibility seeing opinions on your profile page as much as their
+              possibility to react to them.</p>
+            <p class="mb-2">Who can view and react to your opinions ?</p>
 
             <app-radio-group
-              [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+              [items]="otherSettings" [control]="viewOpinions"></app-radio-group>
           </div>
 
           <div class="transparent-divider mb-2"></div>
@@ -94,7 +107,7 @@
             <p class="mb-2">Who can view your reactions ?</p>
 
             <app-radio-group
-              [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+              [items]="otherSettings" [control]="viewReactions"></app-radio-group>
           </div>
 
           <div class="transparent-divider mb-2"></div>
@@ -104,13 +117,13 @@
             <p class="mb-2">Who can view your favorites ?</p>
 
             <app-radio-group
-              [items]="[{title: 'Everyone', value: 1}, {title: 'Followers only', value: 2}, {title: 'No one', value: 3}]"></app-radio-group>
+              [items]="otherSettings" [control]="viewFavorites"></app-radio-group>
           </div>
         </ng-template>
       </app-settings-accordion>
 
       <app-settings-accordion icon="check_circle" title="Verification" [content]="verificationContent"
-                              [showActions]="false">
+                              [showActions]="false" [loading]="state.loading">
         <ng-template #verificationContent>
           <p>To request a verified badge, you must be a public figure, celebrity or brand and meet certain account and
             eligibility requirements.</p>
