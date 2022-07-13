@@ -20,7 +20,7 @@
                               (save)="changePassword()" (closed)="cancelPasswordChange()"
                               [loading]="$any(state.loading)">
         <ng-template #passwordContent>
-          <h3 class="mb-1">Change password</h3>
+          <h3 class="py-1">Change password</h3>
 
           <app-input
             #currentPasswordInput
@@ -59,7 +59,7 @@
         <ng-template #privacyContent>
           <div class="mb-2">
             <div class="mb-2">
-              <h3 class="mb-1">Following</h3>
+              <h3 class="py-1">Following</h3>
 
               <p class="mb-2">Allow following you:</p>
 
@@ -123,9 +123,10 @@
       </app-settings-accordion>
 
       <app-settings-accordion icon="check_circle" title="Verification" [content]="verificationContent"
-                              [showActions]="false" [loading]="state.loading">
+                              [showActions]="false" [loading]="$any(state.loading)">
         <ng-template #verificationContent>
-          <p>To request a verified badge, you must be a public figure, celebrity or brand and meet certain account and
+          <p class="mt-1">To request a verified badge, you must be a public figure, celebrity or brand and meet certain
+            account and
             eligibility requirements.</p>
           <p class="mb-2">Be sure to have your documents prepared in order to pass identification process.</p>
 
