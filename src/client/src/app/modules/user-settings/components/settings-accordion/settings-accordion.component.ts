@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild} from '@angular/core';
-import {FormGroup} from '@angular/forms';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 
 @Component({
@@ -12,7 +11,6 @@ export class SettingsAccordionComponent {
   @Input() public content!: TemplateRef<any>;
   @Input() public icon = '';
   @Input() public title = '';
-  @Input() public form = new FormGroup({});
   @Input() public showActions = true;
   @Input() public disabledSave = false;
 

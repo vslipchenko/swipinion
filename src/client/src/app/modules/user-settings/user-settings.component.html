@@ -15,7 +15,7 @@
 
   <div class="primary-scrollbar pb-2">
     <div class="container mx-auto px-2 w-100">
-      <app-settings-accordion class="mb-1 d-block" icon="key" title="Password" [form]="changePasswordForm"
+      <app-settings-accordion class="mb-1 d-block" icon="key" title="Password"
                               [content]="passwordContent"
                               (save)="changePassword()" (closed)="cancelPasswordChange()"
 
@@ -54,7 +54,7 @@
           </app-input>
         </ng-template>
       </app-settings-accordion>
-      <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy" [form]="privacyForm"
+      <app-settings-accordion class="mb-1 d-block" icon="lock" title="Privacy"
                               [content]="privacyContent" (closed)="cancelPrivacy()" (save)="updatePrivacySettings()"
                               [disabledSave]="state.loading || privacyForm.pristine">
         <ng-template #privacyContent>
