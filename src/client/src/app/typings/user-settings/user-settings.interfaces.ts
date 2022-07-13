@@ -1,4 +1,5 @@
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
+import {SuccessResponse} from '~app/typings/response/response.interfaces';
 
 export interface UserSettings {
   follow: FollowSettings;
@@ -11,4 +12,8 @@ export interface UserSettings {
 
 export interface GetUserSettingsQueryResult {
   userSettings: UserSettings;
+}
+
+export interface UpdateUserSettingsMutationResult {
+  updateUserSettings: SuccessResponse;
 }
