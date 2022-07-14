@@ -31,6 +31,7 @@ export function apolloClientOptions(httpLink: HttpLink): ApolloClientOptions<unk
   return {
     link: ApolloLink.from([error, link]),
     cache: new InMemoryCache(),
+    connectToDevTools: !environment.production,
   };
 }
 
