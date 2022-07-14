@@ -33,6 +33,7 @@ export interface UserStateModel {
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
   profileSettings: UserSettings;
+  userSettings: UserSettings;
   userOpinions: Array<Opinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
   profileOpinions: Array<Opinion>; // Authed user opinions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
@@ -50,6 +51,14 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     bio: '',
     thumbnail: '',
     profileSettings: {
+      follow: FollowSettings.Everyone,
+      view_following: PrivacyCommonSettings.Everyone,
+      message: PrivacyCommonSettings.Everyone,
+      view_opinions: PrivacyCommonSettings.Everyone,
+      view_reactions: PrivacyCommonSettings.Everyone,
+      view_favorites: PrivacyCommonSettings.Everyone,
+    },
+    userSettings: {
       follow: FollowSettings.Everyone,
       view_following: PrivacyCommonSettings.Everyone,
       message: PrivacyCommonSettings.Everyone,

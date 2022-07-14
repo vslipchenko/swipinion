@@ -9,7 +9,7 @@ import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
 import {UserProfileResolver} from '~app/resolvers/user-profile/user-profile.resolver';
 import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
 import {UserSettingsModule} from '~app/modules/user-settings/user-settings.module';
-import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings-resolver.service';
+import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings.resolver';
 
 const entryModule = {
   pathMatch: 'full',
