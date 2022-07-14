@@ -6,6 +6,8 @@ import {FollowUser} from '~app/modules/user/store/user.actions';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatDialog} from '@angular/material/dialog';
 import {UnfollowUserDialogComponent} from '~app/modules/user/components/unfollow-user-dialog/unfollow-user-dialog.component';
+import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -25,8 +27,15 @@ export class ProfileActionBarComponent {
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
+  public readonly userSettings!: UserSettings;
+  public readonly isProfilePath!: boolean;
 
-  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
+  // public readonly privacyCommonSettings = PrivacyCommonSettings;
+
+  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
+    this.userSettings = this.store.selectSnapshot(UserSelectors.userSettings);
+    this.isProfilePath = this.store.selectSnapshot(UserSelectors.isProfilePath);
+  }
 
   public message(): void {
     console.log('message');
@@ -42,5 +51,18 @@ export class ProfileActionBarComponent {
 
   public scrollTop(): void {
     this.wrapper.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  public get canMessage(): boolean {
+    if (this.isProfilePath) return true;
+
+    switch (this.userSettings.message) {
+      case PrivacyCommonSettings.FollowersOnly:
+        return this.store.selectSnapshot(UserSelectors.following);
+      case PrivacyCommonSettings.NoOne:
+        return false;
+      default:
+        return true;
+    }
   }
 }

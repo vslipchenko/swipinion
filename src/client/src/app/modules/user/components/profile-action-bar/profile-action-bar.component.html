@@ -1,6 +1,6 @@
 <div class="d-flex ai-center w-100 jc-evenly">
   <app-statistics-action></app-statistics-action>
-  <app-icon-button icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
+  <app-icon-button *ngIf="canMessage" icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
 
   <ng-container [ngTemplateOutlet]="followButtons"></ng-container>
 </div>
@@ -9,7 +9,7 @@
   <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
     <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail">
     <div *ngIf="!thumbnail" class="thumbnail"></div>
-    
+
     <span class="fw-medium truncate ml-1">{{username}}</span>
   </div>
 

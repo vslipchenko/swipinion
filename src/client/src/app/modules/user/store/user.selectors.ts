@@ -37,4 +37,8 @@ export class UserSelectors {
   public static userSettings = createSelector([UserState], (state: UserStateModel) => {
     return state.userSettings;
   });
+
+  public static isProfilePath = createSelector([UserState], (state: UserStateModel) => {
+    return state.isProfilePath;
+  });
 }
