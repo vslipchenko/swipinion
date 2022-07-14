@@ -33,4 +33,8 @@ export class UserSelectors {
   public static profileSettings = createSelector([UserState], (state: UserStateModel) => {
     return state.profileSettings;
   });
+
+  public static userSettings = createSelector([UserState], (state: UserStateModel) => {
+    return state.userSettings;
+  });
 }
