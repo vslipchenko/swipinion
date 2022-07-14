@@ -88,4 +88,5 @@ export interface ResolvedUserData {
   thumbnail: string;
   isProfilePath: boolean;
   following: boolean;
+  pending: boolean;
 }

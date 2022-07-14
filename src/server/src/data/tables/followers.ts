@@ -9,6 +9,7 @@ export const FollowersTable: Table = {
         ON DELETE CASCADE,
       follower_id BIGINT REFERENCES users(id)
         ON DELETE CASCADE,
+      pending BOOLEAN,
       UNIQUE (user_id, follower_id)
     );
   `,

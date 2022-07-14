@@ -14,14 +14,14 @@ const userProfile = async (
   _: unknown,
   {username}: {username: string},
   {accessToken}: {accessToken: string},
-): Promise<{id: string; follower_id: string; bio: string; thumbnail?: string} | null> => {
+): Promise<{id: string; follower_id: string; pending: boolean; bio: string; thumbnail?: string} | null> => {
   const {error} = usernameValidator.validate(username);
 
   if (error) return null;
 
   const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
 
-  const result = await db.query<{id: string; follower_id: string; bio: string; thumbnail?: string}>(
+  const result = await db.query<{id: string; follower_id: string; pending: boolean; bio: string; thumbnail?: string}>(
     queryUserProfileData(username, authenticationError ? null : tokenData.userId),
   );
 

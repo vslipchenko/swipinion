@@ -39,6 +39,7 @@ export interface UserStateModel {
   profileOpinions: Array<Opinion>; // Authed user opinions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
   following: boolean; // Whether authed user follows resolved
+  pending: boolean; // Pending following
   canLoadMore: boolean;
 }
 
@@ -71,6 +72,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     profileOpinions: [],
     isProfilePath: false,
     following: false,
+    pending: false,
     canLoadMore: false,
   },
 })

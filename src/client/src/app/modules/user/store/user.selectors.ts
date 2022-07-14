@@ -11,6 +11,7 @@ export class UserSelectors {
       bio: state.bio,
       isProfilePath: state.isProfilePath,
       following: state.following,
+      pending: state.pending,
     };
   });
 

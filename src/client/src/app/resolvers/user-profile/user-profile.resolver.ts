@@ -64,6 +64,7 @@ export class UserProfileResolver implements Resolve<unknown> {
             thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route
             isProfilePath: navigatingProfile,
             following: Boolean(data.userProfile.follower_id),
+            pending: data.userProfile.pending,
           }),
         );
 

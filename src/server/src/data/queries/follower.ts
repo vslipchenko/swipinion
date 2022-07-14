@@ -1,10 +1,11 @@
 import {QueryConfig} from 'pg';
+import {FollowSettings} from '../../typings/user-settings/user-settings.enums';
 
 export const queryFollowUser = (userId: string, followerId: string): QueryConfig => ({
   text: `
     INSERT INTO followers
-    (user_id, follower_id)
-    VALUES ($1, $2)
+    (user_id, follower_id, pending)
+    VALUES ($1, $2, (SELECT EXISTS (SELECT FROM user_settings WHERE user_id = $1 AND follow = ${FollowSettings.ByApprove})))
   `,
   values: [userId, followerId],
 });

@@ -5,6 +5,7 @@ export const GET_PROFILE_DATA = gql`
     userProfile(username: $username) {
       id
       follower_id
+      pending
       bio
       thumbnail
     }
