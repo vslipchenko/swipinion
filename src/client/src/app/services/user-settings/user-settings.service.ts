@@ -23,9 +23,11 @@ export class UserSettingsService {
     });
   }
 
-  public getUserSettings(): Observable<ApolloQueryResult<GetUserSettingsQueryResult>> {
+  public getUserSettings(userId?: string): Observable<ApolloQueryResult<GetUserSettingsQueryResult>> {
     return this.apollo.query<GetUserSettingsQueryResult>({
       query: GET_USER_SETTINGS,
+      variables: {userId},
+      fetchPolicy: userId ? 'no-cache' : 'cache-first', // Always request fresh settings when navigating between /user/ pages
     });
   }
 }

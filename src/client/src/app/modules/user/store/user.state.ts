@@ -12,9 +12,10 @@ import {
   FetchUserSettings,
   FollowUser,
   PrependUserOpinion,
+  SetUserSettings,
   UnfollowUser,
+  UpdateProfileSettings,
   UpdateResolvedUserData,
-  UpdateUserSettings,
 } from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {map, Observable, tap, throwError} from 'rxjs';
@@ -218,8 +219,11 @@ export class UserState {
     );
   }
 
-  @Action(UpdateUserSettings)
-  private updateUserSettings(context: StateContext<UserStateModel>, action: UpdateUserSettings): Observable<unknown> {
+  @Action(UpdateProfileSettings)
+  private updateProfileSettings(
+    context: StateContext<UserStateModel>,
+    action: UpdateProfileSettings,
+  ): Observable<unknown> {
     return this.userSettingsService.updateUserSettings(action.payload).pipe(
       map((result) => {
         if (!result.data?.updateUserSettings?.success) return throwError('');
@@ -235,5 +239,16 @@ export class UserState {
         return result;
       }),
     );
+  }
+
+  @Action(SetUserSettings)
+  private updateUserSettings(context: StateContext<UserStateModel>, action: SetUserSettings): void {
+    context.setState((state) => ({
+      ...state,
+      userSettings: {
+        ...state.userSettings,
+        ...action.payload,
+      },
+    }));
   }
 }
