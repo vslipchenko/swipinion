@@ -9,7 +9,7 @@ import {Actions, ofActionErrored, ofActionSuccessful, Select, Store} from '@ngxs
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
-import {UpdateUserSettings} from '~app/modules/user/store/user.actions';
+import {UpdateProfileSettings} from '~app/modules/user/store/user.actions';
 
 @Component({
   selector: 'app-user-settings',
@@ -71,7 +71,7 @@ export class UserSettingsComponent implements Destroyable {
     // Set initial values;
     this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionSuccessful(UpdateUserSettings)).subscribe(() => {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionSuccessful(UpdateProfileSettings)).subscribe(() => {
       this.loading$.next(false);
       this.privacyForm.markAsPristine();
       this.snackbar.open('Privacy settings successfully updated', 'OK', {
@@ -79,7 +79,7 @@ export class UserSettingsComponent implements Destroyable {
       });
     });
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(UpdateUserSettings)).subscribe(() => {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(UpdateProfileSettings)).subscribe(() => {
       this.loading$.next(false);
       this.showErrorSnackbar();
     });
@@ -106,7 +106,7 @@ export class UserSettingsComponent implements Destroyable {
   public updatePrivacySettings(): void {
     this.loading$.next(true);
 
-    this.store.dispatch(new UpdateUserSettings(this.privacyForm.value));
+    this.store.dispatch(new UpdateProfileSettings(this.privacyForm.value));
   }
 
   public cancelPasswordChange(): void {
