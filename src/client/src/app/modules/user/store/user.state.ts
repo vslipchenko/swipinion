@@ -32,7 +32,7 @@ export interface UserStateModel {
   username: string; // Resolved user username
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
-  settings: UserSettings;
+  profileSettings: UserSettings;
   userOpinions: Array<Opinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
   profileOpinions: Array<Opinion>; // Authed user opinions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
@@ -49,7 +49,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     username: '',
     bio: '',
     thumbnail: '',
-    settings: {
+    profileSettings: {
       follow: FollowSettings.Everyone,
       view_following: PrivacyCommonSettings.Everyone,
       message: PrivacyCommonSettings.Everyone,
@@ -200,8 +200,8 @@ export class UserState {
 
         context.setState((state) => ({
           ...state,
-          settings: {
-            ...state.settings,
+          profileSettings: {
+            ...state.profileSettings,
             ...data.userSettings,
           },
         }));
@@ -217,8 +217,8 @@ export class UserState {
 
         context.setState((state) => ({
           ...state,
-          settings: {
-            ...state.settings,
+          profileSettings: {
+            ...state.profileSettings,
             ...action.payload,
           },
         }));

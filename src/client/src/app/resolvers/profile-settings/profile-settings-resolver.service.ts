@@ -9,7 +9,7 @@ import {Store} from '@ngxs/store';
 @Injectable({
   providedIn: 'root',
 })
-export class UserSettingsResolver implements Resolve<ApolloQueryResult<GetUserSettingsQueryResult>> {
+export class ProfileSettingsResolver implements Resolve<ApolloQueryResult<GetUserSettingsQueryResult>> {
   public constructor(private readonly store: Store) {}
 
   public resolve(): Observable<ApolloQueryResult<GetUserSettingsQueryResult>> {

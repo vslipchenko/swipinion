@@ -18,7 +18,7 @@ import {UpdateUserSettings} from '~app/modules/user/store/user.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserSettingsComponent implements Destroyable {
-  @Select(UserSelectors.settings) public settings$!: Observable<UserSettings>;
+  @Select(UserSelectors.profileSettings) public settings$!: Observable<UserSettings>;
 
   public readonly privacyForm = new FormGroup({
     follow: new FormControl(FollowSettings.Everyone),
@@ -66,7 +66,7 @@ export class UserSettingsComponent implements Destroyable {
     private readonly actions$: Actions,
   ) {
     const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
-      UserSelectors.settings,
+      UserSelectors.profileSettings,
     );
     // Set initial values;
     this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
@@ -96,7 +96,7 @@ export class UserSettingsComponent implements Destroyable {
 
   public cancelPrivacy(): void {
     const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
-      UserSelectors.settings,
+      UserSelectors.profileSettings,
     );
     // Reset to current values
     this.privacyForm.reset({follow, view_following, message, view_opinions, view_reactions, view_favorites});

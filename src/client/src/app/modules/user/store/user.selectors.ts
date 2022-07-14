@@ -30,7 +30,7 @@ export class UserSelectors {
     return state.following;
   });
 
-  public static settings = createSelector([UserState], (state: UserStateModel) => {
-    return state.settings;
+  public static profileSettings = createSelector([UserState], (state: UserStateModel) => {
+    return state.profileSettings;
   });
 }
