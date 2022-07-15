@@ -39,7 +39,7 @@ export class UserSelectors {
     return state.isProfilePath;
   });
 
-  public static followingState = createSelector([UserState], (state: UserStateModel) => {
+  public static followingStatus = createSelector([UserState], (state: UserStateModel) => {
     return {following: state.following, pending: state.pending};
   });
 }

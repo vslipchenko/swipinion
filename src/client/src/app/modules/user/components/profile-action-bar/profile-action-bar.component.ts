@@ -24,7 +24,7 @@ export class ProfileActionBarComponent {
   @Input() public wrapper!: HTMLDivElement;
 
   // @Select(UserSelectors.following) public following$!: Observable<boolean>;
-  @Select(UserSelectors.followingState) public followingState$!: Observable<{following: boolean; pending: boolean}>;
+  @Select(UserSelectors.followingStatus) public followingStatus$!: Observable<{following: boolean; pending: boolean}>;
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
@@ -64,13 +64,13 @@ export class ProfileActionBarComponent {
   public get canMessage(): boolean {
     if (this.isProfilePath) return true;
 
-    const followingState = this.store.selectSnapshot(UserSelectors.followingState); // TODO rename to following status
+    const followingStatus = this.store.selectSnapshot(UserSelectors.followingStatus); // TODO rename to following status
 
-    if (followingState.pending) return false;
+    if (followingStatus.pending) return false;
 
     switch (this.userSettings.message) {
       case PrivacyCommonSettings.FollowersOnly:
-        return followingState.following;
+        return followingStatus.following;
       case PrivacyCommonSettings.NoOne:
         return false;
       default:
@@ -79,6 +79,6 @@ export class ProfileActionBarComponent {
   }
 
   public get pendingFollowing(): boolean {
-    return this.store.selectSnapshot(UserSelectors.followingState).pending;
+    return this.store.selectSnapshot(UserSelectors.followingStatus).pending;
   }
 }

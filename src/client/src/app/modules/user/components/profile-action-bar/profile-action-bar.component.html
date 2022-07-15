@@ -22,7 +22,7 @@
 
 <ng-template #followActions let-showMessageOnFollowing>
   <ng-container *ngIf="role !== userRole.User">
-    <ng-container *ngIf="{followingState: followingState$ | async} as state">
+    <ng-container *ngIf="{followingState: followingStatus$ | async} as state">
       <app-icon-button *ngIf="!state.followingState?.following" icon="person_add" [appAuthClick]="follow.bind(this)"
                        color="primary"></app-icon-button>
 
