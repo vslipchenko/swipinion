@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {UnfollowUser} from '~app/modules/user/store/user.actions';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -20,6 +20,7 @@ export class UnfollowUserDialogComponent implements Destroyable {
   public readonly profile: ResolvedUserData;
 
   public constructor(
+    @Inject(MAT_DIALOG_DATA) public readonly data: {title: string; body: string; action: string},
     private readonly store: Store,
     private readonly snackbar: MatSnackBar,
     private readonly dialog: MatDialogRef<UnfollowUserDialogComponent>,

@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Unfollow user</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 <ng-container *ngIf="{loading: loading$ | async} as state">
   <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
@@ -10,7 +10,9 @@
         [src]="profile.thumbnail"
         alt="">
 
-      Unfollow
+      <div *ngIf="!profile.thumbnail" class="image mx-auto mb-2"></div>
+
+      {{data.body}}
       <p class="mb-1"><span class="fw-medium">@{{profile.username}}</span> ?</p>
     </div>
   </mat-dialog-content>
@@ -21,7 +23,7 @@
     </app-progress-bar>
 
     <app-button mat-dialog-close text="Cancel"></app-button>
-    <app-button color="warn" text="Unfollow" (clicked)="unfollow()"
+    <app-button color="warn" [text]="data.action" (clicked)="unfollow()"
                 [disabled]="state.loading || false"></app-button>
   </mat-dialog-actions>
 </ng-container>
