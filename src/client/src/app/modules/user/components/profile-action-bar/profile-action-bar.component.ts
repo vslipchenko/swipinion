@@ -23,7 +23,8 @@ export class ProfileActionBarComponent {
   @Input() public showBottomBar = false;
   @Input() public wrapper!: HTMLDivElement;
 
-  @Select(UserSelectors.following) public following$!: Observable<boolean>;
+  // @Select(UserSelectors.following) public following$!: Observable<boolean>;
+  @Select(UserSelectors.followingState) public followingState$!: Observable<{following: boolean; pending: boolean}>;
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
@@ -45,8 +46,15 @@ export class ProfileActionBarComponent {
     this.store.dispatch(new FollowUser(this.id));
   }
 
-  public unfollow(): void {
-    this.dialog.open(UnfollowUserDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+  public unfollow(pending = false): void {
+    this.dialog.open(UnfollowUserDialogComponent, {
+      panelClass: ['dialog', 'extended-dialog'],
+      data: {
+        title: pending ? 'Revoke follow request' : 'Unfollow user',
+        body: pending ? 'Waiting for follow request to be accepted. Do you want to revoke follow of' : 'Unfollow',
+        action: pending ? 'Revoke' : 'Unfollow',
+      },
+    });
   }
 
   public scrollTop(): void {
@@ -56,13 +64,21 @@ export class ProfileActionBarComponent {
   public get canMessage(): boolean {
     if (this.isProfilePath) return true;
 
+    const followingState = this.store.selectSnapshot(UserSelectors.followingState); // TODO rename to following status
+
+    if (followingState.pending) return false;
+
     switch (this.userSettings.message) {
       case PrivacyCommonSettings.FollowersOnly:
-        return this.store.selectSnapshot(UserSelectors.following);
+        return followingState.following;
       case PrivacyCommonSettings.NoOne:
         return false;
       default:
         return true;
     }
+  }
+
+  public get pendingFollowing(): boolean {
+    return this.store.selectSnapshot(UserSelectors.followingState).pending;
   }
 }

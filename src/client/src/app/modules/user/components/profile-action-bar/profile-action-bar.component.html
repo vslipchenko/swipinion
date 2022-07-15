@@ -1,11 +1,12 @@
 <div class="d-flex ai-center w-100 jc-evenly">
   <app-statistics-action></app-statistics-action>
+
   <app-icon-button *ngIf="canMessage" icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
 
-  <ng-container [ngTemplateOutlet]="followButtons"></ng-container>
+  <ng-container [ngTemplateOutlet]="followActions"></ng-container>
 </div>
 
-<div class="userbar fixed w-100 p-1 d-flex ai-center jc-between" [class.show]="showBottomBar">
+<div class="userbar fixed w-100 py-1 px-2 d-flex ai-center jc-between" [class.show]="showBottomBar">
   <div class="userbar-info d-flex ai-center f-1" (click)="scrollTop()">
     <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail">
     <div *ngIf="!thumbnail" class="thumbnail"></div>
@@ -13,25 +14,50 @@
     <span class="fw-medium truncate ml-1">{{username}}</span>
   </div>
 
-  <ng-container [ngTemplateOutlet]="followButtons" [ngTemplateOutletContext]="{$implicit: true}"></ng-container>
+  <ng-container *ngIf="role === userRole.User" [ngTemplateOutlet]="arrowUpAction"></ng-container>
 
-  <app-icon-button *ngIf="role === userRole.User" icon="keyboard_arrow_up"
-                   (clicked)="scrollTop()"></app-icon-button>
+  <ng-container [ngTemplateOutlet]="followActions"
+                [ngTemplateOutletContext]="{$implicit: true}"></ng-container>
 </div>
 
-<ng-template #followButtons let-showMessageOnFollowing>
+<ng-template #followActions let-showMessageOnFollowing>
   <ng-container *ngIf="role !== userRole.User">
-    <ng-container *ngIf="{following: following$ | async} as state">
-      <app-icon-button *ngIf="!state.following" icon="person_add" [appAuthClick]="follow.bind(this)"
+    <ng-container *ngIf="{followingState: followingState$ | async} as state">
+      <app-icon-button *ngIf="!state.followingState?.following" icon="person_add" [appAuthClick]="follow.bind(this)"
                        color="primary"></app-icon-button>
 
-      <ng-container *ngIf="state.following">
+      <ng-container *ngIf="state.followingState?.following">
         <!-- Assume authed -->
-        <app-icon-button *ngIf="showMessageOnFollowing" icon="email" (clicked)="message()"></app-icon-button>
+        <ng-container *ngIf="showMessageOnFollowing">
+          <app-icon-button *ngIf="canMessage" icon="email" (clicked)="message()"></app-icon-button>
 
-        <app-icon-button *ngIf="!showMessageOnFollowing" svgIcon="account-check" [appAuthClick]="unfollow.bind(this)"
-        ></app-icon-button>
+          <ng-container *ngIf="!canMessage">
+            <ng-container *ngIf="pendingFollowing" [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
+
+            <ng-container *ngIf="!pendingFollowing" [ngTemplateOutlet]="arrowUpAction"></ng-container>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="!showMessageOnFollowing">
+          <ng-container *ngIf="state.followingState?.pending"
+                        [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
+
+          <app-icon-button *ngIf="!state.followingState?.pending" svgIcon="account-check"
+                           (clicked)="unfollow()"
+          ></app-icon-button>
+        </ng-container>
       </ng-container>
     </ng-container>
   </ng-container>
+</ng-template>
+
+<ng-template #arrowUpAction>
+  <app-icon-button icon="keyboard_arrow_up"
+                   (clicked)="scrollTop()"></app-icon-button>
+</ng-template>
+
+<ng-template #pendingFollowingAction>
+  <app-icon-button svgIcon="account-clock"
+                   (clicked)="unfollow(true)"
+  ></app-icon-button>
 </ng-template>
