@@ -168,11 +168,12 @@ export class UserState {
   ): Observable<MutationResult<FollowUserMutationResult>> {
     return this.followerService.followUser(action.payload).pipe(
       tap(({data}) => {
-        if (!data?.followUser.success) return;
+        if (!data?.followUser) return;
 
         context.setState((state) => ({
           ...state,
           following: true,
+          pending: data.followUser.pending,
         }));
       }),
     );

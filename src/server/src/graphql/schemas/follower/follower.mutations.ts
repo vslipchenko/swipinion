@@ -7,7 +7,7 @@ import {db} from '../../../data';
 
 export const followerMutationTypeDefinitions = gql`
   type Mutation {
-    followUser(userId: String!): Success
+    followUser(userId: String!): FollowingPendingStatus
     unfollowUser(userId: String!): Success
   }
 `;
@@ -16,7 +16,7 @@ const followUser = async (
   _: unknown,
   {userId}: {userId: string},
   {accessToken}: {accessToken: string},
-): Promise<SuccessResponse | ApolloError | null> => {
+): Promise<{pending: boolean} | ApolloError | null> => {
   const {error} = bigintValidator.validate(userId);
 
   if (error) return null;
@@ -25,9 +25,11 @@ const followUser = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryFollowUser(userId, tokenData.userId));
+  const result = await db.query<{pending: boolean}>(queryFollowUser(userId, tokenData.userId));
 
-  return {success: Boolean(result.rowCount)};
+  if (!result.rowCount) return null;
+
+  return result.rows[0];
 };
 
 const unfollowUser = async (
