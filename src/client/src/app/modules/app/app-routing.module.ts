@@ -10,6 +10,7 @@ import {UserProfileResolver} from '~app/resolvers/user-profile/user-profile.reso
 import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
 import {UserSettingsModule} from '~app/modules/user-settings/user-settings.module';
 import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings.resolver';
+import {UserNotificationsModule} from '~app/modules/user-notifications/user-notifications.module';
 
 const entryModule = {
   pathMatch: 'full',
@@ -72,8 +73,17 @@ const routes: Routes = [
       import('~app/modules/user-settings/user-settings.module').then((m) => m.UserSettingsModule),
     ...userGuards,
     resolve: {
-      ...userResolvers,
+      profile: userResolvers.profile,
       settings: ProfileSettingsResolver,
+    },
+  },
+  {
+    path: 'profile/notifications',
+    loadChildren: (): Promise<typeof UserNotificationsModule> =>
+      import('~app/modules/user-notifications/user-notifications.module').then((m) => m.UserNotificationsModule),
+    ...userGuards,
+    resolve: {
+      profile: userResolvers.profile,
     },
   },
   {
