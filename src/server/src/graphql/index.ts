@@ -7,6 +7,10 @@ import {opinionResolvers, opinionTypeDefinitions} from './schemas/opinion/opinio
 import {profileResolvers, profileTypeDefinitions} from './schemas/profile/profile.schema';
 import {followerResolvers, followerTypeDefinitions} from './schemas/follower/follower.schema';
 import {userSettingsResolvers, userSettingsTypeDefinitions} from './schemas/user-settings/user-settings.schema';
+import {
+  userNotificationsResolvers,
+  userNotificationsTypeDefinitions,
+} from './schemas/user-notifications/user-notifications.schema';
 
 export const schema = makeExecutableSchema({
   typeDefs: [
@@ -17,6 +21,7 @@ export const schema = makeExecutableSchema({
     profileTypeDefinitions,
     followerTypeDefinitions,
     userSettingsTypeDefinitions,
+    userNotificationsTypeDefinitions,
   ],
   resolvers: merge(
     {},
@@ -26,5 +31,6 @@ export const schema = makeExecutableSchema({
     ...profileResolvers,
     ...followerResolvers,
     ...userSettingsResolvers,
+    ...userNotificationsResolvers,
   ),
 });
