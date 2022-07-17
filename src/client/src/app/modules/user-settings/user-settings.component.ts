@@ -6,10 +6,10 @@ import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {Actions, ofActionErrored, ofActionSuccessful, Select, Store} from '@ngxs/store';
-import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
-import {UpdateProfileSettings} from '~app/modules/user/store/user.actions';
+import {UserSettingsSelectors} from '~app/modules/user-settings/store/user-settings.selectors';
+import {UpdateProfileSettings} from '~app/modules/user-settings/store/user-settings.actions';
 
 @Component({
   selector: 'app-user-settings',
@@ -18,7 +18,7 @@ import {UpdateProfileSettings} from '~app/modules/user/store/user.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserSettingsComponent implements Destroyable {
-  @Select(UserSelectors.profileSettings) public settings$!: Observable<UserSettings>;
+  @Select(UserSettingsSelectors.settings) public settings$!: Observable<UserSettings>;
 
   public readonly privacyForm = new FormGroup({
     follow: new FormControl(FollowSettings.Everyone),
@@ -66,7 +66,7 @@ export class UserSettingsComponent implements Destroyable {
     private readonly actions$: Actions,
   ) {
     const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
-      UserSelectors.profileSettings,
+      UserSettingsSelectors.settings,
     );
     // Set initial values;
     this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
@@ -96,7 +96,7 @@ export class UserSettingsComponent implements Destroyable {
 
   public cancelPrivacy(): void {
     const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
-      UserSelectors.profileSettings,
+      UserSettingsSelectors.settings,
     );
     // Reset to current values
     this.privacyForm.reset({follow, view_following, message, view_opinions, view_reactions, view_favorites});

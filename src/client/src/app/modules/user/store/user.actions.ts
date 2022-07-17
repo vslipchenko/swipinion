@@ -50,18 +50,8 @@ export class EditUserProfile {
   public constructor(public payload: Omit<UserProfile, 'username'>) {}
 }
 
-export class FetchUserSettings {
-  public static readonly type = '[User] FetchUserSettings';
-}
-
 export class SetUserSettings {
   public static readonly type = '[User] SetUserSettings';
-
-  public constructor(public payload: UserSettings) {}
-}
-
-export class UpdateProfileSettings {
-  public static readonly type = '[User] UpdateProfileSettings';
 
   public constructor(public payload: UserSettings) {}
 }

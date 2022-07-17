@@ -5,6 +5,8 @@ import {RouterModule} from '@angular/router';
 import {SharedModule} from '~app/shared/shared.module';
 import {MatIconModule} from '@angular/material/icon';
 import {SettingsAccordionComponent} from './components/settings-accordion/settings-accordion.component';
+import {NgxsModule} from '@ngxs/store';
+import {UserSettingsState} from '~app/modules/user-settings/store/user-settings.state';
 
 @NgModule({
   declarations: [UserSettingsComponent, SettingsAccordionComponent],
@@ -16,6 +18,7 @@ import {SettingsAccordionComponent} from './components/settings-accordion/settin
         component: UserSettingsComponent,
       },
     ]),
+    NgxsModule.forFeature([UserSettingsState]),
     SharedModule,
     MatIconModule,
   ],

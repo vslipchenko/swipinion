@@ -9,12 +9,10 @@ import {
   DeleteUserOpinion,
   EditUserProfile,
   FetchOpinions,
-  FetchUserSettings,
   FollowUser,
   PrependUserOpinion,
   SetUserSettings,
   UnfollowUser,
-  UpdateProfileSettings,
   UpdateResolvedUserData,
 } from '~app/modules/user/store/user.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
@@ -23,18 +21,15 @@ import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
 import {FollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
-import {GetUserSettingsQueryResult, UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
-import {UserSettingsService} from '~app/services/user-settings/user-settings.service';
-import {ApolloQueryResult} from '@apollo/client/core';
 
 export interface UserStateModel {
   id: string; // Resolved user id
   username: string; // Resolved user username
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
-  profileSettings: UserSettings;
-  userSettings: UserSettings;
+  settings: UserSettings;
   userOpinions: Array<Opinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
   profileOpinions: Array<Opinion>; // Authed user opinions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
@@ -52,15 +47,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     username: '',
     bio: '',
     thumbnail: '',
-    profileSettings: {
-      follow: FollowSettings.Everyone,
-      view_following: PrivacyCommonSettings.Everyone,
-      message: PrivacyCommonSettings.Everyone,
-      view_opinions: PrivacyCommonSettings.Everyone,
-      view_reactions: PrivacyCommonSettings.Everyone,
-      view_favorites: PrivacyCommonSettings.Everyone,
-    },
-    userSettings: {
+    settings: {
       follow: FollowSettings.Everyone,
       view_following: PrivacyCommonSettings.Everyone,
       message: PrivacyCommonSettings.Everyone,
@@ -81,7 +68,6 @@ export class UserState {
   public constructor(
     private readonly opinionService: OpinionService,
     private readonly followerService: FollowerService,
-    private readonly userSettingsService: UserSettingsService,
   ) {}
 
   @Action(UpdateResolvedUserData)
@@ -203,53 +189,12 @@ export class UserState {
     }));
   }
 
-  @Action(FetchUserSettings)
-  private fetchUserSettings(
-    context: StateContext<UserStateModel>,
-  ): Observable<ApolloQueryResult<GetUserSettingsQueryResult>> {
-    return this.userSettingsService.getUserSettings().pipe(
-      tap(({data}) => {
-        if (!data.userSettings) return;
-
-        context.setState((state) => ({
-          ...state,
-          profileSettings: {
-            ...state.profileSettings,
-            ...data.userSettings,
-          },
-        }));
-      }),
-    );
-  }
-
-  @Action(UpdateProfileSettings)
-  private updateProfileSettings(
-    context: StateContext<UserStateModel>,
-    action: UpdateProfileSettings,
-  ): Observable<unknown> {
-    return this.userSettingsService.updateUserSettings(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.updateUserSettings?.success) return throwError('');
-
-        context.setState((state) => ({
-          ...state,
-          profileSettings: {
-            ...state.profileSettings,
-            ...action.payload,
-          },
-        }));
-
-        return result;
-      }),
-    );
-  }
-
   @Action(SetUserSettings)
   private updateUserSettings(context: StateContext<UserStateModel>, action: SetUserSettings): void {
     context.setState((state) => ({
       ...state,
-      userSettings: {
-        ...state.userSettings,
+      settings: {
+        ...state.settings,
         ...action.payload,
       },
     }));

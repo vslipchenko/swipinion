@@ -34,7 +34,7 @@ export class ProfileActionBarComponent {
   // public readonly privacyCommonSettings = PrivacyCommonSettings;
 
   public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
-    this.userSettings = this.store.selectSnapshot(UserSelectors.userSettings);
+    this.userSettings = this.store.selectSnapshot(UserSelectors.settings);
     this.isProfilePath = this.store.selectSnapshot(UserSelectors.isProfilePath);
   }
 

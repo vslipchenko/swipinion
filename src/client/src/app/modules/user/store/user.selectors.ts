@@ -27,12 +27,8 @@ export class UserSelectors {
     return state.canLoadMore;
   });
 
-  public static profileSettings = createSelector([UserState], (state: UserStateModel) => {
-    return state.profileSettings;
-  });
-
-  public static userSettings = createSelector([UserState], (state: UserStateModel) => {
-    return state.userSettings;
+  public static settings = createSelector([UserState], (state: UserStateModel) => {
+    return state.settings;
   });
 
   public static isProfilePath = createSelector([UserState], (state: UserStateModel) => {
