@@ -153,7 +153,7 @@ export const queryUserEditProfile = ({
   values: [thumbnail, bio, userId],
 });
 
-export const queryUserProfileData = (username: string, followerId: string | null): QueryConfig => ({
+export const queryUserProfileCompleteData = (username: string, followerId: string): QueryConfig => ({
   text: `
     SELECT followers.follower_id, followers.pending, users.id, users.thumbnail, users.bio
     FROM users
@@ -162,4 +162,22 @@ export const queryUserProfileData = (username: string, followerId: string | null
     WHERE users.username = $1
   `,
   values: [username, followerId],
+});
+
+export const queryUserProfileDataById = (userId: string): QueryConfig => ({
+  text: `
+    SELECT thumbnail, bio
+    FROM users
+    WHERE id = $1
+  `,
+  values: [userId],
+});
+
+export const queryUserProfileDataByUsername = (username: string): QueryConfig => ({
+  text: `
+    SELECT id, thumbnail, bio
+    FROM users
+    WHERE username = $1
+  `,
+  values: [username],
 });

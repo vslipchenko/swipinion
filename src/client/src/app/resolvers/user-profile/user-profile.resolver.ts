@@ -25,7 +25,11 @@ export class UserProfileResolver implements Resolve<unknown> {
     const navigatingProfile = route.url.some((item) => item.path === 'profile');
     const username = navigatingProfile ? profile.username : route.params['username'];
 
-    return this.profileService.getProfileData(username, navigatingProfile).pipe(
+    const query = navigatingProfile
+      ? this.profileService.getProfileData(true) // Assume user authed and querying own profile data
+      : this.profileService.getProfileData(false, username);
+
+    return query.pipe(
       // Query is cached
       // tap(({data}) => {
       //   if (!data?.userProfile) {
@@ -57,6 +61,7 @@ export class UserProfileResolver implements Resolve<unknown> {
         // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
 
         this.store.dispatch(
+          // TODO update based on navigatingProfile condition
           new UpdateResolvedUserData({
             id: data.userProfile.id,
             username,
