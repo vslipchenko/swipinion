@@ -65,6 +65,7 @@ const routes: Routes = [
   },
   {
     path: 'profile',
+    pathMatch: 'full',
     ...userModule,
   },
   {
