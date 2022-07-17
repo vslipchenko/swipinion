@@ -29,7 +29,7 @@ $user-profile-image-radius: 20px;
 
   @include media.zero-large {
     //display: none;
-    height: $user-profile-image-size-small / 1.5;
+    height: calc($user-profile-image-size-small / 1.5);
   }
 
   @include media.above-large {
