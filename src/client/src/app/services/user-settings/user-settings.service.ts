@@ -27,7 +27,7 @@ export class UserSettingsService {
     return this.apollo.query<GetUserSettingsQueryResult>({
       query: GET_USER_SETTINGS,
       variables: {userId},
-      fetchPolicy: userId ? 'no-cache' : 'cache-first', // Always request fresh settings when navigating between /user/ pages
+      fetchPolicy: 'no-cache', // Always request fresh settings
     });
   }
 }
