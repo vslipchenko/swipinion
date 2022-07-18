@@ -4,6 +4,7 @@ export interface GetUserNotificationsQueryResult {
 
 export interface Notification {
   type: number;
-  involved_user_id: string;
-  created_at: string;
+  username: string;
+  thumbnail: string;
+  created_at: number;
 }
