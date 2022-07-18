@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Store} from '@ngxs/store';
+import {FetchUserNotifications} from '~app/modules/user-notifications/store/user-notifications.actions';
 
 @Component({
   selector: 'app-user-notifications',
@@ -13,5 +14,7 @@ export class UserNotificationsComponent implements OnInit {
 
   public constructor(private readonly store: Store) {}
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.store.dispatch(new FetchUserNotifications(0));
+  }
 }

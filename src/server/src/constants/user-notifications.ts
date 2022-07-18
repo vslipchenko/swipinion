@@ -1,0 +1,1 @@
+export const USER_NOTIFICATIONS_FETCH_LIMIT = 15;

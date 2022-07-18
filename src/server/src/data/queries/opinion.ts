@@ -1,5 +1,6 @@
 import {QueryConfig} from 'pg';
 import {CreateOpinion} from '../../typings/opinion/opinion.interfaces';
+import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
 
 export const concatenateTagValues = (values: Array<string>): string => {
   return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join(', ');
@@ -59,7 +60,7 @@ export const queryOpinionsByUsername = (username: string, offset: number): Query
       WHERE opinions.user_id = (SELECT id FROM users WHERE username = $1)
       GROUP BY opinions.id
       ORDER BY opinions.created_at DESC
-      LIMIT 9
+      LIMIT ${OPINION_FETCH_LIMIT}
       OFFSET $2
   `,
   values: [username, offset],
