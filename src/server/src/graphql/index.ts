@@ -11,10 +11,12 @@ import {
   userNotificationsResolvers,
   userNotificationsTypeDefinitions,
 } from './schemas/user-notifications/user-notifications.schema';
+import {appResolvers, appTypeDefinitions} from './schemas/app/app.schema';
 
 export const schema = makeExecutableSchema({
   typeDefs: [
     sharedTypeDefinitions,
+    appTypeDefinitions,
     userTypeDefinitions,
     authenticationTypeDefinitions,
     opinionTypeDefinitions,
@@ -25,6 +27,7 @@ export const schema = makeExecutableSchema({
   ],
   resolvers: merge(
     {},
+    ...appResolvers,
     ...userResolvers,
     ...authenticationResolvers,
     ...opinionResolvers,

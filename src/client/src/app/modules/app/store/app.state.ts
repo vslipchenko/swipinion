@@ -1,12 +1,13 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {UpdateAuthedUserProfileTeaser, UpdateUserRole} from '~app/modules/app/store/app.actions';
+import {UpdateAuthedUserProfileTeaser, UpdateUserRole, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
 
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
   role: UserRole;
+  utcTimestamp: number;
 }
 
 const APP_STATE = new StateToken<AppStateModel>('app');
@@ -20,6 +21,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       thumbnail: '',
     },
     role: UserRole.Guest,
+    utcTimestamp: new Date().getTime(),
   },
 })
 @Injectable()
@@ -40,6 +42,14 @@ export class AppState {
     context.setState((state) => ({
       ...state,
       role: action.payload,
+    }));
+  }
+
+  @Action(UpdateUtcTimestamp)
+  private updateUtcTimestamp(context: StateContext<AppStateModel>, action: UpdateUtcTimestamp): void {
+    context.setState((state) => ({
+      ...state,
+      utcTimestamp: action.payload,
     }));
   }
 }

@@ -9,4 +9,8 @@ export class AppSelectors {
   public static userRole = createSelector([AppState], (state: AppStateModel) => {
     return state.role;
   });
+
+  public static utcTimestamp = createSelector([AppState], (state: AppStateModel) => {
+    return state.utcTimestamp;
+  });
 }

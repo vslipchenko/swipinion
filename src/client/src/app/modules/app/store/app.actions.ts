@@ -12,3 +12,9 @@ export class UpdateUserRole {
 
   public constructor(public payload: UserRole) {}
 }
+
+export class UpdateUtcTimestamp {
+  public static readonly type = '[App] UpdateUtcTimestamp';
+
+  public constructor(public payload: number) {}
+}

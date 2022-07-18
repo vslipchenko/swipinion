@@ -13,9 +13,10 @@ import {NgxsModule, Store} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
-import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
+import {UpdateAuthedUserProfileTeaser, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
 import {SharedModule} from '~app/shared/shared.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {AppService} from '~app/services/app/app.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,12 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
       provide: APP_INITIALIZER,
       useFactory: authenticationFactory,
       deps: [AuthenticationService, Store],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appStateFactory,
+      deps: [AppService, Store],
       multi: true,
     },
   ],
@@ -67,6 +74,18 @@ function authenticationFactory(
       }),
       catchError(() => {
         return of(); // Ignore error; let auth interceptor handle authentication
+      }),
+    );
+  };
+}
+
+function appStateFactory(appService: AppService, store: Store): () => void | Observable<any> {
+  return (): void | Observable<any> => {
+    return appService.getServerTimestamp().pipe(
+      tap(({data}) => {
+        if (!data.getServerTimestamp) return; // User client's local timestamp
+
+        store.dispatch(new UpdateUtcTimestamp(data.getServerTimestamp));
       }),
     );
   };
