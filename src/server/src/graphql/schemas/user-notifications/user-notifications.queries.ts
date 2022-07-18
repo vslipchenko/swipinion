@@ -24,11 +24,11 @@ const userNotifications = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<Array<Notification>>(queryUserNotifications(tokenData.userId, offset));
+  const result = await db.query<Notification>(queryUserNotifications(tokenData.userId, offset));
 
   if (!result.rowCount) return null;
 
-  return result.rows[0];
+  return result.rows;
 };
 
 export const userNotificationsQueryResolvers = {
