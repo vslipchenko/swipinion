@@ -1,3 +1,4 @@
 export enum NotificationType {
-  FollowRequest = 1,
+  Followed = 1,
+  FollowRequest = 2,
 }
