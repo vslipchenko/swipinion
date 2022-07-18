@@ -27,7 +27,7 @@ export class UserSettingsService {
     return this.apollo.query<GetUserSettingsQueryResult>({
       query: GET_USER_SETTINGS,
       variables: {userId},
-      fetchPolicy: 'no-cache', // Always request fresh settings
+      fetchPolicy: 'no-cache', // TODO update profile settings caching once proper cache update strategy is figured out
     });
   }
 }

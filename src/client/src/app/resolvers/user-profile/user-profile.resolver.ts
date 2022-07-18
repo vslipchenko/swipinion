@@ -26,8 +26,8 @@ export class UserProfileResolver implements Resolve<unknown> {
     const username = navigatingProfile ? profile.username : route.params['username'];
 
     const query = navigatingProfile
-      ? this.profileService.getProfileData(true) // Assume user authed and querying own profile data
-      : this.profileService.getProfileData(false, username);
+      ? this.profileService.getProfileData() // Assume user authed and querying own profile data
+      : this.profileService.getProfileData(username);
 
     return query.pipe(
       // Query is cached

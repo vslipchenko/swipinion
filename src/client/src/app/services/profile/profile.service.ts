@@ -10,11 +10,11 @@ import {GetProfileDataQueryResult} from '~app/typings/profile/profile.interfaces
 export class ProfileService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public getProfileData(cacheFirst: boolean, username?: string): Observable<MutationResult<GetProfileDataQueryResult>> {
+  public getProfileData(username?: string): Observable<MutationResult<GetProfileDataQueryResult>> {
     return this.apollo.query<GetProfileDataQueryResult>({
       query: GET_PROFILE_DATA,
       variables: {username},
-      fetchPolicy: cacheFirst ? 'cache-first' : 'no-cache',
+      fetchPolicy: 'no-cache', // TODO update profile data caching once proper cache update strategy is figured out
     });
   }
 }
