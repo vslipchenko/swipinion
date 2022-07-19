@@ -1,8 +1,12 @@
 import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {map, Observable, tap} from 'rxjs';
+import {map, Observable, tap, throwError} from 'rxjs';
 import {UserNotificationsService} from '~app/services/user-notifications/user-notifications.service';
-import {FetchUserNotifications} from '~app/modules/user-notifications/store/user-notifications.actions';
+import {
+  AcceptFollowRequest,
+  DeclineFollowRequest,
+  FetchUserNotifications,
+} from '~app/modules/user-notifications/store/user-notifications.actions';
 import {
   GetUserNotificationsQueryResult,
   UINotification,
@@ -18,6 +22,7 @@ import {
 } from '~app/utilities/date';
 import {ElapsedTimeMeasure} from '~app/typings/date/date.enums';
 import {NotificationType} from '~app/typings/user-notifications/user-notifications.enums';
+import {FollowerService} from '~app/services/follower/follower.service';
 
 export interface UserNotificationsStateModel {
   notifications: Array<UINotification>;
@@ -37,9 +42,9 @@ const USER_NOTIFICATIONS_STATE = new StateToken<UserNotificationsStateModel>('us
 export class UserNotificationsState {
   public constructor(
     private readonly userNotificationsService: UserNotificationsService,
+    private readonly followerService: FollowerService,
     private readonly store: Store,
-  ) {
-  }
+  ) {}
 
   @Action(FetchUserNotifications)
   private fetchUserNotifications(
@@ -85,10 +90,32 @@ export class UserNotificationsState {
 
         context.setState((state) => ({
           ...state,
-          notifications: action.payload ? [...state.notifications, ...notifications] : notifications,
+          notifications: [...state.notifications, ...notifications],
           canLoadMore: data.userNotifications.length === USER_NOTIFICATIONS_FETCH_LIMIT,
         }));
       }),
     );
+  }
+
+  @Action(AcceptFollowRequest)
+  private acceptFollowRequest(
+    context: StateContext<UserNotificationsStateModel>,
+    action: AcceptFollowRequest,
+  ): Observable<unknown> {
+    return this.followerService.acceptFollowRequest(action.payload).pipe(
+      map((result) => {
+        if (!result.data?.acceptFollowRequest?.success) return throwError('');
+
+        return result;
+      }),
+    );
+  }
+
+  @Action(DeclineFollowRequest)
+  private declineFollowRequest(
+    context: StateContext<UserNotificationsStateModel>,
+    action: DeclineFollowRequest,
+  ): Observable<unknown> {
+    return this.followerService.declineFollowRequest(action.payload).pipe(tap(console.log));
   }
 }

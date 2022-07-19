@@ -15,3 +15,19 @@ export const UNFOLLOW_USER = gql`
     }
   }
 `;
+
+export const ACCEPT_FOLLOW_REQUEST = gql`
+  mutation ($recordId: String!) {
+    acceptFollowRequest(recordId: $recordId) {
+      success
+    }
+  }
+`;
+
+export const DECLINE_FOLLOW_REQUEST = gql`
+  mutation ($recordId: String!) {
+    declineFollowRequest(recordId: $recordId) {
+      success
+    }
+  }
+`;

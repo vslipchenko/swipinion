@@ -46,7 +46,7 @@
           <app-icon-button *ngIf="hasOptions(notification.type) && menuItems.menu" [matMenuTriggerFor]="menuItems.menu"
                            icon="more_horiz"></app-icon-button>
 
-          <app-menu-items #menuItems [items]="followRequestOptions"></app-menu-items>
+          <app-menu-items #menuItems [items]="followRequestOptions" [context]="notification"></app-menu-items>
         </div>
       </div>
     </div>

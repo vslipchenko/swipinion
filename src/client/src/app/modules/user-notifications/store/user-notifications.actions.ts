@@ -3,3 +3,15 @@ export class FetchUserNotifications {
 
   public constructor(public payload: number) {}
 }
+
+export class AcceptFollowRequest {
+  public static readonly type = '[UserNotifications] AcceptFollowRequest';
+
+  public constructor(public payload: string) {}
+}
+
+export class DeclineFollowRequest {
+  public static readonly type = '[UserNotifications] DeclineFollowRequest';
+
+  public constructor(public payload: string) {}
+}

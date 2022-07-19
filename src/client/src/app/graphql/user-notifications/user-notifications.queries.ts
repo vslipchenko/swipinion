@@ -6,7 +6,7 @@ export const GET_USER_NOTIFICATIONS = gql`
       type
       username
       thumbnail
-      read
+      follower_record_id
       created_at
     }
   }

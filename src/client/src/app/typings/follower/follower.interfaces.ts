@@ -7,3 +7,11 @@ export interface FollowUserMutationResult {
 export interface UnfollowUserMutationResult {
   unfollowUser: SuccessResponse;
 }
+
+export interface AcceptFollowRequestMutationResult {
+  acceptFollowRequest: SuccessResponse;
+}
+
+export interface DeclineFollowRequestMutationResult {
+  declineFollowRequest: SuccessResponse;
+}

@@ -5,6 +5,7 @@ export const userNotificationsTypes = gql`
     type: Int
     username: String
     thumbnail: String
+    follower_record_id: String
     read: Boolean
     created_at: Float
   }

@@ -33,3 +33,12 @@ export const queryUnfollowUser = (userId: string, followerId: string): QueryConf
   `,
   values: [userId, followerId],
 });
+
+export const queryAcceptFollowRequest = (recordId: string, userId: string): QueryConfig => ({
+  text: `
+    UPDATE followers
+    SET pending = false
+    WHERE id = $1 AND user_id = $2;
+  `,
+  values: [recordId, userId],
+});

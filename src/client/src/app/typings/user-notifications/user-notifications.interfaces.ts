@@ -8,6 +8,7 @@ export interface Notification {
   type: number;
   username: string;
   thumbnail: string;
+  follower_record_id: string;
   created_at: number;
 }
 
