@@ -6,6 +6,7 @@ import {SharedModule} from '~app/shared/shared.module';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxsModule} from '@ngxs/store';
 import {UserNotificationsState} from '~app/modules/user-notifications/store/user-notifications.state';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [UserNotificationsComponent],
@@ -20,6 +21,7 @@ import {UserNotificationsState} from '~app/modules/user-notifications/store/user
     NgxsModule.forFeature([UserNotificationsState]),
     SharedModule,
     MatIconModule,
+    MatMenuModule,
   ],
 })
 export class UserNotificationsModule {}

@@ -11,10 +11,7 @@ export interface Notification {
   created_at: number;
 }
 
-export interface UINotification {
-  type: number;
-  username: string;
-  thumbnail: string;
+export interface UINotification extends Notification {
+  text: string;
   timeElapsed$: Observable<string>;
-  created_at: number;
 }

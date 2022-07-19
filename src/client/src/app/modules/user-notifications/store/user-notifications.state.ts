@@ -17,6 +17,7 @@ import {
   millisecondsToMinutes,
 } from '~app/utilities/date';
 import {ElapsedTimeMeasure} from '~app/typings/date/date.enums';
+import {NotificationType} from '~app/typings/user-notifications/user-notifications.enums';
 
 export interface UserNotificationsStateModel {
   notifications: Array<UINotification>;
@@ -37,7 +38,8 @@ export class UserNotificationsState {
   public constructor(
     private readonly userNotificationsService: UserNotificationsService,
     private readonly store: Store,
-  ) {}
+  ) {
+  }
 
   @Action(FetchUserNotifications)
   private fetchUserNotifications(
@@ -49,8 +51,17 @@ export class UserNotificationsState {
         if (!data?.userNotifications) return;
 
         const notifications: Array<UINotification> = data.userNotifications.map((notification) => {
+          let text = '';
+
+          if (notification.type === NotificationType.Followed) {
+            text = 'Started following you';
+          } else if (notification.type === NotificationType.FollowRequest) {
+            text = 'Wants to follow you';
+          }
+
           return {
             ...notification,
+            text,
             timeElapsed$: this.store.select(AppSelectors.utcTimestamp).pipe(
               map((utcTimestamp) => {
                 const millisecondsElapsed = utcTimestamp - notification.created_at;
