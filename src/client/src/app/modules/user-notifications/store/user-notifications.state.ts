@@ -1,17 +1,25 @@
-import {Action, State, StateContext, StateToken} from '@ngxs/store';
+import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {Observable, tap} from 'rxjs';
+import {map, Observable, tap} from 'rxjs';
 import {UserNotificationsService} from '~app/services/user-notifications/user-notifications.service';
 import {FetchUserNotifications} from '~app/modules/user-notifications/store/user-notifications.actions';
 import {
   GetUserNotificationsQueryResult,
-  Notification,
+  UINotification,
 } from '~app/typings/user-notifications/user-notifications.interfaces';
 import {MutationResult} from 'apollo-angular';
 import {USER_NOTIFICATIONS_FETCH_LIMIT} from '~app/constants/user-notifications';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {
+  determineElapsedTimeMeasure,
+  millisecondsToDays,
+  millisecondsToHours,
+  millisecondsToMinutes,
+} from '~app/utilities/date';
+import {ElapsedTimeMeasure} from '~app/typings/date/date.enums';
 
 export interface UserNotificationsStateModel {
-  notifications: Array<Notification>;
+  notifications: Array<UINotification>;
   canLoadMore: boolean;
 }
 
@@ -26,7 +34,10 @@ const USER_NOTIFICATIONS_STATE = new StateToken<UserNotificationsStateModel>('us
 })
 @Injectable()
 export class UserNotificationsState {
-  public constructor(private readonly userNotificationsService: UserNotificationsService) {}
+  public constructor(
+    private readonly userNotificationsService: UserNotificationsService,
+    private readonly store: Store,
+  ) {}
 
   @Action(FetchUserNotifications)
   private fetchUserNotifications(
@@ -37,9 +48,33 @@ export class UserNotificationsState {
       tap(({data}) => {
         if (!data?.userNotifications) return;
 
+        const notifications: Array<UINotification> = data.userNotifications.map((notification) => {
+          return {
+            ...notification,
+            timeElapsed$: this.store.select(AppSelectors.utcTimestamp).pipe(
+              map((utcTimestamp) => {
+                const millisecondsElapsed = utcTimestamp - notification.created_at;
+
+                const measure = determineElapsedTimeMeasure(millisecondsElapsed);
+
+                switch (measure) {
+                  case ElapsedTimeMeasure.SECOND:
+                    return 'Now';
+                  case ElapsedTimeMeasure.MINUTE:
+                    return `${millisecondsToMinutes(millisecondsElapsed)}m`;
+                  case ElapsedTimeMeasure.HOUR:
+                    return `${millisecondsToHours(millisecondsElapsed)}h`;
+                  default:
+                    return `${millisecondsToDays(millisecondsElapsed)}d`;
+                }
+              }),
+            ),
+          };
+        });
+
         context.setState((state) => ({
           ...state,
-          notifications: action.payload ? [...state.notifications, ...data.userNotifications] : data.userNotifications,
+          notifications: action.payload ? [...state.notifications, ...notifications] : notifications,
           canLoadMore: data.userNotifications.length === USER_NOTIFICATIONS_FETCH_LIMIT,
         }));
       }),

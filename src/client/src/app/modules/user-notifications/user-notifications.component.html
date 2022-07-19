@@ -26,6 +26,7 @@
       <!--      Nothing is here yet-->
       <div *ngFor="let notification of notifications$ | async">
         {{notification.created_at}}
+        <div *ngIf="notification.timeElapsed$ | async as timeElapsed">{{timeElapsed}}</div>
       </div>
     </div>
   </div>
