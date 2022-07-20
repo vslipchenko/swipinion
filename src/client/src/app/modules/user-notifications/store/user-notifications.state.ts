@@ -106,6 +106,13 @@ export class UserNotificationsState {
       map((result) => {
         if (!result.data?.acceptFollowRequest?.success) return throwError('');
 
+        context.setState((state) => ({
+          ...state,
+          notifications: state.notifications.filter(
+            (notification) => notification.follower_record_id !== action.payload,
+          ),
+        }));
+
         return result;
       }),
     );
@@ -116,6 +123,19 @@ export class UserNotificationsState {
     context: StateContext<UserNotificationsStateModel>,
     action: DeclineFollowRequest,
   ): Observable<unknown> {
-    return this.followerService.declineFollowRequest(action.payload).pipe(tap(console.log));
+    return this.followerService.declineFollowRequest(action.payload).pipe(
+      map((result) => {
+        if (!result.data?.declineFollowRequest?.success) return throwError('');
+
+        context.setState((state) => ({
+          ...state,
+          notifications: state.notifications.filter(
+            (notification) => notification.follower_record_id !== action.payload,
+          ),
+        }));
+
+        return result;
+      }),
+    );
   }
 }

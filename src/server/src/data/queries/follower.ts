@@ -42,3 +42,12 @@ export const queryAcceptFollowRequest = (recordId: string, userId: string): Quer
   `,
   values: [recordId, userId],
 });
+
+export const queryDeleteFollowRequest = (recordId: string, userId: string): QueryConfig => ({
+  text: `
+    DELETE
+    FROM followers WHERE
+    id = $1 AND user_id = $2
+  `,
+  values: [recordId, userId],
+});

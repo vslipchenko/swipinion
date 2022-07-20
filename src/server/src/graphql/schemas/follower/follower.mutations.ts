@@ -1,7 +1,12 @@
 import {ApolloError, gql} from 'apollo-server-core';
 import {bigintValidator} from '../../../validators/shared';
 import {authenticationGuard} from '../../../utilities/guard';
-import {queryAcceptFollowRequest, queryFollowUser, queryUnfollowUser} from '../../../data/queries/follower';
+import {
+  queryAcceptFollowRequest,
+  queryDeleteFollowRequest,
+  queryFollowUser,
+  queryUnfollowUser,
+} from '../../../data/queries/follower';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {db} from '../../../data';
 import {queryDeleteNotificationByFollowersRecordId} from '../../../data/queries/user-notifications';
@@ -74,10 +79,32 @@ const acceptFollowRequest = async (
   return result;
 };
 
+const declineFollowRequest = async (
+  _: unknown,
+  {recordId}: {recordId: string},
+  {accessToken}: {accessToken: string},
+): Promise<SuccessResponse | ApolloError | null> => {
+  const {error} = bigintValidator.validate(recordId);
+
+  if (error) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.transaction(
+    queryDeleteFollowRequest(recordId, tokenData.userId),
+    queryDeleteNotificationByFollowersRecordId(recordId),
+  );
+
+  return result;
+};
+
 export const followerMutationResolvers = {
   Mutation: {
     followUser,
     unfollowUser,
     acceptFollowRequest,
+    declineFollowRequest,
   },
 };

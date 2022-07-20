@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {Actions, ofActionCompleted, ofActionErrored, Select, Store} from '@ngxs/store';
 import {
   AcceptFollowRequest,
+  DeclineFollowRequest,
   FetchUserNotifications,
 } from '~app/modules/user-notifications/store/user-notifications.actions';
 import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/user-notifications.selectors';
@@ -34,15 +35,19 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
     private readonly snackbar: MatSnackBar,
     private readonly actions$: Actions,
   ) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(AcceptFollowRequest)).subscribe(() => {
-      this.loading$.next(false);
-    });
-
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(AcceptFollowRequest)).subscribe(() => {
-      this.snackbar.open('Something went wrong. Please try again later', 'OK', {
-        panelClass: 'snackbar-error',
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionCompleted(AcceptFollowRequest, DeclineFollowRequest))
+      .subscribe(() => {
+        this.loading$.next(false);
       });
-    });
+
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionErrored(AcceptFollowRequest, DeclineFollowRequest))
+      .subscribe(() => {
+        this.snackbar.open('Something went wrong. Please try again later', 'OK', {
+          panelClass: 'snackbar-error',
+        });
+      });
   }
 
   public ngOnInit(): void {
@@ -68,6 +73,6 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
   private declineFollowRequest(notification: UINotification): void {
     this.loading$.next(true);
 
-    // this.store.dispatch(new AcceptFollowRequest(notification.follower_record_id));
+    this.store.dispatch(new DeclineFollowRequest(notification.follower_record_id));
   }
 }
