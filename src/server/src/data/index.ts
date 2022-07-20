@@ -3,7 +3,7 @@ import {environment} from '../environments';
 import {UsersTable} from './tables/users';
 import {OpinionsTable} from './tables/opinions';
 import {TagsTable} from './tables/tags';
-import {FollowersTable} from './tables/followers';
+import {FollowersTable} from './tables/user-followers';
 import {UserSettingsTable} from './tables/user-settings';
 import {UserNotificationsTable} from './tables/user-notifications';
 import {SuccessResponse} from '../typings/response/response.interfaces';

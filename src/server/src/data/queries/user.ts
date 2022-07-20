@@ -155,10 +155,10 @@ export const queryUserEditProfile = ({
 
 export const queryUserProfileCompleteData = (username: string, followerId: string): QueryConfig => ({
   text: `
-    SELECT followers.follower_id, followers.pending, users.id, users.thumbnail, users.bio
+    SELECT user_followers.follower_id, user_followers.pending, users.id, users.thumbnail, users.bio
     FROM users
-    LEFT JOIN followers 
-    ON users.id = followers.user_id AND followers.follower_id = $2
+    LEFT JOIN user_followers 
+    ON users.id = user_followers.user_id AND user_followers.follower_id = $2
     WHERE users.username = $1
   `,
   values: [username, followerId],

@@ -1,9 +1,9 @@
 import {Table} from '../../typings/data/data.interfaces';
 
 export const FollowersTable: Table = {
-  name: 'followers',
+  name: 'user_followers',
   query: `
-    CREATE TABLE IF NOT EXISTS followers (
+    CREATE TABLE IF NOT EXISTS user_followers (
       id BIGSERIAL PRIMARY KEY,
       user_id BIGINT REFERENCES users(id)
         ON DELETE CASCADE,

@@ -5,7 +5,7 @@ import {NotificationType} from '../../typings/user-notifications/user-notificati
 export const queryFollowUser = (userId: string, followerId: string): QueryConfig => ({
   text: `
     WITH record AS (
-      INSERT INTO followers
+      INSERT INTO user_followers
       (user_id, follower_id, pending)
       VALUES ($1, $2, (SELECT EXISTS (SELECT FROM user_settings WHERE user_id = $1 AND follow = ${FollowSettings.ByApprove})))
       RETURNING id, pending
@@ -28,7 +28,7 @@ export const queryFollowUser = (userId: string, followerId: string): QueryConfig
 
 export const queryUnfollowUser = (userId: string, followerId: string): QueryConfig => ({
   text: `
-    DELETE FROM followers
+    DELETE FROM user_followers
     WHERE user_id = $1 AND follower_id = $2
   `,
   values: [userId, followerId],
@@ -36,7 +36,7 @@ export const queryUnfollowUser = (userId: string, followerId: string): QueryConf
 
 export const queryAcceptFollowRequest = (recordId: string, userId: string): QueryConfig => ({
   text: `
-    UPDATE followers
+    UPDATE user_followers
     SET pending = false
     WHERE id = $1 AND user_id = $2;
   `,
@@ -46,7 +46,7 @@ export const queryAcceptFollowRequest = (recordId: string, userId: string): Quer
 export const queryDeleteFollowRequest = (recordId: string, userId: string): QueryConfig => ({
   text: `
     DELETE
-    FROM followers WHERE
+    FROM user_followers WHERE
     id = $1 AND user_id = $2
   `,
   values: [recordId, userId],
