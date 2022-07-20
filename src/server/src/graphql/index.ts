@@ -5,7 +5,7 @@ import {sharedTypeDefinitions} from './schemas/shared/shared.schema';
 import {authenticationResolvers, authenticationTypeDefinitions} from './schemas/authentication/authentication.schema';
 import {opinionResolvers, opinionTypeDefinitions} from './schemas/opinion/opinion.schema';
 import {profileResolvers, profileTypeDefinitions} from './schemas/profile/profile.schema';
-import {followerResolvers, followerTypeDefinitions} from './schemas/follower/follower.schema';
+import {userFollowerResolvers, userFollowerTypeDefinitions} from './schemas/user-follower/user-follower.schema';
 import {userSettingsResolvers, userSettingsTypeDefinitions} from './schemas/user-settings/user-settings.schema';
 import {
   userNotificationsResolvers,
@@ -21,7 +21,7 @@ export const schema = makeExecutableSchema({
     authenticationTypeDefinitions,
     opinionTypeDefinitions,
     profileTypeDefinitions,
-    followerTypeDefinitions,
+    userFollowerTypeDefinitions,
     userSettingsTypeDefinitions,
     userNotificationsTypeDefinitions,
   ],
@@ -32,7 +32,7 @@ export const schema = makeExecutableSchema({
     ...authenticationResolvers,
     ...opinionResolvers,
     ...profileResolvers,
-    ...followerResolvers,
+    ...userFollowerResolvers,
     ...userSettingsResolvers,
     ...userNotificationsResolvers,
   ),

@@ -1,6 +1,6 @@
 import {gql} from 'apollo-server-core';
 
-export const followerTypes = gql`
+export const userFollowerTypes = gql`
   type FollowingPendingStatus {
     pending: Boolean
   }

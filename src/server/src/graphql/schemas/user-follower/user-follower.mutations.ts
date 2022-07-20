@@ -11,7 +11,7 @@ import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {db} from '../../../data';
 import {queryDeleteNotificationByFollowersRecordId} from '../../../data/queries/user-notifications';
 
-export const followerMutationTypeDefinitions = gql`
+export const userFollowerMutationTypeDefinitions = gql`
   type Mutation {
     followUser(userId: String!): FollowingPendingStatus
     unfollowUser(userId: String!): Success
@@ -100,7 +100,7 @@ const declineFollowRequest = async (
   return result;
 };
 
-export const followerMutationResolvers = {
+export const userFollowerMutationResolvers = {
   Mutation: {
     followUser,
     unfollowUser,
