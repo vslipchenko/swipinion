@@ -1,0 +1,15 @@
+@use 'variables' as var;
+
+.notification {
+  border: 1px solid var.$color-light-darker;
+  border-radius: 10px;
+}
+
+.thumbnail {
+  width: 40px;
+  height: 40px;
+}
+
+.text {
+  font-size: 0.8rem;
+}

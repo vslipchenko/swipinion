@@ -8,8 +8,6 @@ import {
 } from '~app/modules/user-notifications/store/user-notifications.actions';
 import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/user-notifications.selectors';
 import {UINotification} from '~app/typings/user-notifications/user-notifications.interfaces';
-import {NotificationType} from '~app/typings/user-notifications/user-notifications.enums';
-import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 
@@ -24,11 +22,6 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
-
-  public followRequestOptions: Array<MenuItem> = [
-    {title: 'Accept', icon: 'done', color: 'primary', click: this.acceptFollowRequest.bind(this)},
-    {title: 'Decline', icon: 'close', color: 'warn', click: this.declineFollowRequest.bind(this)},
-  ];
 
   public constructor(
     private readonly store: Store,
@@ -60,17 +53,13 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
     this.loading$.complete();
   }
 
-  public hasOptions(type: NotificationType): boolean {
-    return type === NotificationType.FollowRequest;
-  }
-
-  private acceptFollowRequest(notification: UINotification): void {
+  public acceptFollowRequest(notification: UINotification): void {
     this.loading$.next(true);
 
     this.store.dispatch(new AcceptFollowRequest(notification.follower_record_id));
   }
 
-  private declineFollowRequest(notification: UINotification): void {
+  public declineFollowRequest(notification: UINotification): void {
     this.loading$.next(true);
 
     this.store.dispatch(new DeclineFollowRequest(notification.follower_record_id));

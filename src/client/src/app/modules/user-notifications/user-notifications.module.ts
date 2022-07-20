@@ -7,9 +7,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {NgxsModule} from '@ngxs/store';
 import {UserNotificationsState} from '~app/modules/user-notifications/store/user-notifications.state';
 import {MatMenuModule} from '@angular/material/menu';
+import { UserNotificationComponent } from './components/user-notification/user-notification.component';
 
 @NgModule({
-  declarations: [UserNotificationsComponent],
+  declarations: [UserNotificationsComponent, UserNotificationComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([

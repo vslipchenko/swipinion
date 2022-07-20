@@ -4,51 +4,19 @@
     class="absolute t-0 w-100">
   </app-progress-bar>
 
-  <!--  <div class="px-2">-->
   <div class="divider mb-2"></div>
-  <!--  </div>-->
 
   <div class="headline d-flex ai-center px-2 mb-2 w-100 mx-auto">
     <mat-icon class="mr-1">notifications</mat-icon>
     <h2>Notifications</h2>
   </div>
 
-  <!--  <div class="mx-auto" style="max-width: 600px">-->
-  <!--    <app-tabs-->
-  <!--      [tabs]="[{text: 'Opinions', icon: 'article'}, {text: 'Reactions', icon: 'thumbs_up_down'}, {text: 'Favorites', icon: 'star'}]"-->
-  <!--      color="accent"-->
-  <!--      headerPosition="below"-->
-  <!--      class="user-content-tabs d-block bg-dark"></app-tabs>-->
-  <!--  </div>-->
-
   <div class="primary-scrollbar pb-2">
     <div class="container mx-auto px-2 w-100">
       <!--      Nothing is here yet-->
-      <div *ngFor="let notification of notifications$ | async" class="notification d-flex p-2 jc-between ai-center">
-        <div class="d-flex ai-center">
-          <div class="mr-1">
-            <img *ngIf="notification.thumbnail" [src]="notification.thumbnail" alt=""
-                 routerLink="/user/{{notification.username}}" class="pointer">
-
-            <div *ngIf="!notification.thumbnail" class="thumbnail pointer"
-                 routerLink="/user/{{notification.username}}"></div>
-          </div>
-
-          <div>
-            <a class="truncate fw-medium link"
-               routerLink="/user/{{notification.username}}">{{notification.username}}</a>
-            <p style="font-size: 0.8rem">{{notification.text}}</p>
-          </div>
-        </div>
-
-        <div class="t-center">
-          <div *ngIf="notification.timeElapsed$ | async as timeElapsed" class="date">{{timeElapsed}}</div>
-          <app-icon-button *ngIf="hasOptions(notification.type) && menuItems.menu" [matMenuTriggerFor]="menuItems.menu"
-                           icon="more_horiz"></app-icon-button>
-
-          <app-menu-items #menuItems [items]="followRequestOptions" [context]="notification"></app-menu-items>
-        </div>
-      </div>
+      <app-user-notification *ngFor="let notification of notifications$ | async" [notification]="notification"
+                             (accept)="acceptFollowRequest(notification)"
+                             (decline)="declineFollowRequest(notification)"></app-user-notification>
     </div>
   </div>
 </div>
