@@ -17,12 +17,12 @@ export class UserNotificationComponent {
   @Output() public delete = new EventEmitter();
 
   public followRequestOptions: Array<MenuItem> = [
-    {title: 'Accept', icon: 'done', color: 'primary', click: this.accept.emit.bind(this)},
-    {title: 'Decline', icon: 'close', color: 'warn', click: this.decline.emit.bind(this)},
+    {title: 'Accept', icon: 'done', color: 'primary', click: (): void => this.accept.emit()},
+    {title: 'Decline', icon: 'close', color: 'warn', click: (): void => this.decline.emit()},
   ];
 
   public defaultOptions: Array<MenuItem> = [
-    {title: 'Delete', icon: 'delete', color: 'warn', click: this.delete.emit.bind(this)},
+    {title: 'Delete', icon: 'delete', color: 'warn', click: (): void => this.delete.emit()},
   ];
 
   public getOptions(type: NotificationType): Array<MenuItem> {
