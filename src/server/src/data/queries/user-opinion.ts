@@ -54,7 +54,12 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
 
 export const queryOpinionsByUsername = (username: string, offset: number): QueryConfig => ({
   text: `
-    SELECT user_opinions.id, user_opinions.type, user_opinions.file_url, user_opinions.title, user_opinions.description, array_agg(tags.tag) as tags
+    SELECT user_opinions.id, 
+        user_opinions.type, 
+        user_opinions.file_url, 
+        user_opinions.title, 
+        user_opinions.description, 
+        array_agg(tags.tag) as tags
     FROM user_opinions
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id
       WHERE user_opinions.user_id = (SELECT id FROM users WHERE username = $1)

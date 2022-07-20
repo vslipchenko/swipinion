@@ -1,6 +1,6 @@
 import {gql} from 'apollo-server-core';
 
-export const opinionInputs = gql`
+export const userOpinionInputs = gql`
   input CreateOpinion {
     type: Int!
     fileUrl: String

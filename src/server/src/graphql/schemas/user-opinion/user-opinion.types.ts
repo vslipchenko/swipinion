@@ -1,6 +1,6 @@
 import {gql} from 'apollo-server-core';
 
-export const opinionTypes = gql`
+export const userOpinionTypes = gql`
   type Opinion {
     id: ID
     type: Int

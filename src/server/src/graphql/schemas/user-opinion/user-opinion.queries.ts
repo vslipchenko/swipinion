@@ -3,7 +3,7 @@ import {db} from '../../../data';
 import {queryOpinionsByUsername} from '../../../data/queries/user-opinion';
 import {getOpinionsByUsernameValidator} from '../../../validators/opinion';
 
-export const opinionQueryTypeDefinitions = gql`
+export const userOpinionQueryTypeDefinitions = gql`
   type Query {
     getOpinionsByUsername(input: GetOpinions!): [Opinion!]
   }
@@ -31,7 +31,7 @@ export const getOpinionsByUsername = async (
   return result.rows;
 };
 
-export const opinionQueryResolvers = {
+export const userOpinionQueryResolvers = {
   Query: {
     getOpinionsByUsername,
   },

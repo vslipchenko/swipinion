@@ -12,7 +12,7 @@ import {CreateOpinion} from '../../../typings/opinion/opinion.interfaces';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {bigintValidator} from '../../../validators/shared';
 
-export const opinionMutationTypeDefinitions = gql`
+export const userOpinionMutationTypeDefinitions = gql`
   type Mutation {
     createOpinion(input: CreateOpinion!): ID
     deleteOpinion(opinionId: String!): Success
@@ -67,7 +67,7 @@ const deleteOpinion = async (
   return {success: Boolean(result.rowCount)};
 };
 
-export const opinionMutationResolvers = {
+export const userOpinionMutationResolvers = {
   Mutation: {
     createOpinion,
     deleteOpinion,
