@@ -17,9 +17,9 @@
 
   <div class="t-center">
     <div *ngIf="notification.timeElapsed$ | async as timeElapsed" class="date">{{timeElapsed}}</div>
-    <app-icon-button *ngIf="hasOptions(notification.type) && menuItems.menu" [matMenuTriggerFor]="menuItems.menu"
+    <app-icon-button *ngIf="menuItems.menu" [matMenuTriggerFor]="menuItems.menu"
                      icon="more_horiz"></app-icon-button>
 
-    <app-menu-items #menuItems [items]="followRequestOptions" [context]="notification"></app-menu-items>
+    <app-menu-items #menuItems [items]="getOptions(notification.type)" [context]="notification"></app-menu-items>
   </div>
 </div>

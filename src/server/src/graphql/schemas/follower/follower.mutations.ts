@@ -73,7 +73,7 @@ const acceptFollowRequest = async (
 
   const result = await db.transaction(
     queryAcceptFollowRequest(recordId, tokenData.userId),
-    queryDeleteNotificationByFollowersRecordId(recordId),
+    queryDeleteNotificationByFollowersRecordId(recordId, tokenData.userId),
   );
 
   return result;
@@ -94,7 +94,7 @@ const declineFollowRequest = async (
 
   const result = await db.transaction(
     queryDeleteFollowRequest(recordId, tokenData.userId),
-    queryDeleteNotificationByFollowersRecordId(recordId),
+    queryDeleteNotificationByFollowersRecordId(recordId, tokenData.userId),
   );
 
   return result;

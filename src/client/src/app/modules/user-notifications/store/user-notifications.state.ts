@@ -5,6 +5,7 @@ import {UserNotificationsService} from '~app/services/user-notifications/user-no
 import {
   AcceptFollowRequest,
   DeclineFollowRequest,
+  DeleteNotification,
   FetchUserNotifications,
 } from '~app/modules/user-notifications/store/user-notifications.actions';
 import {
@@ -132,6 +133,25 @@ export class UserNotificationsState {
           notifications: state.notifications.filter(
             (notification) => notification.follower_record_id !== action.payload,
           ),
+        }));
+
+        return result;
+      }),
+    );
+  }
+
+  @Action(DeleteNotification)
+  private deleteNotification(
+    context: StateContext<UserNotificationsStateModel>,
+    action: DeleteNotification,
+  ): Observable<unknown> {
+    return this.userNotificationsService.deleteNotification(action.payload).pipe(
+      map((result) => {
+        if (!result.data?.deleteNotification?.success) return throwError('');
+
+        context.setState((state) => ({
+          ...state,
+          notifications: state.notifications.filter((notification) => notification.id !== action.payload),
         }));
 
         return result;

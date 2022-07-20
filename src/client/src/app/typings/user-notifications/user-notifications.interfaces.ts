@@ -1,10 +1,16 @@
 import {Observable} from 'rxjs';
+import {SuccessResponse} from '~app/typings/response/response.interfaces';
 
 export interface GetUserNotificationsQueryResult {
   userNotifications: Array<Notification>;
 }
 
+export interface DeleteNotificationMutationResult {
+  deleteNotification: SuccessResponse;
+}
+
 export interface Notification {
+  id: string;
   type: number;
   username: string;
   thumbnail: string;

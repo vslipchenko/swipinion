@@ -16,7 +16,8 @@
       <!--      Nothing is here yet-->
       <app-user-notification *ngFor="let notification of notifications$ | async" [notification]="notification"
                              (accept)="acceptFollowRequest(notification)"
-                             (decline)="declineFollowRequest(notification)"></app-user-notification>
+                             (decline)="declineFollowRequest(notification)"
+                             (delete)="deleteNotification(notification)"></app-user-notification>
     </div>
   </div>
 </div>

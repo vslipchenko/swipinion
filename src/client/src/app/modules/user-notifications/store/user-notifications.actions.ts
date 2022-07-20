@@ -15,3 +15,9 @@ export class DeclineFollowRequest {
 
   public constructor(public payload: string) {}
 }
+
+export class DeleteNotification {
+  public static readonly type = '[UserNotifications] DeleteNotification';
+
+  public constructor(public payload: string) {}
+}

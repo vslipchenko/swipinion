@@ -4,6 +4,7 @@ import {Actions, ofActionCompleted, ofActionErrored, Select, Store} from '@ngxs/
 import {
   AcceptFollowRequest,
   DeclineFollowRequest,
+  DeleteNotification,
   FetchUserNotifications,
 } from '~app/modules/user-notifications/store/user-notifications.actions';
 import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/user-notifications.selectors';
@@ -29,13 +30,13 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
     private readonly actions$: Actions,
   ) {
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionCompleted(AcceptFollowRequest, DeclineFollowRequest))
+      .pipe(takeUntil(this.destroy$), ofActionCompleted(AcceptFollowRequest, DeclineFollowRequest, DeleteNotification))
       .subscribe(() => {
         this.loading$.next(false);
       });
 
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionErrored(AcceptFollowRequest, DeclineFollowRequest))
+      .pipe(takeUntil(this.destroy$), ofActionErrored(AcceptFollowRequest, DeclineFollowRequest, DeleteNotification))
       .subscribe(() => {
         this.snackbar.open('Something went wrong. Please try again later', 'OK', {
           panelClass: 'snackbar-error',
@@ -63,5 +64,11 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
     this.loading$.next(true);
 
     this.store.dispatch(new DeclineFollowRequest(notification.follower_record_id));
+  }
+
+  public deleteNotification(notification: UINotification): void {
+    this.loading$.next(true);
+
+    this.store.dispatch(new DeleteNotification(notification.id));
   }
 }

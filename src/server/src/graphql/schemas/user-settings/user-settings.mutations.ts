@@ -4,6 +4,7 @@ import {UserSettings} from '../../../typings/user-settings/user-settings.interfa
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {queryUpdateUserSettings} from '../../../data/queries/user-settings';
+import {SuccessResponse} from '../../../typings/response/response.interfaces';
 
 export const userSettingsMutationTypeDefinitions = gql`
   type Mutation {
@@ -15,7 +16,7 @@ const updateUserSettings = async (
   _: unknown,
   {input}: {input: UserSettings},
   {accessToken}: {accessToken: string},
-): Promise<{success: boolean} | ApolloError | null> => {
+): Promise<SuccessResponse | ApolloError | null> => {
   const {error} = updateUserSettingsValidator.validate(input);
 
   if (error) return null;
