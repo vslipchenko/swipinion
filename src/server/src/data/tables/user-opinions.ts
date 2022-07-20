@@ -1,9 +1,9 @@
 import {Table} from '../../typings/data/data.interfaces';
 
-export const OpinionsTable: Table = {
-  name: 'opinions',
+export const UserOpinionsTable: Table = {
+  name: 'user_opinions',
   query: `
-    CREATE TABLE IF NOT EXISTS opinions (
+    CREATE TABLE IF NOT EXISTS user_opinions (
       id BIGSERIAL PRIMARY KEY,
       user_id BIGINT,
       type SMALLINT,

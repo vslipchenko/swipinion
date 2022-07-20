@@ -8,7 +8,7 @@ export const TagsTable: Table = {
       tag VARCHAR (35),
       opinion_id BIGINT,
         FOREIGN KEY(opinion_id)
-        REFERENCES opinions(id)
+        REFERENCES user_opinions(id)
         ON DELETE CASCADE
     );
   `,

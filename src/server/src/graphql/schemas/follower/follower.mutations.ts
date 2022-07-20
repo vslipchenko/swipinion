@@ -6,7 +6,7 @@ import {
   queryDeleteFollowRequest,
   queryFollowUser,
   queryUnfollowUser,
-} from '../../../data/queries/follower';
+} from '../../../data/queries/user-follower';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {db} from '../../../data';
 import {queryDeleteNotificationByFollowersRecordId} from '../../../data/queries/user-notifications';

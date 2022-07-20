@@ -1,7 +1,7 @@
 import {Pool, QueryConfig, QueryResult} from 'pg';
 import {environment} from '../environments';
 import {UsersTable} from './tables/users';
-import {OpinionsTable} from './tables/opinions';
+import {UserOpinionsTable} from './tables/user-opinions';
 import {TagsTable} from './tables/tags';
 import {FollowersTable} from './tables/user-followers';
 import {UserSettingsTable} from './tables/user-settings';
@@ -48,7 +48,7 @@ export const db = {
       UsersTable,
       UserNotificationsTable,
       UserSettingsTable,
-      OpinionsTable,
+      UserOpinionsTable,
       TagsTable,
       FollowersTable,
       // ... Append other tables to sync
