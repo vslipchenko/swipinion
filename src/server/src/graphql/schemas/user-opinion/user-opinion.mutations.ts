@@ -62,7 +62,7 @@ const deleteOpinion = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryOpinionDelete(opinionId, tokenData.userId));
+  const result = await db.query(queryOpinionDelete(tokenData.userId, opinionId));
 
   return {success: Boolean(result.rowCount)};
 };
