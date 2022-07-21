@@ -1,13 +1,14 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {Observable} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {MatDialog} from '@angular/material/dialog';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-user-navbar',
@@ -15,9 +16,10 @@ import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
   styleUrls: ['./user-navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserNavbarComponent {
+export class UserNavbarComponent implements Destroyable {
   @Select(AppSelectors.authedUserProfileTeaser)
   public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
+  public readonly destroy$ = new Subject<void>();
 
   public readonly navbarItems: Array<MenuItem> = [
     {title: 'Share opinion', icon: 'post_add', click: (): void => this.shareOpinion()},
@@ -40,8 +42,12 @@ export class UserNavbarComponent {
     private readonly authenticationService: AuthenticationService,
     private readonly userNavbarService: UserNavbarService,
   ) {
-    // !TODO: If component is not persistent, consider unsubscribe
-    this.userNavbarService.shareOpinion$.subscribe(() => this.shareOpinion());
+    this.userNavbarService.shareOpinion$.pipe(takeUntil(this.destroy$)).subscribe(() => this.shareOpinion());
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public shareOpinion(): void {

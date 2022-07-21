@@ -9,8 +9,9 @@ import {EditProfileDialogComponent} from '~app/modules/user/components/edit-prof
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UserRole} from '~app/typings/user/user.enums';
+import {UserContentTab, UserRole} from '~app/typings/user/user.enums';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
+import {Tab} from '~app/typings/tabs/tabs.interfaces';
 
 @Component({
   selector: 'app-user',
@@ -35,6 +36,15 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly destroy$ = new Subject<void>();
   public readonly username: string = '';
   public readonly isProfilePath: boolean = false;
+  public readonly userContentTabs: Array<Tab> = [
+    {id: UserContentTab.Opinions, text: 'Opinions', icon: 'article'},
+    {
+      id: UserContentTab.Reactions,
+      text: 'Reactions',
+      icon: 'thumbs_up_down',
+    },
+    {id: UserContentTab.Favorites, text: 'Favorites', icon: 'star'},
+  ];
 
   public constructor(
     private readonly store: Store,
@@ -84,6 +94,8 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public shareOpinion(): void {
     this.userNavbarService.shareOpinion$.next();
   }
+
+  public navigateTab(tab: Tab): void {}
 
   private trackScrollProgress(): void {
     fromEvent(this.wrapper.nativeElement, 'scroll')

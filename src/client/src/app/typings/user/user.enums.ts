@@ -3,3 +3,9 @@ export enum UserRole {
   Viewer, // Authed with read only permissions
   User, // Authed read / write permissions
 }
+
+export enum UserContentTab {
+  Opinions,
+  Reactions,
+  Favorites,
+}
