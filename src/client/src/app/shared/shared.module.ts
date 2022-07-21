@@ -47,6 +47,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {RadioGroupComponent} from './components/radio-group/radio-group.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MessagesComponent} from '~app/shared/components/messages/messages.component';
+import {EmptyContentComponent} from './components/empty-content/empty-content.component';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -83,6 +84,7 @@ import {MessagesComponent} from '~app/shared/components/messages/messages.compon
     AccordionComponent,
     RadioGroupComponent,
     MessagesComponent,
+    EmptyContentComponent,
   ],
   imports: [
     CommonModule,
@@ -127,6 +129,7 @@ import {MessagesComponent} from '~app/shared/components/messages/messages.compon
     AccordionComponent,
     RadioGroupComponent,
     MessagesComponent,
+    EmptyContentComponent,
   ],
 })
 export class SharedModule {}
