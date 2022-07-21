@@ -10,6 +10,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserRole} from '~app/typings/user/user.enums';
+import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 
 @Component({
   selector: 'app-user',
@@ -35,7 +36,11 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly username: string = '';
   public readonly isProfilePath: boolean = false;
 
-  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
+  public constructor(
+    private readonly store: Store,
+    private readonly dialog: MatDialog,
+    private readonly userNavbarService: UserNavbarService,
+  ) {
     const profileSnapshot = this.profileSnapshot;
     this.username = profileSnapshot.username;
     this.isProfilePath = profileSnapshot.isProfilePath;
@@ -74,6 +79,10 @@ export class UserComponent implements OnInit, AfterViewInit, Destroyable {
       panelClass: ['dialog', 'extended-dialog'],
       data: this.profileSnapshot,
     });
+  }
+
+  public shareOpinion(): void {
+    this.userNavbarService.shareOpinion$.next();
   }
 
   private trackScrollProgress(): void {

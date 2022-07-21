@@ -7,6 +7,7 @@ import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {MatDialog} from '@angular/material/dialog';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 
 @Component({
   selector: 'app-user-navbar',
@@ -37,7 +38,11 @@ export class UserNavbarComponent {
     private readonly store: Store,
     private readonly dialog: MatDialog,
     private readonly authenticationService: AuthenticationService,
-  ) {}
+    private readonly userNavbarService: UserNavbarService,
+  ) {
+    // !TODO: If component is not persistent, consider unsubscribe
+    this.userNavbarService.shareOpinion$.subscribe(() => this.shareOpinion());
+  }
 
   public shareOpinion(): void {
     this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'extended-dialog']});

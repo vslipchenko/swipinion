@@ -51,7 +51,8 @@
       <app-empty-content *ngIf="!opinions.length; else opinionList" icon="lightbulb_circle"
                          class="d-block mt-2-3"
                          tip="You can add new opinions through user menu's action «Share opinion»">
-        <app-button text="Share your first opinion " class="mt-1 d-flex jc-center"></app-button>
+        <app-button text="Share your first opinion " class="mt-1 d-flex jc-center"
+                    (clicked)="shareOpinion()"></app-button>
         <p class="mt-h t-center">with the world!</p>
       </app-empty-content>
 
