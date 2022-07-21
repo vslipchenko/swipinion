@@ -48,13 +48,21 @@
 
     <div *ngIf="opinions$ | async as opinions" class="content" [class.pb-extended]="data.showBottomBar">
       <!-- TODO: Add trackBy -->
-      <app-opinion-preview *ngFor="let opinion of opinions" [username]="username" [id]="opinion.id"
-                           [title]="opinion.title"
-                           [description]="opinion.description" [fileUrl]="opinion.file_url"
-                           [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
+      <app-empty-content *ngIf="!opinions.length; else opinionList" icon="lightbulb_circle"
+                         class="d-block mt-2-3">
+        <app-button text="Share your first opinion " class="mt-1 d-flex jc-center"></app-button>
+        <p class="mt-h t-center">with the world!</p>
+      </app-empty-content>
 
-      <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
-                       icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"></app-flat-button>
+      <ng-template #opinionList>
+        <app-opinion-preview *ngFor="let opinion of opinions" [username]="username" [id]="opinion.id"
+                             [title]="opinion.title"
+                             [description]="opinion.description" [fileUrl]="opinion.file_url"
+                             [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
+
+        <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
+                         icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"></app-flat-button>
+      </ng-template>
     </div>
 
     <!-- 3 types of messages: Inbox, Sent, Saved -->

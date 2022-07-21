@@ -129,7 +129,7 @@ export class UserState {
   ): Observable<MutationResult<DeleteOpinionMutationResult>> {
     return this.opinionService.deleteOpinion(action.payload).pipe(
       tap(({data}) => {
-        if (!data?.deleteOpinion) return;
+        if (!data?.deleteOpinion?.success) return;
 
         context.setState((state) => ({
           ...state,

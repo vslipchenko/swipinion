@@ -14,7 +14,7 @@
   <div class="primary-scrollbar pb-2">
     <div *ngIf="notifications$ | async as notifications" class="container mx-auto px-2 w-100">
       <app-empty-content *ngIf="!notifications.length; else notificationList"
-                         text="Stay informed about important activity" class="d-block mt-2"
+                         text="Stay informed about important activity" class="d-block mt-2-3"
                          icon="circle_notifications"
       ></app-empty-content>
 
