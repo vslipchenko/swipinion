@@ -1,0 +1,6 @@
+@use 'variables' as var;
+
+.mat-tooltip {
+  background-color: var.$color-light-darker;
+  font-size: 0.8rem;
+}
