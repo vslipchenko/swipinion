@@ -1,6 +1,13 @@
 <div class="p-2 container">
-  <mat-icon class="icon d-block mx-auto">{{icon}}</mat-icon>
-  <p *ngIf="text" class="mt-1 t-center">{{text}}</p>
+  <div class="relative">
+    <mat-icon *ngIf="tip" class="tip absolute pointer"
+              [matTooltip]="tip"
+    >help
+    </mat-icon>
 
-  <ng-content></ng-content>
+    <mat-icon class="icon d-block mx-auto">{{icon}}</mat-icon>
+    <p *ngIf="text" class="mt-1 t-center">{{text}}</p>
+
+    <ng-content></ng-content>
+  </div>
 </div>

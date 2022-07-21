@@ -48,6 +48,7 @@ import {RadioGroupComponent} from './components/radio-group/radio-group.componen
 import {MatRadioModule} from '@angular/material/radio';
 import {MessagesComponent} from '~app/shared/components/messages/messages.component';
 import {EmptyContentComponent} from './components/empty-content/empty-content.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -104,6 +105,7 @@ import {EmptyContentComponent} from './components/empty-content/empty-content.co
     MatProgressBarModule,
     MatExpansionModule,
     MatRadioModule,
+    MatTooltipModule,
     // MatCardModule,
     // MatDividerModule,
   ],

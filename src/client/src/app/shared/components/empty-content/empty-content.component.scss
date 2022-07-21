@@ -5,6 +5,15 @@
   border-radius: 10px;
 }
 
+.tip {
+  right: 0;
+  opacity: 0.8;
+}
+
+.tip:hover {
+  opacity: 1;
+}
+
 .icon {
   height: 100px;
   width: 100px;

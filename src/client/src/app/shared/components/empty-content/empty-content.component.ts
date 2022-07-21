@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-empty-content',
@@ -6,13 +6,8 @@ import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, In
   styleUrls: ['./empty-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmptyContentComponent implements AfterViewInit {
+export class EmptyContentComponent {
   @Input() public icon = '';
   @Input() public text = '';
-
-  public constructor(private readonly changeDetector: ChangeDetectorRef) {}
-
-  public ngAfterViewInit(): void {
-    this.changeDetector.detach();
-  }
+  @Input() public tip = '';
 }
