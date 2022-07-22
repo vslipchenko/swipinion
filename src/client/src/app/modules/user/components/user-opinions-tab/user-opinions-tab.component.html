@@ -6,10 +6,16 @@
     <!-- TODO: Add trackBy -->
     <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="article"
                              class="d-block mt-2-3"
-                             tip="You can add new opinions through user menu's action «Share opinion»">
-      <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
-                  (clicked)="shareOpinion()"></app-button>
-      <p class="mt-h t-center">with others!</p>
+                             [tip]="isProfilePath ? 'You can add new opinions through user menu\'s action «Share opinion»' : ''">
+      <ng-container *ngIf="isProfilePath; else emptyContent">
+        <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
+                    (clicked)="shareOpinion()"></app-button>
+        <p class="mt-h t-center">with others!</p>
+      </ng-container>
+
+      <ng-template #emptyContent>
+        <p class="mt-h t-center">User has not shared any opinions yet</p>
+      </ng-template>
     </app-content-placeholder>
 
     <ng-template #opinionList>
