@@ -1,12 +1,12 @@
 <ng-container *ngIf="opinions$ | async as opinions">
   <!-- TODO: Add trackBy -->
-  <app-empty-content *ngIf="!opinions.length; else opinionList" icon="lightbulb_circle"
-                     class="d-block mt-2-3"
-                     tip="You can add new opinions through user menu's action «Share opinion»">
+  <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="lightbulb_circle"
+                           class="d-block mt-2-3"
+                           tip="You can add new opinions through user menu's action «Share opinion»">
     <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
                 (clicked)="shareOpinion()"></app-button>
     <p class="mt-h t-center">with others!</p>
-  </app-empty-content>
+  </app-content-placeholder>
 
   <ng-template #opinionList>
     <app-opinion-preview *ngFor="let opinion of opinions" [username]="username" [id]="opinion.id"
