@@ -12,6 +12,9 @@ import {ProfileActionBarComponent} from './components/profile-action-bar/profile
 import {MatMenuModule} from '@angular/material/menu';
 import {StatisticsActionComponent} from './components/statistics-action/statistics-action.component';
 import {UnfollowUserDialogComponent} from './components/unfollow-user-dialog/unfollow-user-dialog.component';
+import { UserOpinionsTabComponent } from './components/user-opinions-tab/user-opinions-tab.component';
+import { UserReactionsTabComponent } from './components/user-reactions-tab/user-reactions-tab.component';
+import { UserFavoritesTabComponent } from './components/user-favorites-tab/user-favorites-tab.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,9 @@ import {UnfollowUserDialogComponent} from './components/unfollow-user-dialog/unf
     ProfileActionBarComponent,
     StatisticsActionComponent,
     UnfollowUserDialogComponent,
+    UserOpinionsTabComponent,
+    UserReactionsTabComponent,
+    UserFavoritesTabComponent,
   ],
   imports: [
     CommonModule,
