@@ -1,6 +1,6 @@
 <ng-container *ngIf="opinions$ | async as opinions">
   <!-- TODO: Add trackBy -->
-  <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="lightbulb_circle"
+  <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="article"
                            class="d-block mt-2-3"
                            tip="You can add new opinions through user menu's action «Share opinion»">
     <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
