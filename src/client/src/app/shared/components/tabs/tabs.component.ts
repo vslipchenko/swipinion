@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
-import {MatTabHeaderPosition} from '@angular/material/tabs/tab-group';
+import {MatTabChangeEvent, MatTabHeaderPosition} from '@angular/material/tabs/tab-group';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
 
 @Component({
@@ -14,6 +14,6 @@ export class TabsComponent {
   @Input() public tabs: Array<Tab> = [];
   @Input() public headerPosition: MatTabHeaderPosition = 'above';
 
-  @Output() public clicked = new EventEmitter<Tab>();
+  @Output() public selectedTabChange = new EventEmitter<MatTabChangeEvent>();
   // @Input() public flipBars = false;
 }

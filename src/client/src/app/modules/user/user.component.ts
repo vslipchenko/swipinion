@@ -7,7 +7,8 @@ import {EditProfileDialogComponent} from '~app/modules/user/components/edit-prof
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UserContentTab, UserRole} from '~app/typings/user/user.enums';
+import {UserContentTabIndex, UserRole} from '~app/typings/user/user.enums';
+import {MatTabChangeEvent} from '@angular/material/tabs/tab-group';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
 
 @Component({
@@ -29,16 +30,17 @@ export class UserComponent implements AfterViewInit, Destroyable {
   public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
+  public readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
   public readonly username: string = '';
   public readonly isProfilePath: boolean = false;
+  public readonly userContentTabIndex = UserContentTabIndex;
   public readonly userContentTabs: Array<Tab> = [
-    {id: UserContentTab.Opinions, text: 'Opinions', icon: 'article'},
+    {text: 'Opinions', icon: 'article'},
     {
-      id: UserContentTab.Reactions,
       text: 'Reactions',
       icon: 'thumbs_up_down',
     },
-    {id: UserContentTab.Favorites, text: 'Favorites', icon: 'star'},
+    {text: 'Favorites', icon: 'star'},
   ];
 
   public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
@@ -64,7 +66,9 @@ export class UserComponent implements AfterViewInit, Destroyable {
     });
   }
 
-  public navigateTab(tab: Tab): void {}
+  public navigateTab(event: MatTabChangeEvent): void {
+    this.activeTab$.next(event.index);
+  }
 
   private trackScrollProgress(): void {
     fromEvent(this.wrapper.nativeElement, 'scroll')
