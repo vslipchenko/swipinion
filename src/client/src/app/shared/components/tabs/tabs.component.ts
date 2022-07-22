@@ -7,6 +7,7 @@ import {Tab} from '~app/typings/tabs/tabs.interfaces';
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
+  // providers: [{provide: ANIMATION_MODULE_TYPE, useValue: 'NoopAnimations'}],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabsComponent {
