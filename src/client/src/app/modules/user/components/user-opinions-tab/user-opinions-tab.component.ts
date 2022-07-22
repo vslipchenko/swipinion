@@ -1,10 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
-import {Select, Store} from '@ngxs/store';
+import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchOpinions} from '~app/modules/user/store/user.actions';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-user-opinions-tab',
@@ -12,15 +13,27 @@ import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
   styleUrls: ['./user-opinions-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserOpinionsTabComponent implements OnInit {
+export class UserOpinionsTabComponent implements OnInit, Destroyable {
   @Input() public username = '';
   @Input() public isProfilePath = false;
 
   @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
 
   public readonly opinions$!: Observable<Array<Opinion>>;
+  public readonly initialLoading$ = new BehaviorSubject(false);
+  public readonly disableLoadMore$ = new BehaviorSubject(false);
+  public readonly destroy$ = new Subject<void>();
 
-  public constructor(private readonly store: Store, private readonly userNavbarService: UserNavbarService) {
+  public constructor(
+    private readonly store: Store,
+    private readonly userNavbarService: UserNavbarService,
+    private readonly actions$: Actions,
+  ) {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchOpinions)).subscribe(() => {
+      this.initialLoading$.next(false);
+      this.disableLoadMore$.next(false);
+    });
+
     this.isProfilePath = this.store.selectSnapshot(UserSelectors.isProfilePath);
 
     this.opinions$ = this.store.select(
@@ -29,7 +42,15 @@ export class UserOpinionsTabComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.initialLoading$.next(true);
+
     this.fetchUserOpinions(0);
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.initialLoading$.complete();
   }
 
   public shareOpinion(): void {
@@ -37,6 +58,8 @@ export class UserOpinionsTabComponent implements OnInit {
   }
 
   public fetchUserOpinions(offset: number): void {
+    this.disableLoadMore$.next(true);
+
     this.store.dispatch(
       new FetchOpinions({
         username: this.username,

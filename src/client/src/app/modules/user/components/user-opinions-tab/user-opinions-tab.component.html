@@ -1,20 +1,27 @@
-<ng-container *ngIf="opinions$ | async as opinions">
-  <!-- TODO: Add trackBy -->
-  <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="article"
-                           class="d-block mt-2-3"
-                           tip="You can add new opinions through user menu's action «Share opinion»">
-    <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
-                (clicked)="shareOpinion()"></app-button>
-    <p class="mt-h t-center">with others!</p>
-  </app-content-placeholder>
+<app-progress-spinner *ngIf="initialLoading$ | async; else content"
+                      class="d-flex jc-center ai-center spinner"></app-progress-spinner>
 
-  <ng-template #opinionList>
-    <app-opinion-preview *ngFor="let opinion of opinions" [username]="username" [id]="opinion.id"
-                         [title]="opinion.title"
-                         [description]="opinion.description" [fileUrl]="opinion.file_url"
-                         [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
+<ng-template #content>
+  <ng-container *ngIf="opinions$ | async as opinions">
+    <!-- TODO: Add trackBy -->
+    <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="article"
+                             class="d-block mt-2-3"
+                             tip="You can add new opinions through user menu's action «Share opinion»">
+      <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
+                  (clicked)="shareOpinion()"></app-button>
+      <p class="mt-h t-center">with others!</p>
+    </app-content-placeholder>
 
-    <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
-                     icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"></app-flat-button>
-  </ng-template>
-</ng-container>
+    <ng-template #opinionList>
+      <app-opinion-preview *ngFor="let opinion of opinions" [username]="username" [id]="opinion.id"
+                           [title]="opinion.title"
+                           [description]="opinion.description" [fileUrl]="opinion.file_url"
+                           [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
+
+      <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
+                       icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"
+                       [disabled]="$any(disableLoadMore$ | async)"></app-flat-button>
+    </ng-template>
+  </ng-container>
+</ng-template>
+
