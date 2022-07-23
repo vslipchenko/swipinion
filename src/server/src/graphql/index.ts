@@ -12,6 +12,7 @@ import {
   userNotificationsTypeDefinitions,
 } from './schemas/user-notifications/user-notifications.schema';
 import {appResolvers, appTypeDefinitions} from './schemas/app/app.schema';
+import {userMessagesResolvers, userMessagesTypeDefinitions} from './schemas/user-messages/user-messages.schema';
 
 export const schema = makeExecutableSchema({
   typeDefs: [
@@ -24,6 +25,7 @@ export const schema = makeExecutableSchema({
     userFollowerTypeDefinitions,
     userSettingsTypeDefinitions,
     userNotificationsTypeDefinitions,
+    userMessagesTypeDefinitions,
   ],
   resolvers: merge(
     {},
@@ -35,5 +37,6 @@ export const schema = makeExecutableSchema({
     ...userFollowerResolvers,
     ...userSettingsResolvers,
     ...userNotificationsResolvers,
+    ...userMessagesResolvers,
   ),
 });

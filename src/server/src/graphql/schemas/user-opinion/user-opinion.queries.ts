@@ -1,7 +1,7 @@
 import {gql} from 'apollo-server-core';
 import {db} from '../../../data';
 import {queryOpinionsByUsername} from '../../../data/queries/user-opinion';
-import {getOpinionsByUsernameValidator} from '../../../validators/opinion';
+import {getOpinionsByUsernameValidator} from '../../../validators/user-opinion';
 
 export const userOpinionQueryTypeDefinitions = gql`
   type Query {

@@ -1,5 +1,5 @@
 import {ApolloError, gql} from 'apollo-server-core';
-import {createOpinionValidator} from '../../../validators/opinion';
+import {createOpinionValidator} from '../../../validators/user-opinion';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {
