@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "6bff7566-e8e4-489c-905d-ddfa81415fdd",
+		"name": "Swipinion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ($input: CreateUser!) {\r\n    createUser(input: $input) {\r\n        success\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\": {\r\n        \"username\": \"joe\",\r\n        \"email\": \"m@m.com\",\r\n        \"password\": \"client11\",\r\n        \"language\": \"en\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable('accessToken', responseData.data.signIn.accessToken);\r",
+									"postman.setEnvironmentVariable('refreshToken', responseData.data.signIn.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($input: SignIn!) {\r\n    signIn(input: $input) {\r\n      accessToken\r\n      refreshToken\r\n      reason\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\": {\r\n        \"email\": \"m@m.com\",\r\n        \"password\": \"client11\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable('accessToken', responseData.data.refreshAccessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($refreshToken: String!) {\r\n    refreshAccessToken(refreshToken: $refreshToken)\r\n}",
+								"variables": "{\r\n    \"refreshToken\": \"{{refreshToken}}\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
