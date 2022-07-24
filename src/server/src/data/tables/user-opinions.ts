@@ -5,8 +5,8 @@ export const UserOpinionsTable: Table = {
   query: `
     CREATE TABLE IF NOT EXISTS user_opinions (
       id BIGSERIAL PRIMARY KEY,
-      user_id BIGINT,
-      type SMALLINT,
+      user_id BIGINT NOT NULL,
+      type SMALLINT NOT NULL,
       file_url VARCHAR (2048),
       title VARCHAR (100),
       description VARCHAR (3000),

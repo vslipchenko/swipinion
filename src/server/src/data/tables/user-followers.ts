@@ -5,11 +5,11 @@ export const FollowersTable: Table = {
   query: `
     CREATE TABLE IF NOT EXISTS user_followers (
       id BIGSERIAL PRIMARY KEY,
-      user_id BIGINT REFERENCES users(id)
+      user_id BIGINT NOT NULL REFERENCES users(id)
         ON DELETE CASCADE,
-      follower_id BIGINT REFERENCES users(id)
+      follower_id BIGINT NOT NULL REFERENCES users(id)
         ON DELETE CASCADE,
-      pending BOOLEAN,
+      pending BOOLEAN NOT NULL,
       UNIQUE (user_id, follower_id)
     );
   `,

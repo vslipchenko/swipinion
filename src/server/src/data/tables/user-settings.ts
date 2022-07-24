@@ -5,13 +5,13 @@ export const UserSettingsTable: Table = {
   query: `
     CREATE TABLE IF NOT EXISTS user_settings (
       id BIGSERIAL PRIMARY KEY,
-      user_id BIGINT,
-      follow SMALLINT,
-      view_following SMALLINT,
-      message SMALLINT,
-      view_opinions SMALLINT,
-      view_reactions SMALLINT,
-      view_favorites SMALLINT,
+      user_id BIGINT NOT NULL,
+      follow SMALLINT NOT NULL,
+      view_following SMALLINT NOT NULL,
+      message SMALLINT NOT NULL,
+      view_opinions SMALLINT NOT NULL,
+      view_reactions SMALLINT NOT NULL,
+      view_favorites SMALLINT NOT NULL,
         FOREIGN KEY(user_id)
         REFERENCES users(id)
         ON DELETE CASCADE

@@ -11,10 +11,10 @@ export const UsersTable: Table = {
       recovery_code CHAR (6),
       thumbnail VARCHAR (2048),
       bio VARCHAR (300),
-      username VARCHAR (30) UNIQUE,
-      email VARCHAR (254) UNIQUE,
-      password CHAR (60),
-      language CHAR (2),
+      username VARCHAR (30) UNIQUE NOT NULL,
+      email VARCHAR (254) UNIQUE NOT NULL,
+      password CHAR (60) NOT NULL,
+      language CHAR (2) NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
   `,

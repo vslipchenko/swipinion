@@ -5,10 +5,10 @@ export const UserMessagesTable: Table = {
   query: `
     CREATE TABLE IF NOT EXISTS user_messages (
       id BIGSERIAL PRIMARY KEY,
-      sender_id BIGINT,  -- Preserve messages even of deleted users
-      receiver_id BIGINT,
-      body VARCHAR (3000),
-      read BOOLEAN DEFAULT FALSE,
+      sender_id BIGINT NOT NULL REFERENCES users(id),  -- Preserve messages even of deleted users
+      receiver_id BIGINT NOT NULL REFERENCES users(id),
+      body VARCHAR (3000) NOT NULL,
+      read BOOLEAN NOT NULL DEFAULT FALSE,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
   `,
