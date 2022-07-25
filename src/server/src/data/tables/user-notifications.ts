@@ -11,7 +11,7 @@ export const UserNotificationsTable: Table = {
       follower_record_id BIGINT REFERENCES user_followers(id) -- Simple constraint that tells to delete record if parent table reference is gone; May be NULL
         ON DELETE CASCADE,
       read BOOLEAN NOT NULL DEFAULT FALSE,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
     );
   `,
 };

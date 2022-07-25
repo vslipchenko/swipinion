@@ -10,7 +10,7 @@ export const UserOpinionsTable: Table = {
       file_url VARCHAR (2048),
       title VARCHAR (100),
       description VARCHAR (3000),
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         FOREIGN KEY(user_id)
         REFERENCES users(id)
         ON DELETE CASCADE

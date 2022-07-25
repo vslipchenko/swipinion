@@ -3,9 +3,8 @@ import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.e
 
 export const querySendUserMessage = (senderId: string, receiverId: string, body: string): QueryConfig => ({
   text: `
-    INSERT INTO user_messages (sender_id, receiver_id, body)
+    INSERT INTO user_messages (receiver_id, sender_id, body)
     VALUES (
-      $1, 
       (
         SELECT user_settings.user_id
         FROM   user_settings
@@ -16,7 +15,8 @@ export const querySendUserMessage = (senderId: string, receiverId: string, body:
                AND user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
                 OR user_followers.follower_id = $1                               -- If messaging is allowed only for followers; check whether sender has accepted following
                    AND user_followers.pending IS FALSE
-      ), 
+      ),
+      $1,
       $3
     )
   `,

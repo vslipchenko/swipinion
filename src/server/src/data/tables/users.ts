@@ -15,7 +15,7 @@ export const UsersTable: Table = {
       email VARCHAR (254) UNIQUE NOT NULL,
       password CHAR (60) NOT NULL,
       language CHAR (2) NOT NULL,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
     );
   `,
 };
