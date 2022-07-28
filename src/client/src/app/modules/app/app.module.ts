@@ -14,9 +14,29 @@ import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateAuthedUserProfileTeaser, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
-import {SharedModule} from '~app/shared/shared.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {AppService} from '~app/services/app/app.service';
+import {HeaderModule} from '~app/shared/components/header/header.module';
+import {MessagesModule} from '~app/shared/components/messages/messages.module';
+import {AddOpinionDialogModule} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.module';
+import {OpinionSuccessSnackbarModule} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.module';
+import {EmailConfirmationDialogModule} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.module';
+import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recovery-dialog.module';
+import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
+import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
+
+const globalModules = [
+  // Following modules available across the app, mostly because of being used in the header
+  MatSnackBarModule,
+  HeaderModule,
+  MessagesModule,
+  AddOpinionDialogModule,
+  OpinionSuccessSnackbarModule,
+  EmailConfirmationDialogModule,
+  RecoveryDialogModule,
+  SignInDialogModule,
+  SignUpDialogModule,
+];
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,8 +49,7 @@ import {AppService} from '~app/services/app/app.service';
     AppRoutingModule,
     NgxsModule.forRoot([AppState]),
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
-    MatSnackBarModule,
-    SharedModule,
+    ...globalModules,
   ],
   providers: [
     AuthenticationInterceptorProvider,

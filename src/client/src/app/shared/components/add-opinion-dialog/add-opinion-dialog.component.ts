@@ -18,12 +18,12 @@ import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialogRef} from '@angular/material/dialog';
-import {OpinionSnackbarComponent} from '~app/shared/components/add-opinion-dialog/opinion-snackbar/opinion-snackbar.component';
 import {MutationResult} from 'apollo-angular';
 import {CreateOpinionMutationResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {hasExtension} from '~app/utilities/file';
+import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
 
 @Component({
   selector: 'app-add-opinion-dialog',
@@ -208,7 +208,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
   private opinionShared({data}: MutationResult<CreateOpinionMutationResult>, opinion: Opinion): void {
     if (!data?.createOpinion) return this.errorSnackbar();
 
-    this.snackbar.openFromComponent(OpinionSnackbarComponent, {
+    this.snackbar.openFromComponent(OpinionSuccessSnackbarComponent, {
       data: data.createOpinion,
       panelClass: 'snackbar-success',
     });

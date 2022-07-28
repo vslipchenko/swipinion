@@ -5,15 +5,15 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 
 @Component({
   selector: 'app-opinion-snackbar',
-  templateUrl: './opinion-snackbar.component.html',
-  styleUrls: ['./opinion-snackbar.component.scss'],
+  templateUrl: './opinion-success-snackbar.component.html',
+  styleUrls: ['./opinion-success-snackbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionSnackbarComponent {
+export class OpinionSuccessSnackbarComponent {
   public constructor(
     @Inject(MAT_SNACK_BAR_DATA) public readonly data: string,
     public readonly store: Store,
-    public readonly snackbar: MatSnackBarRef<OpinionSnackbarComponent>,
+    public readonly snackbar: MatSnackBarRef<OpinionSuccessSnackbarComponent>,
   ) {}
 
   public get username(): string {

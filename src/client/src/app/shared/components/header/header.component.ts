@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {SignUpDialogComponent} from '~app/modules/entry/components/sign-up-dialog/sign-up-dialog.component';
 import {merge, Observable, of, Subject, takeUntil} from 'rxjs';
-import {SignInDialogComponent} from '~app/modules/entry/components/sign-in-dialog/sign-in-dialog.component';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {RecoveryDialogComponent} from '~app/modules/entry/components/recovery-dialog/recovery-dialog.component';
-import {EmailConfirmationDialogComponent} from '~app/modules/entry/components/email-confirmation-dialog/email-confirmation-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {Router} from '@angular/router';
+import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
+import {SignUpDialogComponent} from '~app/shared/components/sign-up-dialog/sign-up-dialog.component';
+import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
+import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/recovery-dialog.component';
 
 @Component({
   selector: 'app-header',

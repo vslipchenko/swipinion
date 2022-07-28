@@ -2,21 +2,16 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {EntryComponent} from './entry.component';
 import {RouterModule} from '@angular/router';
-import {SharedModule} from '~app/shared/shared.module';
-import {SignInDialogComponent} from './components/sign-in-dialog/sign-in-dialog.component';
-import {SignUpDialogComponent} from './components/sign-up-dialog/sign-up-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import {RecoveryDialogComponent} from './components/recovery-dialog/recovery-dialog.component';
-import {EmailConfirmationDialogComponent} from './components/email-confirmation-dialog/email-confirmation-dialog.component';
+import {CardModule} from '~app/shared/components/card/card.module';
+import {InputModule} from '~app/shared/components/input/input.module';
+import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ButtonModule} from '~app/shared/components/button/button.module';
+import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
+import {CheckboxModule} from '~app/shared/components/checkbox/checkbox.module';
 
 @NgModule({
-  declarations: [
-    EntryComponent,
-    SignInDialogComponent,
-    SignUpDialogComponent,
-    RecoveryDialogComponent,
-    EmailConfirmationDialogComponent,
-  ],
+  declarations: [EntryComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -25,8 +20,13 @@ import {EmailConfirmationDialogComponent} from './components/email-confirmation-
         component: EntryComponent,
       },
     ]),
-    SharedModule,
     MatDialogModule,
+    CardModule,
+    InputModule,
+    ProgressBarModule,
+    ButtonModule,
+    InputHideSuffixModule,
+    CheckboxModule,
   ],
 })
 export class EntryModule {}
