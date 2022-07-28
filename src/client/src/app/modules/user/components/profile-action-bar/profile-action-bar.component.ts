@@ -8,6 +8,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {UnfollowUserDialogComponent} from '~app/modules/user/components/unfollow-user-dialog/unfollow-user-dialog.component';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
+import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
+import {UserMessageDialogComponent} from '~app/shared/components/user-message-dialog/user-message-dialog.component';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -33,13 +35,23 @@ export class ProfileActionBarComponent {
 
   // public readonly privacyCommonSettings = PrivacyCommonSettings;
 
-  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
+  public constructor(
+    private readonly store: Store,
+    private readonly dialog: MatDialog,
+    private readonly userMessagesService: UserMessagesService,
+  ) {
     this.userSettings = this.store.selectSnapshot(UserSelectors.settings);
     this.isProfilePath = this.store.selectSnapshot(UserSelectors.isProfilePath);
   }
 
   public message(): void {
-    console.log('message');
+    console.log('message', this.id);
+    // this.userMessagesService.sendMessage({
+    //   receiverId: this.id
+    // });
+    this.dialog.open(UserMessageDialogComponent, {
+      panelClass: ['dialog', 'extended-dialog'],
+    });
   }
 
   public follow(): void {

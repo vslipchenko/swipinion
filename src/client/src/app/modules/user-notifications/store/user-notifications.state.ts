@@ -81,7 +81,7 @@ export class UserNotificationsState {
                     return `${millisecondsToMinutes(millisecondsElapsed)}m`;
                   case ElapsedTimeMeasure.HOUR:
                     return `${millisecondsToHours(millisecondsElapsed)}h`;
-                  default:
+                  default: // TODO: Fix. This has to be a concrete date instead of days passed since
                     return `${millisecondsToDays(millisecondsElapsed)}d`;
                 }
               }),
