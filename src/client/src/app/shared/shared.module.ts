@@ -49,6 +49,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MessagesComponent} from '~app/shared/components/messages/messages.component';
 import {ContentPlaceholderComponent} from './components/content-placeholder/content-placeholder.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { UserMessageDialogComponent } from './components/user-message-dialog/user-message-dialog.component';
 // import {MatCardModule} from '@angular/material/card';
 // import {MatDividerModule} from '@angular/material/divider';
 
@@ -86,6 +87,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     RadioGroupComponent,
     MessagesComponent,
     ContentPlaceholderComponent,
+    UserMessageDialogComponent,
   ],
   imports: [
     CommonModule,
