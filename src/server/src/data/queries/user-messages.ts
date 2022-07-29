@@ -22,11 +22,3 @@ export const querySendUserMessage = (senderId: string, receiverId: string, body:
   `,
   values: [senderId, receiverId, body],
 });
-
-export const queryUnreadUserMessageExists = (userId: string): QueryConfig => ({
-  text: `
-    SELECT 1 FROM user_messages
-    WHERE receiver_id = ${userId} AND read = FALSE
-  `,
-  values: [userId],
-});
