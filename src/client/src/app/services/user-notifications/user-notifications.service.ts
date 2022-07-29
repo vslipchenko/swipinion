@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Apollo, MutationResult} from 'apollo-angular';
+import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {
   DeleteNotificationMutationResult,
@@ -7,6 +7,7 @@ import {
 } from '~app/typings/user-notifications/user-notifications.interfaces';
 import {GET_USER_NOTIFICATIONS} from '~app/graphql/user-notifications/user-notifications.queries';
 import {DELETE_USER_NOTIFICATION} from '~app/graphql/user-notifications/user-notifications.mutations';
+import {ApolloQueryResult} from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ import {DELETE_USER_NOTIFICATION} from '~app/graphql/user-notifications/user-not
 export class UserNotificationsService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public getNotifications(offset: number): Observable<MutationResult<GetUserNotificationsQueryResult>> {
+  public getNotifications(offset: number): Observable<ApolloQueryResult<GetUserNotificationsQueryResult>> {
     return this.apollo.query<GetUserNotificationsQueryResult>({
       query: GET_USER_NOTIFICATIONS,
       variables: {offset},
@@ -22,7 +23,7 @@ export class UserNotificationsService {
     });
   }
 
-  public deleteNotification(id: string): Observable<MutationResult<DeleteNotificationMutationResult>> {
+  public deleteNotification(id: string): Observable<ApolloQueryResult<DeleteNotificationMutationResult>> {
     return this.apollo.query<DeleteNotificationMutationResult>({
       query: DELETE_USER_NOTIFICATION,
       variables: {id},

@@ -10,6 +10,7 @@ import {
   GetOpinionsByUsernameQueryResult,
 } from '~app/typings/opinion/opinion.interfaces';
 import {GET_OPINIONS_BY_USERNAME} from '~app/graphql/opinion/opinions.queries';
+import {ApolloQueryResult} from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,7 @@ export class OpinionService {
     });
   }
 
-  public getOpinionsByUsername(input: GetOpinions): Observable<MutationResult<GetOpinionsByUsernameQueryResult>> {
+  public getOpinionsByUsername(input: GetOpinions): Observable<ApolloQueryResult<GetOpinionsByUsernameQueryResult>> {
     return this.apollo.query<GetOpinionsByUsernameQueryResult>({
       query: GET_OPINIONS_BY_USERNAME,
       variables: {input},
