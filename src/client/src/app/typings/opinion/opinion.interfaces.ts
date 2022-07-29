@@ -1,5 +1,5 @@
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
-import {SuccessResponse} from '~app/typings/response/response.interfaces';
+import {ExistsResponse, SuccessResponse} from '~app/typings/response/response.interfaces';
 
 export interface Opinion {
   id: string;
@@ -12,6 +12,10 @@ export interface Opinion {
 
 export interface CreateOpinionMutationResult {
   createOpinion: string;
+}
+
+export interface CheckUnreadUserMessageQueryResult {
+  checkUnreadUserMessageExists: ExistsResponse;
 }
 
 export interface DeleteOpinionMutationResult {

@@ -1,6 +1,11 @@
 import {userMessagesMutationResolvers, userMessagesMutationTypeDefinitions} from './user-messages.mutations';
 import {userMessagesInputs} from './user-messages.inputs';
+import {userMessagesQueryResolvers, userMessagesQueryTypeDefinitions} from './user-messages.queries';
 
-export const userMessagesTypeDefinitions = [userMessagesInputs, userMessagesMutationTypeDefinitions];
+export const userMessagesTypeDefinitions = [
+  userMessagesInputs,
+  userMessagesQueryTypeDefinitions,
+  userMessagesMutationTypeDefinitions,
+];
 
-export const userMessagesResolvers = [userMessagesMutationResolvers];
+export const userMessagesResolvers = [userMessagesQueryResolvers, userMessagesMutationResolvers];

@@ -25,19 +25,6 @@ import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recov
 import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
 import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
 
-const globalModules = [
-  // Following modules available across the app, mostly because of being used in the header
-  MatSnackBarModule,
-  HeaderModule,
-  MessagesModule,
-  AddOpinionDialogModule,
-  OpinionSuccessSnackbarModule,
-  EmailConfirmationDialogModule,
-  RecoveryDialogModule,
-  SignInDialogModule,
-  SignUpDialogModule,
-];
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -49,7 +36,16 @@ const globalModules = [
     AppRoutingModule,
     NgxsModule.forRoot([AppState]),
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
-    ...globalModules,
+    // Following modules considered global as they available across the app, mostly because of being used in the header or on multiple pages
+    MatSnackBarModule,
+    HeaderModule,
+    MessagesModule,
+    AddOpinionDialogModule,
+    OpinionSuccessSnackbarModule,
+    EmailConfirmationDialogModule,
+    RecoveryDialogModule,
+    SignInDialogModule,
+    SignUpDialogModule,
   ],
   providers: [
     AuthenticationInterceptorProvider,
