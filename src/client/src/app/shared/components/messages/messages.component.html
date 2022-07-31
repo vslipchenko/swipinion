@@ -16,8 +16,11 @@
     <div class="content relative">
       <div [class.h-0]="showChat">
         <!--        <app-tabs [tabs]="tabs"></app-tabs>-->
-
         <div class="list primary-scrollbar">
+          <div class="transparent-divider"></div>
+          <app-message icon="bookmark" [username]="'Saved Messages'" [message]="'Lol some'"
+                       date="28 July" (clicked)="showChat = true"></app-message>
+
           <div *ngFor="let message of messages">
             <div class="transparent-divider"></div>
             <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.message"
@@ -27,53 +30,7 @@
       </div>
 
       <div class="messaging" *ngIf="showChat">
-        <div class="messaging-content relative">
-          <div class="px-3 pb-2 pt-1 d-flex jc-between">
-            <div class="d-flex ai-center">
-              <img [src]="'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'"
-                   alt="" class="thumbnail mr-2">
-
-              <div>
-                <a class="fw-medium truncate link" routerLink="/user/{{'someone'}}">{{'someone'}}</a>
-                <div class="date">July 28</div>
-              </div>
-            </div>
-            <!--            <app-button icon="arrow_back_ios_new" text="Back" (clicked)="showChat = false"></app-button>-->
-            <div>
-              <app-icon-button icon="reply"></app-icon-button>
-              <app-icon-button icon="arrow_back" (clicked)="showChat = false"></app-icon-button>
-            </div>
-          </div>
-
-          <div class="message-body px-3 pb-2 primary-scrollbar">
-            Where does it come from?
-            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
-            Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
-            Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
-            Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable
-            source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-            of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular
-            during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
-            section 1.10.32.
-
-            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections
-            1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
-            original form, accompanied by English versions from the 1914 translation by H. Rackham.
-            Where does it come from?
-            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
-            Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
-            Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
-            Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable
-            source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-            of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular
-            during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
-            section 1.10.32.
-
-            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections
-            1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
-            original form, accompanied by English versions from the 1914 translation by H. Rackham.
-          </div>
-        </div>
+        <app-chat (back)="showChat = false"></app-chat>
       </div>
 
       <div class="dimmer absolute"></div>

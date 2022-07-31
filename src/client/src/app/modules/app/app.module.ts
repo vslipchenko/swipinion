@@ -34,7 +34,7 @@ import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-
     HttpClientModule,
     RouterModule,
     AppRoutingModule,
-    NgxsModule.forRoot([AppState]),
+    NgxsModule.forRoot([AppState], {developmentMode: !environment.production}),
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
     // Following modules considered global as they available across the app, mostly because of being used in the header or on multiple pages
     MatSnackBarModule,

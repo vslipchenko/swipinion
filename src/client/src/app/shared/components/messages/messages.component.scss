@@ -13,18 +13,13 @@ $thumbnail-size: 40px;
 
 .list {
   overflow-y: auto;
-  max-height: calc(100vh - 75px - 65px - 48px); // 75px - Header height; 65px - Accordion panel header; 48px - Tabs height
+  max-height: calc(100vh - 75px - 65px); // 75px - Header height; 65px - Accordion panel header; 48px - Tabs height
 }
 
 //.message-date {
 //  opacity: .6; // This corresponds to inactive tabs opacity
 //  font-size: 0.7rem;
 //}
-
-.message-body {
-  overflow-y: auto;
-  max-height: calc(100vh - 75px - 64px - 64px); // 75px - Header height; 64px - Accordion panel header; 64px - Message panel height
-}
 
 .dimmer {
   box-shadow: inset 0px -20px 12px -12px var.$color-light-darker;
@@ -40,7 +35,3 @@ $thumbnail-size: 40px;
   display: contents;
 }
 
-.messaging-content {
-  background-color: var.$color-light-darker;
-  z-index: 1;
-}

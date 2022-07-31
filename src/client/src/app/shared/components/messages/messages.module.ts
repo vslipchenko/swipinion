@@ -6,10 +6,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
 import {RouterModule} from '@angular/router';
 import {MessageModule} from '~app/shared/components/message/message.module';
+import {ChatModule} from '~app/shared/components/chat/chat.module';
 
 @NgModule({
   declarations: [MessagesComponent],
-  imports: [CommonModule, RouterModule, AccordionModule, MatIconModule, IconButtonModule, MessageModule],
+  imports: [CommonModule, RouterModule, AccordionModule, MatIconModule, IconButtonModule, MessageModule, ChatModule],
   exports: [MessagesComponent],
 })
 export class MessagesModule {}
