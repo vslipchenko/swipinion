@@ -1,0 +1,17 @@
+@use 'src/assets/scss/variables' as var;
+
+$thumbnail-size: 40px;
+
+.item:hover {
+  background-color: var.$color-light-transparent;
+}
+
+.thumbnail {
+  width: $thumbnail-size;
+  min-width: $thumbnail-size;
+  height: $thumbnail-size;
+}
+
+.message-info {
+  min-width: 0;
+}
