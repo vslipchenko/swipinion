@@ -1,0 +1,19 @@
+@use 'variables' as var;
+
+$thumbnail-size: 40px;
+
+.thumbnail {
+  width: $thumbnail-size;
+  min-width: $thumbnail-size;
+  height: $thumbnail-size;
+}
+
+.messaging-content {
+  background-color: var.$color-light-darker;
+  z-index: 1;
+}
+
+.message-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 75px - 64px - 64px - 1px); // 75px - Header height; 64px - Accordion panel header; 64px - Message panel height; 1px - fixes ghost jump
+}
