@@ -55,6 +55,7 @@ export class AppComponent implements Destroyable {
   }
 
   public runUserStatusPolling(): void {
+    // TODO move script to web worker in order to guarantee stable setInterval callback run as az browser throttles inactive tabs
     let interval: number;
 
     combineLatest([

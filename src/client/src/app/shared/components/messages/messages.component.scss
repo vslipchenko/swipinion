@@ -16,20 +16,10 @@ $thumbnail-size: 40px;
   max-height: calc(100vh - 75px - 65px - 48px); // 75px - Header height; 65px - Accordion panel header; 48px - Tabs height
 }
 
-.message-info {
-  min-width: 0;
-}
-
 //.message-date {
 //  opacity: .6; // This corresponds to inactive tabs opacity
 //  font-size: 0.7rem;
 //}
-
-.thumbnail {
-  width: $thumbnail-size;
-  min-width: $thumbnail-size;
-  height: $thumbnail-size;
-}
 
 .message-body {
   overflow-y: auto;
@@ -45,9 +35,6 @@ $thumbnail-size: 40px;
   z-index: 1;
 }
 
-.item:hover {
-  background-color: var.$color-light-transparent;
-}
 
 .messaging {
   display: contents;

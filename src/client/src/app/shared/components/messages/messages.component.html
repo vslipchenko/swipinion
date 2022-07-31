@@ -15,24 +15,13 @@
   <ng-template #content>
     <div class="content relative">
       <div [class.h-0]="showChat">
-        <app-tabs [tabs]="tabs"></app-tabs>
+        <!--        <app-tabs [tabs]="tabs"></app-tabs>-->
 
         <div class="list primary-scrollbar">
           <div *ngFor="let message of messages">
-            <div class="d-flex ai-center py-2 px-3 item pointer" (click)="showChat = true">
-              <img *ngIf="message.thumbnail" [src]="message.thumbnail" alt="" class="thumbnail mr-2">
-              <div *ngIf="!message.thumbnail" class="thumbnail mr-2"></div>
-
-              <div class="w-100 message-info">
-                <div class="d-flex jc-between ai-center">
-                  <div class="fw-medium">{{message.username}}</div>
-                  <div class="date">July 28</div>
-                </div>
-
-                <div class="truncate">{{message.message}}</div>
-              </div>
-            </div>
             <div class="transparent-divider"></div>
+            <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.message"
+                         date="28 July" (clicked)="showChat = true"></app-message>
           </div>
         </div>
       </div>
