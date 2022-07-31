@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
   HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
   HttpResponse,
 } from '@angular/common/http';
 import {finalize, first, Observable, of, Subject, switchMap} from 'rxjs';
@@ -71,6 +71,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
               return this.authenticationService.refreshAccessToken().pipe(
                 switchMap(({data}) => {
+                  this.authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
                   this.freshAccessToken$.next(data.refreshAccessToken.accessToken);
                   return next.handle(
                     AuthenticationInterceptor.attachAccessToken(request, data.refreshAccessToken.accessToken),
