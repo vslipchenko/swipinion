@@ -1,6 +1,10 @@
 <div class="d-flex ai-center py-2 px-3 item pointer" (click)="clicked.emit(senderId)">
-  <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail mr-2">
-  <div *ngIf="!thumbnail" class="thumbnail mr-2"></div>
+  <mat-icon *ngIf="icon; else image" color="accent">{{icon}}</mat-icon>
+
+  <ng-template #image>
+    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail mr-2">
+    <div *ngIf="!thumbnail" class="thumbnail mr-2"></div>
+  </ng-template>
 
   <div class="w-100 message-info">
     <div class="d-flex jc-between ai-center">

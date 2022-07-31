@@ -8,6 +8,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@
 })
 export class MessageComponent {
   @Input() public senderId = '';
+  @Input() public icon = '';
   @Input() public thumbnail = '';
   @Input() public username = '';
   @Input() public date = '';
