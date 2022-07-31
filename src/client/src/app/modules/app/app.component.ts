@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ICONS, ICONS_PATH} from '~app/constants/icons';
-import {distinctUntilChanged, forkJoin, Subject, takeUntil} from 'rxjs';
+import {combineLatest, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {HeaderService} from '~app/services/header/header.service';
@@ -57,7 +57,10 @@ export class AppComponent implements Destroyable {
   public runUserStatusPolling(): void {
     let interval: number;
 
-    forkJoin([this.userStatusPingerService.runMessagePolling$, this.userStatusPingerService.runNotificationPolling$])
+    combineLatest([
+      this.userStatusPingerService.runMessagePolling$,
+      this.userStatusPingerService.runNotificationPolling$,
+    ])
       .pipe(
         takeUntil(this.destroy$),
         distinctUntilChanged((previous, current) => {
