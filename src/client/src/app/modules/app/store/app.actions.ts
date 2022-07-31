@@ -1,5 +1,6 @@
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserProfile} from '~app/typings/user/user.interfaces';
+import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
 
 export class UpdateAuthedUserProfileTeaser {
   public static readonly type = '[App] UpdateAuthedUserProfileTeaser';
@@ -17,4 +18,10 @@ export class UpdateUtcTimestamp {
   public static readonly type = '[App] UpdateUtcTimestamp';
 
   public constructor(public payload: number) {}
+}
+
+export class RunUserStatusPolling {
+  public static readonly type = '[App] RunUserStatusPolling';
+
+  public constructor(public payload: UserStatusCheck) {}
 }

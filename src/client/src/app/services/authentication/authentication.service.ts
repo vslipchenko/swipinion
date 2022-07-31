@@ -31,7 +31,7 @@ export class AuthenticationService {
     return this.apollo.query<AccessTokenByRefreshTokenQueryResult>({
       query: REFRESH_ACCESS_TOKEN,
       variables: {refreshToken: this.getRefreshToken()},
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
     });
   }
 

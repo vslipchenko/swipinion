@@ -1,30 +1,51 @@
 import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
-import {queryUserStatus} from '../../../data/queries/user-status';
+import {
+  queryCompleteUserStatus,
+  queryMessageUserStatus,
+  queryNotificationUserStatus,
+} from '../../../data/queries/user-status';
 
 export const userStatusQueryTypeDefinitions = gql`
   type Query {
-    checkUserStatus: UserStatus
+    checkUserStatus(input: UserStatusCheck!): UserStatus
   }
 `;
 
 const checkUserStatus = async (
   _1: unknown,
-  _2: unknown,
+  {input}: {input: {checkMessage: boolean; checkNotification: boolean}},
   {accessToken}: {accessToken: string},
-): Promise<{unreadMessage: boolean; unreadNotification: boolean} | ApolloError | null> => {
+): Promise<{unreadMessage?: boolean; unreadNotification?: boolean} | ApolloError | null> => {
   const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  console.log(tokenData, new Date());
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<{receiver_id: boolean; user_id: boolean}>(queryUserStatus(tokenData.userId));
+  let result;
 
-  if (!result.rowCount) return {unreadMessage: false, unreadNotification: false};
+  if (input.checkMessage && input.checkNotification) {
+    result = await db.query<{receiver_id: boolean; user_id: boolean}>(queryCompleteUserStatus(tokenData.userId));
+
+    return {
+      unreadMessage: Boolean(result.rows[0]?.receiver_id),
+      unreadNotification: Boolean(result.rows[0]?.user_id),
+    };
+  } else if (input.checkMessage) {
+    result = await db.query(queryMessageUserStatus(tokenData.userId));
+
+    return {
+      unreadMessage: Boolean(result.rowCount),
+    };
+  }
+
+  // input.checkNotification
+  result = await db.query(queryNotificationUserStatus(tokenData.userId));
 
   return {
-    unreadMessage: Boolean(result.rows[0].receiver_id),
-    unreadNotification: Boolean(result.rows[0].user_id),
+    unreadNotification: Boolean(result.rowCount),
   };
 };
 

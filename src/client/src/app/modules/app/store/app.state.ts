@@ -1,13 +1,22 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {UpdateAuthedUserProfileTeaser, UpdateUserRole, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
+import {
+  RunUserStatusPolling,
+  UpdateAuthedUserProfileTeaser,
+  UpdateUserRole,
+  UpdateUtcTimestamp,
+} from '~app/modules/app/store/app.actions';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
+import {UserStatusService} from '~app/services/user-status/user-status.service';
+import {Observable, tap} from 'rxjs';
 
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
   role: UserRole;
   utcTimestamp: number;
+  unreadMessage: boolean;
+  unreadNotification: boolean;
 }
 
 const APP_STATE = new StateToken<AppStateModel>('app');
@@ -21,11 +30,15 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       thumbnail: '',
     },
     role: UserRole.Guest,
+    unreadMessage: false,
+    unreadNotification: false,
     utcTimestamp: new Date().getTime(),
   },
 })
 @Injectable()
 export class AppState {
+  public constructor(private readonly userStatusService: UserStatusService) {}
+
   @Action(UpdateAuthedUserProfileTeaser)
   private updateUserProfile(context: StateContext<AppStateModel>, action: UpdateAuthedUserProfileTeaser): void {
     context.setState((state) => ({
@@ -51,5 +64,22 @@ export class AppState {
       ...state,
       utcTimestamp: action.payload,
     }));
+  }
+
+  @Action(RunUserStatusPolling)
+  private runUserStatusPolling(
+    context: StateContext<AppStateModel>,
+    action: RunUserStatusPolling,
+  ): Observable<unknown> {
+    return this.userStatusService.checkUserStatus(action.payload).pipe(
+      tap(({data}) => {
+        if (!data.checkUserStatus) return;
+
+        context.setState((state) => ({
+          ...state,
+          ...data.checkUserStatus,
+        }));
+      }),
+    );
   }
 }

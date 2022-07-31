@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {CheckUserStatusQueryResult} from '~app/typings/opinion/opinion.interfaces';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {CHECK_USER_STATUS} from '~app/graphql/user-status/user-status.queries';
+import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,11 @@ import {CHECK_USER_STATUS} from '~app/graphql/user-status/user-status.queries';
 export class UserStatusService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public checkUserStatus(): Observable<ApolloQueryResult<CheckUserStatusQueryResult>> {
+  public checkUserStatus(input: UserStatusCheck): Observable<ApolloQueryResult<CheckUserStatusQueryResult>> {
     return this.apollo.query<CheckUserStatusQueryResult>({
       query: CHECK_USER_STATUS,
+      variables: {input},
+      fetchPolicy: 'no-cache',
     });
   }
 }

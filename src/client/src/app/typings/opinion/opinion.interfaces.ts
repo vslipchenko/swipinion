@@ -15,7 +15,7 @@ export interface CreateOpinionMutationResult {
 }
 
 export interface CheckUserStatusQueryResult {
-  checkUserStatus: {unreadMessage: boolean; unreadNotification: boolean};
+  checkUserStatus: {unreadMessage?: boolean; unreadNotification?: boolean};
 }
 
 export interface DeleteOpinionMutationResult {

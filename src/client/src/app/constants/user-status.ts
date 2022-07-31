@@ -1,0 +1,1 @@
+export const USER_STATUS_POLLING_INTERVAL = 10000; // i.e. 10s
