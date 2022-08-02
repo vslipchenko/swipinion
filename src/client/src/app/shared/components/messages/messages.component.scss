@@ -1,7 +1,5 @@
 @use 'src/assets/scss/variables' as var;
 
-$thumbnail-size: 40px;
-
 .content {
   margin-left: -24px;
   margin-right: -24px;
@@ -15,11 +13,6 @@ $thumbnail-size: 40px;
   overflow-y: auto;
   max-height: calc(100vh - 75px - 65px); // 75px - Header height; 65px - Accordion panel header; 48px - Tabs height
 }
-
-//.message-date {
-//  opacity: .6; // This corresponds to inactive tabs opacity
-//  font-size: 0.7rem;
-//}
 
 .dimmer {
   box-shadow: inset 0px -20px 12px -12px var.$color-light-darker;

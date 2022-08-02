@@ -1,5 +1,5 @@
-<div class="messaging-content relative">
-  <div class="px-3 pb-2 pt-1 d-flex jc-between">
+<div class="messaging-content relative pb-2">
+  <div class="panel p-2 d-flex jc-between">
     <div class="d-flex ai-center">
       <img [src]="'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'"
            alt="" class="thumbnail mr-2">
@@ -16,7 +16,8 @@
     </div>
   </div>
 
-  <div class="message-body px-3 pb-2 primary-scrollbar">
+  <!--  <div class="message-body">-->
+  <div class="message-body px-2 pb-2 primary-scrollbar relative">
     Where does it come from?
     Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
     Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
@@ -44,4 +45,13 @@
     1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
     original form, accompanied by English versions from the 1914 translation by H. Rackham.
   </div>
+
+  <div class="px-2 d-flex ai-center">
+    <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
+
+    <!--    <app-button text="Send" color="primary"></app-button>-->
+    <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
+                         class="ml-2"></app-mini-fab-button>
+  </div>
+  <!--  </div>-->
 </div>

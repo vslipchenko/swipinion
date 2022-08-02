@@ -1,6 +1,8 @@
 @use 'variables' as var;
 @use 'media';
 
+$thumbnail-size: 40px;
+
 .messages {
   bottom: 0;
   right: var.$unit-2;
@@ -10,6 +12,21 @@
   @include media.zero-small {
     display: none;
   }
+}
+
+.messages .thumbnail {
+  width: $thumbnail-size;
+  min-width: $thumbnail-size;
+  height: $thumbnail-size;
+}
+
+.messages .mat-expansion-panel-header {
+  padding-left: var.$unit-2;
+  padding-right: var.$unit-2;
+}
+
+.messages .mat-form-field-wrapper {
+  padding-bottom: 0;
 }
 
 .messages .mat-tab-label {

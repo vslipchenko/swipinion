@@ -141,6 +141,10 @@
   margin-left: var.$unit;
 }
 
+.ml-2 {
+  margin-left: var.$unit-2;
+}
+
 .ml-2-3 {
   @include media.zero-small {
     margin-left: var.$unit-2;
