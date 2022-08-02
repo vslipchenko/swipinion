@@ -19,7 +19,7 @@ const fetchUserMessages = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<unknown>(queryFetchUserMessages(tokenData.userId, startDate));
+  const result = await db.query<unknown>(queryFetchUserMessages(tokenData.userId, startDate || 'NOW()'));
 
   if (!result.rowCount) return null;
 

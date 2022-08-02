@@ -26,16 +26,15 @@ export const querySendUserMessage = (senderId: string, receiverId: string, body:
 
 export const queryFetchUserMessages = (userId: string, startDate?: string): QueryConfig => ({
   text: `
-    SELECT DISTINCT (user_messages.sender_id) user_messages.sender_id, 
+    SELECT DISTINCT ON (user_messages.sender_id) user_messages.sender_id, 
         users.username, 
         users.thumbnail,
+        user_messages.id,
         user_messages.body, 
         user_messages.created_at
     FROM user_messages 
     LEFT JOIN users ON users.id = user_messages.sender_id 
-    WHERE user_messages.receiver_id = $1 AND user_messages.created_at < ${
-      startDate ? 'to_timestamp(CAST($2 as bigint)/1000)' : 'NOW()'
-    } -- AND user_messages.created_at < to_timestamp(CAST('1659447481886'as bigint)/1000)
+    WHERE user_messages.receiver_id = $1 AND user_messages.created_at < $2 -- AND user_messages.created_at < to_timestamp(CAST('1659447481886'as bigint)/1000)
     ORDER BY user_messages.sender_id DESC, user_messages.created_at DESC -- DESC allows to select the most recent user message
     LIMIT $3
   `,

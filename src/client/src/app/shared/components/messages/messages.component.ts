@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 
 @Component({
   selector: 'app-messages',
@@ -50,9 +51,10 @@ export class MessagesComponent implements OnInit {
 
   public showChat = false;
 
-  constructor() {}
+  constructor(private readonly userMessagesService: UserMessagesService) {}
 
   ngOnInit(): void {
     console.log('INSTANTIATE MESSAGES');
+    this.userMessagesService.fetchUserMessages().subscribe(console.log);
   }
 }
