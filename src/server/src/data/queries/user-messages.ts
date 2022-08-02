@@ -35,7 +35,7 @@ export const queryFetchUserMessages = (userId: string, startDate?: string): Quer
     WHERE user_messages.receiver_id = $1 AND user_messages.created_at < ${
       startDate ? 'to_timestamp(CAST($2 as bigint)/1000)' : 'NOW()'
     } -- AND user_messages.created_at < to_timestamp(CAST('1659447481886'as bigint)/1000)
-    ORDER BY user_messages.sender_id, user_messages.created_at DESC -- DESC allows to select the most recent user message
+    ORDER BY user_messages.sender_id DESC, user_messages.created_at DESC -- DESC allows to select the most recent user message
     LIMIT $3
   `,
   values: [userId, startDate, USER_MESSAGES_FETCH_LIMIT],
