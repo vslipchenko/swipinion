@@ -20,8 +20,6 @@ const checkUserStatus = async (
 ): Promise<{unreadMessage?: boolean; unreadNotification?: boolean} | ApolloError | null> => {
   const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
 
-  console.log(tokenData, new Date());
-
   if (authenticationError) return authenticationError;
 
   let result;

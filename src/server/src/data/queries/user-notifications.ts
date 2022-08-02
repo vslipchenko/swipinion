@@ -7,10 +7,10 @@ export const queryUserNotifications = (userId: string, offset: number): QueryCon
     FROM user_notifications
     LEFT JOIN users ON users.id = user_notifications.involved_user_id
     WHERE user_id = $1
-    LIMIT ${USER_NOTIFICATIONS_FETCH_LIMIT}
+    LIMIT $3
     OFFSET $2
   `,
-  values: [userId, offset],
+  values: [userId, offset, USER_NOTIFICATIONS_FETCH_LIMIT],
 });
 
 export const queryDeleteNotificationByFollowersRecordId = (recordId: string, userId: string): QueryConfig => ({

@@ -1,5 +1,6 @@
 import {QueryConfig} from 'pg';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
+import {USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
 
 export const querySendUserMessage = (senderId: string, receiverId: string, body: string): QueryConfig => ({
   text: `
@@ -21,4 +22,21 @@ export const querySendUserMessage = (senderId: string, receiverId: string, body:
     )
   `,
   values: [senderId, receiverId, body],
+});
+
+export const queryFetchUserMessages = (userId: string, startDate?: string): QueryConfig => ({
+  text: `
+    SELECT DISTINCT (user_messages.sender_id) user_messages.sender_id, 
+        users.username, 
+        user_messages.body, 
+        user_messages.created_at
+    FROM user_messages 
+    LEFT JOIN users ON users.id = user_messages.sender_id 
+    WHERE user_messages.receiver_id = $1 AND user_messages.created_at < ${
+      startDate ? 'to_timestamp(CAST($2 as bigint)/1000)' : 'NOW()'
+    } -- AND user_messages.created_at < to_timestamp(CAST('1659447481886'as bigint)/1000)
+    ORDER BY user_messages.sender_id, user_messages.created_at DESC -- DESC allows to select the most recent user message
+    LIMIT $3
+  `,
+  values: [userId, startDate, USER_MESSAGES_FETCH_LIMIT],
 });
