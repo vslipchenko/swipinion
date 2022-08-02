@@ -80,6 +80,8 @@ export class AppComponent implements Destroyable {
   }
 
   private dispatchUserStatusPolling(checkMessage: boolean, checkNotification: boolean): void {
+    if (document.hidden) return; // Prevent polling when tab is inactive
+
     this.store.dispatch(
       new RunUserStatusPolling({
         checkMessage,

@@ -1,6 +1,7 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
+  FetchUserMessages,
   RunUserStatusPolling,
   UpdateAuthedUserProfileTeaser,
   UpdateUserRole,
@@ -10,9 +11,11 @@ import {UserProfile} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
+import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
+  messages: Array<unknown>;
   role: UserRole;
   utcTimestamp: number;
   unreadMessage: boolean;
@@ -29,6 +32,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       // bio: '',
       thumbnail: '',
     },
+    messages: [],
     role: UserRole.Guest,
     unreadMessage: false,
     unreadNotification: false,
@@ -37,7 +41,10 @@ const APP_STATE = new StateToken<AppStateModel>('app');
 })
 @Injectable()
 export class AppState {
-  public constructor(private readonly userStatusService: UserStatusService) {}
+  public constructor(
+    private readonly userStatusService: UserStatusService,
+    private readonly userMessagesService: UserMessagesService,
+  ) {}
 
   @Action(UpdateAuthedUserProfileTeaser)
   private updateUserProfile(context: StateContext<AppStateModel>, action: UpdateAuthedUserProfileTeaser): void {
@@ -79,6 +86,15 @@ export class AppState {
           ...state,
           ...data.checkUserStatus,
         }));
+      }),
+    );
+  }
+
+  @Action(FetchUserMessages)
+  private fetchUserMessages(context: StateContext<AppStateModel>, action: FetchUserMessages): Observable<unknown> {
+    return this.userMessagesService.fetchUserMessages().pipe(
+      tap(({data}) => {
+        console.log(data);
       }),
     );
   }
