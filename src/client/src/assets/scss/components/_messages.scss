@@ -33,7 +33,8 @@ $thumbnail-size: 40px;
   min-height: 0;
 }
 
-.messages .thumbnail {
+.messages .thumbnail,
+.messages .saved-messages-icon {
   width: $thumbnail-size;
   min-width: $thumbnail-size;
   height: $thumbnail-size;
