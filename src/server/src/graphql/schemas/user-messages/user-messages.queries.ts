@@ -5,7 +5,7 @@ import {queryFetchUserMessages} from '../../../data/queries/user-messages';
 
 export const userMessagesQueryTypeDefinitions = gql`
   type Query {
-    fetchUserMessages(startDate: String): [Notification!]
+    fetchUserMessages(startDate: String): [Message!]
   }
 `;
 

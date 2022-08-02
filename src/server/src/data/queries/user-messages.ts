@@ -28,6 +28,7 @@ export const queryFetchUserMessages = (userId: string, startDate?: string): Quer
   text: `
     SELECT DISTINCT (user_messages.sender_id) user_messages.sender_id, 
         users.username, 
+        users.thumbnail,
         user_messages.body, 
         user_messages.created_at
     FROM user_messages 
