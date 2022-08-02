@@ -11,7 +11,6 @@
 
 .list {
   overflow-y: auto;
-  max-height: calc(100vh - 75px - 65px); // 75px - Header height; 65px - Accordion panel header; 48px - Tabs height
 }
 
 .dimmer {
@@ -21,10 +20,5 @@
   bottom: 0;
   left: 0;
   z-index: 1;
-}
-
-
-.messaging {
-  display: contents;
 }
 

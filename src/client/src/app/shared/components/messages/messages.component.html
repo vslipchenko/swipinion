@@ -13,10 +13,10 @@
   </ng-template>
 
   <ng-template #content>
-    <div class="content relative">
-      <div [class.h-0]="showChat">
+    <div class="content relative h-100">
+      <div [class.h-0]="showChat" class="h-100">
         <!--        <app-tabs [tabs]="tabs"></app-tabs>-->
-        <div class="list primary-scrollbar">
+        <div class="list primary-scrollbar h-100">
           <div class="transparent-divider"></div>
           <app-message icon="bookmark" [username]="'Saved Messages'" [message]="'Lol some'"
                        date="28 July" (clicked)="showChat = true"></app-message>
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="messaging" *ngIf="showChat">
+      <div class="messaging h-100" *ngIf="showChat">
         <app-chat (back)="showChat = false"></app-chat>
       </div>
 

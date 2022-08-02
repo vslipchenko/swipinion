@@ -14,6 +14,25 @@ $thumbnail-size: 40px;
   }
 }
 
+.messages .mat-accordion {
+  display: flex;
+  max-height: calc(100vh - 75px); // 75px - header height
+}
+
+.messages .mat-expansion-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.messages .mat-expansion-panel-header {
+  flex-shrink: 0;
+}
+
+.messages .mat-expansion-panel-content,
+.messages .mat-expansion-panel-body {
+  min-height: 0;
+}
+
 .messages .thumbnail {
   width: $thumbnail-size;
   min-width: $thumbnail-size;

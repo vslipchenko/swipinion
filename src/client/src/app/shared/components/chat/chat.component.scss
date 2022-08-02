@@ -12,7 +12,3 @@
 .panel {
   border-top: 1px solid var.$color-light-transparent;
 }
-
-.message-body {
-  max-height: calc(100vh - 75px - 64px - 73px - 113px); // 75px - Header height; 64px - Accordion panel header; 73px - Message panel height; 113px - input panel height
-}
