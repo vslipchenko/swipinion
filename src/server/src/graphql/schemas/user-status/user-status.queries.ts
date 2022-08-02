@@ -6,6 +6,7 @@ import {
   queryMessageUserStatus,
   queryNotificationUserStatus,
 } from '../../../data/queries/user-status';
+import {checkUserStatusValidator} from '../../../validators/user-status';
 
 export const userStatusQueryTypeDefinitions = gql`
   type Query {
@@ -18,6 +19,10 @@ const checkUserStatus = async (
   {input}: {input: {checkMessage: boolean; checkNotification: boolean}},
   {accessToken}: {accessToken: string},
 ): Promise<{unreadMessage?: boolean; unreadNotification?: boolean} | ApolloError | null> => {
+  const {error} = checkUserStatusValidator.validate(input);
+
+  if (error) return null;
+
   const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
 
   if (authenticationError) return authenticationError;
