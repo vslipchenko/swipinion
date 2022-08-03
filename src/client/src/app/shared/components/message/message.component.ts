@@ -13,6 +13,7 @@ export class MessageComponent {
   @Input() public username = '';
   @Input() public date = '';
   @Input() public message = '';
+  @Input() public read = true;
 
   @Output() public clicked = new EventEmitter<string>();
 }

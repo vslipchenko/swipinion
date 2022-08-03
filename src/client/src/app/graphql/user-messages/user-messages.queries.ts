@@ -8,6 +8,7 @@ export const FETCH_USER_MESSAGES = gql`
       username
       thumbnail
       body
+      read
       created_at
     }
   }

@@ -7,6 +7,7 @@ export const userMessagesTypes = gql`
     username: String
     thumbnail: String
     body: String
+    read: Boolean
     created_at: Float
   }
 `;

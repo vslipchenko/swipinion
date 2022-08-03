@@ -19,5 +19,6 @@ export interface UserMessage {
   username: string;
   thumbnail: string;
   body: string;
+  read: boolean;
   created_at: number;
 }

@@ -2,7 +2,8 @@
                [content]="content" (afterExpand)="afterExpand()">
   <ng-template #title>
       <span class="relative d-flex mr-1">
-              <mat-icon svgIcon="email-multiple" color="primary"></mat-icon>
+              <mat-icon svgIcon="email-multiple"
+                        [color]="(unreadMessageTimestamp$ | async) ? 'primary' : null"></mat-icon>
             </span>
     Messages
   </ng-template>
@@ -35,7 +36,7 @@
                 <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
                   <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.body"
-                               date="28 July" (clicked)="showChat = true"></app-message>
+                               date="28 July" (clicked)="showChat = true" [read]="message.read"></app-message>
                 </div>
               </ng-template>
             </ng-container>

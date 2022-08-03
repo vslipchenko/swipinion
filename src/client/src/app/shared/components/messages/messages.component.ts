@@ -14,6 +14,7 @@ import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 })
 export class MessagesComponent implements Destroyable {
   @Select(AppSelectors.messages) public messages$!: Observable<Array<UserMessage>>;
+  @Select(AppSelectors.unreadMessageTimestamp) public unreadMessageTimestamp$!: Observable<Array<UserMessage>>;
 
   // public readonly tabs = [
   //   {text: 'Inbox', icon: 'inbox'},

@@ -31,6 +31,7 @@ export const queryFetchUserMessages = (userId: string, startDate?: string): Quer
         users.thumbnail,
         user_messages.id,
         user_messages.body, 
+        user_messages.read, 
         user_messages.created_at
     FROM user_messages 
     LEFT JOIN users ON users.id = user_messages.sender_id 
