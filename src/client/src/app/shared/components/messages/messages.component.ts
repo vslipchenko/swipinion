@@ -1,8 +1,10 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {Store} from '@ngxs/store';
+import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserMessages} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 
 @Component({
   selector: 'app-messages',
@@ -11,53 +13,27 @@ import {BehaviorSubject, Subject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessagesComponent implements Destroyable {
-  public readonly tabs = [
-    {text: 'Inbox', icon: 'inbox'},
-    {text: 'Sent', icon: 'send'},
-    {
-      text: 'Saved',
-      icon: 'inventory_2',
-    },
-  ];
-  public messages = [
-    {
-      username: 'Johnny',
-      thumbnail:
-        'https://static.remove.bg/remove-bg-web/5c20d2ecc9ddb1b6c85540a333ec65e2c616dbbd/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg',
-      message: 'Hey!',
-    },
-    {
-      username: 'Tonny',
-      thumbnail: 'https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg',
-      message:
-        'Lol some long message goes here but actually I dont care enough to make it to the certain point in the future where we dont need to worry',
-    },
-    {username: 'somenone', thumbnail: '', message: 'Something'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {username: 'keker', thumbnail: '', message: 'A'},
-    {
-      username: 'Whydafuck',
-      thumbnail: 'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg',
-      message: 'B',
-    },
-  ];
+  @Select(AppSelectors.messages) public messages$!: Observable<Array<UserMessage>>;
+
+  // public readonly tabs = [
+  //   {text: 'Inbox', icon: 'inbox'},
+  //   {text: 'Sent', icon: 'send'},
+  //   {
+  //     text: 'Saved',
+  //     icon: 'inventory_2',
+  //   },
+  // ];
 
   public showChat = false;
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
-  public constructor(private readonly store: Store) {}
+  public constructor(private readonly store: Store, private readonly actions$: Actions) {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages)).subscribe(() => {
+      this.loading$.next(false);
+    });
+  }
 
   // public ngOnInit(): void {
   //

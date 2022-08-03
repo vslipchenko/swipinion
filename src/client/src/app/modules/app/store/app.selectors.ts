@@ -13,4 +13,8 @@ export class AppSelectors {
   public static utcTimestamp = createSelector([AppState], (state: AppStateModel) => {
     return state.utcTimestamp;
   });
+
+  public static messages = createSelector([AppState], (state: AppStateModel) => {
+    return state.messages;
+  });
 }

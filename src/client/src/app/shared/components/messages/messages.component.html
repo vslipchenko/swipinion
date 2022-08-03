@@ -25,9 +25,9 @@
             <app-message icon="bookmark" [username]="'Saved Messages'" [message]="'Lol some'"
                          date="28 July" (clicked)="showChat = true"></app-message>
 
-            <div *ngFor="let message of messages">
+            <div *ngFor="let message of messages$ | async">
               <div class="transparent-divider"></div>
-              <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.message"
+              <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.body"
                            date="28 July" (clicked)="showChat = true"></app-message>
             </div>
           </div>
