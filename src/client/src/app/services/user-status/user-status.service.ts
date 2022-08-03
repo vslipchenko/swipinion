@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs';
-import {CheckUserStatusQueryResult} from '~app/typings/opinion/opinion.interfaces';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {CHECK_USER_STATUS} from '~app/graphql/user-status/user-status.queries';
-import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
+import {CheckUserStatusQueryResult, UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
 
 @Injectable({
   providedIn: 'root',

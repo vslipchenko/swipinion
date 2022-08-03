@@ -14,10 +14,6 @@ export interface CreateOpinionMutationResult {
   createOpinion: string;
 }
 
-export interface CheckUserStatusQueryResult {
-  checkUserStatus: {unreadMessage?: boolean; unreadNotification?: boolean};
-}
-
 export interface DeleteOpinionMutationResult {
   deleteOpinion: SuccessResponse;
 }

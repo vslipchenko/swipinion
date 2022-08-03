@@ -8,3 +8,16 @@ export interface SendUserMessage {
 export interface SendUserMessageMutationResult {
   sendUserMessage: SuccessResponse;
 }
+
+export interface FetchUserMessagesQueryResult {
+  fetchUserMessages: Array<UserMessage>;
+}
+
+export interface UserMessage {
+  id: string;
+  sender_id: string;
+  username: string;
+  thumbnail: string;
+  body: string;
+  created_at: number;
+}

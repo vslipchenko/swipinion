@@ -57,4 +57,8 @@ export class MessagesComponent implements OnInit {
   public ngOnInit(): void {
     this.store.dispatch(new FetchUserMessages(''));
   }
+
+  public afterExpand(): void {
+    console.log('after expand');
+  }
 }

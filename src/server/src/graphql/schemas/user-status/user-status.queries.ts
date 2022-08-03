@@ -18,7 +18,7 @@ const checkUserStatus = async (
   _1: unknown,
   {input}: {input: {checkMessage: boolean; checkNotification: boolean}},
   {accessToken}: {accessToken: string},
-): Promise<{unreadMessage?: boolean; unreadNotification?: boolean} | ApolloError | null> => {
+): Promise<{unreadMessageTimestamp?: string; unreadNotificationTimestamp?: string} | ApolloError | null> => {
   const {error} = checkUserStatusValidator.validate(input);
 
   if (error) return null;
@@ -30,25 +30,27 @@ const checkUserStatus = async (
   let result;
 
   if (input.checkMessage && input.checkNotification) {
-    result = await db.query<{receiver_id: boolean; user_id: boolean}>(queryCompleteUserStatus(tokenData.userId));
+    result = await db.query<{message_created_at: string; notification_created_at: string}>(
+      queryCompleteUserStatus(tokenData.userId),
+    );
 
     return {
-      unreadMessage: Boolean(result.rows[0]?.receiver_id),
-      unreadNotification: Boolean(result.rows[0]?.user_id),
+      unreadMessageTimestamp: result.rows[0]?.message_created_at,
+      unreadNotificationTimestamp: result.rows[0]?.notification_created_at,
     };
   } else if (input.checkMessage) {
-    result = await db.query(queryMessageUserStatus(tokenData.userId));
+    result = await db.query<{message_created_at: string}>(queryMessageUserStatus(tokenData.userId));
 
     return {
-      unreadMessage: Boolean(result.rowCount),
+      unreadMessageTimestamp: result.rows[0]?.message_created_at,
     };
   }
 
   // input.checkNotification
-  result = await db.query(queryNotificationUserStatus(tokenData.userId));
+  result = await db.query<{notification_created_at: string}>(queryNotificationUserStatus(tokenData.userId));
 
   return {
-    unreadNotification: Boolean(result.rowCount),
+    unreadNotificationTimestamp: result.rows[0]?.notification_created_at,
   };
 };
 

@@ -2,15 +2,15 @@ import {QueryConfig} from 'pg';
 
 export const queryCompleteUserStatus = (userId: string): QueryConfig => ({
   text: `
-    SELECT a.receiver_id,
-      b.user_id
+    SELECT a.created_at AS message_created_at,
+      b.created_at AS notification_created_at
     FROM
-      (SELECT receiver_id
+      (SELECT receiver_id, created_at
         FROM user_messages
         WHERE receiver_id = $1
           AND read = FALSE) AS a
     FULL OUTER JOIN
-      (SELECT user_id
+      (SELECT user_id, created_at
         FROM user_notifications
         WHERE user_id = $1
           AND read = FALSE) AS b ON a.receiver_id = b.user_id
@@ -20,7 +20,7 @@ export const queryCompleteUserStatus = (userId: string): QueryConfig => ({
 
 export const queryNotificationUserStatus = (userId: string): QueryConfig => ({
   text: `
-    SELECT 1
+    SELECT created_at as notification_created_at
     FROM user_notifications
     WHERE user_id = $1
       AND read = FALSE
@@ -30,7 +30,7 @@ export const queryNotificationUserStatus = (userId: string): QueryConfig => ({
 
 export const queryMessageUserStatus = (userId: string): QueryConfig => ({
   text: `
-    SELECT 1
+    SELECT created_at as message_created_at
     FROM user_messages
     WHERE receiver_id = $1
       AND read = FALSE
