@@ -1,6 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Store} from '@ngxs/store';
 import {FetchUserMessages} from '~app/modules/app/store/app.actions';
+import {Destroyable} from '~app/typings/component/component.interfaces';
+import {BehaviorSubject, Subject} from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -8,7 +10,7 @@ import {FetchUserMessages} from '~app/modules/app/store/app.actions';
   styleUrls: ['./messages.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements Destroyable {
   public readonly tabs = [
     {text: 'Inbox', icon: 'inbox'},
     {text: 'Sent', icon: 'send'},
@@ -52,13 +54,26 @@ export class MessagesComponent implements OnInit {
 
   public showChat = false;
 
+  public readonly loading$ = new BehaviorSubject(false);
+  public readonly destroy$ = new Subject<void>();
+
   public constructor(private readonly store: Store) {}
 
-  public ngOnInit(): void {
-    this.store.dispatch(new FetchUserMessages(''));
+  // public ngOnInit(): void {
+  //
+  // }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.loading$.complete();
   }
 
   public afterExpand(): void {
     console.log('after expand');
+
+    this.loading$.next(true);
+
+    this.store.dispatch(new FetchUserMessages(''));
   }
 }

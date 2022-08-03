@@ -7,10 +7,20 @@ import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.m
 import {RouterModule} from '@angular/router';
 import {MessageModule} from '~app/shared/components/message/message.module';
 import {ChatModule} from '~app/shared/components/chat/chat.module';
+import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 
 @NgModule({
   declarations: [MessagesComponent],
-  imports: [CommonModule, RouterModule, AccordionModule, MatIconModule, IconButtonModule, MessageModule, ChatModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    AccordionModule,
+    MatIconModule,
+    IconButtonModule,
+    MessageModule,
+    ChatModule,
+    ProgressSpinnerModule,
+  ],
   exports: [MessagesComponent],
 })
 export class MessagesModule {}

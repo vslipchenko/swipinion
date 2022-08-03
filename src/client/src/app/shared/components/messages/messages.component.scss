@@ -1,6 +1,7 @@
 @use 'src/assets/scss/variables' as var;
 
 .content {
+  min-height: 400px;
   margin-left: -24px;
   margin-right: -24px;
 }

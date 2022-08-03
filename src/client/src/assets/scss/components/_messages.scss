@@ -22,6 +22,7 @@ $thumbnail-size: 40px;
 .messages .mat-expansion-panel {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .messages .mat-expansion-panel-header {
