@@ -12,14 +12,15 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
+import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
   messages: Array<unknown>;
   role: UserRole;
   utcTimestamp: number;
-  unreadMessage: boolean;
-  unreadNotification: boolean;
+  unreadMessageTimestamp: number;
+  unreadNotificationTimestamp: number;
 }
 
 const APP_STATE = new StateToken<AppStateModel>('app');
@@ -34,8 +35,8 @@ const APP_STATE = new StateToken<AppStateModel>('app');
     },
     messages: [],
     role: UserRole.Guest,
-    unreadMessage: false,
-    unreadNotification: false,
+    unreadMessageTimestamp: 0,
+    unreadNotificationTimestamp: 0,
     utcTimestamp: new Date().getTime(),
   },
 })
@@ -92,9 +93,18 @@ export class AppState {
 
   @Action(FetchUserMessages)
   private fetchUserMessages(context: StateContext<AppStateModel>, action: FetchUserMessages): Observable<unknown> {
-    return this.userMessagesService.fetchUserMessages().pipe(
+    return this.userMessagesService.fetchUserMessages(action.payload).pipe(
       tap(({data}) => {
-        console.log(data);
+        if (!data.fetchUserMessages) return;
+
+        const sortedMessages = data.fetchUserMessages.sort((a: UserMessage, b: UserMessage) => {
+          return b.created_at - a.created_at;
+        });
+
+        context.setState((state) => ({
+          ...state,
+          messages: sortedMessages,
+        }));
       }),
     );
   }
