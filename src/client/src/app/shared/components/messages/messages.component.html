@@ -14,22 +14,31 @@
 
   <ng-template #content>
     <div class="content relative h-100">
-      <app-progress-spinner *ngIf="loading$ | async; else messageList"
+      <app-progress-spinner *ngIf="loading$ | async; else container"
                             class="d-flex jc-center ai-center spinner h-100"></app-progress-spinner>
 
-      <ng-template #messageList>
+      <ng-template #container>
         <div [class.h-0]="showChat" class="h-100">
           <!--        <app-tabs [tabs]="tabs"></app-tabs>-->
-          <div class="list primary-scrollbar h-100">
+          <div class="list primary-scrollbar h-100 d-flex f-column">
             <div class="transparent-divider"></div>
             <app-message icon="bookmark" [username]="'Saved Messages'" [message]="'Lol some'"
                          date="28 July" (clicked)="showChat = true"></app-message>
 
-            <div *ngFor="let message of messages$ | async">
-              <div class="transparent-divider"></div>
-              <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.body"
-                           date="28 July" (clicked)="showChat = true"></app-message>
-            </div>
+            <ng-container *ngIf="messages$ | async as messages">
+              <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
+                                       text="New messages will show up here"
+                                       class="h-100 messages-placeholder" [border]="false"
+                                       [gradient]="false"></app-content-placeholder>
+
+              <ng-template #messageList>
+                <div *ngFor="let message of messages$ | async">
+                  <div class="transparent-divider"></div>
+                  <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.body"
+                               date="28 July" (clicked)="showChat = true"></app-message>
+                </div>
+              </ng-template>
+            </ng-container>
           </div>
         </div>
       </ng-template>
