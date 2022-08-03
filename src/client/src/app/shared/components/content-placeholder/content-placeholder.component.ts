@@ -8,6 +8,9 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 })
 export class ContentPlaceholderComponent {
   @Input() public icon = '';
+  @Input() public svgIcon = '';
   @Input() public text = '';
   @Input() public tip = '';
+  @Input() public border = true;
+  @Input() public gradient = true;
 }

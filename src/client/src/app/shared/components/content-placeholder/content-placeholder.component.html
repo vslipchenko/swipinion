@@ -1,11 +1,11 @@
-<div class="p-2 container">
-  <div class="relative">
+<div class="p-2 container h-100 d-flex ai-center jc-center" [class.border]="border">
+  <div class="relative w-100">
     <mat-icon *ngIf="tip" class="tip absolute pointer"
               [matTooltip]="tip"
     >help
     </mat-icon>
 
-    <mat-icon class="icon d-block mx-auto">{{icon}}</mat-icon>
+    <mat-icon class="icon d-block mx-auto" [class.gradient]="gradient" [svgIcon]="svgIcon">{{icon}}</mat-icon>
     <p *ngIf="text" class="mt-1 t-center">{{text}}</p>
 
     <ng-content></ng-content>
