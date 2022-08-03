@@ -53,4 +53,8 @@ export class MessagesComponent implements Destroyable {
 
     this.store.dispatch(new FetchUserMessages(''));
   }
+
+  public loadChat(): void {
+    this.loading$.next(true);
+  }
 }

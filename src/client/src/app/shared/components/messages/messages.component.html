@@ -24,7 +24,7 @@
           <div class="list primary-scrollbar h-100 d-flex f-column">
             <div class="transparent-divider"></div>
             <app-message icon="bookmark" [username]="'Saved Messages'" [message]="'Lol some'"
-                         date="28 July" (clicked)="showChat = true"></app-message>
+                         date="28 July" (clicked)="loadChat()"></app-message>
 
             <ng-container *ngIf="messages$ | async as messages">
               <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
@@ -36,7 +36,7 @@
                 <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
                   <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.body"
-                               date="28 July" (clicked)="showChat = true" [read]="message.read"></app-message>
+                               date="28 July" (clicked)="loadChat()" [read]="message.read"></app-message>
                 </div>
               </ng-template>
             </ng-container>
