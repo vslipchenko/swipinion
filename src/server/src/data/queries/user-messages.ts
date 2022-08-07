@@ -32,18 +32,28 @@ export const querySendUserMessage = (
 
 export const queryFetchUserMessages = (userId: string, startDate?: string): QueryConfig => ({
   text: `
-    SELECT DISTINCT ON (user_messages.sender_id) user_messages.sender_id, 
-        users.username, 
-        users.thumbnail,
-        user_messages.id,
-        user_messages.body, 
-        user_messages.read, 
-        user_messages.created_at
-    FROM user_messages 
-    LEFT JOIN users ON users.id = user_messages.sender_id 
-    WHERE user_messages.receiver_id = $1 AND user_messages.created_at < $2 -- AND user_messages.created_at < to_timestamp(CAST('1659447481886'as bigint)/1000)
-    ORDER BY user_messages.sender_id DESC, user_messages.created_at DESC -- DESC allows to select the most recent user message
-    LIMIT $3
+    SELECT user_messages.id, 
+      user_messages.teaser, 
+      conversations.greatest AS user_id_1, 
+      conversations.least AS user_id_2, 
+      conversations.maxdate AS created_at, 
+      users.username, 
+      users.thumbnail
+    FROM 
+    (
+      SELECT DISTINCT GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id), MAX(created_at) AS maxdate
+      FROM user_messages
+      WHERE sender_id = $1
+        OR receiver_id = $1
+      GROUP BY GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id)
+      HAVING MAX(created_at) <= $2
+      ORDER BY maxdate DESC
+      LIMIT $3
+    ) AS conversations
+    LEFT JOIN user_messages ON conversations.maxdate = user_messages.created_at 
+      AND user_messages.sender_id = conversations.greatest AND user_messages.receiver_id = conversations.least
+      OR user_messages.sender_id = conversations.least AND user_messages.receiver_id = conversations.greatest
+    LEFT JOIN users ON (users.id = user_messages.receiver_id OR users.id = user_messages.sender_id) AND users.id != $1
   `,
   values: [userId, startDate, USER_MESSAGES_FETCH_LIMIT],
 });
