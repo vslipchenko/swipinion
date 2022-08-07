@@ -4,6 +4,7 @@ import {db} from '../../../data';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {querySendUserMessage} from '../../../data/queries/user-messages';
 import {sendUserMessageValidator} from '../../../validators/user-messages';
+import {MESSAGE_TEASER_LENGTH} from '../../../constants/user-messages';
 
 export const userMessagesMutationTypeDefinitions = gql`
   type Mutation {
@@ -24,7 +25,9 @@ const sendUserMessage = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(querySendUserMessage(tokenData.userId, input.receiverId, input.body));
+  const result = await db.query(
+    querySendUserMessage(tokenData.userId, input.receiverId, input.body, input.body.slice(0, MESSAGE_TEASER_LENGTH)),
+  );
 
   return {success: Boolean(result.rowCount)};
 };

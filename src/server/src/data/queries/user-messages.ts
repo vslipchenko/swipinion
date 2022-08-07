@@ -2,9 +2,14 @@ import {QueryConfig} from 'pg';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
 import {USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
 
-export const querySendUserMessage = (senderId: string, receiverId: string, body: string): QueryConfig => ({
+export const querySendUserMessage = (
+  senderId: string,
+  receiverId: string,
+  body: string,
+  teaser: string,
+): QueryConfig => ({
   text: `
-    INSERT INTO user_messages (receiver_id, sender_id, body)
+    INSERT INTO user_messages (receiver_id, sender_id, body, teaser)
     VALUES (
       (
         SELECT user_settings.user_id
@@ -18,10 +23,11 @@ export const querySendUserMessage = (senderId: string, receiverId: string, body:
                    AND user_followers.pending IS FALSE
       ),
       $1,
-      $3
+      $3,
+      $4
     )
   `,
-  values: [senderId, receiverId, body],
+  values: [senderId, receiverId, body, teaser],
 });
 
 export const queryFetchUserMessages = (userId: string, startDate?: string): QueryConfig => ({
