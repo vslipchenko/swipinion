@@ -15,7 +15,9 @@
 
   <ng-template #content>
     <div class="content relative h-100">
-      <app-progress-spinner *ngIf="loading$ | async; else container"
+      <app-progress-bar *ngIf="loading$ | async" class="absolute w-100 t-0"></app-progress-bar>
+
+      <app-progress-spinner *ngIf="initialLoading$ | async; else container"
                             class="d-flex jc-center ai-center spinner h-100"></app-progress-spinner>
 
       <ng-template #container>
@@ -35,7 +37,7 @@
               <ng-template #messageList>
                 <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
-                  <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.body"
+                  <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.teaser"
                                date="28 July" (clicked)="loadChat()" [read]="message.read"></app-message>
                 </div>
               </ng-template>

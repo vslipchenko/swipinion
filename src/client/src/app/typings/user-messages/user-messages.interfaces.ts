@@ -15,10 +15,11 @@ export interface FetchUserMessagesQueryResult {
 
 export interface UserMessage {
   id: string;
-  sender_id: string;
+  user_id_1: string;
+  user_id_2: string;
   username: string;
   thumbnail: string;
-  body: string;
+  teaser: string;
   read: boolean;
   created_at: number;
 }

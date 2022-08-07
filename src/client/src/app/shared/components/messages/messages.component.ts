@@ -27,12 +27,13 @@ export class MessagesComponent implements Destroyable {
 
   public showChat = false;
 
+  public readonly initialLoading$ = new BehaviorSubject(false);
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages)).subscribe(() => {
-      this.loading$.next(false);
+      this.initialLoading$.next(false);
     });
   }
 
@@ -44,12 +45,13 @@ export class MessagesComponent implements Destroyable {
     this.destroy$.next();
     this.destroy$.complete();
     this.loading$.complete();
+    this.initialLoading$.complete();
   }
 
   public afterExpand(): void {
     console.log('after expand');
 
-    this.loading$.next(true);
+    this.initialLoading$.next(true);
 
     this.store.dispatch(new FetchUserMessages(''));
   }

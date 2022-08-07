@@ -13,13 +13,13 @@ export const queryFollowUser = (userId: string, followerId: string): QueryConfig
     INSERT INTO user_notifications
     (type, follower_record_id, user_id, involved_user_id)
     VALUES (
-        CASE  
-          WHEN (SELECT pending FROM record) = TRUE THEN ${NotificationType.FollowRequest}
-          ELSE ${NotificationType.Followed}
-        END,
-        (SELECT id FROM record),
-        $1,
-        $2
+      CASE  
+        WHEN (SELECT pending FROM record) = TRUE THEN ${NotificationType.FollowRequest}
+        ELSE ${NotificationType.Followed}
+      END,
+      (SELECT id FROM record),
+      $1,
+      $2
     )
     RETURNING (SELECT pending FROM record)
   `,

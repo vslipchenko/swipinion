@@ -4,10 +4,11 @@ export const FETCH_USER_MESSAGES = gql`
   query ($startDate: String) {
     fetchUserMessages(startDate: $startDate) {
       id
-      sender_id
+      user_id_1
+      user_id_2
       username
       thumbnail
-      body
+      teaser
       read
       created_at
     }
