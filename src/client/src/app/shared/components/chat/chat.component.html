@@ -1,15 +1,20 @@
 <div class="messaging-content relative pb-2 h-100 d-flex f-column">
   <div class="panel p-2 d-flex jc-between">
     <div class="d-flex ai-center">
-      <img [src]="'https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg'"
+      <img *ngIf="chatInfo.thumbnail" [src]="chatInfo.thumbnail"
            alt="" class="thumbnail mr-2">
+      <div *ngIf="!chatInfo.thumbnail" class="thumbnail mr-2"></div>
 
       <div>
-        <a class="fw-medium truncate link" routerLink="/user/{{'someone'}}">{{'someone'}}</a>
-        <div class="date">July 28</div>
+        <a *ngIf="chatInfo.username" class="fw-medium truncate link"
+           routerLink="/user/{{username}}">{{username}}</a>
+
+        <span *ngIf="!chatInfo.username" class="fw-medium truncate">{{username}}</span>
+
+        <!--        <div class="date">July 28</div>-->
       </div>
     </div>
-    <!--            <app-button icon="arrow_back_ios_new" text="Back" (clicked)="showChat = false"></app-button>-->
+    <!--            <app-button icon="arrow_back_ios_new" text="Back" (clicked)="showChat = false"></app-button> -->
     <div>
       <app-icon-button icon="reply"></app-icon-button>
       <app-icon-button icon="arrow_back" (clicked)="back.emit()"></app-icon-button>
@@ -17,33 +22,18 @@
   </div>
 
   <!--  <div class="message-body">-->
-  <div class="message-body px-2 pb-2 primary-scrollbar relative">
-    Where does it come from?
-    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
-    Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
-    Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
-    Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable
-    source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-    of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular
-    during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
-    section 1.10.32.
+  <div class="message-body px-2 pb-2 primary-scrollbar relative h-100">
+    <div class="message first-in-group p-1 mb-1" style="border-radius: 0 10px 10px;">
+      Tłumacz Google – darmowy serwis internetowy Google umożliwiający tłumaczenie tekstu, plików, stron internetowych
+      <div class="time d-flex jc-end ai-center">10:30</div>
+    </div>
 
-    The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections
-    1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
-    original form, accompanied by English versions from the 1914 translation by H. Rackham.
-    Where does it come from?
-    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
-    Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
-    Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem
-    Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable
-    source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-    of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular
-    during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
-    section 1.10.32.
-
-    The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections
-    1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact
-    original form, accompanied by English versions from the 1914 translation by H. Rackham.
+    <div class="message last-in-group p-1 ml-auto" style="border-radius: 10px 10px 0;">
+      Tłumacz Google – darmowy serwis internetowy Google umożliwiający tłumaczenie tekstu, plików, stron internetowych
+      <div class="time d-flex jc-end ai-center">10:30
+        <mat-icon class="status-icon">done</mat-icon>
+      </div>
+    </div>
   </div>
 
   <div class="px-2 d-flex ai-center">

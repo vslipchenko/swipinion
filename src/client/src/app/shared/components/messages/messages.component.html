@@ -15,7 +15,7 @@
 
   <ng-template #content>
     <div class="content relative h-100">
-      <app-progress-bar *ngIf="loading$ | async" class="absolute w-100 t-0"></app-progress-bar>
+      <app-progress-bar *ngIf="loading$ | async" class="absolute w-100 t-0 progress-bar"></app-progress-bar>
 
       <app-progress-spinner *ngIf="initialLoading$ | async; else container"
                             class="d-flex jc-center ai-center spinner h-100"></app-progress-spinner>
@@ -26,7 +26,7 @@
           <div class="list primary-scrollbar h-100 d-flex f-column">
             <div class="transparent-divider"></div>
             <app-message icon="bookmark" [username]="'Saved Messages'" [message]="'Lol some'"
-                         date="28 July" (clicked)="loadChat()"></app-message>
+                         date="28 July" (clicked)="loadChat(true)"></app-message>
 
             <ng-container *ngIf="messages$ | async as messages">
               <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
@@ -38,7 +38,8 @@
                 <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
                   <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.teaser"
-                               date="28 July" (clicked)="loadChat()" [read]="message.read"></app-message>
+                               date="28 July" (clicked)="loadChat(false, message.username, message.thumbnail)"
+                               [read]="message.read"></app-message>
                 </div>
               </ng-template>
             </ng-container>
@@ -47,7 +48,7 @@
       </ng-template>
 
       <div class="messaging h-100" *ngIf="showChat">
-        <app-chat (back)="showChat = false"></app-chat>
+        <app-chat [chatInfo]="$any(chatInfo$ | async)" (back)="showChat = false"></app-chat>
       </div>
 
       <div class="dimmer absolute"></div>

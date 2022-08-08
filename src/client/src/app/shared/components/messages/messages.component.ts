@@ -28,18 +28,20 @@ export class MessagesComponent implements Destroyable {
   public showChat = false;
 
   public readonly initialLoading$ = new BehaviorSubject(false);
+  public readonly chatInfo$ = new BehaviorSubject<{username?: string; thumbnail?: string; savedMessages: boolean}>({
+    username: '',
+    thumbnail: '',
+    savedMessages: false,
+  });
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
+  public username = '';
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages)).subscribe(() => {
       this.initialLoading$.next(false);
     });
   }
-
-  // public ngOnInit(): void {
-  //
-  // }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
@@ -56,7 +58,11 @@ export class MessagesComponent implements Destroyable {
     this.store.dispatch(new FetchUserMessages(''));
   }
 
-  public loadChat(): void {
+  public loadChat(savedMessages: boolean, username?: string, thumbnail?: string): void {
     this.loading$.next(true);
+
+    this.chatInfo$.next({username, thumbnail, savedMessages});
+
+    this.showChat = true;
   }
 }

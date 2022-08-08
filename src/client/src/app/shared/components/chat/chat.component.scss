@@ -12,3 +12,24 @@
 .panel {
   border-top: 1px solid var.$color-light-transparent;
 }
+
+.message {
+  max-width: 95%;
+  width: max-content;
+}
+
+.first-in-group {
+  background-color: var.$color-light-transparent;
+}
+
+.last-in-group {
+  background-color: #69f0ae1f;
+}
+
+.time {
+  font-size: 0.7rem;
+}
+
+.status-icon {
+  transform: scale(0.7);
+}
