@@ -5,6 +5,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 @Component({
   selector: 'app-messages',
@@ -36,6 +37,7 @@ export class MessagesComponent implements Destroyable {
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public username = '';
+  public messagesFetchLimit = USER_MESSAGES_FETCH_LIMIT;
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages)).subscribe(() => {
@@ -50,19 +52,16 @@ export class MessagesComponent implements Destroyable {
     this.initialLoading$.complete();
   }
 
-  public spinnerInView(value: boolean): void {
-    if (!value) return;
+  public spinnerInView(inView: boolean, latestMessageTimestamp: number): void {
+    if (!inView) return;
 
-    // Check whether can load more conversations
-    // If it's possible - load more
+    this.store.dispatch(new FetchUserMessages(latestMessageTimestamp));
   }
 
   public afterExpand(): void {
-    console.log('after expand');
+    // TODO Check whether fetch is required
 
-    // this.initialLoading$.next(true);
-
-    this.store.dispatch(new FetchUserMessages(''));
+    this.store.dispatch(new FetchUserMessages());
   }
 
   public loadStart(): void {

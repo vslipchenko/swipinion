@@ -1,0 +1,1 @@
+export const USER_MESSAGES_FETCH_LIMIT = 15;

@@ -12,7 +12,6 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
@@ -97,14 +96,21 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserMessages) return;
 
-        const sortedMessages = data.fetchUserMessages.sort((a: UserMessage, b: UserMessage) => {
-          return b.created_at - a.created_at;
-        });
+        context.setState((state) => {
+          const nextState = {
+            ...state,
+            messages: [...state.messages, ...data.fetchUserMessages],
+          };
 
-        context.setState((state) => ({
-          ...state,
-          messages: sortedMessages,
-        }));
+          if (!action.payload) {
+            // This one is needed in order to fix discrepancy when inactive tab has a stale unreadMessageTimestamp on message fetch
+            const unreadMessage = data.fetchUserMessages.find((item) => !item.read);
+
+            if (unreadMessage) nextState.unreadMessageTimestamp = unreadMessage.created_at;
+          }
+
+          return nextState;
+        });
       }),
     );
   }

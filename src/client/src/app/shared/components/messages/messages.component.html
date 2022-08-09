@@ -40,11 +40,12 @@
                                [read]="message.read"></app-message>
                 </div>
               </ng-template>
-            </ng-container>
 
-            <app-progress-spinner
-              (appInView)="spinnerInView($event)"
-              class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
+              <app-progress-spinner
+                *ngIf="messages.length && !(messages.length % messagesFetchLimit)"
+                (appInView)="spinnerInView($event, messages[messages.length - 1].created_at)"
+                class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
+            </ng-container>
           </div>
         </div>
       </ng-template>
