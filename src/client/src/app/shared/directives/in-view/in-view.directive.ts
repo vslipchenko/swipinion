@@ -1,17 +1,23 @@
-import {AfterViewInit, Directive, ElementRef, EventEmitter, Output} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, OnDestroy, Output} from '@angular/core';
 
 @Directive({
   selector: '[appInView]',
 })
-export class InViewDirective implements AfterViewInit {
+export class InViewDirective implements AfterViewInit, OnDestroy {
   @Output() public appInView = new EventEmitter<boolean>();
 
+  private intersection$!: IntersectionObserver;
+
   public constructor(private readonly elementRef: ElementRef) {}
+
+  public ngOnDestroy(): void {
+    this.intersection$.disconnect();
+  }
 
   public ngAfterViewInit(): void {
     const observedElement = this.elementRef.nativeElement;
 
-    const observer = new IntersectionObserver(
+    this.intersection$ = new IntersectionObserver(
       ([entry]) => {
         this.appInView.emit(entry.isIntersecting);
       },
@@ -22,6 +28,6 @@ export class InViewDirective implements AfterViewInit {
       },
     );
 
-    observer.observe(observedElement);
+    this.intersection$.observe(observedElement);
   }
 }
