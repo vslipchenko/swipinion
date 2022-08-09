@@ -15,10 +15,8 @@
 
   <ng-template #content>
     <div class="content relative h-100">
-      <app-progress-bar *ngIf="loading$ | async" class="absolute w-100 t-0 progress-bar"></app-progress-bar>
-
       <app-progress-spinner *ngIf="initialLoading$ | async; else container"
-                            class="d-flex jc-center ai-center spinner h-100"></app-progress-spinner>
+                            class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 
       <ng-template #container>
         <div [class.h-0]="showChat" class="h-100">
@@ -43,12 +41,17 @@
                 </div>
               </ng-template>
             </ng-container>
+
+            <app-progress-spinner
+              (appInView)="spinnerInView($event)"
+              class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
           </div>
         </div>
       </ng-template>
 
       <div class="messaging h-100" *ngIf="showChat">
-        <app-chat [chatInfo]="$any(chatInfo$ | async)" (back)="showChat = false"></app-chat>
+        <app-chat [chatInfo]="$any(chatInfo$ | async)" (back)="showChat = false" (loadStart)="loading$.next(true)"
+                  (loadEnd)="loading$.next(false)"></app-chat>
       </div>
 
       <div class="dimmer absolute"></div>

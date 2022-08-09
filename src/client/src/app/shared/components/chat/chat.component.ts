@@ -14,6 +14,8 @@ export class ChatComponent implements OnInit {
   };
 
   @Output() public back = new EventEmitter<void>();
+  @Output() public loadStart = new EventEmitter<void>();
+  @Output() public loadEnd = new EventEmitter<void>();
 
   public username = '';
 
@@ -21,5 +23,7 @@ export class ChatComponent implements OnInit {
     const {username, savedMessages} = this.chatInfo;
 
     this.username = username ? username : savedMessages ? 'Saved Messages' : 'Deleted Account';
+
+    this.loadStart.next();
   }
 }

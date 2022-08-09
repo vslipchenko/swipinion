@@ -27,7 +27,7 @@ export class MessagesComponent implements Destroyable {
 
   public showChat = false;
 
-  public readonly initialLoading$ = new BehaviorSubject(false);
+  public readonly initialLoading$ = new BehaviorSubject(true);
   public readonly chatInfo$ = new BehaviorSubject<{username?: string; thumbnail?: string; savedMessages: boolean}>({
     username: '',
     thumbnail: '',
@@ -50,16 +50,27 @@ export class MessagesComponent implements Destroyable {
     this.initialLoading$.complete();
   }
 
+  public spinnerInView(value: boolean): void {
+    if (!value) return;
+
+    // Check whether can load more conversations
+    // If it's possible - load more
+  }
+
   public afterExpand(): void {
     console.log('after expand');
 
-    this.initialLoading$.next(true);
+    // this.initialLoading$.next(true);
 
     this.store.dispatch(new FetchUserMessages(''));
   }
 
-  public loadChat(savedMessages: boolean, username?: string, thumbnail?: string): void {
+  public loadStart(): void {
     this.loading$.next(true);
+  }
+
+  public loadChat(savedMessages: boolean, username?: string, thumbnail?: string): void {
+    // this.loading$.next(true);
 
     this.chatInfo$.next({username, thumbnail, savedMessages});
 

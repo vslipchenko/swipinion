@@ -9,7 +9,7 @@ import {MessageModule} from '~app/shared/components/message/message.module';
 import {ChatModule} from '~app/shared/components/chat/chat.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
 
 @NgModule({
   declarations: [MessagesComponent],
@@ -23,7 +23,7 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
     ChatModule,
     ProgressSpinnerModule,
     ContentPlaceholderModule,
-    ProgressBarModule,
+    InViewModule,
   ],
   exports: [MessagesComponent],
 })
