@@ -22,3 +22,4 @@ export const passwordValidator = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSW
 export const languageValidator = Joi.string().valid(...getStringEnumValues(LanguageLabel));
 export const offsetValidator = Joi.number().min(0);
 export const fileUrlValidator = Joi.string().max(FILE_URL_MAX_LENGTH).allow(null);
+export const unixTimestampValidator = Joi.date().timestamp('unix');

@@ -23,7 +23,7 @@ export class UserMessagesService {
     });
   }
 
-  public fetchUserMessages(startDate?: string): Observable<ApolloQueryResult<FetchUserMessagesQueryResult>> {
+  public fetchUserMessages(startDate?: number): Observable<ApolloQueryResult<FetchUserMessagesQueryResult>> {
     return this.apollo.query<FetchUserMessagesQueryResult>({
       query: FETCH_USER_MESSAGES,
       variables: {startDate},

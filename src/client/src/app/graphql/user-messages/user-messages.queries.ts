@@ -1,7 +1,7 @@
 import {gql} from 'apollo-angular';
 
 export const FETCH_USER_MESSAGES = gql`
-  query ($startDate: String) {
+  query ($startDate: Float) {
     fetchUserMessages(startDate: $startDate) {
       id
       user_id_1

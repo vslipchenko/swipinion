@@ -29,5 +29,5 @@ export class RunUserStatusPolling {
 export class FetchUserMessages {
   public static readonly type = '[App] FetchUserMessages';
 
-  public constructor(public payload: string) {}
+  public constructor(public payload?: number) {}
 }
