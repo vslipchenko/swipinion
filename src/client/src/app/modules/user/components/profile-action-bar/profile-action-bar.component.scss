@@ -12,7 +12,7 @@
 
   // Prevents userbar from stacking if device width suddenly gets wider
   @include media.above-small {
-    display: none;
+    display: none !important;
   }
 }
 

@@ -64,7 +64,7 @@
 
 .actions {
   @include media.zero-large {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -74,6 +74,6 @@
   max-width: 500px;
 
   @include media.above-large {
-    display: none;
+    display: none !important;
   }
 }
