@@ -30,32 +30,31 @@ export const querySendUserMessage = (
   values: [senderId, receiverId, body, teaser],
 });
 
-export const queryFetchUserMessages = (userId: string, startDate?: string): QueryConfig => ({
+export const queryFetchUserMessages = (userId: string, startId?: number): QueryConfig => ({
   text: `
-    SELECT user_messages.id, 
-      user_messages.teaser, 
+    SELECT conversations.conversation_id AS id, 
       conversations.greatest AS user_id_1, 
       conversations.least AS user_id_2, 
-      conversations.maxdate AS created_at, 
+      user_messages.created_at, 
+      user_messages.teaser,
       users.username, 
       users.thumbnail
     FROM 
     (
-      SELECT DISTINCT GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id), MAX(created_at) AS maxdate
+      SELECT DISTINCT GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id), MAX(id) AS conversation_id
       FROM user_messages
       WHERE sender_id = $1
         OR receiver_id = $1
       GROUP BY GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id)
-      HAVING MAX(created_at) <= $2
-      ORDER BY maxdate DESC
-      LIMIT $3
+      ${startId ? 'HAVING MAX(id) < $3' : ''}
+      ORDER BY conversation_id DESC
+      LIMIT $2
     ) AS conversations
-    LEFT JOIN user_messages ON conversations.maxdate = user_messages.created_at 
-      AND user_messages.sender_id = conversations.greatest AND user_messages.receiver_id = conversations.least
-      OR user_messages.sender_id = conversations.least AND user_messages.receiver_id = conversations.greatest
+    LEFT JOIN user_messages ON  user_messages.id = conversations.conversation_id
     LEFT JOIN users ON (users.id = user_messages.receiver_id OR users.id = user_messages.sender_id) AND users.id != $1
+    ORDER BY id DESC
   `,
-  values: [userId, startDate, USER_MESSAGES_FETCH_LIMIT],
+  values: startId ? [userId, USER_MESSAGES_FETCH_LIMIT, startId] : [userId, USER_MESSAGES_FETCH_LIMIT],
 });
 
 export const queryMarkUserMessagesRead = (senderId: string, receiverId: string): QueryConfig => ({
