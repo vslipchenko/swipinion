@@ -66,7 +66,7 @@ const fetchUserChat = async (
       queryFetchUserChat(input.user_id_1, input.user_id_2, startDate),
     );
 
-    return result;
+    return result.results[1].rows;
   }
 
   const result = await db.query<unknown>(queryFetchUserChat(input.user_id_1, input.user_id_2, startDate));
