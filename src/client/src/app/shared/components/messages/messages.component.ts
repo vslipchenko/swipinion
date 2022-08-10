@@ -59,9 +59,9 @@ export class MessagesComponent implements Destroyable {
   }
 
   public afterExpand(): void {
-    // TODO Check whether fetch is required
+    const fetchedMessages = this.store.selectSnapshot(AppSelectors.messages).length;
 
-    this.store.dispatch(new FetchUserMessages());
+    if (!fetchedMessages) this.store.dispatch(new FetchUserMessages());
   }
 
   public loadStart(): void {
