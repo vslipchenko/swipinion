@@ -43,7 +43,7 @@
 
               <app-progress-spinner
                 *ngIf="messages.length && !(messages.length % messagesFetchLimit)"
-                (appInView)="spinnerInView($event, messages[messages.length - 1].created_at)"
+                (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
                 class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
             </ng-container>
           </div>

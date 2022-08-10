@@ -30,7 +30,7 @@ export const querySendUserMessage = (
   values: [senderId, receiverId, body, teaser],
 });
 
-export const queryFetchUserMessages = (userId: string, startId?: number): QueryConfig => ({
+export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryConfig => ({
   text: `
     SELECT conversations.conversation_id AS id, 
       conversations.greatest AS user_id_1, 
@@ -46,7 +46,7 @@ export const queryFetchUserMessages = (userId: string, startId?: number): QueryC
       WHERE sender_id = $1
         OR receiver_id = $1
       GROUP BY GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id)
-      ${startId ? 'HAVING MAX(id) < $3' : ''}
+      ${edgeId ? 'HAVING MAX(id) < $3' : ''}
       ORDER BY conversation_id DESC
       LIMIT $2
     ) AS conversations
@@ -54,7 +54,7 @@ export const queryFetchUserMessages = (userId: string, startId?: number): QueryC
     LEFT JOIN users ON (users.id = user_messages.receiver_id OR users.id = user_messages.sender_id) AND users.id != $1
     ORDER BY id DESC
   `,
-  values: startId ? [userId, USER_MESSAGES_FETCH_LIMIT, startId] : [userId, USER_MESSAGES_FETCH_LIMIT],
+  values: edgeId ? [userId, USER_MESSAGES_FETCH_LIMIT, edgeId] : [userId, USER_MESSAGES_FETCH_LIMIT],
 });
 
 export const queryMarkUserMessagesRead = (senderId: string, receiverId: string): QueryConfig => ({

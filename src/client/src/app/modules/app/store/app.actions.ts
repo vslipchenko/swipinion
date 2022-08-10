@@ -30,7 +30,7 @@ export class RunUserStatusPolling {
 export class FetchUserMessages {
   public static readonly type = '[App] FetchUserMessages';
 
-  public constructor(public payload?: number) {}
+  public constructor(public payload?: string) {}
 }
 
 export class FetchUserChat {

@@ -52,10 +52,10 @@ export class MessagesComponent implements Destroyable {
     this.initialLoading$.complete();
   }
 
-  public spinnerInView(inView: boolean, latestMessageTimestamp: number): void {
+  public spinnerInView(inView: boolean, edgeMessageId: string): void {
     if (!inView) return;
 
-    this.store.dispatch(new FetchUserMessages(latestMessageTimestamp));
+    this.store.dispatch(new FetchUserMessages(edgeMessageId));
   }
 
   public afterExpand(): void {

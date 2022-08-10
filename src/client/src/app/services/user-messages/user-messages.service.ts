@@ -25,10 +25,10 @@ export class UserMessagesService {
     });
   }
 
-  public fetchUserMessages(startDate?: number): Observable<ApolloQueryResult<FetchUserMessagesQueryResult>> {
+  public fetchUserMessages(edgeId?: string): Observable<ApolloQueryResult<FetchUserMessagesQueryResult>> {
     return this.apollo.query<FetchUserMessagesQueryResult>({
       query: FETCH_USER_MESSAGES,
-      variables: {startDate},
+      variables: {edgeId},
       fetchPolicy: 'no-cache',
     });
   }

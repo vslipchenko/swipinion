@@ -6,23 +6,23 @@ import {
   queryFetchUserMessages,
   queryMarkUserMessagesRead,
 } from '../../../data/queries/user-messages';
-import {unixTimestampValidator} from '../../../validators/shared';
+import {bigintValidator} from '../../../validators/shared';
 import {FetchUserChatPayload} from '../../../typings/user-messages/user-messages.interfaces';
 import {fetchUserChatValidator} from '../../../validators/user-messages';
 
 export const userMessagesQueryTypeDefinitions = gql`
   type Query {
-    fetchUserMessages(startDate: Float): [Message!]
+    fetchUserMessages(edgeId: String): [Message!]
     fetchUserChat(input: FetchUserChat): [Chat!]
   }
 `;
 
 const fetchUserMessages = async (
   _1: unknown,
-  {startDate}: {startDate: number},
+  {edgeId}: {edgeId: number},
   {accessToken}: {accessToken: string},
 ): Promise<Array<unknown> | ApolloError | null> => {
-  const {error} = unixTimestampValidator.validate(startDate);
+  const {error} = bigintValidator.validate(edgeId);
 
   if (error) return null;
 
@@ -30,9 +30,7 @@ const fetchUserMessages = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<unknown>(
-    queryFetchUserMessages(tokenData.userId, startDate ? new Date(startDate).toISOString() : 'NOW()'),
-  );
+  const result = await db.query<unknown>(queryFetchUserMessages(tokenData.userId, edgeId));
 
   if (!result.rowCount) return null;
 
@@ -44,7 +42,6 @@ const fetchUserChat = async (
   {input}: {input: FetchUserChatPayload},
   {accessToken}: {accessToken: string},
 ): Promise<unknown | ApolloError | null> => {
-  // TODO update validation
   const {error} = fetchUserChatValidator.validate(input);
 
   if (error) return null;
