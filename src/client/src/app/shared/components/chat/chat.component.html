@@ -1,9 +1,15 @@
 <div class="messaging-content relative pb-2 h-100 d-flex f-column">
   <div class="panel p-2 d-flex jc-between">
     <div class="d-flex ai-center">
-      <img *ngIf="chatInfo.thumbnail" [src]="chatInfo.thumbnail"
-           alt="" class="thumbnail mr-2">
-      <div *ngIf="!chatInfo.thumbnail" class="thumbnail mr-2"></div>
+      <mat-icon *ngIf="chatInfo.savedMessages; else image" color="accent"
+                class="saved-messages-icon d-flex jc-center ai-center mr-2">bookmark
+      </mat-icon>
+
+      <ng-template #image>
+        <img *ngIf="chatInfo.thumbnail" [src]="chatInfo.thumbnail"
+             alt="" class="thumbnail mr-2">
+        <div *ngIf="!chatInfo.thumbnail" class="thumbnail mr-2"></div>
+      </ng-template>
 
       <div>
         <a *ngIf="chatInfo.username" class="fw-medium truncate link"
