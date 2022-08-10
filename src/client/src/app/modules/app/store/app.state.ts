@@ -1,6 +1,7 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
+  FetchUserChat,
   FetchUserMessages,
   RunUserStatusPolling,
   UpdateAuthedUserProfileTeaser,
@@ -16,6 +17,7 @@ import {UserMessagesService} from '~app/services/user-messages/user-messages.ser
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
   messages: Array<unknown>;
+  chats: {[key: string]: unknown};
   role: UserRole;
   utcTimestamp: number;
   unreadMessageTimestamp: number;
@@ -33,6 +35,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       thumbnail: '',
     },
     messages: [],
+    chats: {},
     role: UserRole.Guest,
     unreadMessageTimestamp: 0,
     unreadNotificationTimestamp: 0,
@@ -110,6 +113,19 @@ export class AppState {
           }
 
           return nextState;
+        });
+      }),
+    );
+  }
+
+  @Action(FetchUserChat)
+  private fetchUserChat(context: StateContext<AppStateModel>, action: FetchUserChat): Observable<unknown> {
+    return this.userMessagesService.fetchUserChat(action.payload).pipe(
+      tap(({data}) => {
+        if (!data.fetchUserChat) return;
+
+        context.setState((state) => {
+          return {...state};
         });
       }),
     );

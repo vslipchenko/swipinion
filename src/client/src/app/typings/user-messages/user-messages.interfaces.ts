@@ -13,6 +13,10 @@ export interface FetchUserMessagesQueryResult {
   fetchUserMessages: Array<UserMessage>;
 }
 
+export interface FetchUserChatQueryResult {
+  fetchUserChat: unknown;
+}
+
 export interface UserMessage {
   id: string;
   user_id_1: string;

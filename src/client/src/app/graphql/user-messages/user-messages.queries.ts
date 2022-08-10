@@ -14,3 +14,13 @@ export const FETCH_USER_MESSAGES = gql`
     }
   }
 `;
+
+export const FETCH_USER_CHAT = gql`
+  query ($input: FetchUserChat) {
+    fetchUserChat(input: $input) {
+      id
+      body
+      created_at
+    }
+  }
+`;

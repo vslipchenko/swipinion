@@ -31,3 +31,9 @@ export class FetchUserMessages {
 
   public constructor(public payload?: number) {}
 }
+
+export class FetchUserChat {
+  public static readonly type = '[App] FetchUserChat';
+
+  public constructor(public payload: {user_id_1: string; user_id_2: string; startDate: number}) {}
+}
