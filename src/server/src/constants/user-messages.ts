@@ -1,2 +1,3 @@
 export const USER_MESSAGES_FETCH_LIMIT = 15;
+export const USER_CHAT_MESSAGES_FETCH_LIMIT = 15;
 export const MESSAGE_TEASER_LENGTH = 150;

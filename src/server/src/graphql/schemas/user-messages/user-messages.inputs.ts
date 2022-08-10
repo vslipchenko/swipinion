@@ -5,4 +5,11 @@ export const userMessagesInputs = gql`
     receiverId: String!
     body: String!
   }
+
+  input FetchUserChat {
+    user_id_1: String!
+    user_id_2: String!
+    startDate: Float!
+    markRead: Boolean!
+  }
 `;

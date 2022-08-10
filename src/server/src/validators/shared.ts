@@ -23,3 +23,4 @@ export const languageValidator = Joi.string().valid(...getStringEnumValues(Langu
 export const offsetValidator = Joi.number().min(0);
 export const fileUrlValidator = Joi.string().max(FILE_URL_MAX_LENGTH).allow(null);
 export const unixTimestampValidator = Joi.date().timestamp('unix');
+export const booleanValidator = Joi.boolean();

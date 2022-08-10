@@ -1,6 +1,7 @@
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
+import {FetchUserChatPayload} from '~app/typings/user-messages/user-messages.interfaces';
 
 export class UpdateAuthedUserProfileTeaser {
   public static readonly type = '[App] UpdateAuthedUserProfileTeaser';
@@ -35,5 +36,5 @@ export class FetchUserMessages {
 export class FetchUserChat {
   public static readonly type = '[App] FetchUserChat';
 
-  public constructor(public payload: {user_id_1: string; user_id_2: string; startDate: number}) {}
+  public constructor(public payload: FetchUserChatPayload) {}
 }

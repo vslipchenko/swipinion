@@ -1,6 +1,6 @@
 import {QueryConfig} from 'pg';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
-import {USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
+import {USER_CHAT_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
 
 export const querySendUserMessage = (
   senderId: string,
@@ -56,4 +56,28 @@ export const queryFetchUserMessages = (userId: string, startDate?: string): Quer
     LEFT JOIN users ON (users.id = user_messages.receiver_id OR users.id = user_messages.sender_id) AND users.id != $1
   `,
   values: [userId, startDate, USER_MESSAGES_FETCH_LIMIT],
+});
+
+export const queryMarkUserMessagesRead = (senderId: string, receiverId: string): QueryConfig => ({
+  // TODO there is a room for possible improvement for marking read only that messages that user actually seen. E.g. when unread message count > fetch limit and user hasn't scrolled through all of them
+  text: `
+    UPDATE user_messages
+    SET read = TRUE
+    WHERE sender_id = $1 AND receiver_id = $2
+  `,
+  values: [senderId, receiverId],
+});
+
+export const queryFetchUserChat = (user_id_1: string, user_id_2: string, startDate: string): QueryConfig => ({
+  text: `
+    SELECT sender_id, receiver_id, body, created_at
+    FROM user_messages
+    WHERE
+        receiver_id = $1 AND sender_id = $2
+        OR receiver_id = $2 AND sender_id = $1
+        AND created_at <= $3
+    ORDER BY created_at DESC
+    LIMIT $4
+  `,
+  values: [user_id_1, user_id_2, startDate, USER_CHAT_MESSAGES_FETCH_LIMIT],
 });

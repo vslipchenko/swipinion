@@ -1,6 +1,7 @@
 import Joi from 'joi';
+import {booleanValidator} from './shared';
 
 export const checkUserStatusValidator = Joi.object({
-  checkMessage: Joi.boolean(),
-  checkNotification: Joi.boolean(),
+  checkMessage: booleanValidator,
+  checkNotification: booleanValidator,
 });

@@ -6,9 +6,9 @@ import {TagsTable} from './tables/tags';
 import {FollowersTable} from './tables/user-followers';
 import {UserSettingsTable} from './tables/user-settings';
 import {UserNotificationsTable} from './tables/user-notifications';
-import {SuccessResponse} from '../typings/response/response.interfaces';
 import {UserMessagesTable} from './tables/user-messages';
 import {UserSavedMessagesTable} from './tables/user-saved-messages';
+import {TransactionResult} from '../typings/data/data.interfaces';
 
 // PostgreSQL v14
 const {DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_PORT} = environment;
@@ -22,23 +22,25 @@ const pool = new Pool({
 });
 
 export const db = {
-  transaction: async (...queries: Array<QueryConfig>): Promise<SuccessResponse> => {
+  transaction: async (...queries: Array<QueryConfig>): Promise<TransactionResult> => {
     const client = await pool.connect();
+
+    const results: Array<QueryResult> = [];
 
     try {
       await client.query('BEGIN');
 
       for (const query of queries) {
-        await client.query(query);
+        results.push(await client.query(query));
       }
 
       await client.query('COMMIT');
 
-      return {success: true};
+      return {success: true, results};
     } catch {
       await client.query('ROLLBACK');
 
-      return {success: false};
+      return {success: false, results};
     } finally {
       client.release();
     }

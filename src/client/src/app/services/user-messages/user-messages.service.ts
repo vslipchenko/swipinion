@@ -3,6 +3,7 @@ import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {SEND_USER_MESSAGE} from '~app/graphql/user-messages/user-messages.mutations';
 import {
+  FetchUserChatPayload,
   FetchUserChatQueryResult,
   FetchUserMessagesQueryResult,
   SendUserMessage,
@@ -32,11 +33,7 @@ export class UserMessagesService {
     });
   }
 
-  public fetchUserChat(input: {
-    user_id_1: string;
-    user_id_2: string;
-    startDate: number;
-  }): Observable<ApolloQueryResult<FetchUserChatQueryResult>> {
+  public fetchUserChat(input: FetchUserChatPayload): Observable<ApolloQueryResult<FetchUserChatQueryResult>> {
     return this.apollo.query<FetchUserChatQueryResult>({
       query: FETCH_USER_CHAT,
       variables: {input},
