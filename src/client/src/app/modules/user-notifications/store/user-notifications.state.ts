@@ -20,6 +20,7 @@ import {
   millisecondsToDays,
   millisecondsToHours,
   millisecondsToMinutes,
+  millisecondsToWeeks,
 } from '~app/utilities/date';
 import {ElapsedTimeMeasure} from '~app/typings/date/date.enums';
 import {NotificationType} from '~app/typings/user-notifications/user-notifications.enums';
@@ -81,8 +82,10 @@ export class UserNotificationsState {
                     return `${millisecondsToMinutes(millisecondsElapsed)}m`;
                   case ElapsedTimeMeasure.HOUR:
                     return `${millisecondsToHours(millisecondsElapsed)}h`;
-                  default: // TODO: Fix. This has to be a concrete date instead of days passed since
+                  case ElapsedTimeMeasure.DAY:
                     return `${millisecondsToDays(millisecondsElapsed)}d`;
+                  default:
+                    return `${millisecondsToWeeks(millisecondsElapsed)}w`;
                 }
               }),
             ),

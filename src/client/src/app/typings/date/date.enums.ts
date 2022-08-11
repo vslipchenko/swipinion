@@ -3,4 +3,5 @@ export enum ElapsedTimeMeasure {
   MINUTE,
   HOUR,
   DAY,
+  WEEK,
 }

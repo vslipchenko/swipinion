@@ -10,6 +10,9 @@ export const millisecondsToHours = (milliseconds: number): number => Math.floor(
 
 export const millisecondsToDays = (milliseconds: number): number => Math.floor(milliseconds / (1000 * 60 * 60 * 24));
 
+export const millisecondsToWeeks = (milliseconds: number): number =>
+  Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 7));
+
 export const determineElapsedTimeMeasure = (milliseconds: number): ElapsedTimeMeasure => {
   switch (true) {
     case milliseconds < 1000 * 60:
@@ -18,7 +21,9 @@ export const determineElapsedTimeMeasure = (milliseconds: number): ElapsedTimeMe
       return ElapsedTimeMeasure.MINUTE;
     case milliseconds < 1000 * 60 * 60 * 24:
       return ElapsedTimeMeasure.HOUR;
-    default:
+    case milliseconds < 1000 * 60 * 60 * 24 * 7:
       return ElapsedTimeMeasure.DAY;
+    default:
+      return ElapsedTimeMeasure.WEEK;
   }
 };
