@@ -9,7 +9,7 @@ export const userMessagesInputs = gql`
   input FetchUserChat {
     user_id_1: String!
     user_id_2: String!
-    startDate: Float!
+    edgeId: String!
     markRead: Boolean!
   }
 `;
