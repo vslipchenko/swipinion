@@ -7,6 +7,7 @@ export const UserSavedMessagesTable: Table = {
       id BIGSERIAL PRIMARY KEY,
       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,  -- Preserve messages even of deleted users
       body VARCHAR (3000) NOT NULL,
+      teaser VARCHAR (150) NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
     );
   `,

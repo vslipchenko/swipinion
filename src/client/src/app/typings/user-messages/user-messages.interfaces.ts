@@ -1,7 +1,7 @@
 import {SuccessResponse} from '~app/typings/response/response.interfaces';
 
 export interface SendUserMessage {
-  receiverId: string;
+  recipientId: string;
   body: string;
 }
 

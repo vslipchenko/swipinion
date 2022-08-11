@@ -14,7 +14,7 @@ export const userMessagesMutationTypeDefinitions = gql`
 
 const sendUserMessage = async (
   _: unknown,
-  {input}: {input: {receiverId: string; body: string}},
+  {input}: {input: {recipientId: string; body: string}},
   {accessToken}: {accessToken: string},
 ): Promise<SuccessResponse | ApolloError | null> => {
   const {error} = sendUserMessageValidator.validate(input);
@@ -26,7 +26,7 @@ const sendUserMessage = async (
   if (authenticationError) return authenticationError;
 
   const result = await db.query(
-    querySendUserMessage(tokenData.userId, input.receiverId, input.body, input.body.slice(0, MESSAGE_TEASER_LENGTH)),
+    querySendUserMessage(tokenData.userId, input.recipientId, input.body, input.body.slice(0, MESSAGE_TEASER_LENGTH)),
   );
 
   return {success: Boolean(result.rowCount)};

@@ -3,7 +3,7 @@ import {bigintValidator, booleanValidator, unixTimestampValidator} from './share
 import {FetchUserChatPayload} from '../typings/user-messages/user-messages.interfaces';
 
 export const sendUserMessageValidator = Joi.object({
-  receiverId: bigintValidator,
+  recipientId: bigintValidator,
   body: Joi.string().max(3000),
 });
 

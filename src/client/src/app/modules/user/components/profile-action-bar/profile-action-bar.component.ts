@@ -47,7 +47,7 @@ export class ProfileActionBarComponent {
   public message(): void {
     console.log('message', this.id);
     // this.userMessagesService.sendMessage({
-    //   receiverId: this.id
+    //   recipientId: this.id
     // });
     this.dialog.open(UserMessageDialogComponent, {
       panelClass: ['dialog', 'extended-dialog'],

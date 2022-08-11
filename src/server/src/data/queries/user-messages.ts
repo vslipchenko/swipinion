@@ -4,12 +4,12 @@ import {USER_CHAT_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '../../c
 
 export const querySendUserMessage = (
   senderId: string,
-  receiverId: string,
+  recipientId: string,
   body: string,
   teaser: string,
 ): QueryConfig => ({
   text: `
-    INSERT INTO user_messages (receiver_id, sender_id, body, teaser)
+    INSERT INTO user_messages (recipient_id, sender_id, body, teaser)
     VALUES (
       (
         SELECT user_settings.user_id
@@ -27,7 +27,7 @@ export const querySendUserMessage = (
       $4
     )
   `,
-  values: [senderId, receiverId, body, teaser],
+  values: [senderId, recipientId, body, teaser],
 });
 
 export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryConfig => ({
@@ -41,39 +41,39 @@ export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryCo
       users.thumbnail
     FROM 
     (
-      SELECT DISTINCT GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id), MAX(id) AS conversation_id
+      SELECT DISTINCT GREATEST(sender_id, recipient_id), LEAST(sender_id, recipient_id), MAX(id) AS conversation_id
       FROM user_messages
       WHERE sender_id = $1
-        OR receiver_id = $1
-      GROUP BY GREATEST(sender_id, receiver_id), LEAST(sender_id, receiver_id)
+        OR recipient_id = $1
+      GROUP BY GREATEST(sender_id, recipient_id), LEAST(sender_id, recipient_id)
       ${edgeId ? 'HAVING MAX(id) < $3' : ''}
       ORDER BY conversation_id DESC
       LIMIT $2
     ) AS conversations
     LEFT JOIN user_messages ON  user_messages.id = conversations.conversation_id
-    LEFT JOIN users ON (users.id = user_messages.receiver_id OR users.id = user_messages.sender_id) AND users.id != $1
+    LEFT JOIN users ON (users.id = user_messages.recipient_id OR users.id = user_messages.sender_id) AND users.id != $1
     ORDER BY id DESC
   `,
   values: edgeId ? [userId, USER_MESSAGES_FETCH_LIMIT, edgeId] : [userId, USER_MESSAGES_FETCH_LIMIT],
 });
 
-export const queryMarkUserMessagesRead = (senderId: string, receiverId: string): QueryConfig => ({
+export const queryMarkUserMessagesRead = (senderId: string, recipientId: string): QueryConfig => ({
   // TODO there is a room for possible improvement for marking read only that messages that user actually seen. E.g. when unread message count > fetch limit and user hasn't scrolled through all of them
   text: `
     UPDATE user_messages
     SET read = TRUE
-    WHERE sender_id = $1 AND receiver_id = $2
+    WHERE sender_id = $1 AND recipient_id = $2
   `,
-  values: [senderId, receiverId],
+  values: [senderId, recipientId],
 });
 
 export const queryFetchUserChat = (user_id_1: string, user_id_2: string, startDate: string): QueryConfig => ({
   text: `
-    SELECT sender_id, receiver_id, body, created_at
+    SELECT sender_id, recipient_id, body, created_at
     FROM user_messages
     WHERE
-        receiver_id = $1 AND sender_id = $2
-        OR receiver_id = $2 AND sender_id = $1
+        recipient_id = $1 AND sender_id = $2
+        OR recipient_id = $2 AND sender_id = $1
         AND created_at <= $3
     ORDER BY created_at DESC
     LIMIT $4
