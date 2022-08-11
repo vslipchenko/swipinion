@@ -1,4 +1,4 @@
-import {Action, State, StateContext, StateToken} from '@ngxs/store';
+import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
   FetchUserChat,
@@ -13,10 +13,18 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
+import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {
+  determineMessageTimePoint,
+  timestampToMonthDay,
+  timestampToMonthDayYear,
+  timestampToTime,
+} from '~app/utilities/date';
+import {MessageTimePoint} from '~app/typings/date/date.enums';
 
 export interface AppStateModel {
   profileTeaser: Omit<UserProfile, 'bio'>;
-  messages: Array<unknown>;
+  messages: Array<UIUserMessage>;
   chats: {[key: string]: unknown};
   role: UserRole;
   utcTimestamp: number;
@@ -45,6 +53,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
 @Injectable()
 export class AppState {
   public constructor(
+    private readonly store: Store,
     private readonly userStatusService: UserStatusService,
     private readonly userMessagesService: UserMessagesService,
   ) {}
@@ -99,15 +108,36 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserMessages) return;
 
+        const messages: Array<UIUserMessage> = data.fetchUserMessages.map((message) => {
+          const timePoint = determineMessageTimePoint(message.created_at);
+          let date;
+
+          switch (timePoint) {
+            case MessageTimePoint.TODAY:
+              date = timestampToTime(message.created_at);
+              break;
+            case MessageTimePoint.THIS_YEAR:
+              date = timestampToMonthDay(message.created_at);
+              break;
+            default:
+              date = timestampToMonthDayYear(message.created_at);
+          }
+
+          return {
+            ...message,
+            date,
+          };
+        });
+
         context.setState((state) => {
           const nextState = {
             ...state,
-            messages: [...state.messages, ...data.fetchUserMessages],
+            messages: [...state.messages, ...messages],
           };
 
           if (!action.payload) {
             // This one is needed in order to fix discrepancy when inactive tab has a stale unreadMessageTimestamp on message fetch
-            const unreadMessage = data.fetchUserMessages.find((item) => !item.read);
+            const unreadMessage = messages.find((item) => !item.read);
 
             if (unreadMessage) nextState.unreadMessageTimestamp = unreadMessage.created_at;
           }

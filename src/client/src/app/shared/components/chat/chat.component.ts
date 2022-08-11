@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 
 @Component({
   selector: 'app-chat',
@@ -7,9 +8,17 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit {
-  @Input() public chatInfo: {username: string; thumbnail: string; savedMessages: boolean} = {
-    username: '',
-    thumbnail: '',
+  @Input() public chatInfo: {message: UserMessage; savedMessages: boolean} = {
+    message: {
+      id: '',
+      user_id_1: '',
+      user_id_2: '',
+      teaser: '',
+      username: '',
+      thumbnail: '',
+      read: false,
+      created_at: 0,
+    },
     savedMessages: false,
   };
 
@@ -20,9 +29,9 @@ export class ChatComponent implements OnInit {
   public username = '';
 
   public ngOnInit(): void {
-    const {username, savedMessages} = this.chatInfo;
+    const {message, savedMessages} = this.chatInfo;
 
-    this.username = username ? username : savedMessages ? 'Saved Messages' : 'Deleted Account';
+    this.username = message.username ? message.username : savedMessages ? 'Saved Messages' : 'Deleted Account';
 
     this.loadStart.next();
   }

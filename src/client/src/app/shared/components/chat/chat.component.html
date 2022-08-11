@@ -6,16 +6,16 @@
       </mat-icon>
 
       <ng-template #image>
-        <img *ngIf="chatInfo.thumbnail" [src]="chatInfo.thumbnail"
+        <img *ngIf="chatInfo.message.thumbnail" [src]="chatInfo.message.thumbnail"
              alt="" class="thumbnail mr-2">
-        <div *ngIf="!chatInfo.thumbnail" class="thumbnail mr-2"></div>
+        <div *ngIf="!chatInfo.message.thumbnail" class="thumbnail mr-2"></div>
       </ng-template>
 
       <div>
-        <a *ngIf="chatInfo.username" class="fw-medium truncate link"
+        <a *ngIf="chatInfo.message.username" class="fw-medium truncate link"
            routerLink="/user/{{username}}">{{username}}</a>
 
-        <span *ngIf="!chatInfo.username" class="fw-medium truncate">{{username}}</span>
+        <span *ngIf="!chatInfo.message.username" class="fw-medium truncate">{{username}}</span>
 
         <!--        <div class="date">July 28</div>-->
       </div>

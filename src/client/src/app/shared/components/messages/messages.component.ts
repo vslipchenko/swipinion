@@ -4,7 +4,7 @@ import {FetchUserMessages} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage, UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 @Component({
@@ -14,8 +14,8 @@ import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessagesComponent implements Destroyable {
-  @Select(AppSelectors.messages) public messages$!: Observable<Array<UserMessage>>;
-  @Select(AppSelectors.unreadMessageTimestamp) public unreadMessageTimestamp$!: Observable<Array<UserMessage>>;
+  @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
+  @Select(AppSelectors.unreadMessageTimestamp) public unreadMessageTimestamp$!: Observable<number>;
 
   // public readonly tabs = [
   //   {text: 'Inbox', icon: 'inbox'},
@@ -29,9 +29,17 @@ export class MessagesComponent implements Destroyable {
   public showChat = false;
 
   public readonly initialLoading$ = new BehaviorSubject(true);
-  public readonly chatInfo$ = new BehaviorSubject<{username?: string; thumbnail?: string; savedMessages: boolean}>({
-    username: '',
-    thumbnail: '',
+  public readonly chatInfo$ = new BehaviorSubject<{message?: UserMessage; savedMessages: boolean}>({
+    message: {
+      id: '',
+      user_id_1: '',
+      user_id_2: '',
+      teaser: '',
+      username: '',
+      thumbnail: '',
+      read: false,
+      created_at: 0,
+    },
     savedMessages: false,
   });
   public readonly loading$ = new BehaviorSubject(false);
@@ -68,10 +76,10 @@ export class MessagesComponent implements Destroyable {
     this.loading$.next(true);
   }
 
-  public loadChat(savedMessages: boolean, username?: string, thumbnail?: string): void {
+  public loadChat(savedMessages: boolean, message?: UserMessage): void {
     // this.loading$.next(true);
 
-    this.chatInfo$.next({username, thumbnail, savedMessages});
+    this.chatInfo$.next({message: message || ({} as UserMessage), savedMessages});
 
     this.showChat = true;
   }

@@ -34,3 +34,7 @@ export interface UserMessage {
   read: boolean;
   created_at: number;
 }
+
+export interface UIUserMessage extends UserMessage {
+  date: string;
+}

@@ -36,7 +36,7 @@
                 <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
                   <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.teaser"
-                               date="28 July" (clicked)="loadChat(false, message.username, message.thumbnail)"
+                               [date]="message.date" (clicked)="loadChat(false, message)"
                                [read]="message.read"></app-message>
                 </div>
               </ng-template>
