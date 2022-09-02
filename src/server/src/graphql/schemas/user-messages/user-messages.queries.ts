@@ -30,7 +30,7 @@ const fetchUserMessages = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<unknown>(queryFetchUserMessages(tokenData.userId, edgeId));
+  const result = await db.query(queryFetchUserMessages(tokenData.userId, edgeId));
 
   if (!result.rowCount) return null;
 
@@ -64,7 +64,7 @@ const fetchUserChat = async (
     return result.results[1].rows;
   }
 
-  const result = await db.query<unknown>(queryFetchUserChat(input.user_id_1, input.user_id_2, input.edgeId));
+  const result = await db.query(queryFetchUserChat(input.user_id_1, input.user_id_2, input.edgeId));
 
   if (!result.rowCount) return null;
 

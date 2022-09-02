@@ -1,7 +1,6 @@
 import {ApolloError, gql} from 'apollo-server-core';
 import {AuthenticationErrorCode, SignInFailReason} from '../../../typings/authentication/authentication.enums';
 import {AccessTokenData, SignIn} from '../../../typings/authentication/authentication.interfaces';
-import {Language} from '../../../typings/i18n/i18n.types';
 import {compareSync} from 'bcrypt';
 import {decode, sign, verify} from 'jsonwebtoken';
 import {JWT_ALGORITHM} from '../../../constants/jwt';
@@ -27,15 +26,7 @@ const signIn = async (
 
   if (error) return null;
 
-  const result = await db.query<{
-    id: string;
-    access_key: string;
-    confirmation_code: string;
-    thumbnail: string;
-    username: string;
-    password: string;
-    language: Language;
-  }>(queryUserSignIn(input.email));
+  const result = await db.query(queryUserSignIn(input.email));
 
   if (!result.rowCount) return null;
 
@@ -71,12 +62,7 @@ const refreshAccessToken = async (
   // Invalid user id
   if (!userId) return new ApolloError('', AuthenticationErrorCode.InvalidRefreshToken);
 
-  const result = await db.query<{
-    access_key: string;
-    thumbnail: string;
-    username: string;
-    language: Language;
-  }>(queryUserRefreshAccessToken(userId));
+  const result = await db.query(queryUserRefreshAccessToken(userId));
   // Invalid refresh token data
   if (!result.rowCount) return new ApolloError('', AuthenticationErrorCode.InvalidRefreshToken);
 

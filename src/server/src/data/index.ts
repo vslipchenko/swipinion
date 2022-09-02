@@ -1,4 +1,4 @@
-import {Pool, QueryConfig, QueryResult} from 'pg';
+import {Pool, QueryConfig, QueryResult, QueryResultRow} from 'pg';
 import {environment} from '../environments';
 import {UsersTable} from './tables/users';
 import {UserOpinionsTable} from './tables/user-opinions';
@@ -45,7 +45,8 @@ export const db = {
       client.release();
     }
   },
-  query: <T>(query: string | QueryConfig, params?: Array<any>): Promise<QueryResult<T>> => pool.query(query, params),
+  query: (query: string | QueryConfig, params?: Array<any>): Promise<QueryResult<QueryResultRow>> =>
+    pool.query(query, params),
   close: (): Promise<void> => pool.end(),
   sync: function (): Promise<void> {
     const tables = [

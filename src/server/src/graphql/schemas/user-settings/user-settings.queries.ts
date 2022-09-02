@@ -2,9 +2,9 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {db} from '../../../data';
 import {queryUserSettings} from '../../../data/queries/user-settings';
 import {authenticationGuard} from '../../../utilities/guard';
-import {UserSettings} from '../../../typings/user-settings/user-settings.interfaces';
 import {bigintValidator} from '../../../validators/shared';
 import {AccessTokenData} from '../../../typings/authentication/authentication.interfaces';
+import {QueryResultRow} from 'pg';
 
 export const userSettingsQueryTypeDefinitions = gql`
   type Query {
@@ -16,7 +16,7 @@ const userSettings = async (
   _1: unknown,
   {userId}: {userId: string},
   {accessToken}: {accessToken: string},
-): Promise<UserSettings | ApolloError | null> => {
+): Promise<QueryResultRow | ApolloError | null> => {
   let tokenData = {} as AccessTokenData;
 
   if (userId) {
@@ -31,7 +31,7 @@ const userSettings = async (
     if (error) return error;
   }
 
-  const result = await db.query<UserSettings>(queryUserSettings(tokenData.userId ?? userId));
+  const result = await db.query(queryUserSettings(tokenData.userId ?? userId));
 
   if (!result.rowCount) return null;
 

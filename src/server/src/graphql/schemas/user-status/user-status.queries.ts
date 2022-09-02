@@ -30,16 +30,14 @@ const checkUserStatus = async (
   let result;
 
   if (input.checkMessage && input.checkNotification) {
-    result = await db.query<{message_created_at: string; notification_created_at: string}>(
-      queryCompleteUserStatus(tokenData.userId),
-    );
+    result = await db.query(queryCompleteUserStatus(tokenData.userId));
 
     return {
       unreadMessageTimestamp: result.rows[0]?.message_created_at,
       unreadNotificationTimestamp: result.rows[0]?.notification_created_at,
     };
   } else if (input.checkMessage) {
-    result = await db.query<{message_created_at: string}>(queryMessageUserStatus(tokenData.userId));
+    result = await db.query(queryMessageUserStatus(tokenData.userId));
 
     return {
       unreadMessageTimestamp: result.rows[0]?.message_created_at,
@@ -47,7 +45,7 @@ const checkUserStatus = async (
   }
 
   // input.checkNotification
-  result = await db.query<{notification_created_at: string}>(queryNotificationUserStatus(tokenData.userId));
+  result = await db.query(queryNotificationUserStatus(tokenData.userId));
 
   return {
     unreadNotificationTimestamp: result.rows[0]?.notification_created_at,

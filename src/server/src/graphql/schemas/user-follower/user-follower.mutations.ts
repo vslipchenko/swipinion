@@ -10,6 +10,7 @@ import {
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {db} from '../../../data';
 import {queryDeleteNotificationByFollowersRecordId} from '../../../data/queries/user-notifications';
+import {QueryResultRow} from 'pg';
 
 export const userFollowerMutationTypeDefinitions = gql`
   type Mutation {
@@ -24,7 +25,7 @@ const followUser = async (
   _: unknown,
   {userId}: {userId: string},
   {accessToken}: {accessToken: string},
-): Promise<{pending: boolean} | ApolloError | null> => {
+): Promise<QueryResultRow | ApolloError | null> => {
   const {error} = bigintValidator.validate(userId);
 
   if (error) return null;
@@ -33,7 +34,7 @@ const followUser = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<{pending: boolean}>(queryFollowUser(userId, tokenData.userId));
+  const result = await db.query(queryFollowUser(userId, tokenData.userId));
 
   if (!result.rowCount) return null;
 

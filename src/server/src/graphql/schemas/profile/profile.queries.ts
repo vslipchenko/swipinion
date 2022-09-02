@@ -7,6 +7,7 @@ import {
   queryUserProfileDataByUsername,
 } from '../../../data/queries/user';
 import {authenticationGuard} from '../../../utilities/guard';
+import {QueryResultRow} from 'pg';
 
 export const profileQueryTypeDefinitions = gql`
   type Query {
@@ -19,8 +20,9 @@ const userProfile = async (
   {username}: {username?: string},
   {accessToken}: {accessToken: string},
 ): Promise<
-  | {id: string; follower_id: string; pending: boolean; bio: string; thumbnail?: string} // Authed querying someone's profile
-  | {id: string; bio: string; thumbnail?: string} // Querying own profile or unauthed user
+  | QueryResultRow
+  // | {id: string; follower_id: string; pending: boolean; bio: string; thumbnail?: string} // Authed querying someone's profile
+  // | {id: string; bio: string; thumbnail?: string} // Querying own profile or unauthed user
   | ApolloError
   | null
 > => {
@@ -32,10 +34,7 @@ const userProfile = async (
 
     const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
 
-    const result = await db.query<
-      | {id: string; follower_id: string; pending: boolean; bio: string; thumbnail?: string}
-      | {id: string; bio: string; thumbnail?: string}
-    >(
+    const result = await db.query(
       authenticationError
         ? queryUserProfileDataByUsername(username) // From perspective of unauthed user
         : queryUserProfileCompleteData(username, tokenData.userId), // From perspective of authed user
@@ -50,7 +49,7 @@ const userProfile = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<{bio: string; thumbnail?: string}>(queryUserProfileDataById(tokenData.userId));
+  const result = await db.query(queryUserProfileDataById(tokenData.userId));
 
   if (!result.rowCount) return null;
 

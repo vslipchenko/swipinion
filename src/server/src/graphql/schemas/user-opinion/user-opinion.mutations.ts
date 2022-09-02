@@ -42,7 +42,7 @@ const createOpinion = async (
     query = queryOpinionCreate({...input, userId: tokenData.userId});
   }
 
-  const result = await db.query<{id: string}>(query);
+  const result = await db.query(query);
 
   if (!result.rowCount) return null;
 

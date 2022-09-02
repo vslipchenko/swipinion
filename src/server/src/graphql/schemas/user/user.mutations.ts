@@ -191,7 +191,7 @@ const changePassword = async (
 
   if (authenticationError) return authenticationError;
 
-  const passwordResult = await db.query<{password: string}>(queryUserPassword(tokenData.userId));
+  const passwordResult = await db.query(queryUserPassword(tokenData.userId));
 
   if (!passwordResult.rowCount) return null;
 
@@ -201,9 +201,7 @@ const changePassword = async (
 
   const newPassword = hashSync(input.newPassword, 10);
 
-  const passwordChangeResult = await db.query<{password: string}>(
-    queryUserChangePassword(tokenData.userId, newPassword),
-  );
+  const passwordChangeResult = await db.query(queryUserChangePassword(tokenData.userId, newPassword));
 
   return {success: Boolean(passwordChangeResult.rowCount)};
 };

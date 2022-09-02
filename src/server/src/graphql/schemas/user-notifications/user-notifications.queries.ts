@@ -3,7 +3,7 @@ import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {queryUserNotifications} from '../../../data/queries/user-notifications';
 import {offsetValidator} from '../../../validators/shared';
-import {Notification} from '../../../typings/user-notifications/user-notifications.interfaces';
+import {QueryResultRow} from 'pg';
 
 export const userNotificationsQueryTypeDefinitions = gql`
   type Query {
@@ -15,7 +15,7 @@ const userNotifications = async (
   _1: unknown,
   {offset}: {offset: number},
   {accessToken}: {accessToken: string},
-): Promise<Array<Notification> | ApolloError | null> => {
+): Promise<Array<QueryResultRow> | ApolloError | null> => {
   const {error} = offsetValidator.validate(offset);
 
   if (error) return null;
@@ -24,7 +24,7 @@ const userNotifications = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query<Notification>(queryUserNotifications(tokenData.userId, offset));
+  const result = await db.query(queryUserNotifications(tokenData.userId, offset));
 
   if (!result.rowCount) return null;
 
