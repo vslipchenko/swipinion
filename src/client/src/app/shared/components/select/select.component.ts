@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
-import {AbstractControl, FormControl, ValidationErrors} from '@angular/forms';
+import {AbstractControl, UntypedFormControl, ValidationErrors} from '@angular/forms';
 import {MatFormFieldAppearance} from '@angular/material/form-field';
 import {ThemePalette} from '@angular/material/core';
 import {SelectItem} from '~app/typings/select/select.interfaces';
@@ -11,7 +11,7 @@ import {SelectItem} from '~app/typings/select/select.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent {
-  @Input() public control = new FormControl();
+  @Input() public control = new UntypedFormControl();
   @Input() public color: ThemePalette;
   @Input() public appearance: MatFormFieldAppearance = 'standard';
   @Input() public extendClass = '';

@@ -8,8 +8,8 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserContentTabIndex, UserRole} from '~app/typings/user/user.enums';
-import {MatTabChangeEvent} from '@angular/material/tabs/tab-group';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-user',

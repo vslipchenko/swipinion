@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {InputType} from '~app/typings/input/input.types';
-import {FormControl, ValidationErrors} from '@angular/forms';
+import {UntypedFormControl, ValidationErrors} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import {FloatLabelType, MatFormFieldAppearance} from '@angular/material/form-field';
 import {Observable, Subject, takeUntil} from 'rxjs';
@@ -14,7 +14,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 })
 export class InputComponent implements OnInit, Destroyable {
   @Input() public type: InputType = 'text';
-  @Input() public control = new FormControl();
+  @Input() public control = new UntypedFormControl();
   @Input() public errorMessage?: (errors: ValidationErrors | null) => string | void;
   // @Input() public required = false;
   // @Input() public disabled = false;

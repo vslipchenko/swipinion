@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
-import {FormControl, ValidationErrors, Validators} from '@angular/forms';
+import {UntypedFormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
@@ -17,7 +17,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   @Output() public readonly cancel = new EventEmitter();
 
   public email = '';
-  public readonly code = new FormControl('', Validators.required);
+  public readonly code = new UntypedFormControl('', Validators.required);
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 

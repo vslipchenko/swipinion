@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RouteReuseStrategy, RouterModule, Routes} from '@angular/router';
+import {Route, RouteReuseStrategy, RouterModule, Routes} from '@angular/router';
 import {EntryModule} from '~app/modules/entry/entry.module';
 import {PageNotFoundModule} from '~app/modules/page-not-found/page-not-found.module';
 import {UserModule} from '~app/modules/user/user.module';
@@ -12,7 +12,7 @@ import {UserSettingsModule} from '~app/modules/user-settings/user-settings.modul
 import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings.resolver';
 import {UserNotificationsModule} from '~app/modules/user-notifications/user-notifications.module';
 
-const entryModule = {
+const entryModule: Route = {
   pathMatch: 'full',
   loadChildren: (): Promise<typeof EntryModule> => import('~app/modules/entry/entry.module').then((m) => m.EntryModule),
 };

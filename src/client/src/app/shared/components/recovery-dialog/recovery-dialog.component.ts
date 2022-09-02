@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
-import {FormControl, ValidationErrors, Validators} from '@angular/forms';
+import {UntypedFormControl, ValidationErrors, Validators} from '@angular/forms';
 import {
   CODE_REGEXP,
   EMAIL_REGEXP,
@@ -24,15 +24,15 @@ export class RecoveryDialogComponent implements Destroyable {
   @Output() public readonly recovered = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
-  public readonly password = new FormControl(null, [
+  public readonly password = new UntypedFormControl(null, [
     Validators.required,
     Validators.minLength(PASSWORD_MIN_LENGTH),
     Validators.maxLength(PASSWORD_MAX_LENGTH),
     Validators.pattern(PASSWORD_REGEXP),
   ]);
-  public readonly repeatPassword = new FormControl(null, [Validators.required, this.sameValueValidator.bind(this)]);
-  public readonly email = new FormControl(null, Validators.required);
-  public readonly code = new FormControl('', Validators.required);
+  public readonly repeatPassword = new UntypedFormControl(null, [Validators.required, this.sameValueValidator.bind(this)]);
+  public readonly email = new UntypedFormControl(null, Validators.required);
+  public readonly code = new UntypedFormControl('', Validators.required);
   public readonly recoverStage$ = new BehaviorSubject(RecoveryStage.Email);
   public readonly recoveryStage = RecoveryStage;
   public readonly loading$ = new BehaviorSubject(false);
@@ -168,7 +168,7 @@ export class RecoveryDialogComponent implements Destroyable {
       );
   }
 
-  private sameValueValidator(control: FormControl): ValidationErrors | null {
+  private sameValueValidator(control: UntypedFormControl): ValidationErrors | null {
     if (control.value === this.password.value) return null;
 
     return {mismatch: true};
