@@ -53,20 +53,18 @@ const fetchUserChat = async (
   // Violation check: tries to fetch messages that don't belong to authorized user
   if (tokenData.userId !== input.user_id_1 && tokenData.userId !== input.user_id_2) return null;
 
-  const startDate = input.startDate ? new Date(input.startDate).toISOString() : 'NOW()';
-
   if (input.markRead) {
     const senderId = tokenData.userId === input.user_id_1 ? input.user_id_2 : input.user_id_1;
 
     const result = await db.transaction(
       queryMarkUserMessagesRead(senderId, tokenData.userId),
-      queryFetchUserChat(input.user_id_1, input.user_id_2, startDate),
+      queryFetchUserChat(input.user_id_1, input.user_id_2, input.edgeId),
     );
 
     return result.results[1].rows;
   }
 
-  const result = await db.query<unknown>(queryFetchUserChat(input.user_id_1, input.user_id_2, startDate));
+  const result = await db.query<unknown>(queryFetchUserChat(input.user_id_1, input.user_id_2, input.edgeId));
 
   if (!result.rowCount) return null;
 

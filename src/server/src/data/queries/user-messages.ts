@@ -67,16 +67,16 @@ export const queryMarkUserMessagesRead = (senderId: string, recipientId: string)
   values: [senderId, recipientId],
 });
 
-export const queryFetchUserChat = (user_id_1: string, user_id_2: string, startDate: string): QueryConfig => ({
+export const queryFetchUserChat = (user_id_1: string, user_id_2: string, id: string): QueryConfig => ({
   text: `
     SELECT sender_id, recipient_id, body, created_at
     FROM user_messages
     WHERE
         recipient_id = $1 AND sender_id = $2
         OR recipient_id = $2 AND sender_id = $1
-        AND created_at <= $3
+        AND id < $3
     ORDER BY created_at DESC
     LIMIT $4
   `,
-  values: [user_id_1, user_id_2, startDate, USER_CHAT_MESSAGES_FETCH_LIMIT],
+  values: [user_id_1, user_id_2, id, USER_CHAT_MESSAGES_FETCH_LIMIT],
 });
