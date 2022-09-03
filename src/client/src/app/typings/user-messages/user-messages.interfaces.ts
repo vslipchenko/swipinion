@@ -28,6 +28,7 @@ export interface UserMessage {
   id: string;
   user_id_1: string;
   user_id_2: string;
+  sender_id: string;
   username: string;
   thumbnail: string;
   teaser: string;

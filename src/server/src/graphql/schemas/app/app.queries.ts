@@ -6,7 +6,7 @@ export const appQueryTypeDefinitions = gql`
   }
 `;
 
-const getServerTimestamp = async (): Promise<number> => {
+const getServerTimestamp = (): number => {
   return new Date().getTime();
 };
 

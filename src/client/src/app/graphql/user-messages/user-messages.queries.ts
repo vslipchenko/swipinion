@@ -6,6 +6,7 @@ export const FETCH_USER_MESSAGES = gql`
       id
       user_id_1
       user_id_2
+      sender_id
       username
       thumbnail
       teaser

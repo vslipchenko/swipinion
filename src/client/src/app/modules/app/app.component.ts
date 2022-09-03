@@ -41,6 +41,7 @@ export class AppComponent implements Destroyable {
       else if (event.url === '/sign-up') this.headerService.signUp$.next();
       else if (event.url === '/recovery') this.recover$.next();
       // Show messages only in the scope of user module; otherwise hide, including 404 page;
+      // TODO and if authed
       else if (event.url.startsWith('/profile')) this.showMessagesService.show();
       else if (event.url.startsWith('/user/')) this.showMessagesService.show();
       else this.showMessagesService.hide();

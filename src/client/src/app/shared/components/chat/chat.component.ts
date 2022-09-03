@@ -15,6 +15,7 @@ export class ChatComponent implements OnInit {
       id: '',
       user_id_1: '',
       user_id_2: '',
+      sender_id: '',
       teaser: '',
       username: '',
       thumbnail: '',

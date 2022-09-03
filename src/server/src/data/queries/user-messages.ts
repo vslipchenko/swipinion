@@ -37,6 +37,8 @@ export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryCo
       conversations.least AS user_id_2, 
       user_messages.created_at, 
       user_messages.teaser,
+      user_messages.sender_id,
+      user_messages.read,
       users.username, 
       users.thumbnail
     FROM 

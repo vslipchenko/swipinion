@@ -5,6 +5,7 @@ export const userMessagesTypes = gql`
     id: String
     user_id_1: String
     user_id_2: String
+    sender_id: String
     username: String
     thumbnail: String
     teaser: String
