@@ -5,8 +5,6 @@ export const SIGN_IN = gql`
     signIn(input: $input) {
       accessToken
       refreshToken
-      thumbnail
-      username
       reason
     }
   }
@@ -16,8 +14,6 @@ export const REFRESH_ACCESS_TOKEN = gql`
   query ($refreshToken: String!) {
     refreshAccessToken(refreshToken: $refreshToken) {
       accessToken
-      thumbnail
-      username
     }
   }
 `;

@@ -1,12 +1,12 @@
 import {UserRole} from '~app/typings/user/user.enums';
-import {UserProfile} from '~app/typings/user/user.interfaces';
+import {UserEssentials} from '~app/typings/user/user.interfaces';
 import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
 import {FetchUserChatPayload} from '~app/typings/user-messages/user-messages.interfaces';
 
-export class UpdateAuthedUserProfileTeaser {
-  public static readonly type = '[App] UpdateAuthedUserProfileTeaser';
+export class UpdateUserEssentials {
+  public static readonly type = '[App] UpdateUserEssentials';
 
-  public constructor(public payload: Partial<Omit<UserProfile, 'bio'>>) {}
+  public constructor(public payload: Partial<UserEssentials>) {}
 }
 
 export class UpdateUserRole {

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -9,8 +9,11 @@ import {SignInFailReason} from '~app/typings/authentication/authentication.enums
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
 import {Store} from '@ngxs/store';
-import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
 import {Router} from '@angular/router';
+import {UserService} from '~app/services/user/user.service';
+import {ApolloQueryResult} from '@apollo/client/core';
+import {UserEssentialsQueryResult} from '~app/typings/user/user.interfaces';
+import {UpdateUserEssentials} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-sign-in-dialog',
@@ -32,6 +35,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) private readonly data: SignIn,
+    private readonly userService: UserService,
     private readonly authenticationService: AuthenticationService,
     private readonly snackbar: MatSnackBar, // private readonly router: Router,
     private readonly router: Router,
@@ -69,18 +73,20 @@ export class SignInDialogComponent implements OnInit, Destroyable {
       .signIn(credentials)
       .pipe(
         takeUntil(this.destroy$),
-        finalize(() => this.loading$.next(false)),
-      )
-      .subscribe(
-        ({data}) => {
-          if (!data.signIn) return this.showErrorSnackbar();
+        switchMap(({data}) => {
+          if (!data.signIn) {
+            this.showErrorSnackbar();
+            return of({data: {}} as ApolloQueryResult<UserEssentialsQueryResult>);
+          }
 
           if (data.signIn.reason === SignInFailReason.Unconfirmed) {
             this.confirm.emit(credentials);
+            return of({data: {}} as ApolloQueryResult<UserEssentialsQueryResult>);
           }
 
           if (data.signIn.reason === SignInFailReason.Blocked) {
-            return this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
+            this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
+            return of({data: {}} as ApolloQueryResult<UserEssentialsQueryResult>);
           }
 
           this.authenticationService.resetTokens(); // Clear active session
@@ -88,12 +94,15 @@ export class SignInDialogComponent implements OnInit, Destroyable {
           this.authenticationService.accessToken$.next(data.signIn.accessToken);
           this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
 
-          this.store.dispatch(
-            new UpdateAuthedUserProfileTeaser({
-              thumbnail: data.signIn.thumbnail,
-              username: data.signIn.username,
-            }),
-          );
+          return this.userService.getUserEssentials();
+        }),
+        finalize(() => this.loading$.next(false)),
+      )
+      .subscribe(
+        ({data}) => {
+          if (!data.userEssentials) return this.showErrorSnackbar();
+
+          this.store.dispatch(new UpdateUserEssentials(data.userEssentials));
 
           const userModule = this.router.url.startsWith('/user/');
           if (userModule) return window.location.reload(); // Reload in order to actualize a user state; this fixes stale user state data

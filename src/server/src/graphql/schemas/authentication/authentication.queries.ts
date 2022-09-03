@@ -19,9 +19,7 @@ export const authenticationQueryTypeDefinitions = gql`
 const signIn = async (
   _: unknown,
   {input}: {input: SignIn},
-): Promise<
-  {accessToken: string; refreshToken: string; thumbnail: string; username: string} | {reason: SignInFailReason} | null
-> => {
+): Promise<{accessToken: string; refreshToken: string} | {reason: SignInFailReason} | null> => {
   const {error} = signInValidator.validate(input);
 
   if (error) return null;
@@ -40,22 +38,23 @@ const signIn = async (
 
   if (!correctPassword) return null;
 
-  const accessToken = sign({userId: row.id, language: row.language}, environment.ACCESS_TOKEN_SECRET, {
+  const accessToken = sign({userId: row.id}, environment.ACCESS_TOKEN_SECRET, {
     algorithm: JWT_ALGORITHM,
     expiresIn: environment.ACCESS_TOKEN_EXPIRES_IN,
   });
+
   const refreshToken = sign({userId: row.id}, `${environment.REFRESH_TOKEN_SECRET}${row.access_key}`, {
     algorithm: JWT_ALGORITHM,
     expiresIn: environment.REFRESH_TOKEN_EXPIRES_IN,
   });
 
-  return {accessToken, refreshToken, thumbnail: row.thumbnail, username: row.username};
+  return {accessToken, refreshToken};
 };
 
 const refreshAccessToken = async (
   _: unknown,
   {refreshToken}: {refreshToken: string},
-): Promise<ApolloError | {accessToken: string; thumbnail: string; username: string}> => {
+): Promise<ApolloError | {accessToken: string}> => {
   if (!refreshToken) return new ApolloError('', AuthenticationErrorCode.EmptyRefreshToken);
 
   const userId = (decode(refreshToken) as AccessTokenData)?.userId;
@@ -80,12 +79,12 @@ const refreshAccessToken = async (
   }
 
   // Token is valid; issue fresh access token
-  const accessToken = sign({userId, language: row.language}, environment.ACCESS_TOKEN_SECRET, {
+  const accessToken = sign({userId}, environment.ACCESS_TOKEN_SECRET, {
     algorithm: JWT_ALGORITHM,
     expiresIn: environment.ACCESS_TOKEN_EXPIRES_IN,
   });
 
-  return {accessToken, thumbnail: row.thumbnail, username: row.username};
+  return {accessToken};
 };
 
 export const authenticationQueryResolvers = {

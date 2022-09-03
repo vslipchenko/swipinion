@@ -13,7 +13,7 @@ import {NgxsModule, Store} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
-import {UpdateAuthedUserProfileTeaser, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
+import {UpdateUserEssentials, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {AppService} from '~app/services/app/app.service';
 import {HeaderModule} from '~app/shared/components/header/header.module';
@@ -82,17 +82,12 @@ function authenticationFactory(
       switchMap(({data}) => {
         authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
 
-        store.dispatch(
-          new UpdateAuthedUserProfileTeaser({
-            thumbnail: data.refreshAccessToken.thumbnail,
-            username: data.refreshAccessToken.username,
-          }),
-        );
-
         return userService.getUserEssentials();
       }),
       tap(({data}) => {
-        console.log(data);
+        if (!data.userEssentials) return;
+
+        store.dispatch(new UpdateUserEssentials(data.userEssentials));
       }),
       catchError(() => {
         return of(); // Ignore error; let auth interceptor handle authentication

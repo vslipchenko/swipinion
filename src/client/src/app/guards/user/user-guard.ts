@@ -22,7 +22,7 @@ export class UserGuardBase {
         return false;
       }
 
-      const profile = this.store.selectSnapshot(AppSelectors.authedUserProfileTeaser);
+      const profile = this.store.selectSnapshot(AppSelectors.userEssentials);
       // Redirect to profile
       if (username === profile.username) return this.router.createUrlTree(['/profile']);
     } else {

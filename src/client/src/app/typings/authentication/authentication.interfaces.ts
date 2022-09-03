@@ -1,12 +1,9 @@
 import {SignInFailReason} from './authentication.enums';
-import {Language} from '~app/typings/i18n/i18n.types';
 
 export interface SignInQueryResult {
   signIn: {
     accessToken: string;
     refreshToken: string;
-    thumbnail: string;
-    username: string;
     reason: SignInFailReason;
   };
 }
@@ -19,12 +16,9 @@ export interface SignIn {
 export interface AccessTokenByRefreshTokenQueryResult {
   refreshAccessToken: {
     accessToken: string;
-    thumbnail: string;
-    username: string;
   };
 }
 
 export interface AccessTokenData {
   userId: string;
-  language: Language;
 }

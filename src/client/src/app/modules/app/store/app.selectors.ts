@@ -2,8 +2,8 @@ import {createSelector} from '@ngxs/store';
 import {AppState, AppStateModel} from '~app/modules/app/store/app.state';
 
 export class AppSelectors {
-  public static authedUserProfileTeaser = createSelector([AppState], (state: AppStateModel) => {
-    return state.profileTeaser;
+  public static userEssentials = createSelector([AppState], (state: AppStateModel) => {
+    return state.user;
   });
 
   public static userRole = createSelector([AppState], (state: AppStateModel) => {

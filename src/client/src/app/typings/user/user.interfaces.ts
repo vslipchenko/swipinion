@@ -72,6 +72,13 @@ export interface UserProfile {
   username: string;
 }
 
+export interface UserEssentials {
+  id: string;
+  thumbnail: string;
+  username: string;
+  language: Language;
+}
+
 export interface EditProfile {
   thumbnail: string;
   bio: string;
@@ -82,12 +89,7 @@ export interface EditProfileMutationResult {
 }
 
 export interface UserEssentialsQueryResult {
-  userEssentials: {
-    id: string;
-    username: string;
-    thumbnail: string;
-    language: string;
-  };
+  userEssentials: UserEssentials;
 }
 
 export interface ResolvedUserData {

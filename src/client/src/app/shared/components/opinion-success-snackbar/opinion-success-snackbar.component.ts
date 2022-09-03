@@ -17,6 +17,6 @@ export class OpinionSuccessSnackbarComponent {
   ) {}
 
   public get username(): string {
-    return this.store.selectSnapshot(AppSelectors.authedUserProfileTeaser).username;
+    return this.store.selectSnapshot(AppSelectors.userEssentials).username;
   }
 }

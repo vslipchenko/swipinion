@@ -21,7 +21,7 @@ export class UserProfileResolver implements Resolve<unknown> {
   ) {}
 
   public resolve(route: ActivatedRouteSnapshot): Observable<unknown> {
-    const profile = this.store.selectSnapshot(AppSelectors.authedUserProfileTeaser);
+    const profile = this.store.selectSnapshot(AppSelectors.userEssentials);
     const navigatingProfile = route.url.some((item) => item.path === 'profile');
     const username = navigatingProfile ? profile.username : route.params['username'];
 
@@ -30,27 +30,6 @@ export class UserProfileResolver implements Resolve<unknown> {
       : this.profileService.getProfileData(username);
 
     return query.pipe(
-      // Query is cached
-      // tap(({data}) => {
-      //   if (!data?.userProfile) {
-      //     // User was not found, redirect 404
-      //     void this.router.navigate(['**'], {skipLocationChange: true});
-      //     return;
-      //   }
-      //
-      //   // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
-      //
-      //   this.store.dispatch(
-      //     new UpdateResolvedUserData({
-      //       id: data.userProfile.id,
-      //       username,
-      //       bio: data.userProfile.bio,
-      //       thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route
-      //       isProfilePath: navigatingProfile,
-      //       following: Boolean(data.userProfile.follower_id),
-      //     }),
-      //   );
-      // }),
       switchMap(({data}) => {
         if (!data?.userProfile) {
           // User was not found, redirect 404

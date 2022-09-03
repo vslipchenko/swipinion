@@ -9,7 +9,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ImageService} from '~app/services/image/image.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Store} from '@ngxs/store';
-import {UpdateAuthedUserProfileTeaser} from '~app/modules/app/store/app.actions';
+import {UpdateUserEssentials} from '~app/modules/app/store/app.actions';
 import {EditProfileMutationResult, ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {MutationResult} from 'apollo-angular';
 import {hasExtension} from '~app/utilities/file';
@@ -129,7 +129,7 @@ export class EditProfileDialogComponent implements Destroyable {
     thumbnail = thumbnail || (this.imageUrl.value as string);
 
     this.store.dispatch(
-      new UpdateAuthedUserProfileTeaser({
+      new UpdateUserEssentials({
         thumbnail,
       }),
     );

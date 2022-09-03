@@ -4,11 +4,11 @@ import {
   FetchUserChat,
   FetchUserMessages,
   RunUserStatusPolling,
-  UpdateAuthedUserProfileTeaser,
+  UpdateUserEssentials,
   UpdateUserRole,
   UpdateUtcTimestamp,
 } from '~app/modules/app/store/app.actions';
-import {UserProfile} from '~app/typings/user/user.interfaces';
+import {UserEssentials} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
@@ -23,7 +23,7 @@ import {
 import {MessageTimePoint} from '~app/typings/date/date.enums';
 
 export interface AppStateModel {
-  profileTeaser: Omit<UserProfile, 'bio'>;
+  user: UserEssentials;
   messages: Array<UIUserMessage>;
   chats: {[key: string]: unknown};
   role: UserRole;
@@ -37,10 +37,11 @@ const APP_STATE = new StateToken<AppStateModel>('app');
 @State({
   name: APP_STATE,
   defaults: {
-    profileTeaser: {
+    user: {
+      id: '',
       username: '',
-      // bio: '',
       thumbnail: '',
+      language: 'en',
     },
     messages: [],
     chats: {},
@@ -58,12 +59,12 @@ export class AppState {
     private readonly userMessagesService: UserMessagesService,
   ) {}
 
-  @Action(UpdateAuthedUserProfileTeaser)
-  private updateUserProfile(context: StateContext<AppStateModel>, action: UpdateAuthedUserProfileTeaser): void {
+  @Action(UpdateUserEssentials)
+  private updateUserEssentials(context: StateContext<AppStateModel>, action: UpdateUserEssentials): void {
     context.setState((state) => ({
       ...state,
-      profileTeaser: {
-        ...state.profileTeaser,
+      user: {
+        ...state.user,
         ...action.payload,
       },
     }));

@@ -1,1 +1,1 @@
-export type Language = 'ru' | 'uk';
+export type Language = 'en';

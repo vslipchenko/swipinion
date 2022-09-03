@@ -17,7 +17,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserNavbarComponent implements Destroyable {
-  @Select(AppSelectors.authedUserProfileTeaser)
+  @Select(AppSelectors.userEssentials)
   public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
   public readonly destroy$ = new Subject<void>();
 
