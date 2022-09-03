@@ -1,4 +1,4 @@
-<div class="d-flex ai-center p-2 message pointer relative" [class.unread]="!read" (click)="clicked.emit(senderId)">
+<div class="d-flex ai-center p-2 message pointer relative" [class.unread]="unread" (click)="clicked.emit(senderId)">
   <mat-icon *ngIf="icon; else image" color="accent"
             class="saved-messages-icon d-flex jc-center ai-center mr-2">{{icon}}</mat-icon>
 

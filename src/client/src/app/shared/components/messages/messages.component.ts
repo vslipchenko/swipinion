@@ -4,7 +4,7 @@ import {FetchUserMessages} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UIUserMessage, UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 @Component({
@@ -29,7 +29,7 @@ export class MessagesComponent implements Destroyable {
   public showChat = false;
 
   public readonly initialLoading$ = new BehaviorSubject(true);
-  public readonly chatInfo$ = new BehaviorSubject<{message?: UserMessage; savedMessages: boolean}>({
+  public readonly chatInfo$ = new BehaviorSubject<{message?: UIUserMessage; savedMessages: boolean}>({
     message: {
       id: '',
       user_id_1: '',
@@ -38,7 +38,9 @@ export class MessagesComponent implements Destroyable {
       teaser: '',
       username: '',
       thumbnail: '',
+      date: '',
       read: false,
+      unread: false,
       created_at: 0,
     },
     savedMessages: false,
@@ -77,10 +79,10 @@ export class MessagesComponent implements Destroyable {
     this.loading$.next(true);
   }
 
-  public loadChat(savedMessages: boolean, message?: UserMessage): void {
+  public loadChat(savedMessages: boolean, message?: UIUserMessage): void {
     // this.loading$.next(true);
 
-    this.chatInfo$.next({message: message || ({} as UserMessage), savedMessages});
+    this.chatInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
 
     this.showChat = true;
   }

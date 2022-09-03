@@ -38,4 +38,5 @@ export interface UserMessage {
 
 export interface UIUserMessage extends UserMessage {
   date: string;
+  unread: boolean;
 }

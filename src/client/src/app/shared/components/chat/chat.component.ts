@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {Store} from '@ngxs/store';
 import {FetchUserChat} from '~app/modules/app/store/app.actions';
 
@@ -10,7 +10,7 @@ import {FetchUserChat} from '~app/modules/app/store/app.actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit {
-  @Input() public chatInfo: {message: UserMessage; savedMessages: boolean} = {
+  @Input() public chatInfo: {message: UIUserMessage; savedMessages: boolean} = {
     message: {
       id: '',
       user_id_1: '',
@@ -19,6 +19,8 @@ export class ChatComponent implements OnInit {
       teaser: '',
       username: '',
       thumbnail: '',
+      date: '',
+      unread: false,
       read: false,
       created_at: 0,
     },

@@ -109,28 +109,33 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserMessages) return;
 
-        const messages: Array<UIUserMessage> = data.fetchUserMessages.map((message) => {
-          const timePoint = determineMessageTimePoint(message.created_at);
-          let date;
-
-          switch (timePoint) {
-            case MessageTimePoint.TODAY:
-              date = timestampToTime(message.created_at);
-              break;
-            case MessageTimePoint.THIS_YEAR:
-              date = timestampToMonthDay(message.created_at);
-              break;
-            default:
-              date = timestampToMonthDayYear(message.created_at);
-          }
-
-          return {
-            ...message,
-            date,
-          };
-        });
-
         context.setState((state) => {
+          const messages: Array<UIUserMessage> = data.fetchUserMessages.map((message) => {
+            const timePoint = determineMessageTimePoint(message.created_at);
+            let date;
+
+            switch (timePoint) {
+              case MessageTimePoint.TODAY:
+                date = timestampToTime(message.created_at);
+                break;
+              case MessageTimePoint.THIS_YEAR:
+                date = timestampToMonthDay(message.created_at);
+                break;
+              default:
+                date = timestampToMonthDayYear(message.created_at);
+            }
+
+            const nextMessage: UIUserMessage = {
+              ...message,
+              unread: false,
+              date,
+            };
+            // Mark unread if sender is not current user and read value is false
+            if (!message.read) nextMessage.unread = message.sender_id !== state.user.id;
+
+            return nextMessage;
+          });
+
           const nextState = {
             ...state,
             messages: [...state.messages, ...messages],
