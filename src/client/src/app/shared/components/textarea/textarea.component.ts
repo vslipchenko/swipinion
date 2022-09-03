@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
-import {UntypedFormControl, ValidationErrors} from '@angular/forms';
+import {FormControl, ValidationErrors} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import {MatFormFieldAppearance} from '@angular/material/form-field';
 
@@ -10,7 +10,7 @@ import {MatFormFieldAppearance} from '@angular/material/form-field';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextareaComponent {
-  @Input() public control = new UntypedFormControl();
+  @Input() public control = new FormControl();
   @Input() public errorMessage?: (errors: ValidationErrors | null) => string | void;
   @Input() public color: ThemePalette;
   @Input() public appearance: MatFormFieldAppearance = 'standard';

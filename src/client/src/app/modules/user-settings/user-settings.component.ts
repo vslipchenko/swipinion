@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
-import {UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces'
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {UserSettingsSelectors} from '~app/modules/user-settings/store/user-settings.selectors';
 import {UpdateProfileSettings} from '~app/modules/user-settings/store/user-settings.actions';
+import {ChangePassword} from '~app/typings/user/user.interfaces';
 
 @Component({
   selector: 'app-user-settings',
@@ -20,13 +21,13 @@ import {UpdateProfileSettings} from '~app/modules/user-settings/store/user-setti
 export class UserSettingsComponent implements Destroyable {
   @Select(UserSettingsSelectors.settings) public settings$!: Observable<UserSettings>;
 
-  public readonly privacyForm = new UntypedFormGroup({
-    follow: new UntypedFormControl(FollowSettings.Everyone),
-    view_following: new UntypedFormControl(PrivacyCommonSettings.Everyone),
-    message: new UntypedFormControl(PrivacyCommonSettings.Everyone),
-    view_opinions: new UntypedFormControl(PrivacyCommonSettings.Everyone),
-    view_reactions: new UntypedFormControl(PrivacyCommonSettings.Everyone),
-    view_favorites: new UntypedFormControl(PrivacyCommonSettings.Everyone),
+  public readonly privacyForm = new FormGroup({
+    follow: new FormControl(FollowSettings.Everyone),
+    view_following: new FormControl(PrivacyCommonSettings.Everyone),
+    message: new FormControl(PrivacyCommonSettings.Everyone),
+    view_opinions: new FormControl(PrivacyCommonSettings.Everyone),
+    view_reactions: new FormControl(PrivacyCommonSettings.Everyone),
+    view_favorites: new FormControl(PrivacyCommonSettings.Everyone),
   });
 
   public followSettings = [
@@ -48,9 +49,9 @@ export class UserSettingsComponent implements Destroyable {
   public readonly cancelPasswordChange$ = new Subject<void>();
   public readonly cancelPrivacy$ = new Subject<void>();
 
-  public readonly changePasswordForm = new UntypedFormGroup({
-    currentPassword: new UntypedFormControl('', [Validators.required]),
-    newPassword: new UntypedFormControl('', [
+  public readonly changePasswordForm = new FormGroup({
+    currentPassword: new FormControl('', [Validators.required]),
+    newPassword: new FormControl('', [
       Validators.required,
       Validators.minLength(PASSWORD_MIN_LENGTH),
       Validators.maxLength(PASSWORD_MAX_LENGTH),
@@ -106,7 +107,7 @@ export class UserSettingsComponent implements Destroyable {
   public updatePrivacySettings(): void {
     this.loading$.next(true);
 
-    this.store.dispatch(new UpdateProfileSettings(this.privacyForm.value));
+    this.store.dispatch(new UpdateProfileSettings(this.privacyForm.value as UserSettings));
   }
 
   public cancelPasswordChange(): void {
@@ -131,7 +132,7 @@ export class UserSettingsComponent implements Destroyable {
     this.loading$.next(true);
 
     this.userService
-      .changePassword(this.changePasswordForm.value)
+      .changePassword(this.changePasswordForm.value as ChangePassword)
       .pipe(
         takeUntil(this.destroy$),
         takeUntil(this.cancelPasswordChange$),
@@ -183,41 +184,41 @@ export class UserSettingsComponent implements Destroyable {
     });
   }
 
-  private duplicatePasswordValidator(control: UntypedFormControl): ValidationErrors | null {
+  private duplicatePasswordValidator(control: FormControl): ValidationErrors | null {
     if (!this.currentPassword?.value && !control.value) return null;
 
     return control.value === this.currentPassword.value ? {duplicate: true} : null;
   }
 
-  public get follow(): UntypedFormControl {
-    return this.privacyForm.controls['follow'] as UntypedFormControl;
+  public get follow(): FormControl {
+    return this.privacyForm.controls['follow'] as FormControl;
   }
 
-  public get viewFollowing(): UntypedFormControl {
-    return this.privacyForm.controls['view_following'] as UntypedFormControl;
+  public get viewFollowing(): FormControl {
+    return this.privacyForm.controls['view_following'] as FormControl;
   }
 
-  public get message(): UntypedFormControl {
-    return this.privacyForm.controls['message'] as UntypedFormControl;
+  public get message(): FormControl {
+    return this.privacyForm.controls['message'] as FormControl;
   }
 
-  public get viewOpinions(): UntypedFormControl {
-    return this.privacyForm.controls['view_opinions'] as UntypedFormControl;
+  public get viewOpinions(): FormControl {
+    return this.privacyForm.controls['view_opinions'] as FormControl;
   }
 
-  public get viewReactions(): UntypedFormControl {
-    return this.privacyForm.controls['view_reactions'] as UntypedFormControl;
+  public get viewReactions(): FormControl {
+    return this.privacyForm.controls['view_reactions'] as FormControl;
   }
 
-  public get viewFavorites(): UntypedFormControl {
-    return this.privacyForm.controls['view_favorites'] as UntypedFormControl;
+  public get viewFavorites(): FormControl {
+    return this.privacyForm.controls['view_favorites'] as FormControl;
   }
 
-  public get currentPassword(): UntypedFormControl {
-    return this.changePasswordForm?.controls['currentPassword'] as UntypedFormControl;
+  public get currentPassword(): FormControl {
+    return this.changePasswordForm?.controls['currentPassword'] as FormControl;
   }
 
-  public get newPassword(): UntypedFormControl {
-    return this.changePasswordForm.controls['newPassword'] as UntypedFormControl;
+  public get newPassword(): FormControl {
+    return this.changePasswordForm.controls['newPassword'] as FormControl;
   }
 }

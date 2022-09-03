@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {SelectItem} from '~app/typings/select/select.interfaces';
@@ -173,7 +173,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     return `${FILE_URL_MAX_LENGTH} characters at max. Consider to use url shortener`;
   }
 
-  private imageValidator(control: UntypedFormControl | AbstractControl): ValidationErrors | null {
+  private imageValidator(control: FormControl | AbstractControl): ValidationErrors | null {
     if (this.addOpinionForm?.controls['type']?.value !== OpinionType.Image) return null;
 
     if (this.file.value) return null;
@@ -189,7 +189,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     return null;
   }
 
-  private fileSizeValidator(control: UntypedFormControl | AbstractControl): ValidationErrors | null {
+  private fileSizeValidator(control: FormControl | AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
 
     if ((control.value as File).size / 1024 ** 2 > MAX_IMAGE_SIZE_MB) return {size: true};
@@ -197,7 +197,7 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     return null;
   }
 
-  private descriptionValidator(control: UntypedFormControl | AbstractControl): ValidationErrors | null {
+  private descriptionValidator(control: FormControl | AbstractControl): ValidationErrors | null {
     if (this.addOpinionForm?.controls['type']?.value !== OpinionType.Text) return null;
 
     if (!control.value) return {required: true};
@@ -222,28 +222,28 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
   }
 
-  public get type(): UntypedFormControl {
-    return this.addOpinionForm.controls['type'] as UntypedFormControl;
+  public get type(): FormControl {
+    return this.addOpinionForm.controls['type'] as FormControl;
   }
 
-  public get title(): UntypedFormControl {
-    return this.addOpinionForm.controls['title'] as UntypedFormControl;
+  public get title(): FormControl {
+    return this.addOpinionForm.controls['title'] as FormControl;
   }
 
-  public get fileUrl(): UntypedFormControl {
-    return this.addOpinionForm.controls['fileUrl'] as UntypedFormControl;
+  public get fileUrl(): FormControl {
+    return this.addOpinionForm.controls['fileUrl'] as FormControl;
   }
 
-  public get file(): UntypedFormControl {
-    return this.addOpinionForm.controls['file'] as UntypedFormControl;
+  public get file(): FormControl {
+    return this.addOpinionForm.controls['file'] as FormControl;
   }
 
-  public get description(): UntypedFormControl {
-    return this.addOpinionForm.controls['description'] as UntypedFormControl;
+  public get description(): FormControl {
+    return this.addOpinionForm.controls['description'] as FormControl;
   }
 
-  public get tags(): UntypedFormControl {
-    return this.addOpinionForm.controls['tags'] as UntypedFormControl;
+  public get tags(): FormControl {
+    return this.addOpinionForm.controls['tags'] as FormControl;
   }
 
   public get imageSet(): boolean {
@@ -258,17 +258,17 @@ export class AddOpinionDialogComponent implements OnInit, Destroyable {
     return this.type.value === OpinionType.Image;
   }
 
-  private get addOpinionFormGroup(): UntypedFormGroup {
-    return new UntypedFormGroup({
-      type: new UntypedFormControl(OpinionType.Text),
-      fileUrl: new UntypedFormControl(null, this.imageValidator.bind(this)),
-      file: new UntypedFormControl(null, this.fileSizeValidator.bind(this)),
-      title: new UntypedFormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
-      description: new UntypedFormControl(null, [
+  private get addOpinionFormGroup(): FormGroup {
+    return new FormGroup({
+      type: new FormControl(OpinionType.Text),
+      fileUrl: new FormControl(null, this.imageValidator.bind(this)),
+      file: new FormControl(null, this.fileSizeValidator.bind(this)),
+      title: new FormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
+      description: new FormControl(null, [
         Validators.maxLength(this.descriptionMaxLength),
         this.descriptionValidator.bind(this),
       ]),
-      tags: new UntypedFormControl([], Validators.maxLength(MAX_TAG_COUNT)),
+      tags: new FormControl([], Validators.maxLength(MAX_TAG_COUNT)),
     });
   }
 }

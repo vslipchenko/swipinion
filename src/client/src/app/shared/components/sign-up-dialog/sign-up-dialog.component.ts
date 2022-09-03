@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, map, Observable, Subject, takeUntil} from 'rxjs';
 import {
   EMAIL_REGEXP,
@@ -152,21 +152,21 @@ export class SignUpDialogComponent implements Destroyable {
       );
   }
 
-  public get username(): UntypedFormControl {
-    return this.signUpForm.controls['username'] as UntypedFormControl;
+  public get username(): FormControl {
+    return this.signUpForm.controls['username'] as FormControl;
   }
 
-  public get email(): UntypedFormControl {
-    return this.signUpForm.controls['email'] as UntypedFormControl;
+  public get email(): FormControl {
+    return this.signUpForm.controls['email'] as FormControl;
   }
 
-  public get password(): UntypedFormControl {
-    return this.signUpForm.controls['password'] as UntypedFormControl;
+  public get password(): FormControl {
+    return this.signUpForm.controls['password'] as FormControl;
   }
 
-  private get signUpFormGroup(): UntypedFormGroup {
-    return new UntypedFormGroup({
-      username: new UntypedFormControl(null, {
+  private get signUpFormGroup(): FormGroup {
+    return new FormGroup({
+      username: new FormControl(null, {
         validators: [
           Validators.required,
           Validators.pattern(USERNAME_REGEXP),
@@ -176,12 +176,12 @@ export class SignUpDialogComponent implements Destroyable {
         asyncValidators: this.duplicateUsernameValidator.bind(this),
         updateOn: 'blur', // Make API call on blur
       }),
-      email: new UntypedFormControl(null, {
+      email: new FormControl(null, {
         validators: [Validators.required, Validators.pattern(EMAIL_REGEXP)],
         asyncValidators: this.duplicateEmailValidator.bind(this),
         updateOn: 'blur', // Make API call on blur
       }),
-      password: new UntypedFormControl(null, [
+      password: new FormControl(null, [
         Validators.required,
         Validators.minLength(PASSWORD_MIN_LENGTH),
         Validators.maxLength(PASSWORD_MAX_LENGTH),

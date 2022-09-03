@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef} from '@a
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatFormFieldAppearance} from '@angular/material/form-field';
-import {UntypedFormControl} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-chips',
@@ -12,7 +12,7 @@ import {UntypedFormControl} from '@angular/forms';
 })
 export class ChipsComponent implements OnInit {
   @Input() public label = '';
-  @Input() public control = new UntypedFormControl();
+  @Input() public control = new FormControl();
   @Input() public extendClass = '';
   @Input() public placeholder = '';
   @Input() public regexp?: RegExp;

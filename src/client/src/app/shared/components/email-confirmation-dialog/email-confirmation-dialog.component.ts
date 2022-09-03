@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
-import {UntypedFormControl, ValidationErrors, Validators} from '@angular/forms';
+import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
@@ -17,7 +17,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
   @Output() public readonly cancel = new EventEmitter();
 
   public email = '';
-  public readonly code = new UntypedFormControl('', Validators.required);
+  public readonly code = new FormControl('', Validators.required);
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
@@ -40,7 +40,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
 
     // const email = this.email || decodeURI(this.activatedRoute.snapshot.queryParams['email']);
 
-    const validCode = CODE_REGEXP.test(this.code.value);
+    const validCode = CODE_REGEXP.test(this.code.value as string);
     const validEmail = EMAIL_REGEXP.test(this.email);
 
     if (!(validCode && validEmail)) return this.showErrorSnackbar();
@@ -48,7 +48,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
     this.loading$.next(true);
 
     this.userService
-      .confirmEmail({email: this.email, code: this.code.value})
+      .confirmEmail({email: this.email, code: this.code.value as string})
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.loading$.next(false)),

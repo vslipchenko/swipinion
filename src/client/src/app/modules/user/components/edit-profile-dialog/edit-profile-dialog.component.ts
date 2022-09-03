@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {isValidHttpUrl} from '~app/utilities/url';
@@ -107,16 +107,16 @@ export class EditProfileDialogComponent implements Destroyable {
       .subscribe(this.handleSuccessfulResponse.bind(this), () => this.showErrorSnackbar());
   }
 
-  public get imageUrl(): UntypedFormControl {
-    return this.editProfileForm.controls['imageUrl'] as UntypedFormControl;
+  public get imageUrl(): FormControl {
+    return this.editProfileForm.controls['imageUrl'] as FormControl;
   }
 
-  public get bio(): UntypedFormControl {
-    return this.editProfileForm.controls['bio'] as UntypedFormControl;
+  public get bio(): FormControl {
+    return this.editProfileForm.controls['bio'] as FormControl;
   }
 
-  public get file(): UntypedFormControl {
-    return this.editProfileForm.controls['file'] as UntypedFormControl;
+  public get file(): FormControl {
+    return this.editProfileForm.controls['file'] as FormControl;
   }
 
   private handleSuccessfulResponse({data}: MutationResult<EditProfileMutationResult>, thumbnail?: string): void {
@@ -150,7 +150,7 @@ export class EditProfileDialogComponent implements Destroyable {
     });
   }
 
-  private imageValidator(control: UntypedFormControl | AbstractControl): ValidationErrors | null {
+  private imageValidator(control: FormControl | AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
 
     if (this.file?.value) return null;
@@ -164,7 +164,7 @@ export class EditProfileDialogComponent implements Destroyable {
     return null;
   }
 
-  private fileSizeValidator(control: UntypedFormControl | AbstractControl): ValidationErrors | null {
+  private fileSizeValidator(control: FormControl | AbstractControl): ValidationErrors | null {
     if (!control.value) return null;
 
     if ((control.value as File).size / 1024 ** 2 > MAX_IMAGE_SIZE_MB) return {size: true};
@@ -172,11 +172,11 @@ export class EditProfileDialogComponent implements Destroyable {
     return null;
   }
 
-  private get editProfileFormGroup(): UntypedFormGroup {
-    return new UntypedFormGroup({
-      imageUrl: new UntypedFormControl(null, this.imageValidator.bind(this)),
-      file: new UntypedFormControl(null, this.fileSizeValidator.bind(this)),
-      bio: new UntypedFormControl(null, Validators.maxLength(BIO_MAX_LENGTH)),
+  private get editProfileFormGroup(): FormGroup {
+    return new FormGroup({
+      imageUrl: new FormControl(null, this.imageValidator.bind(this)),
+      file: new FormControl(null, this.fileSizeValidator.bind(this)),
+      bio: new FormControl(null, Validators.maxLength(BIO_MAX_LENGTH)),
     });
   }
 }

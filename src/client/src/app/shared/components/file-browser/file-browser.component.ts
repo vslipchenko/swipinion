@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
-import {UntypedFormControl} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-file-browser',
@@ -8,7 +8,7 @@ import {UntypedFormControl} from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileBrowserComponent implements OnDestroy {
-  @Input() public control = new UntypedFormControl();
+  @Input() public control = new FormControl();
   @Input() public accept: Array<string> = [];
   @Output() public fileChange = new EventEmitter<File | void>();
 

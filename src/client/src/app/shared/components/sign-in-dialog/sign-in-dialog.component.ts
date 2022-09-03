@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
-import {UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
@@ -30,7 +30,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
 
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
-  public readonly rememberMe = new UntypedFormControl(false);
+  public readonly rememberMe = new FormControl(false);
   private readonly signInForm = this.signInFormGroup;
 
   public constructor(
@@ -129,18 +129,18 @@ export class SignInDialogComponent implements OnInit, Destroyable {
     });
   }
 
-  public get email(): UntypedFormControl {
-    return this.signInForm.controls['email'] as UntypedFormControl;
+  public get email(): FormControl {
+    return this.signInForm.controls['email'] as FormControl;
   }
 
-  public get password(): UntypedFormControl {
-    return this.signInForm.controls['password'] as UntypedFormControl;
+  public get password(): FormControl {
+    return this.signInForm.controls['password'] as FormControl;
   }
 
-  private get signInFormGroup(): UntypedFormGroup {
-    return new UntypedFormGroup({
-      email: new UntypedFormControl(null, Validators.required),
-      password: new UntypedFormControl(null, Validators.required),
+  private get signInFormGroup(): FormGroup {
+    return new FormGroup({
+      email: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required),
     });
   }
 }

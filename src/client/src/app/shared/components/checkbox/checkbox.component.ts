@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
-import {UntypedFormControl} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-checkbox',
@@ -10,6 +10,6 @@ import {UntypedFormControl} from '@angular/forms';
 })
 export class CheckboxComponent {
   @Input() public color: ThemePalette;
-  @Input() public control = new UntypedFormControl();
+  @Input() public control = new FormControl();
   @Input() public label = '';
 }

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
-import {UntypedFormControl, ValidationErrors, Validators} from '@angular/forms';
+import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {
   CODE_REGEXP,
   EMAIL_REGEXP,
@@ -24,15 +24,15 @@ export class RecoveryDialogComponent implements Destroyable {
   @Output() public readonly recovered = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
-  public readonly password = new UntypedFormControl(null, [
+  public readonly password = new FormControl('', [
     Validators.required,
     Validators.minLength(PASSWORD_MIN_LENGTH),
     Validators.maxLength(PASSWORD_MAX_LENGTH),
     Validators.pattern(PASSWORD_REGEXP),
   ]);
-  public readonly repeatPassword = new UntypedFormControl(null, [Validators.required, this.sameValueValidator.bind(this)]);
-  public readonly email = new UntypedFormControl(null, Validators.required);
-  public readonly code = new UntypedFormControl('', Validators.required);
+  public readonly repeatPassword = new FormControl('', [Validators.required, this.sameValueValidator.bind(this)]);
+  public readonly email = new FormControl('', Validators.required);
+  public readonly code = new FormControl('', Validators.required);
   public readonly recoverStage$ = new BehaviorSubject(RecoveryStage.Email);
   public readonly recoveryStage = RecoveryStage;
   public readonly loading$ = new BehaviorSubject(false);
@@ -82,12 +82,12 @@ export class RecoveryDialogComponent implements Destroyable {
   public recover(): void {
     if (!this.email.valid) return;
 
-    if (!EMAIL_REGEXP.test(this.email.value)) return this.showErrorSnackbar('email');
+    if (!EMAIL_REGEXP.test(this.email.value as string)) return this.showErrorSnackbar('email');
 
     this.loading$.next(true);
 
     this.userService
-      .recoverPassword({email: this.email.value, language: 'en' as Language})
+      .recoverPassword({email: this.email.value as string, language: 'en' as Language})
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
@@ -113,12 +113,12 @@ export class RecoveryDialogComponent implements Destroyable {
 
     if (!this.code.valid) return;
 
-    if (!CODE_REGEXP.test(this.code.value)) return this.showErrorSnackbar('code');
+    if (!CODE_REGEXP.test(this.code.value as string)) return this.showErrorSnackbar('code');
 
     this.loading$.next(true);
 
     this.userService
-      .checkRecoveryCodeExistenceByEmail({email: this.email.value, code: this.code.value})
+      .checkRecoveryCodeExistenceByEmail({email: this.email.value as string, code: this.code.value as string})
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
@@ -147,7 +147,11 @@ export class RecoveryDialogComponent implements Destroyable {
     this.loading$.next(true);
 
     this.userService
-      .setNewPassword({email: this.email.value, password: this.password.value, code: this.code.value})
+      .setNewPassword({
+        email: this.email.value as string,
+        password: this.password.value as string,
+        code: this.code.value as string,
+      })
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
@@ -168,7 +172,7 @@ export class RecoveryDialogComponent implements Destroyable {
       );
   }
 
-  private sameValueValidator(control: UntypedFormControl): ValidationErrors | null {
+  private sameValueValidator(control: FormControl): ValidationErrors | null {
     if (control.value === this.password.value) return null;
 
     return {mismatch: true};

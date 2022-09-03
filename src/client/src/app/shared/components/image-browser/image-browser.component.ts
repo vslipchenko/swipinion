@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {UntypedFormControl, ValidationErrors} from '@angular/forms';
+import {FormControl, ValidationErrors} from '@angular/forms';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
@@ -9,8 +9,8 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageBrowserComponent implements OnDestroy {
-  @Input() public imageUrl = new UntypedFormControl();
-  @Input() public file = new UntypedFormControl();
+  @Input() public imageUrl = new FormControl();
+  @Input() public file = new FormControl();
   @Input() public imageUrlErrorMessage!: (errors: ValidationErrors | null) => string | void;
   @Input() public extendClass = '';
 
