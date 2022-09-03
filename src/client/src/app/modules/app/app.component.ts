@@ -11,6 +11,7 @@ import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
 import {Store} from '@ngxs/store';
 import {RunUserStatusPolling} from '~app/modules/app/store/app.actions';
 import {UserStatusPingerService} from '~app/services/user-status-pinger/user-status-pinger.service';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements Destroyable {
   public readonly destroy$ = new Subject<void>();
 
   public constructor(
+    public readonly authenticationService: AuthenticationService,
     public readonly headerService: HeaderService,
     public readonly showMessagesService: ShowMessagesService,
     private readonly store: Store,
@@ -37,17 +39,27 @@ export class AppComponent implements Destroyable {
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
-      if (event.url === '/sign-in') this.headerService.signIn$.next();
-      else if (event.url === '/sign-up') this.headerService.signUp$.next();
-      else if (event.url === '/recovery') this.recover$.next();
-      // Show messages only in the scope of user module; otherwise hide, including 404 page;
-      // TODO and if authed
-      else if (event.url.startsWith('/profile')) this.showMessagesService.show();
-      else if (event.url.startsWith('/user/')) this.showMessagesService.show();
-      else this.showMessagesService.hide();
+      switch (true) {
+        case event.url === '/sign-in':
+          this.headerService.signIn$.next();
+          break;
+        case event.url === '/sign-up':
+          this.headerService.signUp$.next();
+          break;
+        case event.url === '/recovery':
+          this.recover$.next();
+          break;
+        // @ts-ignore
+        case this.authenticationService.authenticated && event.url.startsWith('/profile'):
+        case this.authenticationService.authenticated && event.url.startsWith('/user/'):
+          this.showMessagesService.show();
+          break;
+        default:
+          this.showMessagesService.hide();
+      }
     });
 
-    this.runUserStatusPolling();
+    if (this.authenticationService.authenticated) this.runUserStatusPolling();
   }
 
   public ngOnDestroy(): void {

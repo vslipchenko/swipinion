@@ -23,3 +23,14 @@ export const USER_WITH_RECOVERY_CODE_EXISTS = gql`
     }
   }
 `;
+
+export const USER_ESSENTIALS = gql`
+  query {
+    userEssentials {
+      id
+      username
+      thumbnail
+      language
+    }
+  }
+`;

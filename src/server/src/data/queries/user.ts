@@ -57,6 +57,15 @@ export const queryUserCheckExistenceByUsername = (username: string): QueryConfig
   values: [username],
 });
 
+export const queryUserEssentialsById = (userId: string): QueryConfig => ({
+  text: `
+    SELECT id, thumbnail, username, language
+    FROM users
+    WHERE id = $1
+  `,
+  values: [userId],
+});
+
 export const queryUserCreate = ({
   username,
   email,

@@ -81,6 +81,15 @@ export interface EditProfileMutationResult {
   editProfile: SuccessResponse;
 }
 
+export interface UserEssentialsQueryResult {
+  userEssentials: {
+    id: string;
+    username: string;
+    thumbnail: string;
+    language: string;
+  };
+}
+
 export interface ResolvedUserData {
   id: string;
   username: string;

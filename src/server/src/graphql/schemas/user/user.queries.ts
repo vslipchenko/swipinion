@@ -1,18 +1,22 @@
-import {gql} from 'apollo-server-core';
+import {ApolloError, gql} from 'apollo-server-core';
 import {
   queryUserCheckExistenceByEmail,
   queryUserCheckExistenceByUsername,
+  queryUserEssentialsById,
   queryUserWithRecoveryCodeByEmail,
 } from '../../../data/queries/user';
 import {db} from '../../../data';
 import {emailValidator, usernameValidator} from '../../../validators/shared';
 import {userCodeValidator} from '../../../validators/user';
+import {authenticationGuard} from '../../../utilities/guard';
+import {QueryResultRow} from 'pg';
 
 export const userQueryTypeDefinitions = gql`
   type Query {
     userWithEmailExists(email: String!): Exists
     userWithUsernameExists(username: String!): Exists
     userWithRecoveryCodeExists(input: UserCode!): Exists
+    userEssentials: UserEssentials
   }
 `;
 
@@ -52,10 +56,29 @@ const userWithRecoveryCodeExists = async (
   return {exists: Boolean(result.rowCount)};
 };
 
+const userEssentials = async (
+  _1: unknown,
+  _2: unknown,
+  {accessToken}: {accessToken: string},
+): Promise<QueryResultRow | ApolloError | null> => {
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  console.log(accessToken, tokenData, authenticationError);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.query(queryUserEssentialsById(tokenData.userId));
+
+  if (!result.rowCount) return null;
+
+  return result.rows[0];
+};
+
 export const userQueryResolvers = {
   Query: {
     userWithEmailExists,
     userWithUsernameExists,
     userWithRecoveryCodeExists,
+    userEssentials,
   },
 };

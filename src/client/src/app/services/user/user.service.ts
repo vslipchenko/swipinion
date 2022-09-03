@@ -11,6 +11,7 @@ import {
 } from '~app/graphql/user/user.mutations';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
+  USER_ESSENTIALS,
   USER_WITH_EMAIL_EXISTS,
   USER_WITH_RECOVERY_CODE_EXISTS,
   USER_WITH_USERNAME_EXISTS,
@@ -28,6 +29,7 @@ import {
   SetNewPassword,
   SetNewPasswordMutationResult,
   UserCode,
+  UserEssentialsQueryResult,
   UserWithEmailExistsQueryResult,
   UserWithRecoveryCodeExistsQueryResult,
   UserWithUsernameExistsQueryResult,
@@ -102,6 +104,12 @@ export class UserService {
     return this.apollo.mutate<EditProfileMutationResult>({
       mutation: EDIT_PROFILE,
       variables: {input},
+    });
+  }
+
+  public getUserEssentials(): Observable<ApolloQueryResult<UserEssentialsQueryResult>> {
+    return this.apollo.query<UserEssentialsQueryResult>({
+      query: USER_ESSENTIALS,
     });
   }
 }

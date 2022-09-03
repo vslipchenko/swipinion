@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GraphQLModule} from '~app/graphql/graphql.module';
 import {HttpClientModule} from '@angular/common/http';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
-import {catchError, Observable, of, tap} from 'rxjs';
+import {catchError, Observable, of, switchMap, tap} from 'rxjs';
 import {AuthenticationInterceptorProvider} from '~app/interceptors/authentication/authentication.interceptor';
 import {NgxsModule, Store} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
@@ -24,6 +24,7 @@ import {EmailConfirmationDialogModule} from '~app/shared/components/email-confir
 import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recovery-dialog.module';
 import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
 import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
+import {UserService} from '~app/services/user/user.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -52,7 +53,7 @@ import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-
     {
       provide: APP_INITIALIZER,
       useFactory: authenticationFactory,
-      deps: [AuthenticationService, Store],
+      deps: [AuthenticationService, UserService, Store],
       multi: true,
     },
     {
@@ -69,6 +70,7 @@ export class AppModule {}
 // Could be dropped once any other factory is used that triggers access token refresh
 function authenticationFactory(
   authenticationService: AuthenticationService,
+  userService: UserService,
   store: Store,
 ): () => void | Observable<any> {
   return (): void | Observable<any> => {
@@ -77,7 +79,7 @@ function authenticationFactory(
     if (!refreshToken) return;
 
     return authenticationService.refreshAccessToken().pipe(
-      tap(({data}) => {
+      switchMap(({data}) => {
         authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
 
         store.dispatch(
@@ -86,6 +88,11 @@ function authenticationFactory(
             username: data.refreshAccessToken.username,
           }),
         );
+
+        return userService.getUserEssentials();
+      }),
+      tap(({data}) => {
+        console.log(data);
       }),
       catchError(() => {
         return of(); // Ignore error; let auth interceptor handle authentication
