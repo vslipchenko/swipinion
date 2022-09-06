@@ -33,6 +33,12 @@ export class FetchUserMessages {
   public constructor(public payload?: string) {}
 }
 
+export class FetchNewUserMessages {
+  public static readonly type = '[App] FetchNewUserMessages';
+
+  public constructor(public payload: Array<string>) {}
+}
+
 export class FetchUserChat {
   public static readonly type = '[App] FetchUserChat';
 

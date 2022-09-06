@@ -30,11 +30,11 @@ export const queryNotificationUserStatus = (userId: string): QueryConfig => ({
 
 export const queryMessageUserStatus = (userId: string): QueryConfig => ({
   text: `
-    SELECT id, sender_id
+    SELECT DISTINCT ON (sender_id) sender_id, MAX(id) as id
     FROM user_messages
     WHERE recipient_id = $1
       AND read = FALSE
-    ORDER BY id DESC
+    GROUP BY sender_id
   `,
   values: [userId],
 });

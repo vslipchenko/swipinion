@@ -13,3 +13,5 @@ export const fetchUserChatValidator = Joi.object<FetchUserChatPayload>({
   edgeId: bigintValidator,
   markRead: booleanValidator,
 });
+
+export const fetchNewUserMessagesValidator = Joi.array().items(bigintValidator);

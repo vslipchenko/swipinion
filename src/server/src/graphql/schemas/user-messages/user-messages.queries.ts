@@ -2,17 +2,20 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {
+  queryFetchNewUserMessages,
   queryFetchUserChat,
   queryFetchUserMessages,
   queryMarkUserMessagesRead,
 } from '../../../data/queries/user-messages';
 import {bigintValidator} from '../../../validators/shared';
 import {FetchUserChatPayload} from '../../../typings/user-messages/user-messages.interfaces';
-import {fetchUserChatValidator} from '../../../validators/user-messages';
+import {fetchNewUserMessagesValidator, fetchUserChatValidator} from '../../../validators/user-messages';
+import {QueryResultRow} from 'pg';
 
 export const userMessagesQueryTypeDefinitions = gql`
   type Query {
     fetchUserMessages(edgeId: String): [Message!]
+    fetchNewUserMessages(input: [String!]!): [Message!]
     fetchUserChat(input: FetchUserChat): [Chat!]
   }
 `;
@@ -37,11 +40,31 @@ const fetchUserMessages = async (
   return result.rows;
 };
 
+const fetchNewUserMessages = async (
+  _1: unknown,
+  {input}: {input: Array<string>},
+  {accessToken}: {accessToken: string},
+): Promise<Array<QueryResultRow> | ApolloError | null> => {
+  const {error} = fetchNewUserMessagesValidator.validate(input);
+
+  if (error) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.query(queryFetchNewUserMessages(input, tokenData.userId));
+
+  if (!result.rowCount) return null;
+
+  return result.rows;
+};
+
 const fetchUserChat = async (
   _1: unknown,
   {input}: {input: FetchUserChatPayload},
   {accessToken}: {accessToken: string},
-): Promise<unknown | ApolloError | null> => {
+): Promise<Array<QueryResultRow> | ApolloError | null> => {
   const {error} = fetchUserChatValidator.validate(input);
 
   if (error) return null;
@@ -74,6 +97,7 @@ const fetchUserChat = async (
 export const userMessagesQueryResolvers = {
   Query: {
     fetchUserMessages,
+    fetchNewUserMessages,
     fetchUserChat,
   },
 };

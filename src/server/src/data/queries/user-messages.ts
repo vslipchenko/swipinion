@@ -59,6 +59,25 @@ export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryCo
   values: edgeId ? [userId, USER_MESSAGES_FETCH_LIMIT, edgeId] : [userId, USER_MESSAGES_FETCH_LIMIT],
 });
 
+export const queryFetchNewUserMessages = (messageIds: Array<string>, recipientId: string): QueryConfig => ({
+  text: `
+    SELECT user_messages.id, 
+      user_messages.sender_id as user_id_1, 
+      user_messages.recipient_id as user_id_2, 
+      user_messages.sender_id, 
+      user_messages.teaser, 
+      user_messages.created_at,
+      user_messages.read,
+      users.username, 
+      users.thumbnail
+    FROM user_messages
+    LEFT JOIN users ON users.id = user_messages.sender_id
+    WHERE user_messages.id = ANY($1::int[]) AND user_messages.recipient_id = $2
+    ORDER BY user_messages.id DESC
+  `,
+  values: [messageIds, recipientId],
+});
+
 export const queryMarkUserMessagesRead = (senderId: string, recipientId: string): QueryConfig => ({
   // TODO there is a room for possible improvement for marking read only that messages that user actually seen. E.g. when unread message count > fetch limit and user hasn't scrolled through all of them
   text: `

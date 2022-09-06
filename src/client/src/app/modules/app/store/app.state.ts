@@ -1,6 +1,7 @@
 import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
+  FetchNewUserMessages,
   FetchUserChat,
   FetchUserMessages,
   RunUserStatusPolling,
@@ -14,13 +15,7 @@ import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
-import {
-  determineMessageTimePoint,
-  timestampToMonthDay,
-  timestampToMonthDayYear,
-  timestampToTime,
-} from '~app/utilities/date';
-import {MessageTimePoint} from '~app/typings/date/date.enums';
+import {convertToUiMessages} from '~app/utilities/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -95,10 +90,33 @@ export class AppState {
       tap(({data}) => {
         if (!data.checkUserStatus) return;
 
-        context.setState((state) => ({
-          ...state,
-          ...data.checkUserStatus,
-        }));
+        context.setState((state) => {
+          const nextState = {
+            ...state,
+            ...data.checkUserStatus,
+          };
+
+          const mostRecentMessageId = Number(state.messages[0]?.id);
+
+          const fetchNewMessages =
+            state.messages.length &&
+            data.checkUserStatus.unreadMessages.length &&
+            data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > mostRecentMessageId);
+
+          if (fetchNewMessages) {
+            const fetchMessages: Array<string> = [];
+
+            data.checkUserStatus.unreadMessages.forEach((message) => {
+              if (Number(message.id) > mostRecentMessageId) {
+                fetchMessages.push(message.id);
+              }
+            });
+
+            if (fetchMessages.length) context.dispatch(new FetchNewUserMessages(fetchMessages));
+          }
+
+          return nextState;
+        });
       }),
     );
   }
@@ -109,46 +127,37 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserMessages) return;
 
+        context.setState((state) => ({
+          ...state,
+          messages: [...state.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
+        }));
+      }),
+    );
+  }
+
+  @Action(FetchNewUserMessages)
+  private fetchNewUserMessages(
+    context: StateContext<AppStateModel>,
+    action: FetchNewUserMessages,
+  ): Observable<unknown> {
+    return this.userMessagesService.fetchNewUserMessages(action.payload).pipe(
+      tap(({data}) => {
+        if (!data.fetchNewUserMessages) return;
+
         context.setState((state) => {
-          const messages: Array<UIUserMessage> = data.fetchUserMessages.map((message) => {
-            const timePoint = determineMessageTimePoint(message.created_at);
-            let date;
+          const messages = convertToUiMessages(data.fetchNewUserMessages, state.user.id);
 
-            switch (timePoint) {
-              case MessageTimePoint.TODAY:
-                date = timestampToTime(message.created_at);
-                break;
-              case MessageTimePoint.THIS_YEAR:
-                date = timestampToMonthDay(message.created_at);
-                break;
-              default:
-                date = timestampToMonthDayYear(message.created_at);
-            }
+          let nextMessages = state.messages.filter(
+            // This will allow to bubble up existing conversations thus avoiding duplicates
+            (message) => !messages.find((item) => message.sender_id === item.sender_id),
+          );
 
-            const nextMessage: UIUserMessage = {
-              ...message,
-              unread: false,
-              date,
-            };
-            // Mark unread if sender is not current user and read value is false
-            if (!message.read) nextMessage.unread = message.sender_id !== state.user.id;
+          nextMessages = [...messages, ...nextMessages];
 
-            return nextMessage;
-          });
-
-          const nextState = {
+          return {
             ...state,
-            messages: [...state.messages, ...messages],
+            messages: nextMessages,
           };
-
-          // if (!action.payload) {
-          //   // This one is needed in order to fix discrepancy when inactive tab has a stale unreadMessageTimestamp on message fetch
-          //   const unreadMessage = messages.find((item) => !item.read);
-          //
-          //   if (unreadMessage) nextState.unreadMessageTimestamp = unreadMessage.created_at;
-          // }
-
-          return nextState;
         });
       }),
     );
