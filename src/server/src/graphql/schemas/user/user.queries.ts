@@ -63,8 +63,6 @@ const userEssentials = async (
 ): Promise<QueryResultRow | ApolloError | null> => {
   const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
 
-  console.log(accessToken, tokenData, authenticationError);
-
   if (authenticationError) return authenticationError;
 
   const result = await db.query(queryUserEssentialsById(tokenData.userId));

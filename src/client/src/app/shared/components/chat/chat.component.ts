@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit {
         user_id_1: message.user_id_1,
         user_id_2: message.user_id_2,
         edgeId: '0',
-        markRead: true,
+        markRead: this.chatInfo.message.unread,
       }),
     );
   }
