@@ -3,7 +3,7 @@
   <ng-template #title>
       <span class="relative d-flex mr-1">
               <mat-icon svgIcon="email-multiple"
-                        [color]="(unreadMessageTimestamp$ | async) ? 'primary' : null"></mat-icon>
+                        [color]="(unreadMessages$ | async)?.length ? 'primary' : null"></mat-icon>
             </span>
     Messages
   </ng-template>

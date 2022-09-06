@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {merge, Observable, of, Subject, takeUntil} from 'rxjs';
+import {combineLatest, distinctUntilChanged, merge, Observable, of, Subject, takeUntil} from 'rxjs';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
@@ -9,6 +9,10 @@ import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-
 import {SignUpDialogComponent} from '~app/shared/components/sign-up-dialog/sign-up-dialog.component';
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
 import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/recovery-dialog.component';
+import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
+import {RunUserStatusPolling} from '~app/modules/app/store/app.actions';
+import {UserStatusPingerService} from '~app/services/user-status-pinger/user-status-pinger.service';
+import {Store} from '@ngxs/store';
 
 @Component({
   selector: 'app-header',
@@ -29,6 +33,8 @@ export class HeaderComponent implements OnInit, Destroyable {
     private readonly location: Location,
     private readonly authenticationService: AuthenticationService, // private readonly history: Navi,
     private readonly router: Router,
+    private readonly userStatusPingerService: UserStatusPingerService,
+    private readonly store: Store,
   ) {
     this.authenticated$ = this.authenticationService.authenticated$;
   }
@@ -45,6 +51,8 @@ export class HeaderComponent implements OnInit, Destroyable {
     this.showPasswordRecovery.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.recoverPassword(false);
     });
+
+    if (this.authenticationService.authenticated) this.runUserStatusPolling();
   }
 
   public ngOnDestroy(): void {
@@ -75,6 +83,8 @@ export class HeaderComponent implements OnInit, Destroyable {
     dialog.componentInstance.authenticated.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
       if (this.isHomepageScope) this.resetLocation();
+
+      this.runUserStatusPolling();
     });
 
     this.listenDialogClose(dialog);
@@ -132,6 +142,42 @@ export class HeaderComponent implements OnInit, Destroyable {
 
   private resetLocation(): void {
     this.location.go('/');
+  }
+
+  private runUserStatusPolling(): void {
+    // TODO move script to web worker in order to guarantee stable setInterval callback run as az browser throttles inactive tabs
+    let interval: number;
+
+    combineLatest([
+      this.userStatusPingerService.runMessagePolling$,
+      this.userStatusPingerService.runNotificationPolling$,
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged((previous, current) => {
+          return previous[0] === current[0] && previous[1] === current[1];
+        }),
+      )
+      .subscribe(([checkMessage, checkNotification]) => {
+        if (!checkMessage && !checkNotification) return clearInterval(interval);
+
+        this.dispatchUserStatusPolling(checkMessage, checkNotification);
+
+        interval = setInterval(() => {
+          this.dispatchUserStatusPolling(checkMessage, checkNotification);
+        }, USER_STATUS_POLLING_INTERVAL);
+      });
+  }
+
+  private dispatchUserStatusPolling(checkMessage: boolean, checkNotification: boolean): void {
+    // if (document.hidden) return; // Prevent polling when tab is inactive
+
+    this.store.dispatch(
+      new RunUserStatusPolling({
+        checkMessage,
+        checkNotification,
+      }),
+    );
   }
 
   public get isHomepageScope(): boolean {

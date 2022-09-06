@@ -4,7 +4,7 @@ import {FetchUserMessages} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 @Component({
@@ -15,7 +15,7 @@ import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 })
 export class MessagesComponent implements Destroyable {
   @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
-  @Select(AppSelectors.unreadMessageTimestamp) public unreadMessageTimestamp$!: Observable<number>;
+  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   // public readonly tabs = [
   //   {text: 'Inbox', icon: 'inbox'},

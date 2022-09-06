@@ -13,7 +13,7 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {
   determineMessageTimePoint,
   timestampToMonthDay,
@@ -28,8 +28,8 @@ export interface AppStateModel {
   chats: {[key: string]: unknown};
   role: UserRole;
   utcTimestamp: number;
-  unreadMessageTimestamp: number;
-  unreadNotificationTimestamp: number;
+  unreadMessages: Array<UnreadMessage>;
+  unreadNotification: string;
 }
 
 const APP_STATE = new StateToken<AppStateModel>('app');
@@ -46,8 +46,8 @@ const APP_STATE = new StateToken<AppStateModel>('app');
     messages: [],
     chats: {},
     role: UserRole.Guest,
-    unreadMessageTimestamp: 0,
-    unreadNotificationTimestamp: 0,
+    unreadMessages: [],
+    unreadNotification: '',
     utcTimestamp: new Date().getTime(),
   },
 })
@@ -141,12 +141,12 @@ export class AppState {
             messages: [...state.messages, ...messages],
           };
 
-          if (!action.payload) {
-            // This one is needed in order to fix discrepancy when inactive tab has a stale unreadMessageTimestamp on message fetch
-            const unreadMessage = messages.find((item) => !item.read);
-
-            if (unreadMessage) nextState.unreadMessageTimestamp = unreadMessage.created_at;
-          }
+          // if (!action.payload) {
+          //   // This one is needed in order to fix discrepancy when inactive tab has a stale unreadMessageTimestamp on message fetch
+          //   const unreadMessage = messages.find((item) => !item.read);
+          //
+          //   if (unreadMessage) nextState.unreadMessageTimestamp = unreadMessage.created_at;
+          // }
 
           return nextState;
         });

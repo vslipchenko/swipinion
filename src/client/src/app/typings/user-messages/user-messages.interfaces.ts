@@ -40,3 +40,8 @@ export interface UIUserMessage extends UserMessage {
   date: string;
   unread: boolean;
 }
+
+export interface UnreadMessage {
+  id: string;
+  sender_id: string;
+}

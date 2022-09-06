@@ -18,7 +18,7 @@ export class AppSelectors {
     return state.messages;
   });
 
-  public static unreadMessageTimestamp = createSelector([AppState], (state: AppStateModel) => {
-    return state.unreadMessageTimestamp;
+  public static unreadMessages = createSelector([AppState], (state: AppStateModel) => {
+    return state.unreadMessages;
   });
 }
