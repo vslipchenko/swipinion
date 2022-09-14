@@ -36,7 +36,10 @@ export const FETCH_USER_CHAT = gql`
   query ($input: FetchUserChat) {
     fetchUserChat(input: $input) {
       id
+      sender_id
+      recipient_id
       body
+      read
       created_at
     }
   }

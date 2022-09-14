@@ -88,16 +88,16 @@ export const queryMarkUserMessagesRead = (senderId: string, recipientId: string)
   values: [senderId, recipientId],
 });
 
-export const queryFetchUserChat = (user_id_1: string, user_id_2: string, id: string): QueryConfig => ({
+export const queryFetchUserChat = (user_id_1: string, user_id_2: string, id: string, userId: string): QueryConfig => ({
   text: `
-    SELECT sender_id, recipient_id, body, created_at
+    SELECT id, sender_id, recipient_id, body, read, created_at
     FROM user_messages
     WHERE
-        recipient_id = $1 AND sender_id = $2
-        OR recipient_id = $2 AND sender_id = $1
+        (recipient_id = $1 AND sender_id = $2 OR recipient_id = $2 AND sender_id = $1)
+        AND (recipient_id = $4 OR sender_id = $4) -- Security measure; In order to restrict lookup scope only to authed user chats
         AND id < $3
-    ORDER BY created_at DESC
+    ORDER BY id DESC
     LIMIT $4
   `,
-  values: [user_id_1, user_id_2, id, USER_CHAT_MESSAGES_FETCH_LIMIT],
+  values: [user_id_1, user_id_2, id, USER_CHAT_MESSAGES_FETCH_LIMIT, userId],
 });

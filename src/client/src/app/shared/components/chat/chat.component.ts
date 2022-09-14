@@ -42,12 +42,16 @@ export class ChatComponent implements OnInit {
 
     this.loadStart.next();
 
+    this.fetchUserChat('0', message.unread);
+  }
+
+  private fetchUserChat(edgeId: string, markRead = false): void {
     this.store.dispatch(
       new FetchUserChat({
-        user_id_1: message.user_id_1,
-        user_id_2: message.user_id_2,
-        edgeId: '0',
-        markRead: this.chatInfo.message.unread,
+        user_id_1: this.chatInfo.message.user_id_1,
+        user_id_2: this.chatInfo.message.user_id_2,
+        edgeId,
+        markRead,
       }),
     );
   }

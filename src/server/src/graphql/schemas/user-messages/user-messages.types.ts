@@ -15,7 +15,10 @@ export const userMessagesTypes = gql`
 
   type Chat {
     id: String
+    sender_id: String
+    recipient_id: String
     body: String
+    read: Boolean
     created_at: Float
   }
 `;

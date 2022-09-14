@@ -18,7 +18,7 @@ export interface FetchNewUserMessagesQueryResult {
 }
 
 export interface FetchUserChatQueryResult {
-  fetchUserChat: unknown;
+  fetchUserChat: Array<UserChat>;
 }
 
 export interface FetchUserChatPayload {
@@ -26,6 +26,15 @@ export interface FetchUserChatPayload {
   user_id_2: string;
   edgeId: string;
   markRead: boolean;
+}
+
+export interface UserChat {
+  id: string;
+  sender_id: string;
+  recipient_id: string;
+  body: string;
+  read: boolean;
+  created_at: number;
 }
 
 export interface UserMessage {
