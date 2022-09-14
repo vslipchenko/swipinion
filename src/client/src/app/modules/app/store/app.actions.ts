@@ -1,7 +1,7 @@
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserEssentials} from '~app/typings/user/user.interfaces';
 import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
-import {FetchUserChatPayload} from '~app/typings/user-messages/user-messages.interfaces';
+import {FetchUserConversationPayload} from '~app/typings/user-messages/user-messages.interfaces';
 
 export class UpdateUserEssentials {
   public static readonly type = '[App] UpdateUserEssentials';
@@ -39,8 +39,8 @@ export class FetchNewUserMessages {
   public constructor(public payload: Array<string>) {}
 }
 
-export class FetchUserChat {
-  public static readonly type = '[App] FetchUserChat';
+export class FetchUserConversation {
+  public static readonly type = '[App] FetchUserConversation';
 
-  public constructor(public payload: FetchUserChatPayload) {}
+  public constructor(public payload: FetchUserConversationPayload) {}
 }

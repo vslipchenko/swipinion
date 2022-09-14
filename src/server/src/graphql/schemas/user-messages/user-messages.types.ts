@@ -13,7 +13,7 @@ export const userMessagesTypes = gql`
     created_at: Float
   }
 
-  type Chat {
+  type Conversation {
     id: String
     sender_id: String
     recipient_id: String

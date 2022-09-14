@@ -4,8 +4,8 @@ import {Observable} from 'rxjs';
 import {SEND_USER_MESSAGE} from '~app/graphql/user-messages/user-messages.mutations';
 import {
   FetchNewUserMessagesQueryResult,
-  FetchUserChatPayload,
-  FetchUserChatQueryResult,
+  FetchUserConversationPayload,
+  FetchUserConversationQueryResult,
   FetchUserMessagesQueryResult,
   SendUserMessage,
   SendUserMessageMutationResult,
@@ -13,7 +13,7 @@ import {
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
   FETCH_NEW_USER_MESSAGES,
-  FETCH_USER_CHAT,
+  FETCH_USER_CONVERSATION,
   FETCH_USER_MESSAGES,
 } from '~app/graphql/user-messages/user-messages.queries';
 
@@ -46,9 +46,11 @@ export class UserMessagesService {
     });
   }
 
-  public fetchUserChat(input: FetchUserChatPayload): Observable<ApolloQueryResult<FetchUserChatQueryResult>> {
-    return this.apollo.query<FetchUserChatQueryResult>({
-      query: FETCH_USER_CHAT,
+  public fetchUserConversation(
+    input: FetchUserConversationPayload,
+  ): Observable<ApolloQueryResult<FetchUserConversationQueryResult>> {
+    return this.apollo.query<FetchUserConversationQueryResult>({
+      query: FETCH_USER_CONVERSATION,
       variables: {input},
       fetchPolicy: 'no-cache',
     });

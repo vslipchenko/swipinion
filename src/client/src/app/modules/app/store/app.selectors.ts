@@ -22,7 +22,7 @@ export class AppSelectors {
     return state.unreadMessages;
   });
 
-  public static chatMessages = createSelector([AppState], (state: AppStateModel) => {
-    return state.chat;
+  public static conversationMessages = createSelector([AppState], (state: AppStateModel) => {
+    return state.conversationMessages;
   });
 }

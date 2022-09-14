@@ -3,20 +3,20 @@ import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {
   queryFetchNewUserMessages,
-  queryFetchUserChat,
+  queryFetchUserConversation,
   queryFetchUserMessages,
   queryMarkUserMessagesRead,
 } from '../../../data/queries/user-messages';
 import {bigintValidator} from '../../../validators/shared';
-import {FetchUserChatPayload} from '../../../typings/user-messages/user-messages.interfaces';
-import {fetchNewUserMessagesValidator, fetchUserChatValidator} from '../../../validators/user-messages';
+import {FetchUserConversationPayload} from '../../../typings/user-messages/user-messages.interfaces';
+import {fetchNewUserMessagesValidator, fetchUserConversationValidator} from '../../../validators/user-messages';
 import {QueryResultRow} from 'pg';
 
 export const userMessagesQueryTypeDefinitions = gql`
   type Query {
     fetchUserMessages(edgeId: String): [Message!]
     fetchNewUserMessages(input: [String!]!): [Message!]
-    fetchUserChat(input: FetchUserChat): [Chat!]
+    fetchUserConversation(input: FetchUserConversation): [Conversation!]
   }
 `;
 
@@ -60,12 +60,12 @@ const fetchNewUserMessages = async (
   return result.rows;
 };
 
-const fetchUserChat = async (
+const fetchUserConversation = async (
   _1: unknown,
-  {input}: {input: FetchUserChatPayload},
+  {input}: {input: FetchUserConversationPayload},
   {accessToken}: {accessToken: string},
 ): Promise<Array<QueryResultRow> | ApolloError | null> => {
-  const {error} = fetchUserChatValidator.validate(input);
+  const {error} = fetchUserConversationValidator.validate(input);
 
   if (error) return null;
 
@@ -81,13 +81,15 @@ const fetchUserChat = async (
 
     const result = await db.transaction(
       queryMarkUserMessagesRead(senderId, tokenData.userId),
-      queryFetchUserChat(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId),
+      queryFetchUserConversation(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId),
     );
 
     return result.results[1].rows;
   }
 
-  const result = await db.query(queryFetchUserChat(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId));
+  const result = await db.query(
+    queryFetchUserConversation(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId),
+  );
 
   if (!result.rowCount) return null;
 
@@ -98,6 +100,6 @@ export const userMessagesQueryResolvers = {
   Query: {
     fetchUserMessages,
     fetchNewUserMessages,
-    fetchUserChat,
+    fetchUserConversation,
   },
 };

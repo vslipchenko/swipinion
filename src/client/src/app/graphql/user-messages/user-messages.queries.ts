@@ -32,9 +32,9 @@ export const FETCH_NEW_USER_MESSAGES = gql`
   }
 `;
 
-export const FETCH_USER_CHAT = gql`
-  query ($input: FetchUserChat) {
-    fetchUserChat(input: $input) {
+export const FETCH_USER_CONVERSATION = gql`
+  query ($input: FetchUserConversation) {
+    fetchUserConversation(input: $input) {
       id
       sender_id
       recipient_id

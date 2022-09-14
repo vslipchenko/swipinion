@@ -2,7 +2,7 @@ import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
   FetchNewUserMessages,
-  FetchUserChat,
+  FetchUserConversation,
   FetchUserMessages,
   RunUserStatusPolling,
   UpdateUserEssentials,
@@ -14,14 +14,14 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {UIUserMessage, UnreadMessage, UserChat} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage, UnreadMessage, UserConversation} from '~app/typings/user-messages/user-messages.interfaces';
 import {convertToUiMessages} from '~app/utilities/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
   messages: Array<UIUserMessage>;
-  chats: {[key: string]: unknown};
-  chat: Array<UserChat>;
+  // conversations: {[key: string]: unknown};
+  conversationMessages: Array<UserConversation>;
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -40,8 +40,8 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       language: 'en',
     },
     messages: [],
-    chats: {},
-    chat: [],
+    // conversations: {},
+    conversationMessages: [],
     role: UserRole.Guest,
     unreadMessages: [],
     unreadNotification: '',
@@ -165,14 +165,17 @@ export class AppState {
     );
   }
 
-  @Action(FetchUserChat)
-  private fetchUserChat(context: StateContext<AppStateModel>, action: FetchUserChat): Observable<unknown> {
-    return this.userMessagesService.fetchUserChat(action.payload).pipe(
+  @Action(FetchUserConversation)
+  private fetchUserConversation(
+    context: StateContext<AppStateModel>,
+    action: FetchUserConversation,
+  ): Observable<unknown> {
+    return this.userMessagesService.fetchUserConversation(action.payload).pipe(
       tap(({data}) => {
-        if (!data.fetchUserChat) return;
+        if (!data.fetchUserConversation) return;
 
         context.setState((state) => {
-          return {...state, chat: data.fetchUserChat};
+          return {...state, conversationMessages: data.fetchUserConversation};
         });
       }),
     );

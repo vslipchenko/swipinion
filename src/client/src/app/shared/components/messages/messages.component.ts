@@ -26,10 +26,10 @@ export class MessagesComponent implements Destroyable {
   //   },
   // ];
 
-  public showChat = false;
+  public showConversation = false;
 
   public readonly initialLoading$ = new BehaviorSubject(true);
-  public readonly chatInfo$ = new BehaviorSubject<{message?: UIUserMessage; savedMessages: boolean}>({
+  public readonly conversationInfo$ = new BehaviorSubject<{message?: UIUserMessage; savedMessages: boolean}>({
     message: {
       id: '',
       user_id_1: '',
@@ -79,11 +79,11 @@ export class MessagesComponent implements Destroyable {
     this.loading$.next(true);
   }
 
-  public loadChat(savedMessages: boolean, message?: UIUserMessage): void {
+  public loadConversation(savedMessages: boolean, message?: UIUserMessage): void {
     // this.loading$.next(true);
 
-    this.chatInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
+    this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
 
-    this.showChat = true;
+    this.showConversation = true;
   }
 }

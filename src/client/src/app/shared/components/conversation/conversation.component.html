@@ -1,26 +1,26 @@
 <div class="messaging-content relative pb-2 h-100 d-flex f-column">
   <div class="panel p-2 d-flex jc-between">
     <div class="d-flex ai-center">
-      <mat-icon *ngIf="chatInfo.savedMessages; else image" color="accent"
+      <mat-icon *ngIf="conversationInfo.savedMessages; else image" color="accent"
                 class="saved-messages-icon d-flex jc-center ai-center mr-2">bookmark
       </mat-icon>
 
       <ng-template #image>
-        <img *ngIf="chatInfo.message.thumbnail" [src]="chatInfo.message.thumbnail"
+        <img *ngIf="conversationInfo.message.thumbnail" [src]="conversationInfo.message.thumbnail"
              alt="" class="thumbnail mr-2">
-        <div *ngIf="!chatInfo.message.thumbnail" class="thumbnail mr-2"></div>
+        <div *ngIf="!conversationInfo.message.thumbnail" class="thumbnail mr-2"></div>
       </ng-template>
 
       <div>
-        <a *ngIf="chatInfo.message.username" class="fw-medium truncate link"
+        <a *ngIf="conversationInfo.message.username" class="fw-medium truncate link"
            routerLink="/user/{{username}}">{{username}}</a>
 
-        <span *ngIf="!chatInfo.message.username" class="fw-medium truncate">{{username}}</span>
+        <span *ngIf="!conversationInfo.message.username" class="fw-medium truncate">{{username}}</span>
 
         <!--        <div class="date">July 28</div>-->
       </div>
     </div>
-    <!--            <app-button icon="arrow_back_ios_new" text="Back" (clicked)="showChat = false"></app-button> -->
+    <!--            <app-button icon="arrow_back_ios_new" text="Back" (clicked)="showConversation = false"></app-button> -->
     <div>
       <app-icon-button icon="reply"></app-icon-button>
       <app-icon-button icon="arrow_back" (clicked)="back.emit()"></app-icon-button>

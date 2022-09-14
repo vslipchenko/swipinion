@@ -1,6 +1,6 @@
 import {QueryConfig} from 'pg';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
-import {USER_CHAT_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
+import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
 
 export const querySendUserMessage = (
   senderId: string,
@@ -88,7 +88,7 @@ export const queryMarkUserMessagesRead = (senderId: string, recipientId: string)
   values: [senderId, recipientId],
 });
 
-export const queryFetchUserChat = (
+export const queryFetchUserConversation = (
   user_id_1: string,
   user_id_2: string,
   edgeId: string | null,
@@ -99,12 +99,12 @@ export const queryFetchUserChat = (
     FROM user_messages
     WHERE
         (recipient_id = $1 AND sender_id = $2 OR recipient_id = $2 AND sender_id = $1)
-        AND (recipient_id = $4 OR sender_id = $4) -- Security measure; In order to restrict lookup scope only to authed user chats
+        AND (recipient_id = $4 OR sender_id = $4) -- Security measure; In order to restrict lookup scope only to authed user conversations
         ${edgeId ? 'AND id < $5' : ''}
     -- ORDER BY id DESC
     LIMIT $3
   `,
   values: edgeId
-    ? [user_id_1, user_id_2, USER_CHAT_MESSAGES_FETCH_LIMIT, userId, edgeId]
-    : [user_id_1, user_id_2, USER_CHAT_MESSAGES_FETCH_LIMIT, userId],
+    ? [user_id_1, user_id_2, USER_CONVERSATION_MESSAGES_FETCH_LIMIT, userId, edgeId]
+    : [user_id_1, user_id_2, USER_CONVERSATION_MESSAGES_FETCH_LIMIT, userId],
 });

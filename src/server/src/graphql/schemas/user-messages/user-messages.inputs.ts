@@ -6,7 +6,7 @@ export const userMessagesInputs = gql`
     body: String!
   }
 
-  input FetchUserChat {
+  input FetchUserConversation {
     user_id_1: String!
     user_id_2: String!
     edgeId: String

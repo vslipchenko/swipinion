@@ -17,18 +17,18 @@ export interface FetchNewUserMessagesQueryResult {
   fetchNewUserMessages: Array<UserMessage>;
 }
 
-export interface FetchUserChatQueryResult {
-  fetchUserChat: Array<UserChat>;
+export interface FetchUserConversationQueryResult {
+  fetchUserConversation: Array<UserConversation>;
 }
 
-export interface FetchUserChatPayload {
+export interface FetchUserConversationPayload {
   user_id_1: string;
   user_id_2: string;
   edgeId: string;
   markRead: boolean;
 }
 
-export interface UserChat {
+export interface UserConversation {
   id: string;
   sender_id: string;
   recipient_id: string;
