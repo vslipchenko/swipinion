@@ -21,4 +21,8 @@ export class AppSelectors {
   public static unreadMessages = createSelector([AppState], (state: AppStateModel) => {
     return state.unreadMessages;
   });
+
+  public static chatMessages = createSelector([AppState], (state: AppStateModel) => {
+    return state.chat;
+  });
 }

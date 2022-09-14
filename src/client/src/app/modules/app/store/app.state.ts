@@ -14,13 +14,14 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage, UnreadMessage, UserChat} from '~app/typings/user-messages/user-messages.interfaces';
 import {convertToUiMessages} from '~app/utilities/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
   messages: Array<UIUserMessage>;
   chats: {[key: string]: unknown};
+  chat: Array<UserChat>;
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -40,6 +41,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
     },
     messages: [],
     chats: {},
+    chat: [],
     role: UserRole.Guest,
     unreadMessages: [],
     unreadNotification: '',
@@ -170,7 +172,7 @@ export class AppState {
         if (!data.fetchUserChat) return;
 
         context.setState((state) => {
-          return {...state};
+          return {...state, chat: data.fetchUserChat};
         });
       }),
     );
