@@ -4,7 +4,7 @@ import {FetchUserChatPayload} from '../typings/user-messages/user-messages.inter
 
 export const sendUserMessageValidator = Joi.object({
   recipientId: bigintValidator,
-  body: Joi.string().max(3000),
+  body: Joi.string().trim().min(1).max(3000), // No empty/whitespace string
 });
 
 export const fetchUserChatValidator = Joi.object<FetchUserChatPayload>({

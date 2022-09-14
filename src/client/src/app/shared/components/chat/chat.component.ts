@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {FetchUserChatPayload, UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {Store} from '@ngxs/store';
 import {FetchUserChat} from '~app/modules/app/store/app.actions';
 
@@ -42,17 +42,18 @@ export class ChatComponent implements OnInit {
 
     this.loadStart.next();
 
-    this.fetchUserChat('0', message.unread);
+    this.fetchUserChat('', message.unread);
   }
 
   private fetchUserChat(edgeId: string, markRead = false): void {
-    this.store.dispatch(
-      new FetchUserChat({
-        user_id_1: this.chatInfo.message.user_id_1,
-        user_id_2: this.chatInfo.message.user_id_2,
-        edgeId,
-        markRead,
-      }),
-    );
+    const payload = {
+      user_id_1: this.chatInfo.message.user_id_1,
+      user_id_2: this.chatInfo.message.user_id_2,
+      markRead,
+    } as FetchUserChatPayload;
+
+    if (edgeId) payload.edgeId = edgeId;
+
+    this.store.dispatch(new FetchUserChat(payload));
   }
 }
