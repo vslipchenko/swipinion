@@ -25,8 +25,15 @@ const sendUserMessage = async (
 
   if (authenticationError) return authenticationError;
 
+  const trimmedBody = input.body.trim();
+
   const result = await db.query(
-    querySendUserMessage(tokenData.userId, input.recipientId, input.body, input.body.slice(0, MESSAGE_TEASER_LENGTH)),
+    querySendUserMessage(
+      tokenData.userId,
+      input.recipientId,
+      trimmedBody,
+      trimmedBody.slice(0, MESSAGE_TEASER_LENGTH),
+    ),
   );
 
   return {success: Boolean(result.rowCount)};
