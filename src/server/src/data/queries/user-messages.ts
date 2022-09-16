@@ -78,7 +78,7 @@ export const queryFetchNewUserMessages = (messageIds: Array<string>, recipientId
   values: [messageIds, recipientId],
 });
 
-export const queryMarkUserMessagesRead = (senderId: string, recipientId: string): QueryConfig => ({
+export const queryMarkUserConversationMessagesRead = (senderId: string, recipientId: string): QueryConfig => ({
   // TODO there is a room for possible improvement for marking read only that messages that user actually seen. E.g. when unread message count > fetch limit and user hasn't scrolled through all of them
   text: `
     UPDATE user_messages
@@ -91,7 +91,7 @@ export const queryMarkUserMessagesRead = (senderId: string, recipientId: string)
 export const queryFetchUserConversation = (
   user_id_1: string,
   user_id_2: string,
-  edgeId: string | null,
+  edgeId: string,
   userId: string,
 ): QueryConfig => ({
   text: `
@@ -101,7 +101,6 @@ export const queryFetchUserConversation = (
         (recipient_id = $1 AND sender_id = $2 OR recipient_id = $2 AND sender_id = $1)
         AND (recipient_id = $4 OR sender_id = $4) -- Security measure; In order to restrict lookup scope only to authed user conversations
         ${edgeId ? 'AND id < $5' : ''}
-    -- ORDER BY id DESC
     LIMIT $3
   `,
   values: edgeId

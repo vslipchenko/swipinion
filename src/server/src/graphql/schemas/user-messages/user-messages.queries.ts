@@ -5,7 +5,7 @@ import {
   queryFetchNewUserMessages,
   queryFetchUserConversation,
   queryFetchUserMessages,
-  queryMarkUserMessagesRead,
+  queryMarkUserConversationMessagesRead,
 } from '../../../data/queries/user-messages';
 import {bigintValidator} from '../../../validators/shared';
 import {FetchUserConversationPayload} from '../../../typings/user-messages/user-messages.interfaces';
@@ -80,7 +80,7 @@ const fetchUserConversation = async (
     const senderId = tokenData.userId === input.user_id_1 ? input.user_id_2 : input.user_id_1;
 
     const result = await db.transaction(
-      queryMarkUserMessagesRead(senderId, tokenData.userId),
+      queryMarkUserConversationMessagesRead(senderId, tokenData.userId),
       queryFetchUserConversation(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId),
     );
 
