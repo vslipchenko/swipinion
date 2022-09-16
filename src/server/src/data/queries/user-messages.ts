@@ -33,11 +33,10 @@ export const querySendUserMessage = (
 export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryConfig => ({
   text: `
     SELECT conversations.conversation_id AS id, 
-      conversations.greatest AS user_id_1, 
-      conversations.least AS user_id_2, 
+      user_messages.sender_id,
+      user_messages.recipient_id,
       user_messages.created_at, 
       user_messages.teaser,
-      user_messages.sender_id,
       user_messages.read,
       users.username, 
       users.thumbnail
@@ -62,9 +61,8 @@ export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryCo
 export const queryFetchNewUserMessages = (messageIds: Array<string>, recipientId: string): QueryConfig => ({
   text: `
     SELECT user_messages.id, 
-      user_messages.sender_id as user_id_1, 
-      user_messages.recipient_id as user_id_2, 
       user_messages.sender_id, 
+      user_messages.recipient_id, 
       user_messages.teaser, 
       user_messages.created_at,
       user_messages.read,

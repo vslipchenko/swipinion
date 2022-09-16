@@ -13,9 +13,8 @@ export class ConversationComponent implements OnInit {
   @Input() public conversationInfo: {message: UIUserMessage; savedMessages: boolean} = {
     message: {
       id: '',
-      user_id_1: '',
-      user_id_2: '',
       sender_id: '',
+      recipient_id: '',
       teaser: '',
       username: '',
       thumbnail: '',
@@ -47,8 +46,9 @@ export class ConversationComponent implements OnInit {
 
   private fetchUserConversation(edgeId: string, markRead = false): void {
     const payload = {
-      user_id_1: this.conversationInfo.message.user_id_1,
-      user_id_2: this.conversationInfo.message.user_id_2,
+      // Order does not matter here
+      user_id_1: this.conversationInfo.message.sender_id,
+      user_id_2: this.conversationInfo.message.recipient_id,
       markRead,
     } as FetchUserConversationPayload;
 

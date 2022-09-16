@@ -32,9 +32,8 @@ export class MessagesComponent implements Destroyable {
   public readonly conversationInfo$ = new BehaviorSubject<{message?: UIUserMessage; savedMessages: boolean}>({
     message: {
       id: '',
-      user_id_1: '',
-      user_id_2: '',
       sender_id: '',
+      recipient_id: '',
       teaser: '',
       username: '',
       thumbnail: '',

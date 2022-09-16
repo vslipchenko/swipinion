@@ -4,9 +4,8 @@ export const FETCH_USER_MESSAGES = gql`
   query ($edgeId: String) {
     fetchUserMessages(edgeId: $edgeId) {
       id
-      user_id_1
-      user_id_2
       sender_id
+      recipient_id
       username
       thumbnail
       teaser
@@ -20,9 +19,8 @@ export const FETCH_NEW_USER_MESSAGES = gql`
   query ($input: [String!]!) {
     fetchNewUserMessages(input: $input) {
       id
-      user_id_1
-      user_id_2
       sender_id
+      recipient_id
       username
       thumbnail
       teaser
