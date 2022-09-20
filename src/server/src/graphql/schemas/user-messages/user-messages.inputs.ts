@@ -10,6 +10,7 @@ export const userMessagesInputs = gql`
     user_id_1: String!
     user_id_2: String!
     edgeId: String
+    fetchNew: Boolean!
     markRead: Boolean!
   }
 `;

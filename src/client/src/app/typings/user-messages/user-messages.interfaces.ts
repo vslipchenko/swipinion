@@ -26,6 +26,7 @@ export interface FetchUserConversationPayload {
   user_id_2: string;
   edgeId: string;
   markRead: boolean;
+  fetchNew: boolean; // true - fetch new messages; false - fetch previous messages
 }
 
 export interface UserConversation {

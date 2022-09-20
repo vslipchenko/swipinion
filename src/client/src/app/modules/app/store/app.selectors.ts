@@ -1,7 +1,13 @@
 import {createSelector} from '@ngxs/store';
 import {AppState, AppStateModel} from '~app/modules/app/store/app.state';
+import {UserConversation} from '~app/typings/user-messages/user-messages.interfaces';
+import {compositeObjectKey} from '~app/utilities/data';
 
 export class AppSelectors {
+  public static userId = createSelector([AppState], (state: AppStateModel) => {
+    return state.user.id;
+  });
+
   public static userEssentials = createSelector([AppState], (state: AppStateModel) => {
     return state.user;
   });
@@ -22,7 +28,16 @@ export class AppSelectors {
     return state.unreadMessages;
   });
 
-  public static conversationMessages = createSelector([AppState], (state: AppStateModel) => {
-    return state.conversationMessages;
-  });
+  public static conversationMessages = (
+    userId1: string,
+    userId2: string,
+  ): ((state: AppStateModel) => Array<UserConversation>) => {
+    return createSelector([AppState], (state: AppStateModel) => {
+      return (
+        // It may be combination sender-recipient or recipient-sender
+        state.conversations[compositeObjectKey(userId1, userId2)] ||
+        state.conversations[compositeObjectKey(userId2, userId1)]
+      );
+    });
+  };
 }

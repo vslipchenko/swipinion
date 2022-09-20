@@ -16,12 +16,12 @@ import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 import {UIUserMessage, UnreadMessage, UserConversation} from '~app/typings/user-messages/user-messages.interfaces';
 import {convertToUiMessages} from '~app/utilities/user-messages';
+import {compositeObjectKey} from '~app/utilities/data';
 
 export interface AppStateModel {
   user: UserEssentials;
   messages: Array<UIUserMessage>;
-  // conversations: {[key: string]: unknown};
-  conversationMessages: Array<UserConversation>;
+  conversations: {[key: string]: Array<UserConversation>};
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -40,8 +40,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       language: 'en',
     },
     messages: [],
-    // conversations: {},
-    conversationMessages: [],
+    conversations: {},
     role: UserRole.Guest,
     unreadMessages: [],
     unreadNotification: '',
@@ -98,20 +97,18 @@ export class AppState {
             ...data.checkUserStatus,
           };
 
-          const mostRecentMessageId = Number(state.messages[0]?.id);
+          const recentMessageId = Number(state.messages[0]?.id);
 
           const fetchNewMessages =
             state.messages.length &&
             data.checkUserStatus.unreadMessages.length &&
-            data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > mostRecentMessageId);
+            data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > recentMessageId);
 
           if (fetchNewMessages) {
             const fetchMessages: Array<string> = [];
 
             data.checkUserStatus.unreadMessages.forEach((message) => {
-              if (Number(message.id) > mostRecentMessageId) {
-                fetchMessages.push(message.id);
-              }
+              if (Number(message.id) > recentMessageId) fetchMessages.push(message.id);
             });
 
             if (fetchMessages.length) context.dispatch(new FetchNewUserMessages(fetchMessages));
@@ -151,7 +148,15 @@ export class AppState {
 
           let nextMessages = state.messages.filter(
             // This will allow to bubble up existing conversations thus avoiding duplicates
-            (message) => !messages.find((item) => message.sender_id === item.sender_id),
+            (message) => {
+              const interlocutorId = message.sender_id === state.user.id ? message.recipient_id : message.sender_id;
+
+              const hasNewMessage = messages.some(
+                (item) => item.sender_id === interlocutorId || item.recipient_id === interlocutorId,
+              );
+
+              return !hasNewMessage;
+            },
           );
 
           nextMessages = [...messages, ...nextMessages];
@@ -174,8 +179,16 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserConversation) return;
 
+        const conversationKey = compositeObjectKey(action.payload.user_id_1, action.payload.user_id_2);
+
         context.setState((state) => {
-          return {...state, conversationMessages: data.fetchUserConversation};
+          return {
+            ...state,
+            conversations: {
+              ...state.conversations,
+              [conversationKey]: data.fetchUserConversation,
+            },
+          };
         });
       }),
     );

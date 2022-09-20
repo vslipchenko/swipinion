@@ -1,6 +1,7 @@
 import {QueryConfig} from 'pg';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
+import {FetchUserConversationPayload} from '../../typings/user-messages/user-messages.interfaces';
 
 export const querySendUserMessage = (
   senderId: string,
@@ -87,9 +88,7 @@ export const queryMarkUserConversationMessagesRead = (senderId: string, recipien
 });
 
 export const queryFetchUserConversation = (
-  user_id_1: string,
-  user_id_2: string,
-  edgeId: string,
+  {user_id_1, user_id_2, edgeId, fetchNew}: FetchUserConversationPayload,
   userId: string,
 ): QueryConfig => ({
   text: `
@@ -98,7 +97,8 @@ export const queryFetchUserConversation = (
     WHERE
         (recipient_id = $1 AND sender_id = $2 OR recipient_id = $2 AND sender_id = $1)
         AND (recipient_id = $4 OR sender_id = $4) -- Security measure; In order to restrict lookup scope only to authed user conversations
-        ${edgeId ? 'AND id < $5' : ''}
+        ${edgeId ? `AND id ${fetchNew ? '>' : '<'} $5` : ''}
+    ORDER BY id
     LIMIT $3
   `,
   values: edgeId

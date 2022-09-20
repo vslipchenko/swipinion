@@ -11,6 +11,7 @@ export const fetchUserConversationValidator = Joi.object<FetchUserConversationPa
   user_id_1: bigintValidator,
   user_id_2: bigintValidator,
   edgeId: bigintValidator,
+  fetchNew: booleanValidator,
   markRead: booleanValidator,
 });
 

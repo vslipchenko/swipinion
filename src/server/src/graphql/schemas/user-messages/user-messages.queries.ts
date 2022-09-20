@@ -81,15 +81,13 @@ const fetchUserConversation = async (
 
     const result = await db.transaction(
       queryMarkUserConversationMessagesRead(senderId, tokenData.userId),
-      queryFetchUserConversation(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId),
+      queryFetchUserConversation(input, tokenData.userId),
     );
 
     return result.results[1].rows;
   }
 
-  const result = await db.query(
-    queryFetchUserConversation(input.user_id_1, input.user_id_2, input.edgeId, tokenData.userId),
-  );
+  const result = await db.query(queryFetchUserConversation(input, tokenData.userId));
 
   if (!result.rowCount) return null;
 
