@@ -182,11 +182,21 @@ export class AppState {
         const conversationKey = compositeObjectKey(action.payload.user_id_1, action.payload.user_id_2);
 
         context.setState((state) => {
+          let nextConversation = data.fetchUserConversation;
+
+          if (action.payload.edgeId) {
+            if (action.payload.fetchNew) {
+              nextConversation = [...state.conversations[conversationKey], ...nextConversation];
+            } else {
+              nextConversation = [...nextConversation, ...state.conversations[conversationKey]];
+            }
+          }
+
           return {
             ...state,
             conversations: {
               ...state.conversations,
-              [conversationKey]: data.fetchUserConversation,
+              [conversationKey]: nextConversation,
             },
           };
         });

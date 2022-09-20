@@ -76,7 +76,7 @@ export class ConversationComponent implements OnInit, Destroyable {
         this.fetchUserConversation(recentMessageId, true, true);
       });
 
-    // Init conversation messages fetch
+    // Init conversation messages fetch; TODO add possibility to init and fetch new messages only if initialized already and new messages exist
     if (!this.relevantConversationIsPresent) this.fetchUserConversation('', message.unread);
   }
 
