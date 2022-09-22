@@ -77,9 +77,7 @@ export class ConversationComponent implements OnInit, Destroyable {
 
         if (!unreadMessage) return;
 
-        const conversation = this.conversation;
-
-        const recentMessageId = conversation[conversation.length - 1].id; // TODO fix index as item order has changed
+        const recentMessageId = this.conversation[0].id; // TODO fix index as item order has changed
 
         // Fetch new messages with id greater than of the most recent message in the conversation; immediately mark as read
         this.fetchUserConversation(recentMessageId, true, true);
@@ -123,7 +121,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     if (!unreadMessages.length) return {relevant: true}; // No new messages, conversation can be renewed
 
     // const recentMessageId = conversation.find((message) => message.sender_id === interlocutorId).id;
-    const recentMessageId = conversation[conversation.length - 1].id;
+    const recentMessageId = conversation[0].id;
 
     const hasNewMessage = unreadMessages.some(
       (message) => message.sender_id === this.interlocutorId && message.id > recentMessageId,
