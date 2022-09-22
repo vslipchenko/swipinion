@@ -18,7 +18,7 @@ export interface FetchNewUserMessagesQueryResult {
 }
 
 export interface FetchUserConversationQueryResult {
-  fetchUserConversation: Array<UserConversation>;
+  fetchUserConversation: Array<UserConversationMessage>;
 }
 
 export interface FetchUserConversationPayload {
@@ -29,7 +29,7 @@ export interface FetchUserConversationPayload {
   fetchNew: boolean; // true - fetch new messages; false - fetch previous messages
 }
 
-export interface UserConversation {
+export interface UserConversationMessage {
   id: string;
   sender_id: string;
   recipient_id: string;

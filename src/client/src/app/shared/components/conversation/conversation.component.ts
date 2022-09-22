@@ -2,13 +2,13 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output}
 import {
   FetchUserConversationPayload,
   UIUserMessage,
-  UserConversation,
+  UserConversationMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserConversation} from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {Observable, skipWhile, Subject, takeUntil} from 'rxjs';
+import {Observable, of, skipWhile, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-conversation',
@@ -40,8 +40,9 @@ export class ConversationComponent implements OnInit, Destroyable {
   @Output() public loadEnd = new EventEmitter<void>();
 
   public username = '';
+  public conversationMessages$: Observable<Array<UserConversationMessage>> = of([]);
+  public interlocutorId = '';
   public readonly destroy$ = new Subject<void>();
-  private interlocutorId = '';
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation)).subscribe(() => {
@@ -56,6 +57,10 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     this.interlocutorId =
       message.sender_id === this.store.selectSnapshot(AppSelectors.userId) ? message.recipient_id : message.sender_id;
+
+    this.conversationMessages$ = this.store.select(
+      AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
+    );
 
     this.unreadMessages$
       .pipe(
@@ -124,7 +129,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     return Boolean(this.conversation?.length);
   }
 
-  private get conversation(): Array<UserConversation> {
+  private get conversation(): Array<UserConversationMessage> {
     return this.store.selectSnapshot(
       AppSelectors.conversationMessages(
         this.conversationInfo.message.sender_id,

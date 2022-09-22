@@ -98,7 +98,7 @@ export const queryFetchUserConversation = (
         (recipient_id = $1 AND sender_id = $2 OR recipient_id = $2 AND sender_id = $1)
         AND (recipient_id = $4 OR sender_id = $4) -- Security measure; In order to restrict lookup scope only to authed user conversations
         ${edgeId ? `AND id ${fetchNew ? '>' : '<'} $5` : ''}
-    ORDER BY id
+    ORDER BY id DESC
     LIMIT $3
   `,
   values: edgeId

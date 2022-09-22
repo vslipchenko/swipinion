@@ -5,6 +5,10 @@
   z-index: 1;
 }
 
+.message-body {
+  flex-direction: column-reverse;
+}
+
 .primary-scrollbar {
   overflow-y: auto;
 }
@@ -20,10 +24,12 @@
 
 .first-in-group {
   background-color: var.$color-light-transparent;
+  border-radius: 0 10px 10px;
 }
 
 .last-in-group {
   background-color: #69f0ae1f;
+  border-radius: 10px 10px 0;
 }
 
 .time {
@@ -37,4 +43,3 @@
 .status-icon {
   transform: scale(0.7);
 }
-

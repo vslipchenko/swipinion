@@ -1,6 +1,6 @@
 import {createSelector} from '@ngxs/store';
 import {AppState, AppStateModel} from '~app/modules/app/store/app.state';
-import {UserConversation} from '~app/typings/user-messages/user-messages.interfaces';
+import {UserConversationMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {compositeObjectKey} from '~app/utilities/data';
 
 export class AppSelectors {
@@ -31,7 +31,7 @@ export class AppSelectors {
   public static conversationMessages = (
     userId1: string,
     userId2: string,
-  ): ((state: AppStateModel) => Array<UserConversation>) => {
+  ): ((state: AppStateModel) => Array<UserConversationMessage>) => {
     return createSelector([AppState], (state: AppStateModel) => {
       return (
         // It may be combination sender-recipient or recipient-sender

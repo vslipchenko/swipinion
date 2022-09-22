@@ -14,14 +14,18 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {UIUserMessage, UnreadMessage, UserConversation} from '~app/typings/user-messages/user-messages.interfaces';
+import {
+  UIUserMessage,
+  UnreadMessage,
+  UserConversationMessage,
+} from '~app/typings/user-messages/user-messages.interfaces';
 import {convertToUiMessages} from '~app/utilities/user-messages';
 import {compositeObjectKey} from '~app/utilities/data';
 
 export interface AppStateModel {
   user: UserEssentials;
   messages: Array<UIUserMessage>;
-  conversations: {[key: string]: Array<UserConversation>};
+  conversations: {[key: string]: Array<UserConversationMessage>};
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -185,11 +189,15 @@ export class AppState {
           let nextConversation = data.fetchUserConversation;
 
           if (action.payload.edgeId) {
+            // Because of the descendant (reverse) order new messages get prepended
             if (action.payload.fetchNew) {
-              nextConversation = [...state.conversations[conversationKey], ...nextConversation];
-            } else {
+              // TODO check if contains unread message and update unreadMessages if positive
               nextConversation = [...nextConversation, ...state.conversations[conversationKey]];
+            } else {
+              nextConversation = [...state.conversations[conversationKey], ...nextConversation];
             }
+          } else {
+            // TODO check if contains unread message and update unreadMessages if positive
           }
 
           return {
