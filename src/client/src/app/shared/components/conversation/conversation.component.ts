@@ -9,6 +9,7 @@ import {FetchUserConversation} from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {Observable, of, skipWhile, Subject, takeUntil} from 'rxjs';
+import {getInterlocutorId} from '~app/utilities/user-messages';
 
 @Component({
   selector: 'app-conversation',
@@ -55,8 +56,11 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     this.username = message.username ? message.username : savedMessages ? 'Saved Messages' : 'Deleted Account';
 
-    this.interlocutorId =
-      message.sender_id === this.store.selectSnapshot(AppSelectors.userId) ? message.recipient_id : message.sender_id;
+    this.interlocutorId = getInterlocutorId(
+      message.sender_id,
+      message.recipient_id,
+      this.store.selectSnapshot(AppSelectors.userId),
+    );
 
     this.conversationMessages$ = this.store.select(
       AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
@@ -75,14 +79,17 @@ export class ConversationComponent implements OnInit, Destroyable {
 
         const conversation = this.conversation;
 
-        const recentMessageId = conversation[conversation.length - 1].id;
+        const recentMessageId = conversation[conversation.length - 1].id; // TODO fix index as item order has changed
 
         // Fetch new messages with id greater than of the most recent message in the conversation; immediately mark as read
         this.fetchUserConversation(recentMessageId, true, true);
       });
 
-    // Init conversation messages fetch; TODO add possibility to init and fetch new messages only if initialized already and new messages exist
-    if (!this.relevantConversationIsPresent) this.fetchUserConversation('', message.unread);
+    const {relevant, hasNewMessage} = this.relevantConversationIsPresent;
+    // Fetch only new messages
+    if (hasNewMessage) return this.fetchUserConversation(message.id, true, true);
+    // Init conversation messages fetch; TODO add possibility to init and fetch new messages only if initialized already and new messages exis
+    if (!relevant) this.fetchUserConversation('', message.unread);
   }
 
   public ngOnDestroy(): void {
@@ -106,14 +113,14 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.store.dispatch(new FetchUserConversation(payload));
   }
 
-  private get relevantConversationIsPresent(): boolean {
+  private get relevantConversationIsPresent(): {relevant?: boolean; hasNewMessage?: boolean} {
     const conversation = this.conversation;
 
-    if (!conversation) return false; // Conversation is not yet stored in the state: requires fetch
+    if (!conversation) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch
 
     const unreadMessages = this.store.selectSnapshot(AppSelectors.unreadMessages);
 
-    if (!unreadMessages.length) return true; // No new messages, conversation can be renewed
+    if (!unreadMessages.length) return {relevant: true}; // No new messages, conversation can be renewed
 
     // const recentMessageId = conversation.find((message) => message.sender_id === interlocutorId).id;
     const recentMessageId = conversation[conversation.length - 1].id;
@@ -122,7 +129,7 @@ export class ConversationComponent implements OnInit, Destroyable {
       (message) => message.sender_id === this.interlocutorId && message.id > recentMessageId,
     );
 
-    return !hasNewMessage; // Check if there are ny new messages sent by interlocutor
+    return {relevant: !hasNewMessage, hasNewMessage}; // Check if there are ny new messages sent by interlocutor
   }
 
   private get conversationInitialized(): boolean {

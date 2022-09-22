@@ -1,4 +1,4 @@
-import {UIUserMessage, UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {UIUserMessage, UnreadMessage, UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {
   determineMessageTimePoint,
   timestampToMonthDay,
@@ -33,4 +33,18 @@ export const convertToUiMessages = (messages: Array<UserMessage>, userId: string
 
     return nextMessage;
   });
+};
+
+export const getInterlocutorId = (userId1: string, userId2: string, userId: string): string =>
+  userId1 === userId ? userId2 : userId1;
+
+export const actualizeUnreadMessages = (
+  unreadMessages: Array<UnreadMessage>,
+  interlocutorId: string,
+): Array<UnreadMessage> => {
+  const hasUnread = unreadMessages.some((message) => message.sender_id === interlocutorId);
+
+  if (!hasUnread) return unreadMessages;
+
+  return unreadMessages.filter((message) => message.sender_id !== interlocutorId);
 };

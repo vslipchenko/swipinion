@@ -11,6 +11,7 @@ import {bigintValidator} from '../../../validators/shared';
 import {FetchUserConversationPayload} from '../../../typings/user-messages/user-messages.interfaces';
 import {fetchNewUserMessagesValidator, fetchUserConversationValidator} from '../../../validators/user-messages';
 import {QueryResultRow} from 'pg';
+import {getInterlocutorId} from '../../../utilities/user-messages';
 
 export const userMessagesQueryTypeDefinitions = gql`
   type Query {
@@ -77,10 +78,10 @@ const fetchUserConversation = async (
   if (tokenData.userId !== input.user_id_1 && tokenData.userId !== input.user_id_2) return null;
 
   if (input.markRead) {
-    const senderId = tokenData.userId === input.user_id_1 ? input.user_id_2 : input.user_id_1;
+    const interlocutorId = getInterlocutorId(input.user_id_1, input.user_id_2, tokenData.userId);
 
     const result = await db.transaction(
-      queryMarkUserConversationMessagesRead(senderId, tokenData.userId),
+      queryMarkUserConversationMessagesRead(interlocutorId, tokenData.userId),
       queryFetchUserConversation(input, tokenData.userId),
     );
 

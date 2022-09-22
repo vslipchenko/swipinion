@@ -19,7 +19,7 @@ import {
   UnreadMessage,
   UserConversationMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
-import {convertToUiMessages} from '~app/utilities/user-messages';
+import {actualizeUnreadMessages, convertToUiMessages, getInterlocutorId} from '~app/utilities/user-messages';
 import {compositeObjectKey} from '~app/utilities/data';
 
 export interface AppStateModel {
@@ -153,7 +153,7 @@ export class AppState {
           let nextMessages = state.messages.filter(
             // This will allow to bubble up existing conversations thus avoiding duplicates
             (message) => {
-              const interlocutorId = message.sender_id === state.user.id ? message.recipient_id : message.sender_id;
+              const interlocutorId = getInterlocutorId(message.sender_id, message.recipient_id, state.user.id);
 
               const hasNewMessage = messages.some(
                 (item) => item.sender_id === interlocutorId || item.recipient_id === interlocutorId,
@@ -187,26 +187,42 @@ export class AppState {
 
         context.setState((state) => {
           let nextConversation = data.fetchUserConversation;
+          let unreadMessages: Array<UnreadMessage> = [];
 
           if (action.payload.edgeId) {
+            // Fetched messages for initialized conversation
             // Because of the descendant (reverse) order new messages get prepended
             if (action.payload.fetchNew) {
-              // TODO check if contains unread message and update unreadMessages if positive
               nextConversation = [...nextConversation, ...state.conversations[conversationKey]];
             } else {
               nextConversation = [...state.conversations[conversationKey], ...nextConversation];
             }
-          } else {
-            // TODO check if contains unread message and update unreadMessages if positive
           }
 
-          return {
+          if (action.payload.markRead) {
+            // Fetched / initialized conversation messages
+            unreadMessages = actualizeUnreadMessages(
+              state.unreadMessages,
+              getInterlocutorId(action.payload.user_id_1, action.payload.user_id_2, state.user.id),
+            );
+          }
+
+          let nextState = {
             ...state,
             conversations: {
               ...state.conversations,
               [conversationKey]: nextConversation,
             },
           };
+
+          if (unreadMessages.length) {
+            nextState = {
+              ...nextState,
+              unreadMessages,
+            };
+          }
+
+          return nextState;
         });
       }),
     );
