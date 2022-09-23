@@ -16,25 +16,27 @@
            routerLink="/user/{{username}}">{{username}}</a>
 
         <span *ngIf="!conversationInfo.message.username" class="fw-medium truncate">{{username}}</span>
-
-        <!--        <div class="date">July 28</div>-->
       </div>
     </div>
-    <!--            <app-button icon="arrow_back_ios_new" text="Back" (clicked)="showConversation = false"></app-button> -->
+
     <div>
       <app-icon-button icon="reply"></app-icon-button>
       <app-icon-button icon="arrow_back" (clicked)="back.emit()"></app-icon-button>
     </div>
   </div>
 
-  <!--  <div class="message-body">-->
   <div class="message-body d-flex px-2 pb-2 primary-scrollbar relative h-100">
-    <!--    <div> -->
-    <div *ngFor="let item of (conversationMessages$ | async); let isFirst = first" class="message p-1 mb-1"
-         [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
-      {{item.body}}
-      <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
-    </div>
+    <app-progress-spinner
+      *ngIf="loading$ | async; else container"
+      class="d-flex jc-center ai-center h-100"></app-progress-spinner>
+
+    <ng-template #container>
+      <div *ngFor="let item of (conversationMessages$ | async); let isFirst = first" class="message p-1 mb-1"
+           [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
+        {{item.body}}
+        <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
+      </div>
+    </ng-template>
 
     <!--    <div class="message first-in-group p-1 mb-1" style="border-radius: 0 10px 10px;">-->
     <!--      Tłumacz Google – darmowy serwis internetowy Google umożliwiający tłumaczenie tekstu, plików, stron internetowych-->
@@ -48,15 +50,13 @@
     <!--      </div>-->
     <!--    </div>-->
     <!--    </div>-->
-
   </div>
 
   <div class="px-2 d-flex ai-center">
     <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
 
-    <!--    <app-button text="Send" color="primary"></app-button>-->
     <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
+                         [disabled]="$any(loading$ | async)"
                          class="ml-2"></app-mini-fab-button>
   </div>
-  <!--  </div>-->
 </div>

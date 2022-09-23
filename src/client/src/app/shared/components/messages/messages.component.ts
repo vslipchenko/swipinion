@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserMessages} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, take, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
@@ -28,7 +28,6 @@ export class MessagesComponent implements Destroyable {
 
   public showConversation = false;
 
-  public readonly initialLoading$ = new BehaviorSubject(true);
   public readonly conversationInfo$ = new BehaviorSubject<{message?: UIUserMessage; savedMessages: boolean}>({
     message: {
       id: '',
@@ -44,14 +43,14 @@ export class MessagesComponent implements Destroyable {
     },
     savedMessages: false,
   });
-  public readonly loading$ = new BehaviorSubject(false);
+  public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
   public username = '';
   public messagesFetchLimit = USER_MESSAGES_FETCH_LIMIT;
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages)).subscribe(() => {
-      this.initialLoading$.next(false);
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages), take(1)).subscribe(() => {
+      this.loading$.next(false);
     });
   }
 
@@ -59,7 +58,6 @@ export class MessagesComponent implements Destroyable {
     this.destroy$.next();
     this.destroy$.complete();
     this.loading$.complete();
-    this.initialLoading$.complete();
   }
 
   public spinnerInView(inView: boolean, edgeMessageId: string): void {
@@ -74,13 +72,7 @@ export class MessagesComponent implements Destroyable {
     if (!fetchedMessages) this.store.dispatch(new FetchUserMessages());
   }
 
-  public loadStart(): void {
-    this.loading$.next(true);
-  }
-
   public loadConversation(savedMessages: boolean, message?: UIUserMessage): void {
-    // this.loading$.next(true);
-
     this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
 
     this.showConversation = true;

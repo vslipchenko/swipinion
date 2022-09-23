@@ -1,4 +1,4 @@
-<app-progress-spinner *ngIf="initialLoading$ | async; else content"
+<app-progress-spinner *ngIf="loading$ | async; else content"
                       class="d-flex jc-center ai-center spinner"></app-progress-spinner>
 
 <ng-template #content>

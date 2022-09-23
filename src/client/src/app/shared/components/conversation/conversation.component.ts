@@ -8,7 +8,7 @@ import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserConversation} from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {Observable, of, skipWhile, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, of, skipWhile, Subject, take, takeUntil} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 
 @Component({
@@ -37,17 +37,18 @@ export class ConversationComponent implements OnInit, Destroyable {
   };
 
   @Output() public back = new EventEmitter<void>();
-  @Output() public loadStart = new EventEmitter<void>();
-  @Output() public loadEnd = new EventEmitter<void>();
+  // @Output() public loadStart = new EventEmitter<void>();
+  // @Output() public loadEnd = new EventEmitter<void>();
 
   public username = '';
   public conversationMessages$: Observable<Array<UserConversationMessage>> = of([]);
   public interlocutorId = '';
+  public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation)).subscribe(() => {
-      this.loadEnd.next();
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation), take(1)).subscribe(() => {
+      this.loading$.next(false);
     });
   }
 
@@ -93,10 +94,11 @@ export class ConversationComponent implements OnInit, Destroyable {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.loading$.complete();
   }
 
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {
-    this.loadStart.next();
+    if (!edgeId) this.loading$.next(true); // Show loading spinner only on initial loading
 
     const payload = {
       // Order does not matter here

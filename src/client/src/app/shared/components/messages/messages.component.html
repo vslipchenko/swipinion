@@ -15,7 +15,7 @@
 
   <ng-template #content>
     <div class="content relative h-100">
-      <app-progress-spinner *ngIf="initialLoading$ | async; else container"
+      <app-progress-spinner *ngIf="loading$ | async; else container"
                             class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 
       <ng-template #container>
@@ -52,9 +52,7 @@
 
       <div class="messaging h-100" *ngIf="showConversation">
         <app-conversation [conversationInfo]="$any(conversationInfo$ | async)"
-                          (back)="showConversation = false"
-                          (loadStart)="loading$.next(true)"
-                          (loadEnd)="loading$.next(false)"></app-conversation>
+                          (back)="showConversation = false"></app-conversation>
       </div>
 
       <div class="dimmer absolute"></div>

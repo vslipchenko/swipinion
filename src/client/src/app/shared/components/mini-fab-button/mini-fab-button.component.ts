@@ -11,5 +11,6 @@ export class MiniFabButtonComponent {
   @Input() public color: ThemePalette;
   @Input() public svgIcon = '';
   @Input() public icon = '';
+  @Input() public disabled = false;
   @Output() public clicked = new EventEmitter();
 }

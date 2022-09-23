@@ -20,7 +20,7 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
   @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
 
   public readonly opinions$!: Observable<Array<Opinion>>;
-  public readonly initialLoading$ = new BehaviorSubject(false);
+  public readonly loading$ = new BehaviorSubject(true);
   public readonly disableLoadMore$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
@@ -30,7 +30,7 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
     private readonly actions$: Actions,
   ) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchOpinions)).subscribe(() => {
-      this.initialLoading$.next(false);
+      this.loading$.next(false);
       this.disableLoadMore$.next(false);
     });
 
@@ -42,15 +42,13 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
   }
 
   public ngOnInit(): void {
-    this.initialLoading$.next(true);
-
     this.fetchUserOpinions(0);
   }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.initialLoading$.complete();
+    this.loading$.complete();
   }
 
   public shareOpinion(): void {
