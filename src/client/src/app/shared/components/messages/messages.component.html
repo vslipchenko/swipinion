@@ -51,7 +51,8 @@
       </ng-template>
 
       <div class="messaging h-100" *ngIf="showConversation">
-        <app-conversation [conversationInfo]="$any(conversationInfo$ | async)" (back)="showConversation = false"
+        <app-conversation [conversationInfo]="$any(conversationInfo$ | async)"
+                          (back)="showConversation = false"
                           (loadStart)="loading$.next(true)"
                           (loadEnd)="loading$.next(false)"></app-conversation>
       </div>

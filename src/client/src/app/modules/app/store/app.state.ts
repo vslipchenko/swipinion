@@ -19,7 +19,12 @@ import {
   UnreadMessage,
   UserConversationMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
-import {actualizeUnreadMessages, convertToUiMessages, getInterlocutorId} from '~app/utilities/user-messages';
+import {
+  actualizeUnreadMessages,
+  convertToUiMessages,
+  getInterlocutorId,
+  markMessageRead,
+} from '~app/utilities/user-messages';
 import {compositeObjectKey} from '~app/utilities/data';
 
 export interface AppStateModel {
@@ -188,6 +193,7 @@ export class AppState {
         context.setState((state) => {
           let nextConversation = data.fetchUserConversation;
           let unreadMessages: Array<UnreadMessage> = [];
+          let messages: Array<UIUserMessage> = [];
 
           if (action.payload.edgeId) {
             // Fetched messages for initialized conversation
@@ -201,13 +207,14 @@ export class AppState {
 
           if (action.payload.markRead) {
             // Fetched / initialized conversation messages
-            unreadMessages = actualizeUnreadMessages(
-              state.unreadMessages,
-              getInterlocutorId(action.payload.user_id_1, action.payload.user_id_2, state.user.id),
-            );
+            const interlocutorId = getInterlocutorId(action.payload.user_id_1, action.payload.user_id_2, state.user.id);
+
+            unreadMessages = actualizeUnreadMessages(state.unreadMessages, interlocutorId);
+
+            messages = markMessageRead(state.messages, interlocutorId);
           }
 
-          let nextState = {
+          const nextState = {
             ...state,
             conversations: {
               ...state.conversations,
@@ -215,12 +222,9 @@ export class AppState {
             },
           };
 
-          if (unreadMessages.length) {
-            nextState = {
-              ...nextState,
-              unreadMessages,
-            };
-          }
+          if (unreadMessages.length) nextState.unreadMessages = unreadMessages;
+
+          if (messages.length) nextState.messages = messages;
 
           return nextState;
         });

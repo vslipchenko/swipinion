@@ -42,9 +42,22 @@ export const actualizeUnreadMessages = (
   unreadMessages: Array<UnreadMessage>,
   interlocutorId: string,
 ): Array<UnreadMessage> => {
-  const hasUnread = unreadMessages.some((message) => message.sender_id === interlocutorId);
-
-  if (!hasUnread) return unreadMessages;
+  // const hasUnread = unreadMessages.some((message) => message.sender_id === interlocutorId);
+  //
+  // if (!hasUnread) return unreadMessages;
 
   return unreadMessages.filter((message) => message.sender_id !== interlocutorId);
+};
+
+export const markMessageRead = (messages: Array<UIUserMessage>, interlocutorId: string): Array<UIUserMessage> => {
+  return messages.map((message) => {
+    if (message.sender_id === interlocutorId || message.recipient_id === interlocutorId)
+      return {
+        ...message,
+        // Consider to set read property to true as well
+        unread: false,
+      };
+
+    return message;
+  });
 };
