@@ -64,6 +64,11 @@ $thumbnail-size: 40px;
   transform: rotate(180deg);
 }
 
-.mat-expansion-panel-body {
+.messages .mat-expansion-panel-body {
   padding-bottom: 0 !important;
+}
+
+.messages .conversations-spinner {
+  transform: scale(0.5);
+  height: 80px;
 }

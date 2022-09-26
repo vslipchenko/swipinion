@@ -97,6 +97,12 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.loading$.complete();
   }
 
+  public spinnerInView(inView: boolean, edgeMessageId: string): void {
+    if (!inView) return;
+
+    this.fetchUserConversation(edgeMessageId);
+  }
+
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {
     if (!edgeId) this.loading$.next(true); // Show loading spinner only on initial loading
 

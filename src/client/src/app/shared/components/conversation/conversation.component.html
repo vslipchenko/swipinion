@@ -31,11 +31,18 @@
       class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 
     <ng-template #container>
-      <div *ngFor="let item of (conversationMessages$ | async); let isFirst = first" class="message p-1 mb-1"
-           [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
-        {{item.body}}
-        <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
-      </div>
+      <ng-container *ngIf="conversationMessages$ | async as messages">
+        <div *ngFor="let item of (conversationMessages$ | async); let isFirst = first" class="message p-1 mb-1"
+             [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
+          {{item.body}}
+          <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
+        </div>
+
+        <app-progress-spinner
+          *ngIf="messages.length && !(messages.length % 15)"
+          (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
+          class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
+      </ng-container>
     </ng-template>
 
     <!--    <div class="message first-in-group p-1 mb-1" style="border-radius: 0 10px 10px;">-->
