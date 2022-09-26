@@ -38,8 +38,10 @@
           <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
         </div>
 
+        <div *ngIf="showDateIfDistinct()" class="d-flex ai-center separator mb-1">May 26</div>
+
         <app-progress-spinner
-          *ngIf="messages.length && !(messages.length % 15)"
+          *ngIf="messages.length && !(messages.length % messagesFetchLimit)"
           (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
           class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
       </ng-container>

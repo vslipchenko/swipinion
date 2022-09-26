@@ -10,6 +10,7 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, of, skipWhile, Subject, take, takeUntil} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
+import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 @Component({
   selector: 'app-conversation',
@@ -43,6 +44,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   public username = '';
   public conversationMessages$: Observable<Array<UserConversationMessage>> = of([]);
   public interlocutorId = '';
+  public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
@@ -101,6 +103,10 @@ export class ConversationComponent implements OnInit, Destroyable {
     if (!inView) return;
 
     this.fetchUserConversation(edgeMessageId);
+  }
+
+  public showDateIfDistinct(): string {
+    return 'May 26';
   }
 
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {

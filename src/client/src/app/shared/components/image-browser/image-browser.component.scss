@@ -5,21 +5,6 @@ $user-profile-image-size-default: 250px;
 $user-profile-image-size-small: 128px;
 $user-profile-image-radius: 20px;
 
-.separator::before,
-.separator::after {
-  content: '';
-  border-bottom: 1px solid var.$color-light;
-  flex: 1;
-}
-
-.separator::before {
-  margin-right: var.$unit-2;
-}
-
-.separator::after {
-  margin-left: var.$unit-2;
-}
-
 .edit-profile .image {
   border-radius: $user-profile-image-radius;
 

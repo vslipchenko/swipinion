@@ -103,3 +103,18 @@ body {
   opacity: .6; // This corresponds to inactive tabs opacity
   font-size: 0.7rem;
 }
+
+.separator::before,
+.separator::after {
+  content: '';
+  border-bottom: 1px solid var.$color-light;
+  flex: 1;
+}
+
+.separator::before {
+  margin-right: var.$unit-2;
+}
+
+.separator::after {
+  margin-left: var.$unit-2;
+}

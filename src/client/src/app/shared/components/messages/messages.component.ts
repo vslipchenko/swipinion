@@ -43,10 +43,10 @@ export class MessagesComponent implements Destroyable {
     },
     savedMessages: false,
   });
+  public readonly messagesFetchLimit = USER_MESSAGES_FETCH_LIMIT;
   public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
   public username = '';
-  public messagesFetchLimit = USER_MESSAGES_FETCH_LIMIT;
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages), take(1)).subscribe(() => {
