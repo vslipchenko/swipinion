@@ -38,6 +38,10 @@ export interface UserConversationMessage {
   created_at: number;
 }
 
+export interface UIUserConversationMessage extends UserConversationMessage {
+  date?: string;
+}
+
 export interface UserMessage {
   id: string;
   sender_id: string;

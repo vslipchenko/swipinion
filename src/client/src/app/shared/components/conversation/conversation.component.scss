@@ -40,6 +40,12 @@
   transform: scale(1.5);
 }
 
+.conversation-date {
+  background-color: var.$color-light-transparent;
+  padding: var.$unit-half var.$unit-2;
+  border-radius: var.$unit-2;
+}
+
 //.status-icon {
 //  transform: scale(0.7);
 //}

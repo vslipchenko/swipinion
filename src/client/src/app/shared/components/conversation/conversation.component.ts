@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   FetchUserConversationPayload,
+  UIUserConversationMessage,
   UIUserMessage,
-  UserConversationMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserConversation} from '~app/modules/app/store/app.actions';
@@ -42,7 +42,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   // @Output() public loadEnd = new EventEmitter<void>();
 
   public username = '';
-  public conversationMessages$: Observable<Array<UserConversationMessage>> = of([]);
+  public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
   public interlocutorId = '';
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
   public readonly loading$ = new BehaviorSubject(false);
@@ -105,10 +105,6 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.fetchUserConversation(edgeMessageId);
   }
 
-  public showDateIfDistinct(): string {
-    return 'May 26';
-  }
-
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {
     if (!edgeId) this.loading$.next(true); // Show loading spinner only on initial loading
 
@@ -148,7 +144,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     return Boolean(this.conversation?.length);
   }
 
-  private get conversation(): Array<UserConversationMessage> {
+  private get conversation(): Array<UIUserConversationMessage> {
     return this.store.selectSnapshot(
       AppSelectors.conversationMessages(
         this.conversationInfo.message.sender_id,

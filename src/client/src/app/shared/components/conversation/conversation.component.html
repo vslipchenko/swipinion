@@ -32,13 +32,17 @@
 
     <ng-template #container>
       <ng-container *ngIf="conversationMessages$ | async as messages">
-        <div *ngFor="let item of (conversationMessages$ | async); let isFirst = first" class="message p-1 mb-1"
-             [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
-          {{item.body}}
-          <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
-        </div>
+        <ng-container *ngFor="let item of messages; let isFirst = first">
+          <div class="message p-1 mb-1"
+               [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
+            {{item.body}}
+            <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
+          </div>
 
-        <div *ngIf="showDateIfDistinct()" class="d-flex ai-center separator mb-1">May 26</div>
+          <div *ngIf="item.date" class="d-flex jc-center mb-1">
+            <div class="conversation-date">{{item.date}}</div>
+          </div>
+        </ng-container>
 
         <app-progress-spinner
           *ngIf="messages.length && !(messages.length % messagesFetchLimit)"

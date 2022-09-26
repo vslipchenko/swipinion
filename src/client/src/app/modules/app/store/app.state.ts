@@ -15,11 +15,12 @@ import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 import {
+  UIUserConversationMessage,
   UIUserMessage,
   UnreadMessage,
-  UserConversationMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {
+  actualizeConversationMessagesDate,
   actualizeUnreadMessages,
   convertToUiMessages,
   getInterlocutorId,
@@ -30,7 +31,7 @@ import {compositeObjectKey} from '~app/utilities/data';
 export interface AppStateModel {
   user: UserEssentials;
   messages: Array<UIUserMessage>;
-  conversations: {[key: string]: Array<UserConversationMessage>};
+  conversations: {[key: string]: Array<UIUserConversationMessage>};
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -199,9 +200,15 @@ export class AppState {
             // Fetched messages for initialized conversation
             // Because of the descendant (reverse) order new messages get prepended
             if (action.payload.fetchNew) {
-              nextConversation = [...nextConversation, ...state.conversations[conversationKey]];
+              nextConversation = actualizeConversationMessagesDate([
+                ...nextConversation,
+                ...state.conversations[conversationKey],
+              ]);
             } else {
-              nextConversation = [...state.conversations[conversationKey], ...nextConversation];
+              nextConversation = actualizeConversationMessagesDate([
+                ...state.conversations[conversationKey],
+                ...nextConversation,
+              ]);
             }
           }
 
@@ -218,7 +225,7 @@ export class AppState {
             ...state,
             conversations: {
               ...state.conversations,
-              [conversationKey]: nextConversation,
+              [conversationKey]: actualizeConversationMessagesDate(nextConversation),
             },
           };
 

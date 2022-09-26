@@ -1,4 +1,10 @@
-import {UIUserMessage, UnreadMessage, UserMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {
+  UIUserConversationMessage,
+  UIUserMessage,
+  UnreadMessage,
+  UserConversationMessage,
+  UserMessage,
+} from '~app/typings/user-messages/user-messages.interfaces';
 import {
   determineMessageTimePoint,
   timestampToMonthDay,
@@ -60,4 +66,45 @@ export const markMessageRead = (messages: Array<UIUserMessage>, interlocutorId: 
 
     return message;
   });
+};
+
+export const actualizeConversationMessagesDate = (
+  messages: Array<UIUserConversationMessage | UserConversationMessage>,
+): Array<UIUserConversationMessage> => {
+  const nextMessages = [];
+  let date = 0;
+
+  for (let i = messages.length - 1; i > -1; i--) {
+    const message = messages[i];
+
+    let nextMessage: UIUserConversationMessage = message;
+
+    if (nextMessage.date) {
+      // Clean-up existing dates
+      nextMessage = {
+        ...message,
+      };
+
+      delete nextMessage.date;
+    }
+
+    const dayTimestamp = new Date(message.created_at).setHours(0, 0, 0, 0);
+
+    if (dayTimestamp === date) {
+      nextMessages.unshift(nextMessage);
+      continue;
+    }
+
+    nextMessage = {
+      ...message,
+    };
+
+    nextMessage.date = String(new Date(nextMessage.created_at));
+
+    date = dayTimestamp;
+
+    nextMessages.unshift(nextMessage);
+  }
+
+  return nextMessages;
 };
