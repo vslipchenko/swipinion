@@ -79,13 +79,13 @@ export const actualizeConversationMessagesDate = (
 
     let nextMessage: UIUserConversationMessage = message;
 
-    if (nextMessage.date) {
+    if (nextMessage.dateTile) {
       // Clean-up existing dates
       nextMessage = {
         ...message,
       };
 
-      delete nextMessage.date;
+      delete nextMessage.dateTile;
     }
 
     const dayTimestamp = new Date(message.created_at).setHours(0, 0, 0, 0);
@@ -99,7 +99,7 @@ export const actualizeConversationMessagesDate = (
       ...message,
     };
 
-    nextMessage.date = String(new Date(nextMessage.created_at));
+    nextMessage.dateTile = String(new Date(nextMessage.created_at));
 
     date = dayTimestamp;
 
