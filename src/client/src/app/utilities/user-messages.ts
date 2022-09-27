@@ -68,8 +68,19 @@ export const markMessageRead = (messages: Array<UIUserMessage>, interlocutorId: 
   });
 };
 
+export const defineConversationMessageTime = (
+  messages: Array<UserConversationMessage>,
+): Array<UIUserConversationMessage> => {
+  return messages.map((message) => {
+    return {
+      ...message,
+      time: timestampToTime(message.created_at),
+    };
+  });
+};
+
 export const actualizeConversationMessagesDate = (
-  messages: Array<UIUserConversationMessage | UserConversationMessage>,
+  messages: Array<UIUserConversationMessage>,
 ): Array<UIUserConversationMessage> => {
   const nextMessages = [];
   let date = 0;
@@ -95,15 +106,26 @@ export const actualizeConversationMessagesDate = (
       continue;
     }
 
-    nextMessage = {
-      ...message,
-    };
+    const timePoint = determineMessageTimePoint(message.created_at);
+    let dateTile = '';
 
-    nextMessage.dateTile = String(new Date(nextMessage.created_at));
+    switch (timePoint) {
+      case MessageTimePoint.TODAY:
+        dateTile = 'Today';
+        break;
+      case MessageTimePoint.THIS_YEAR:
+        dateTile = timestampToMonthDay(message.created_at, true);
+        break;
+      default:
+        dateTile = timestampToMonthDayYear(message.created_at, true);
+    }
+
+    nextMessages.unshift({
+      ...message,
+      dateTile,
+    });
 
     date = dayTimestamp;
-
-    nextMessages.unshift(nextMessage);
   }
 
   return nextMessages;

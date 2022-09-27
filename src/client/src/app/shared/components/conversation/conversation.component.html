@@ -36,7 +36,7 @@
           <div class="message p-1 mb-1"
                [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
             {{item.body}}
-            <div class="time d-flex jc-end ai-center">{{item.created_at}}</div>
+            <div class="time d-flex jc-end ai-center">{{item.time}}</div>
           </div>
 
           <div *ngIf="item.dateTile" class="d-flex jc-center mb-1">

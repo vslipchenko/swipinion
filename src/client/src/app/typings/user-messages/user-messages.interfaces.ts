@@ -39,6 +39,7 @@ export interface UserConversationMessage {
 }
 
 export interface UIUserConversationMessage extends UserConversationMessage {
+  time: string;
   dateTile?: string;
 }
 

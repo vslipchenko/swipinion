@@ -23,6 +23,7 @@ import {
   actualizeConversationMessagesDate,
   actualizeUnreadMessages,
   convertToUiMessages,
+  defineConversationMessageTime,
   getInterlocutorId,
   markMessageRead,
 } from '~app/utilities/user-messages';
@@ -192,7 +193,7 @@ export class AppState {
         const conversationKey = compositeObjectKey(action.payload.user_id_1, action.payload.user_id_2);
 
         context.setState((state) => {
-          let nextConversation = data.fetchUserConversation;
+          let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
           let unreadMessages: Array<UnreadMessage> = [];
           let messages: Array<UIUserMessage> = [];
 

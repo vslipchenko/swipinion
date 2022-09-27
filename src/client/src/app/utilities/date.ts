@@ -1,5 +1,5 @@
 import {ElapsedTimeMeasure, MessageTimePoint} from '~app/typings/date/date.enums';
-import {MONTH_SHORTENINGS} from '~app/constants/date';
+import {MONTH_SHORTENINGS, MONTHS} from '~app/constants/date';
 
 // export const hasLessMillisecondsThanDay = (milliseconds: number): boolean => milliseconds < 1000 * 60 * 60 * 24;
 //
@@ -22,18 +22,18 @@ export const timestampToTime = (timestamp: number): string => {
   return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
 };
 
-export const timestampToMonthDay = (timestamp: number): string => {
+export const timestampToMonthDay = (timestamp: number, fullMonth?: boolean): string => {
   const date = new Date(timestamp);
-  const month = MONTH_SHORTENINGS[date.getMonth()];
+  const month = fullMonth ? MONTHS[date.getMonth()] : MONTH_SHORTENINGS[date.getMonth()];
   const day = date.getDate();
 
   return `${month} ${day}`;
 };
 
-export const timestampToMonthDayYear = (timestamp: number): string => {
+export const timestampToMonthDayYear = (timestamp: number, fullMonth?: boolean): string => {
   const date = new Date(timestamp);
 
-  return `${timestampToMonthDay(timestamp)}, ${date.getFullYear()}`;
+  return `${timestampToMonthDay(timestamp, fullMonth)}, ${date.getFullYear()}`;
 };
 
 export const determineElapsedTimeMeasure = (milliseconds: number): ElapsedTimeMeasure => {
