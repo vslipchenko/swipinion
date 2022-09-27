@@ -13,6 +13,9 @@
       <div class="date">{{date}}</div>
     </div>
 
-    <div class="truncate">{{message}}</div>
+    <div class="d-flex">
+      <div *ngIf="outgoing" class="outgoing-label mr-1">You:</div>
+      <div class="truncate">{{message}}</div>
+    </div>
   </div>
 </div>

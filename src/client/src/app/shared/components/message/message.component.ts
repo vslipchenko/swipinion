@@ -14,6 +14,7 @@ export class MessageComponent {
   @Input() public date = '';
   @Input() public message = '';
   @Input() public unread = false;
+  @Input() public outgoing = false;
 
   @Output() public clicked = new EventEmitter<string>();
 }
