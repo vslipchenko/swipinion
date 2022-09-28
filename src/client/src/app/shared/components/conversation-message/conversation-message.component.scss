@@ -1,0 +1,26 @@
+@use 'variables' as var;
+
+.message {
+  max-width: 95%;
+  width: max-content;
+}
+
+.first-in-group {
+  background-color: var.$color-light-transparent;
+  border-radius: 0 10px 10px;
+}
+
+.last-in-group {
+  background-color: #69f0ae1f;
+  border-radius: 10px 10px 0;
+}
+
+.time {
+  font-size: 0.7rem;
+}
+
+.seen {
+  height: 16px;
+  width: auto;
+  margin-left: var.$unit-half;
+}

@@ -8,6 +8,7 @@ import {MiniFabButtonModule} from '~app/shared/components/mini-fab-button/mini-f
 import {MatIconModule} from '@angular/material/icon';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
+import {ConversationMessageModule} from '~app/shared/components/conversation-message/conversation-message.module';
 
 @NgModule({
   declarations: [ConversationComponent],
@@ -21,6 +22,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     MatIconModule,
     ProgressSpinnerModule,
     InViewModule,
+    ConversationMessageModule,
   ],
 })
 export class ConversationModule {}

@@ -32,12 +32,9 @@
 
     <ng-template #container>
       <ng-container *ngIf="conversationMessages$ | async as messages">
-        <ng-container *ngFor="let item of messages; let isFirst = first">
-          <div class="message p-1 mb-1"
-               [ngClass]="{'mb-auto': isFirst, 'mb-1': !isFirst, 'first-in-group': item.sender_id === interlocutorId, 'last-in-group ml-auto': item.recipient_id === interlocutorId}">
-            {{item.body}}
-            <div class="time d-flex jc-end ai-center">{{item.time}}</div>
-          </div>
+        <ng-container *ngFor="let item of messages; let first = first">
+          <app-conversation-message [first]="first" [message]="item"
+                                    [interlocutorId]="interlocutorId"></app-conversation-message>
 
           <div *ngIf="item.dateTile" class="d-flex jc-center mb-1">
             <div class="conversation-date">{{item.dateTile}}</div>
@@ -50,19 +47,6 @@
           class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
       </ng-container>
     </ng-template>
-
-    <!--    <div class="message first-in-group p-1 mb-1" style="border-radius: 0 10px 10px;">-->
-    <!--      Tłumacz Google – darmowy serwis internetowy Google umożliwiający tłumaczenie tekstu, plików, stron internetowych-->
-    <!--      <div class="time d-flex jc-end ai-center">10:30</div>-->
-    <!--    </div>-->
-
-    <!--    <div class="message last-in-group p-1 ml-auto" style="border-radius: 10px 10px 0;">-->
-    <!--      Tłumacz Google – darmowy serwis internetowy Google umożliwiający tłumaczenie tekstu, plików, stron internetowych-->
-    <!--      <div class="time d-flex jc-end ai-center">10:30-->
-    <!--        <mat-icon class="status-icon">done</mat-icon>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--    </div>-->
   </div>
 
   <div class="px-2 d-flex ai-center">
