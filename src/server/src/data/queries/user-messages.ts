@@ -105,3 +105,12 @@ export const queryFetchUserConversation = (
     ? [user_id_1, user_id_2, USER_CONVERSATION_MESSAGES_FETCH_LIMIT, userId, edgeId]
     : [user_id_1, user_id_2, USER_CONVERSATION_MESSAGES_FETCH_LIMIT, userId],
 });
+
+export const queryUserConversationMessageSeenStatus = (senderId: string, recipientId: string): QueryConfig => ({
+  text: `
+    SELECT MAX(id)
+    FROM user_messages
+    WHERE sender_id = $1 AND recipient_id = $2 AND read = TRUE
+  `,
+  values: [senderId, recipientId],
+});

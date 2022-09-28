@@ -6,6 +6,7 @@ import {
   queryFetchUserConversation,
   queryFetchUserMessages,
   queryMarkUserConversationMessagesRead,
+  queryUserConversationMessageSeenStatus,
 } from '../../../data/queries/user-messages';
 import {bigintValidator} from '../../../validators/shared';
 import {FetchUserConversationPayload} from '../../../typings/user-messages/user-messages.interfaces';
@@ -18,11 +19,12 @@ export const userMessagesQueryTypeDefinitions = gql`
     fetchUserMessages(edgeId: String): [Message!]
     fetchNewUserMessages(input: [String!]!): [Message!]
     fetchUserConversation(input: FetchUserConversation): [Conversation!]
+    checkConversationMessageSeenStatus(input: String!): String
   }
 `;
 
 const fetchUserMessages = async (
-  _1: unknown,
+  _: unknown,
   {edgeId}: {edgeId: number},
   {accessToken}: {accessToken: string},
 ): Promise<Array<unknown> | ApolloError | null> => {
@@ -42,7 +44,7 @@ const fetchUserMessages = async (
 };
 
 const fetchNewUserMessages = async (
-  _1: unknown,
+  _: unknown,
   {input}: {input: Array<string>},
   {accessToken}: {accessToken: string},
 ): Promise<Array<QueryResultRow> | ApolloError | null> => {
@@ -62,7 +64,7 @@ const fetchNewUserMessages = async (
 };
 
 const fetchUserConversation = async (
-  _1: unknown,
+  _: unknown,
   {input}: {input: FetchUserConversationPayload},
   {accessToken}: {accessToken: string},
 ): Promise<Array<QueryResultRow> | ApolloError | null> => {
@@ -95,10 +97,31 @@ const fetchUserConversation = async (
   return result.rows;
 };
 
+const checkConversationMessageSeenStatus = async (
+  _: unknown,
+  {input}: {input: string},
+  {accessToken}: {accessToken: string},
+): Promise<Array<unknown> | ApolloError | null> => {
+  const {error} = bigintValidator.validate(input);
+
+  if (error) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.query(queryUserConversationMessageSeenStatus(tokenData.userId, input));
+
+  if (!result.rowCount) return null;
+
+  return result.rows[0].id;
+};
+
 export const userMessagesQueryResolvers = {
   Query: {
     fetchUserMessages,
     fetchNewUserMessages,
     fetchUserConversation,
+    checkConversationMessageSeenStatus,
   },
 };
