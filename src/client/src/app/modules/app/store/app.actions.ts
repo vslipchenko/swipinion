@@ -44,3 +44,9 @@ export class FetchUserConversation {
 
   public constructor(public payload: FetchUserConversationPayload) {}
 }
+
+export class RunConversationMessageStatusCheck {
+  public static readonly type = '[App] RunConversationMessageStatusCheck';
+
+  public constructor(public payload: string) {}
+}

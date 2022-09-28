@@ -3,7 +3,7 @@ import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {SEND_USER_MESSAGE} from '~app/graphql/user-messages/user-messages.mutations';
 import {
-  CheckConversationMessageSeenStatusQueryResult,
+  CheckConversationMessageStatusQueryResult,
   FetchNewUserMessagesQueryResult,
   FetchUserConversationPayload,
   FetchUserConversationQueryResult,
@@ -13,7 +13,7 @@ import {
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
-  CHECK_CONVERSATION_MESSAGE_SEEN_STATUS,
+  CHECK_CONVERSATION_MESSAGE_STATUS,
   FETCH_NEW_USER_MESSAGES,
   FETCH_USER_CONVERSATION,
   FETCH_USER_MESSAGES,
@@ -58,11 +58,11 @@ export class UserMessagesService {
     });
   }
 
-  public checkConversationMessageSeenStatus(
+  public checkConversationMessageStatus(
     input: string,
-  ): Observable<ApolloQueryResult<CheckConversationMessageSeenStatusQueryResult>> {
-    return this.apollo.query<CheckConversationMessageSeenStatusQueryResult>({
-      query: CHECK_CONVERSATION_MESSAGE_SEEN_STATUS,
+  ): Observable<ApolloQueryResult<CheckConversationMessageStatusQueryResult>> {
+    return this.apollo.query<CheckConversationMessageStatusQueryResult>({
+      query: CHECK_CONVERSATION_MESSAGE_STATUS,
       variables: {input},
       fetchPolicy: 'no-cache',
     });

@@ -43,8 +43,8 @@ export const FETCH_USER_CONVERSATION = gql`
   }
 `;
 
-export const CHECK_CONVERSATION_MESSAGE_SEEN_STATUS = gql`
+export const CHECK_CONVERSATION_MESSAGE_STATUS = gql`
   query ($input: String!) {
-    checkConversationMessageSeenStatus(input: $input)
+    checkConversationMessageStatus(input: $input)
   }
 `;

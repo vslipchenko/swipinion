@@ -21,8 +21,8 @@ export interface FetchUserConversationQueryResult {
   fetchUserConversation: Array<UserConversationMessage>;
 }
 
-export interface CheckConversationMessageSeenStatusQueryResult {
-  checkConversationMessageSeenStatus: string;
+export interface CheckConversationMessageStatusQueryResult {
+  checkConversationMessageStatus: string;
 }
 
 export interface FetchUserConversationPayload {

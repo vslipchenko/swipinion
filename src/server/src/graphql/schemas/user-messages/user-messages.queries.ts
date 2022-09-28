@@ -6,7 +6,7 @@ import {
   queryFetchUserConversation,
   queryFetchUserMessages,
   queryMarkUserConversationMessagesRead,
-  queryUserConversationMessageSeenStatus,
+  queryUserConversationMessageStatus,
 } from '../../../data/queries/user-messages';
 import {bigintValidator} from '../../../validators/shared';
 import {FetchUserConversationPayload} from '../../../typings/user-messages/user-messages.interfaces';
@@ -19,7 +19,7 @@ export const userMessagesQueryTypeDefinitions = gql`
     fetchUserMessages(edgeId: String): [Message!]
     fetchNewUserMessages(input: [String!]!): [Message!]
     fetchUserConversation(input: FetchUserConversation): [Conversation!]
-    checkConversationMessageSeenStatus(input: String!): String
+    checkConversationMessageStatus(input: String!): String
   }
 `;
 
@@ -97,7 +97,7 @@ const fetchUserConversation = async (
   return result.rows;
 };
 
-const checkConversationMessageSeenStatus = async (
+const checkConversationMessageStatus = async (
   _: unknown,
   {input}: {input: string},
   {accessToken}: {accessToken: string},
@@ -110,7 +110,7 @@ const checkConversationMessageSeenStatus = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryUserConversationMessageSeenStatus(tokenData.userId, input));
+  const result = await db.query(queryUserConversationMessageStatus(tokenData.userId, input));
 
   if (!result.rowCount) return null;
 
@@ -122,6 +122,6 @@ export const userMessagesQueryResolvers = {
     fetchUserMessages,
     fetchNewUserMessages,
     fetchUserConversation,
-    checkConversationMessageSeenStatus,
+    checkConversationMessageStatus,
   },
 };

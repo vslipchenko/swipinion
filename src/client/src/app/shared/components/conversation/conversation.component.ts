@@ -5,12 +5,13 @@ import {
   UIUserMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchUserConversation} from '~app/modules/app/store/app.actions';
+import {FetchUserConversation, RunConversationMessageStatusCheck} from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, Observable, of, skipWhile, Subject, take, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, of, skipWhile, Subject, take, takeUntil, timer} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
+import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
 
 @Component({
   selector: 'app-conversation',
@@ -69,6 +70,34 @@ export class ConversationComponent implements OnInit, Destroyable {
       AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
     );
 
+    this.runMessageStatusCheck();
+
+    this.listenToUnreadMessagesChanges();
+
+    this.actualizeConversationIfStale();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.loading$.complete();
+  }
+
+  public spinnerInView(inView: boolean, edgeMessageId: string): void {
+    if (!inView) return;
+
+    this.fetchUserConversation(edgeMessageId);
+  }
+
+  private actualizeConversationIfStale(): void {
+    const {relevant, hasNewMessage} = this.conversationIsRelevant;
+    // Fetch only new messages
+    if (hasNewMessage) return this.fetchUserConversation(this.conversationInfo.message.id, true, true);
+    // Init conversation messages fetch; TODO add possibility to init and fetch new messages only if initialized already and new messages exis
+    if (!relevant) this.fetchUserConversation('', this.conversationInfo.message.unread);
+  }
+
+  private listenToUnreadMessagesChanges(): void {
     this.unreadMessages$
       .pipe(
         takeUntil(this.destroy$),
@@ -85,24 +114,14 @@ export class ConversationComponent implements OnInit, Destroyable {
         // Fetch new messages with id greater than of the most recent message in the conversation; immediately mark as read
         this.fetchUserConversation(recentMessageId, true, true);
       });
-
-    const {relevant, hasNewMessage} = this.relevantConversationIsPresent;
-    // Fetch only new messages
-    if (hasNewMessage) return this.fetchUserConversation(message.id, true, true);
-    // Init conversation messages fetch; TODO add possibility to init and fetch new messages only if initialized already and new messages exis
-    if (!relevant) this.fetchUserConversation('', message.unread);
   }
 
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.loading$.complete();
-  }
-
-  public spinnerInView(inView: boolean, edgeMessageId: string): void {
-    if (!inView) return;
-
-    this.fetchUserConversation(edgeMessageId);
+  private runMessageStatusCheck(): void {
+    timer(0, USER_STATUS_POLLING_INTERVAL)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.store.dispatch(new RunConversationMessageStatusCheck(this.interlocutorId));
+      });
   }
 
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {
@@ -121,7 +140,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.store.dispatch(new FetchUserConversation(payload));
   }
 
-  private get relevantConversationIsPresent(): {relevant?: boolean; hasNewMessage?: boolean} {
+  private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean} {
     const conversation = this.conversation;
 
     if (!conversation) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch

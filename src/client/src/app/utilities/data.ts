@@ -1,1 +1,1 @@
-export const compositeObjectKey = (...args: Array<string | number>): string => args.join('-');
+export const composeRelationKey = (...args: Array<string | number>): string => args.join('-');

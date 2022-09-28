@@ -4,6 +4,7 @@ import {
   FetchNewUserMessages,
   FetchUserConversation,
   FetchUserMessages,
+  RunConversationMessageStatusCheck,
   RunUserStatusPolling,
   UpdateUserEssentials,
   UpdateUserRole,
@@ -24,10 +25,11 @@ import {
   actualizeUnreadMessages,
   convertToUiMessages,
   defineConversationMessageTime,
+  getConversation,
   getInterlocutorId,
   markMessageRead,
 } from '~app/utilities/user-messages';
-import {compositeObjectKey} from '~app/utilities/data';
+import {composeRelationKey} from '~app/utilities/data';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -190,7 +192,7 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserConversation) return;
 
-        const conversationKey = compositeObjectKey(action.payload.user_id_1, action.payload.user_id_2);
+        const conversationKey = composeRelationKey(action.payload.user_id_1, action.payload.user_id_2);
 
         context.setState((state) => {
           let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
@@ -235,6 +237,48 @@ export class AppState {
           if (messages.length) nextState.messages = messages;
 
           return nextState;
+        });
+      }),
+    );
+  }
+
+  @Action(RunConversationMessageStatusCheck)
+  private runConversationMessageStatusCheck(
+    context: StateContext<AppStateModel>,
+    action: RunConversationMessageStatusCheck,
+  ): Observable<unknown> {
+    return this.userMessagesService.checkConversationMessageStatus(action.payload).pipe(
+      tap(({data}) => {
+        if (!data.checkConversationMessageStatus) return;
+
+        context.setState((state) => {
+          const {key, conversation} = getConversation(state.conversations, action.payload, state.user.id);
+          const latestSeenMessageId = data.checkConversationMessageStatus;
+          const nextConversation: Array<UIUserConversationMessage> = [];
+
+          for (let i = 0; i < conversation.length; i++) {
+            const message = conversation[i];
+
+            if (!message.read && message.id <= latestSeenMessageId && message.sender_id === state.user.id) {
+              // Ignore messages from interlocutor or that which are read already or id is greater than latestSeenMessageId
+              // Mark as read
+              nextConversation.push({
+                ...message,
+                read: true,
+              });
+              continue;
+            }
+
+            nextConversation.push(message);
+          }
+
+          return {
+            ...state,
+            conversations: {
+              ...state.conversations,
+              [key]: nextConversation,
+            },
+          };
         });
       }),
     );

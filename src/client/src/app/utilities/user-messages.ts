@@ -12,6 +12,7 @@ import {
   timestampToTime,
 } from '~app/utilities/date';
 import {MessageTimePoint} from '~app/typings/date/date.enums';
+import {composeRelationKey} from '~app/utilities/data';
 
 export const convertToUiMessages = (messages: Array<UserMessage>, userId: string): Array<UIUserMessage> => {
   return messages.map((message) => {
@@ -129,4 +130,22 @@ export const actualizeConversationMessagesDate = (
   }
 
   return nextMessages;
+};
+
+export const getConversation = (
+  conversations: {
+    [key: string]: Array<UIUserConversationMessage>;
+  },
+  userId1: string,
+  userId2: string,
+): {key: string; conversation: Array<UIUserConversationMessage>} => {
+  const key1 = composeRelationKey(userId1, userId2);
+  const key2 = composeRelationKey(userId2, userId1);
+
+  return conversations[key1]
+    ? {key: key1, conversation: conversations[key1]}
+    : {
+        key: key2,
+        conversation: conversations[key2],
+      };
 };
