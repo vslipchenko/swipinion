@@ -132,20 +132,40 @@ export const actualizeConversationMessagesDate = (
   return nextMessages;
 };
 
-export const getConversation = (
+export const actualizeConversationMessagesReadStatus = (
+  messages: Array<UIUserConversationMessage>,
+  lastReadMessageId: string,
+  userId: string,
+): Array<UIUserConversationMessage> => {
+  const nextMessages: Array<UIUserConversationMessage> = [];
+
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+
+    if (!message.read && message.id <= lastReadMessageId && message.sender_id === userId) {
+      // Ignore messages from interlocutor or that which are read already or id is greater than latestSeenMessageId
+      // Mark as read
+      nextMessages.push({
+        ...message,
+        read: true,
+      });
+      continue;
+    }
+
+    nextMessages.push(message);
+  }
+
+  return nextMessages;
+};
+
+export const getConversationKey = (
   conversations: {
     [key: string]: Array<UIUserConversationMessage>;
   },
   userId1: string,
   userId2: string,
-): {key: string; conversation: Array<UIUserConversationMessage>} => {
+): string => {
   const key1 = composeRelationKey(userId1, userId2);
-  const key2 = composeRelationKey(userId2, userId1);
 
-  return conversations[key1]
-    ? {key: key1, conversation: conversations[key1]}
-    : {
-        key: key2,
-        conversation: conversations[key2],
-      };
+  return conversations[key1] ? key1 : composeRelationKey(userId2, userId1);
 };
