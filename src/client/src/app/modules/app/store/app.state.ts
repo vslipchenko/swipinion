@@ -259,7 +259,11 @@ export class AppState {
 
           if (unreadMessages.length) nextState.unreadMessages = unreadMessages;
 
-          if (messages.length) nextState.messages.messages = messages;
+          if (messages.length)
+            nextState.messages = {
+              ...state.messages,
+              messages,
+            };
 
           return nextState;
         });

@@ -34,7 +34,8 @@
       <ng-container *ngIf="conversationMessages$ | async as messages">
         <ng-container *ngFor="let item of messages; let first = first">
           <app-conversation-message [first]="first" [message]="item"
-                                    [interlocutorId]="interlocutorId"></app-conversation-message>
+                                    [interlocutorId]="interlocutorId"
+                                    [class.mb-auto]="first"></app-conversation-message>
 
           <div *ngIf="item.dateTile" class="d-flex jc-center mb-1">
             <div class="conversation-date">{{item.dateTile}}</div>
