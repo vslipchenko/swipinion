@@ -42,6 +42,7 @@
                 </div>
               </ng-template>
 
+              <!-- TODO fix spinner condition; (add logic similarly to the conversation) -->
               <app-progress-spinner
                 *ngIf="messages.length && !(messages.length % messagesFetchLimit)"
                 (appInView)="spinnerInView($event, messages[messages.length - 1].id)"

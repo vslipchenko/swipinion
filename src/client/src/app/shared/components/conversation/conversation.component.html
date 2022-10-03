@@ -42,7 +42,7 @@
         </ng-container>
 
         <app-progress-spinner
-          *ngIf="(loadedCompletely$ | async) !== true"
+          *ngIf="canLoadMore$ | async"
           (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
           class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
       </ng-container>

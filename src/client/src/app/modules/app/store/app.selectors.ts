@@ -39,14 +39,11 @@ export class AppSelectors {
     });
   };
 
-  public static conversationLoadedCompletely = (
-    userId1: string,
-    userId2: string,
-  ): ((state: AppStateModel) => boolean) => {
+  public static conversationCanLoadMore = (userId1: string, userId2: string): ((state: AppStateModel) => boolean) => {
     return createSelector([AppState], (state: AppStateModel) => {
       const conversationKey = getConversationKey(state.conversations, userId1, userId2);
 
-      return state.conversations[conversationKey].loadedCompletely;
+      return state.conversations[conversationKey].canLoadMore;
     });
   };
 }

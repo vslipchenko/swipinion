@@ -26,6 +26,7 @@ import {
   getInterlocutorId,
   markMessageRead,
 } from '~app/utilities/user-messages';
+import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -190,29 +191,16 @@ export class AppState {
         if (!data.fetchUserConversation) return;
 
         context.setState((state) => {
+          let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
+          let unreadMessages: Array<UnreadMessage> = [];
+          let messages: Array<UIUserMessage> = [];
+
+          const canLoadMore = nextConversation.length === USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
           const conversationKey = getConversationKey(
             state.conversations,
             action.payload.user_id_1,
             action.payload.user_id_2,
           );
-
-          if (!data.fetchUserConversation.length && action.payload.edgeId && !action.payload.fetchNew) {
-            // All old messages are fetched
-            return {
-              ...state,
-              conversations: {
-                ...state.conversations,
-                [conversationKey]: {
-                  ...state.conversations[conversationKey],
-                  loadedCompletely: true,
-                },
-              },
-            };
-          }
-
-          let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
-          let unreadMessages: Array<UnreadMessage> = [];
-          let messages: Array<UIUserMessage> = [];
 
           if (action.payload.edgeId) {
             // Fetched messages for initialized conversation
@@ -246,6 +234,7 @@ export class AppState {
               [conversationKey]: {
                 ...state.conversations[conversationKey],
                 messages: actualizeConversationMessagesDate(nextConversation),
+                canLoadMore,
               },
             },
           };

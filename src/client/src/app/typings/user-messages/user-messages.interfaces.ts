@@ -48,7 +48,7 @@ export interface UIUserConversationMessage extends UserConversationMessage {
 }
 
 export interface Conversations {
-  [key: string]: {messages: Array<UIUserConversationMessage>; loadedCompletely: boolean};
+  [key: string]: {messages: Array<UIUserConversationMessage>; canLoadMore: boolean};
 }
 
 export interface UserMessage {
