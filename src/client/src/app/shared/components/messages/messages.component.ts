@@ -15,6 +15,7 @@ import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 })
 export class MessagesComponent implements Destroyable {
   @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
+  @Select(AppSelectors.canLoadMoreMessages) public canLoadMore$!: Observable<boolean>;
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   // public readonly tabs = [

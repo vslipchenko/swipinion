@@ -15,7 +15,12 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {Conversations, UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {
+  Conversations,
+  Messages,
+  UIUserMessage,
+  UnreadMessage,
+} from '~app/typings/user-messages/user-messages.interfaces';
 import {
   actualizeConversationMessagesDate,
   actualizeConversationMessagesReadStatus,
@@ -24,13 +29,13 @@ import {
   defineConversationMessageTime,
   getConversationKey,
   getInterlocutorId,
-  markMessageRead,
+  markMessagesRead,
 } from '~app/utilities/user-messages';
-import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
+import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
-  messages: Array<UIUserMessage>;
+  messages: Messages;
   conversations: Conversations;
   role: UserRole;
   utcTimestamp: number;
@@ -49,7 +54,10 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       thumbnail: '',
       language: 'en',
     },
-    messages: [],
+    messages: {
+      messages: [],
+      canLoadMore: false,
+    },
     conversations: {},
     role: UserRole.Guest,
     unreadMessages: [],
@@ -107,10 +115,10 @@ export class AppState {
             ...data.checkUserStatus,
           };
 
-          const recentMessageId = Number(state.messages[0]?.id);
+          const recentMessageId = Number(state.messages.messages[0]?.id);
 
           const fetchNewMessages =
-            state.messages.length &&
+            state.messages.messages.length &&
             data.checkUserStatus.unreadMessages.length &&
             data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > recentMessageId);
 
@@ -138,7 +146,11 @@ export class AppState {
 
         context.setState((state) => ({
           ...state,
-          messages: [...state.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
+          messages: {
+            ...state.messages,
+            messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
+            canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
+          },
         }));
       }),
     );
@@ -157,7 +169,7 @@ export class AppState {
         context.setState((state) => {
           const messages = convertToUiMessages(data.fetchNewUserMessages, state.user.id);
 
-          let nextMessages = state.messages.filter(
+          let nextMessages = state.messages.messages.filter(
             // This will allow to bubble up existing conversations thus avoiding duplicates
             (message) => {
               const interlocutorId = getInterlocutorId(message.sender_id, message.recipient_id, state.user.id);
@@ -174,7 +186,10 @@ export class AppState {
 
           return {
             ...state,
-            messages: nextMessages,
+            messages: {
+              ...state.messages,
+              messages: nextMessages,
+            },
           };
         });
       }),
@@ -224,7 +239,7 @@ export class AppState {
 
             unreadMessages = actualizeUnreadMessages(state.unreadMessages, interlocutorId);
 
-            messages = markMessageRead(state.messages, interlocutorId);
+            messages = markMessagesRead(state.messages.messages, interlocutorId);
           }
 
           const nextState = {
@@ -241,7 +256,7 @@ export class AppState {
 
           if (unreadMessages.length) nextState.unreadMessages = unreadMessages;
 
-          if (messages.length) nextState.messages = messages;
+          if (messages.length) nextState.messages.messages = messages;
 
           return nextState;
         });

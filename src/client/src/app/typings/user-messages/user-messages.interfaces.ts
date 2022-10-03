@@ -47,6 +47,11 @@ export interface UIUserConversationMessage extends UserConversationMessage {
   dateTile?: string;
 }
 
+export interface Messages {
+  messages: Array<UIUserMessage>;
+  canLoadMore: boolean;
+}
+
 export interface Conversations {
   [key: string]: {messages: Array<UIUserConversationMessage>; canLoadMore: boolean};
 }

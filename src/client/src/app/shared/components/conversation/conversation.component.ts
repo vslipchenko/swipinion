@@ -72,7 +72,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     );
 
     this.canLoadMore$ = this.store.select(
-      AppSelectors.conversationCanLoadMore(message.sender_id, message.recipient_id),
+      AppSelectors.canLoadMoreConversationMessages(message.sender_id, message.recipient_id),
     );
 
     this.runMessageStatusCheck();

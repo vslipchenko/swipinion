@@ -57,7 +57,7 @@ export const actualizeUnreadMessages = (
   return unreadMessages.filter((message) => message.sender_id !== interlocutorId);
 };
 
-export const markMessageRead = (messages: Array<UIUserMessage>, interlocutorId: string): Array<UIUserMessage> => {
+export const markMessagesRead = (messages: Array<UIUserMessage>, interlocutorId: string): Array<UIUserMessage> => {
   return messages.map((message) => {
     if (message.sender_id === interlocutorId || message.recipient_id === interlocutorId)
       return {

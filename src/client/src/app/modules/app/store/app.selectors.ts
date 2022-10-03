@@ -21,7 +21,11 @@ export class AppSelectors {
   });
 
   public static messages = createSelector([AppState], (state: AppStateModel) => {
-    return state.messages;
+    return state.messages.messages;
+  });
+
+  public static canLoadMoreMessages = createSelector([AppState], (state: AppStateModel) => {
+    return state.messages.canLoadMore;
   });
 
   public static unreadMessages = createSelector([AppState], (state: AppStateModel) => {
@@ -39,7 +43,10 @@ export class AppSelectors {
     });
   };
 
-  public static conversationCanLoadMore = (userId1: string, userId2: string): ((state: AppStateModel) => boolean) => {
+  public static canLoadMoreConversationMessages = (
+    userId1: string,
+    userId2: string,
+  ): ((state: AppStateModel) => boolean) => {
     return createSelector([AppState], (state: AppStateModel) => {
       const conversationKey = getConversationKey(state.conversations, userId1, userId2);
 

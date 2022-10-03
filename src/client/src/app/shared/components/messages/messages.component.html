@@ -41,10 +41,9 @@
                                [unread]="message.unread"></app-message>
                 </div>
               </ng-template>
-
-              <!-- TODO fix spinner condition; (add logic similarly to the conversation) -->
+              
               <app-progress-spinner
-                *ngIf="messages.length && !(messages.length % messagesFetchLimit)"
+                *ngIf="canLoadMore$ | async"
                 (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
                 class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
             </ng-container>
