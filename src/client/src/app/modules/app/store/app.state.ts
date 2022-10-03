@@ -206,16 +206,15 @@ export class AppState {
         if (!data.fetchUserConversation) return;
 
         context.setState((state) => {
-          let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
-          let unreadMessages: Array<UnreadMessage> = [];
-          let messages: Array<UIUserMessage> = [];
-
-          const canLoadMore = nextConversation.length === USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
           const conversationKey = getConversationKey(
             state.conversations,
             action.payload.user_id_1,
             action.payload.user_id_2,
           );
+
+          let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
+          let unreadMessages: Array<UnreadMessage> = [];
+          let messages: Array<UIUserMessage> = [];
 
           if (action.payload.edgeId) {
             // Fetched messages for initialized conversation
@@ -249,10 +248,14 @@ export class AppState {
               [conversationKey]: {
                 ...state.conversations[conversationKey],
                 messages: actualizeConversationMessagesDate(nextConversation),
-                canLoadMore,
               },
             },
           };
+
+          if (!action.payload.fetchNew)
+            // Avoid canLoadMore value rewrite on a new message fetch
+            nextState.conversations[conversationKey].canLoadMore =
+              data.fetchUserConversation.length === USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
 
           if (unreadMessages.length) nextState.unreadMessages = unreadMessages;
 
