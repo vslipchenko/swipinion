@@ -15,11 +15,7 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
-import {
-  UIUserConversationMessage,
-  UIUserMessage,
-  UnreadMessage,
-} from '~app/typings/user-messages/user-messages.interfaces';
+import {Conversations, UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {
   actualizeConversationMessagesDate,
   actualizeConversationMessagesReadStatus,
@@ -34,7 +30,7 @@ import {
 export interface AppStateModel {
   user: UserEssentials;
   messages: Array<UIUserMessage>;
-  conversations: {[key: string]: Array<UIUserConversationMessage>};
+  conversations: Conversations;
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -173,7 +169,7 @@ export class AppState {
             },
           );
 
-          nextMessages = [...messages, ...nextMessages];
+          nextMessages = [...messages, ...nextMessages]; // Bubble up (new / updated existing) conversations
 
           return {
             ...state,
@@ -193,14 +189,27 @@ export class AppState {
       tap(({data}) => {
         if (!data.fetchUserConversation) return;
 
-        // TODO if (!data.fetchUserConversation.length && action.payload.edgeId && !action.payload.fetchNew) ...set loaded flag to determine and fix conversation spinner condition
-
         context.setState((state) => {
           const conversationKey = getConversationKey(
             state.conversations,
             action.payload.user_id_1,
             action.payload.user_id_2,
           );
+
+          if (!data.fetchUserConversation.length && action.payload.edgeId && !action.payload.fetchNew) {
+            // All old messages are fetched
+            return {
+              ...state,
+              conversations: {
+                ...state.conversations,
+                [conversationKey]: {
+                  ...state.conversations[conversationKey],
+                  loadedCompletely: true,
+                },
+              },
+            };
+          }
+
           let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
           let unreadMessages: Array<UnreadMessage> = [];
           let messages: Array<UIUserMessage> = [];
@@ -209,7 +218,7 @@ export class AppState {
             // Fetched messages for initialized conversation
             // Because of the descendant (reverse) order new messages get prepended
             if (action.payload.fetchNew) {
-              const updatedConversation = [...nextConversation, ...state.conversations[conversationKey]];
+              const updatedConversation = [...nextConversation, ...state.conversations[conversationKey].messages];
 
               nextConversation = actualizeConversationMessagesReadStatus(
                 updatedConversation,
@@ -217,7 +226,7 @@ export class AppState {
                 state.user.id,
               );
             } else {
-              nextConversation = [...state.conversations[conversationKey], ...nextConversation];
+              nextConversation = [...state.conversations[conversationKey].messages, ...nextConversation];
             }
           }
 
@@ -234,7 +243,10 @@ export class AppState {
             ...state,
             conversations: {
               ...state.conversations,
-              [conversationKey]: actualizeConversationMessagesDate(nextConversation),
+              [conversationKey]: {
+                ...state.conversations[conversationKey],
+                messages: actualizeConversationMessagesDate(nextConversation),
+              },
             },
           };
 
@@ -265,11 +277,14 @@ export class AppState {
             ...state,
             conversations: {
               ...state.conversations,
-              [conversationKey]: actualizeConversationMessagesReadStatus(
-                state.conversations[conversationKey],
-                lastReadMessageId,
-                state.user.id,
-              ),
+              [conversationKey]: {
+                ...state.conversations[conversationKey],
+                messages: actualizeConversationMessagesReadStatus(
+                  state.conversations[conversationKey].messages,
+                  lastReadMessageId,
+                  state.user.id,
+                ),
+              },
             },
           };
         });

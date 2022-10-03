@@ -92,8 +92,6 @@ const fetchUserConversation = async (
 
   const result = await db.query(queryFetchUserConversation(input, tokenData.userId));
 
-  if (!result.rowCount) return null;
-
   return result.rows;
 };
 

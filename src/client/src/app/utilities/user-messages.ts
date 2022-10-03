@@ -1,4 +1,5 @@
 import {
+  Conversations,
   UIUserConversationMessage,
   UIUserMessage,
   UnreadMessage,
@@ -158,13 +159,7 @@ export const actualizeConversationMessagesReadStatus = (
   return nextMessages;
 };
 
-export const getConversationKey = (
-  conversations: {
-    [key: string]: Array<UIUserConversationMessage>;
-  },
-  userId1: string,
-  userId2: string,
-): string => {
+export const getConversationKey = (conversations: Conversations, userId1: string, userId2: string): string => {
   const key1 = composeRelationKey(userId1, userId2);
 
   return conversations[key1] ? key1 : composeRelationKey(userId2, userId1);

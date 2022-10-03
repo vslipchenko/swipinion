@@ -1,7 +1,7 @@
 import {createSelector} from '@ngxs/store';
 import {AppState, AppStateModel} from '~app/modules/app/store/app.state';
 import {UIUserConversationMessage} from '~app/typings/user-messages/user-messages.interfaces';
-import {composeRelationKey} from '~app/utilities/data';
+import {getConversationKey} from '~app/utilities/user-messages';
 
 export class AppSelectors {
   public static userId = createSelector([AppState], (state: AppStateModel) => {
@@ -33,11 +33,20 @@ export class AppSelectors {
     userId2: string,
   ): ((state: AppStateModel) => Array<UIUserConversationMessage>) => {
     return createSelector([AppState], (state: AppStateModel) => {
-      return (
-        // It may be combination sender-recipient or recipient-sender
-        state.conversations[composeRelationKey(userId1, userId2)] ||
-        state.conversations[composeRelationKey(userId2, userId1)]
-      );
+      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+
+      return state.conversations[conversationKey].messages;
+    });
+  };
+
+  public static conversationLoadedCompletely = (
+    userId1: string,
+    userId2: string,
+  ): ((state: AppStateModel) => boolean) => {
+    return createSelector([AppState], (state: AppStateModel) => {
+      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+
+      return state.conversations[conversationKey].loadedCompletely;
     });
   };
 }

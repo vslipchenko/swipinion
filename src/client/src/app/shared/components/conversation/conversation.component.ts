@@ -44,6 +44,7 @@ export class ConversationComponent implements OnInit, Destroyable {
 
   public username = '';
   public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
+  public loadedCompletely$: Observable<boolean> = of(true);
   public interlocutorId = '';
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
   public readonly loading$ = new BehaviorSubject(false);
@@ -68,6 +69,10 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     this.conversationMessages$ = this.store.select(
       AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
+    );
+
+    this.loadedCompletely$ = this.store.select(
+      AppSelectors.conversationLoadedCompletely(message.sender_id, message.recipient_id),
     );
 
     this.runMessageStatusCheck();
