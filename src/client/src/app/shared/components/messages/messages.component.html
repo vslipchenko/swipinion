@@ -41,7 +41,7 @@
                                [unread]="message.unread"></app-message>
                 </div>
               </ng-template>
-              
+
               <app-progress-spinner
                 *ngIf="canLoadMore$ | async"
                 (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
@@ -55,8 +55,6 @@
         <app-conversation [conversationInfo]="$any(conversationInfo$ | async)"
                           (back)="showConversation = false"></app-conversation>
       </div>
-
-      <div class="dimmer absolute"></div>
     </div>
   </ng-template>
 </app-accordion>

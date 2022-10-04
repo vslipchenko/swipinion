@@ -18,15 +18,6 @@
   overflow-y: auto;
 }
 
-.dimmer {
-  box-shadow: inset 0px -20px 12px -12px var.$color-light-darker;
-  width: calc(100% - #{var.$unit-3});
-  height: 20px;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-}
-
 .messages-placeholder {
   border-top: 1px solid var.$color-light-transparent;
 }
