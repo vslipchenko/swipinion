@@ -1,22 +1,22 @@
 import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
-import {SuccessResponse} from '../../../typings/response/response.interfaces';
-import {querySendUserMessage} from '../../../data/queries/user-messages';
+import {queryFetchAndMarkInterlocutorMessages, querySendUserMessage} from '../../../data/queries/user-messages';
 import {sendUserMessageValidator} from '../../../validators/user-messages';
 import {MESSAGE_TEASER_LENGTH} from '../../../constants/user-messages';
+import {SendUserMessagePayload, SendUserMessageResult} from '../../../typings/user-messages/user-messages.interfaces';
 
 export const userMessagesMutationTypeDefinitions = gql`
   type Mutation {
-    sendUserMessage(input: SendUserMessage!): Success
+    sendUserMessage(input: SendUserMessage!): SendUserMessageResult
   }
 `;
 
 const sendUserMessage = async (
   _: unknown,
-  {input}: {input: {recipientId: string; body: string}},
+  {input}: {input: SendUserMessagePayload},
   {accessToken}: {accessToken: string},
-): Promise<SuccessResponse | ApolloError | null> => {
+): Promise<SendUserMessageResult | ApolloError | null> => {
   const {error} = sendUserMessageValidator.validate(input);
 
   if (error) return null;
@@ -27,16 +27,18 @@ const sendUserMessage = async (
 
   const trimmedBody = input.body.trim();
 
-  const result = await db.query(
-    querySendUserMessage(
-      tokenData.userId,
-      input.recipientId,
-      trimmedBody,
-      trimmedBody.slice(0, MESSAGE_TEASER_LENGTH),
-    ),
+  const result = await db.transaction(
+    queryFetchAndMarkInterlocutorMessages(input.recipientId, tokenData.userId, input.edgeId),
+    querySendUserMessage(tokenData.userId, input.recipientId, trimmedBody, trimmedBody.slice(0, MESSAGE_TEASER_LENGTH)),
   );
 
-  return {success: Boolean(result.rowCount)};
+  return {
+    success: result.success,
+    results: {
+      interlocutorMessages: result.results?.[0]?.rows, // result.results value is [] if transaction is unsuccessful
+      sentMessage: result.results?.[1]?.rows?.[0],
+    },
+  };
 };
 
 export const userMessagesMutationResolvers = {
