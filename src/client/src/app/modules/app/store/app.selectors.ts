@@ -43,6 +43,17 @@ export class AppSelectors {
     });
   };
 
+  public static conversationUnprocessedMessages = (
+    userId1: string,
+    userId2: string,
+  ): ((state: AppStateModel) => Array<UIUserConversationMessage>) => {
+    return createSelector([AppState], (state: AppStateModel) => {
+      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+
+      return state.conversations[conversationKey].unprocessedMessages;
+    });
+  };
+
   public static canLoadMoreConversationMessages = (
     userId1: string,
     userId2: string,

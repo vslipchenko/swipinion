@@ -1,7 +1,10 @@
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserEssentials} from '~app/typings/user/user.interfaces';
 import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
-import {FetchUserConversationPayload} from '~app/typings/user-messages/user-messages.interfaces';
+import {
+  FetchUserConversationPayload,
+  SendUserMessagePayload,
+} from '~app/typings/user-messages/user-messages.interfaces';
 
 export class UpdateUserEssentials {
   public static readonly type = '[App] UpdateUserEssentials';
@@ -49,4 +52,10 @@ export class RunConversationMessageStatusCheck {
   public static readonly type = '[App] RunConversationMessageStatusCheck';
 
   public constructor(public payload: string) {}
+}
+
+export class SendUserMessage {
+  public static readonly type = '[App] SendUserMessage';
+
+  public constructor(public payload: SendUserMessagePayload) {}
 }
