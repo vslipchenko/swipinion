@@ -2,6 +2,7 @@ import {gql} from 'apollo-server-core';
 
 export const userMessagesInputs = gql`
   input SendUserMessage {
+    edgeId: String
     recipientId: String!
     body: String!
   }

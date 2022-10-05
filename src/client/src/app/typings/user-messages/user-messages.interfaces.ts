@@ -1,12 +1,16 @@
-import {SuccessResponse} from '~app/typings/response/response.interfaces';
-
 export interface SendUserMessage {
   recipientId: string;
   body: string;
 }
 
 export interface SendUserMessageMutationResult {
-  sendUserMessage: SuccessResponse;
+  sendUserMessage: {
+    success: boolean;
+    results: {
+      interlocutorMessages: Array<UserConversationMessage>;
+      sentMessage: UserConversationMessage;
+    };
+  };
 }
 
 export interface FetchUserMessagesQueryResult {
@@ -53,7 +57,11 @@ export interface Messages {
 }
 
 export interface Conversations {
-  [key: string]: {messages: Array<UIUserConversationMessage>; canLoadMore: boolean};
+  [key: string]: {
+    messages: Array<UIUserConversationMessage>;
+    unprocessedMessages: Array<UIUserConversationMessage>;
+    canLoadMore: boolean;
+  };
 }
 
 export interface UserMessage {
@@ -75,4 +83,10 @@ export interface UIUserMessage extends UserMessage {
 export interface UnreadMessage {
   id: string;
   sender_id: string;
+}
+
+export interface SendUserMessagePayload {
+  edgeId?: string;
+  body: string;
+  recipientId: string;
 }
