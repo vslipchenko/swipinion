@@ -43,6 +43,25 @@ export const convertToUiMessages = (messages: Array<UserMessage>, userId: string
   });
 };
 
+export const excludeNewMessages = (
+  userId: string,
+  messages: Array<UIUserMessage>,
+  newMessages: Array<UIUserMessage>,
+): Array<UIUserMessage> => {
+  return messages.filter(
+    // This will allow to bubble up existing conversations thus avoiding duplicates
+    (message) => {
+      const interlocutorId = getInterlocutorId(message.sender_id, message.recipient_id, userId);
+
+      const hasNewMessage = newMessages.some(
+        (item) => item.sender_id === interlocutorId || item.recipient_id === interlocutorId,
+      );
+
+      return !hasNewMessage;
+    },
+  );
+};
+
 export const getInterlocutorId = (userId1: string, userId2: string, userId: string): string =>
   userId1 === userId ? userId2 : userId1;
 
@@ -70,7 +89,7 @@ export const markMessagesRead = (messages: Array<UIUserMessage>, interlocutorId:
   });
 };
 
-export const defineConversationMessageTime = (
+export const defineConversationMessagesTime = (
   messages: Array<UserConversationMessage>,
 ): Array<UIUserConversationMessage> => {
   return messages.map((message) => {
