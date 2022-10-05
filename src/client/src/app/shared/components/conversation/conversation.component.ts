@@ -5,13 +5,18 @@ import {
   UIUserMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchUserConversation, RunConversationMessageStatusCheck} from '~app/modules/app/store/app.actions';
+import {
+  FetchUserConversation,
+  RunConversationMessageStatusCheck,
+  SendUserMessage,
+} from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, of, skipWhile, Subject, take, takeUntil, timer} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
+import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 
 @Component({
   selector: 'app-conversation',
@@ -44,6 +49,7 @@ export class ConversationComponent implements OnInit, Destroyable {
 
   public username = '';
   public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
+  public conversationUnprocessedMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
   public canLoadMore$: Observable<boolean> = of(true);
   public interlocutorId = '';
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
@@ -71,6 +77,10 @@ export class ConversationComponent implements OnInit, Destroyable {
       AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
     );
 
+    this.conversationUnprocessedMessages$ = this.store.select(
+      AppSelectors.conversationUnprocessedMessages(message.sender_id, message.recipient_id),
+    );
+
     this.canLoadMore$ = this.store.select(
       AppSelectors.canLoadMoreConversationMessages(message.sender_id, message.recipient_id),
     );
@@ -94,11 +104,19 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.fetchUserConversation(edgeMessageId);
   }
 
+  public sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
+    const body = textarea.control.value;
+    const edgeId = messages.find((message) => message.sender_id === this.interlocutorId)?.id;
+
+    this.store.dispatch(new SendUserMessage({edgeId, body, recipientId: this.interlocutorId}));
+    textarea.resetValue();
+  }
+
   private actualizeConversationIfStale(): void {
     const {relevant, hasNewMessage} = this.conversationIsRelevant;
     // Fetch only new messages
     if (hasNewMessage) return this.fetchUserConversation(this.conversationInfo.message.id, true, true);
-    // Init conversation messages fetch; TODO add possibility to init and fetch new messages only if initialized already and new messages exis
+    // Init conversation messages fetch;
     if (!relevant) this.fetchUserConversation('', this.conversationInfo.message.unread);
   }
 
@@ -106,15 +124,23 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.unreadMessages$
       .pipe(
         takeUntil(this.destroy$),
-        skipWhile(() => !this.conversationInitialized), // Skip until conversation is initialized
+        skipWhile(() => !this.conversationInitialized),
       )
       .subscribe((messages) => {
-        // TODO double-check that unreadMessages contain only relevant info and can be assumed as a source of truth
         const unreadMessage = messages.find((message) => message.sender_id === this.interlocutorId);
 
         if (!unreadMessage) return;
 
-        const recentMessageId = this.conversation[0].id; // TODO fix index as item order has changed
+        const unprocessedMessages = this.store.selectSnapshot(
+          AppSelectors.conversationUnprocessedMessages(
+            this.conversationInfo.message.sender_id,
+            this.conversationInfo.message.recipient_id,
+          ),
+        );
+
+        if (unprocessedMessages.length) return; // Ignore while messages processing is in progress
+
+        const recentMessageId = this.conversation[0].id;
 
         // Fetch new messages with id greater than of the most recent message in the conversation; immediately mark as read
         this.fetchUserConversation(recentMessageId, true, true);

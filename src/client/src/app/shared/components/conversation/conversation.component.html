@@ -25,13 +25,23 @@
     </div>
   </div>
 
-  <div class="message-body d-flex px-2 pb-2 primary-scrollbar relative h-100">
-    <app-progress-spinner
-      *ngIf="loading$ | async; else container"
-      class="d-flex jc-center ai-center h-100"></app-progress-spinner>
+  <ng-container *ngIf="conversationMessages$ | async as messages">
+    <div class="message-body d-flex px-2 primary-scrollbar relative h-100"
+         [class.pb-2]="conversationInfo.message.username">
+      <app-progress-spinner
+        *ngIf="loading$ | async; else container"
+        class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 
-    <ng-template #container>
-      <ng-container *ngIf="conversationMessages$ | async as messages">
+      <ng-template #container>
+        <ng-container *ngIf="conversationUnprocessedMessages$ | async as unprocessedMessages">
+          <ng-container *ngFor="let item of unprocessedMessages; let first = first">
+            <app-conversation-message [first]="first" [message]="item"
+                                      [interlocutorId]="interlocutorId"
+                                      [class.mb-auto]="first"></app-conversation-message>
+          </ng-container>
+        </ng-container>
+
+
         <ng-container *ngFor="let item of messages; let first = first">
           <app-conversation-message [first]="first" [message]="item"
                                     [interlocutorId]="interlocutorId"
@@ -46,15 +56,16 @@
           *ngIf="canLoadMore$ | async"
           (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
           class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
-      </ng-container>
-    </ng-template>
-  </div>
+      </ng-template>
+    </div>
 
-  <div class="px-2 d-flex ai-center">
-    <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
+    <div *ngIf="conversationInfo.message.username || conversationInfo.savedMessages" class="px-2 d-flex ai-center">
+      <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
 
-    <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
-                         [disabled]="$any(loading$ | async)"
-                         class="ml-2"></app-mini-fab-button>
-  </div>
+      <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
+                           (clicked)="sendMessage(textarea, messages)"
+                           [disabled]="$any(loading$ | async)"
+                           class="ml-2"></app-mini-fab-button>
+    </div>
+  </ng-container>
 </div>
