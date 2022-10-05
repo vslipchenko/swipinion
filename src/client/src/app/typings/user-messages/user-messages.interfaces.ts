@@ -1,16 +1,19 @@
 export interface SendUserMessage {
+  edgeId?: string;
   recipientId: string;
   body: string;
 }
 
-export interface SendUserMessageMutationResult {
-  sendUserMessage: {
-    success: boolean;
-    results: {
-      interlocutorMessages: Array<UserConversationMessage>;
-      sentMessage: UserConversationMessage;
-    };
+interface SendUserMessageResult {
+  success: boolean;
+  results: {
+    interlocutorMessages: Array<UserConversationMessage>;
+    sentMessage: UserConversationMessage;
   };
+}
+
+export interface SendUserMessageMutationResult {
+  sendUserMessage: SendUserMessageResult;
 }
 
 export interface FetchUserMessagesQueryResult {
@@ -85,8 +88,7 @@ export interface UnreadMessage {
   sender_id: string;
 }
 
-export interface SendUserMessagePayload {
-  edgeId?: string;
-  body: string;
-  recipientId: string;
+export interface SendUserMessagePayload extends SendUserMessage {
+  username: string;
+  thumbnail: string;
 }

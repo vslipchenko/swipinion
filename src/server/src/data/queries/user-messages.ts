@@ -18,17 +18,40 @@ export const querySendUserMessage = (
                LEFT JOIN user_followers
                       ON user_settings.user_id = user_followers.user_id
         WHERE  user_settings.user_id = $2 
-               AND user_settings.message != ${PrivacyCommonSettings.NoOne}       -- Check whether messaging is disabled on behalf of receiver
-               AND user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
-                OR user_followers.follower_id = $1                               -- If messaging is allowed only for followers; check whether sender has accepted following
-                   AND user_followers.pending IS FALSE
+               AND (
+                user_settings.message != ${PrivacyCommonSettings.NoOne}       -- Check whether messaging is disabled on behalf of receiver
+                AND user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
+                  OR user_followers.follower_id = $1                               -- If messaging is allowed only for followers; check whether sender has accepted following
+                     AND user_followers.pending IS FALSE
+                )
       ),
       $1,
       $3,
       $4
     )
+    RETURNING
+      id, 
+      sender_id,
+      recipient_id,
+      body, 
+      created_at, 
+      read
   `,
   values: [senderId, recipientId, body, teaser],
+});
+
+export const queryFetchAndMarkInterlocutorMessages = (
+  senderId: string,
+  recipientId: string,
+  edgeId?: string,
+): QueryConfig => ({
+  text: `
+    UPDATE user_messages
+    SET read = TRUE
+    WHERE ${edgeId ? 'id > $3 AND' : ''} sender_id = $1 AND recipient_id = $2
+    RETURNING id, sender_id, recipient_id, body, read, created_at
+  `,
+  values: edgeId ? [senderId, recipientId, edgeId] : [senderId, recipientId],
 });
 
 export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryConfig => ({

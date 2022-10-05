@@ -6,6 +6,7 @@ import {
   FetchUserMessages,
   RunConversationMessageStatusCheck,
   RunUserStatusPolling,
+  SendUserMessage,
   UpdateUserEssentials,
   UpdateUserRole,
   UpdateUtcTimestamp,
@@ -18,20 +19,27 @@ import {UserMessagesService} from '~app/services/user-messages/user-messages.ser
 import {
   Conversations,
   Messages,
+  UIUserConversationMessage,
   UIUserMessage,
   UnreadMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {
-  actualizeConversationMessagesDate,
+  actualizeConversationMessagesDateTiles,
   actualizeConversationMessagesReadStatus,
   actualizeUnreadMessages,
+  convertToUiMessage,
   convertToUiMessages,
-  defineConversationMessageTime,
+  defineConversationMessagesTime,
+  excludeNewMessages,
   getConversationKey,
   getInterlocutorId,
   markMessagesRead,
 } from '~app/utilities/user-messages';
-import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
+import {
+  MESSAGE_TEASER_LENGTH,
+  USER_CONVERSATION_MESSAGES_FETCH_LIMIT,
+  USER_MESSAGES_FETCH_LIMIT,
+} from '~app/constants/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -156,7 +164,6 @@ export class AppState {
     );
   }
 
-  // TODO refactor current flow in order to fetch unread messages only once and fetch new user messages afterwards
   @Action(FetchNewUserMessages)
   private fetchNewUserMessages(
     context: StateContext<AppStateModel>,
@@ -169,26 +176,11 @@ export class AppState {
         context.setState((state) => {
           const messages = convertToUiMessages(data.fetchNewUserMessages, state.user.id);
 
-          let nextMessages = state.messages.messages.filter(
-            // This will allow to bubble up existing conversations thus avoiding duplicates
-            (message) => {
-              const interlocutorId = getInterlocutorId(message.sender_id, message.recipient_id, state.user.id);
-
-              const hasNewMessage = messages.some(
-                (item) => item.sender_id === interlocutorId || item.recipient_id === interlocutorId,
-              );
-
-              return !hasNewMessage;
-            },
-          );
-
-          nextMessages = [...messages, ...nextMessages]; // Bubble up (new / updated existing) conversations
-
           return {
             ...state,
             messages: {
               ...state.messages,
-              messages: nextMessages,
+              messages: [...messages, ...excludeNewMessages(state.user.id, state.messages.messages, messages)], // Bubble up (new / updated existing) conversations,
             },
           };
         });
@@ -212,7 +204,7 @@ export class AppState {
             action.payload.user_id_2,
           );
 
-          let nextConversation = defineConversationMessageTime(data.fetchUserConversation);
+          let nextConversation = defineConversationMessagesTime(data.fetchUserConversation);
           let unreadMessages: Array<UnreadMessage> = [];
           let messages: Array<UIUserMessage> = [];
 
@@ -247,7 +239,7 @@ export class AppState {
               ...state.conversations,
               [conversationKey]: {
                 ...state.conversations[conversationKey],
-                messages: actualizeConversationMessagesDate(nextConversation),
+                messages: actualizeConversationMessagesDateTiles(nextConversation),
               },
             },
           };
@@ -301,5 +293,91 @@ export class AppState {
         });
       }),
     );
+  }
+
+  @Action(SendUserMessage)
+  private sendUserMessage(context: StateContext<AppStateModel>, action: SendUserMessage): Observable<unknown> {
+    const sendMessageBody = action.payload.body.trim();
+
+    let conversationKey: string;
+    let unprocessedMessage: UIUserConversationMessage;
+
+    context.setState((state) => {
+      conversationKey = getConversationKey(state.conversations, action.payload.recipientId, state.user.id);
+      unprocessedMessage = {
+        id: '',
+        body: sendMessageBody,
+        sender_id: state.user.id,
+        recipient_id: action.payload.recipientId,
+        read: false,
+        created_at: 0,
+        time: '',
+      };
+
+      const unprocessedMessages = state.conversations[conversationKey].unprocessedMessages
+        ? [unprocessedMessage, ...state.conversations[conversationKey].unprocessedMessages]
+        : [unprocessedMessage];
+
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          [conversationKey]: {
+            ...state.conversations[conversationKey],
+            unprocessedMessages,
+          },
+        },
+      };
+    });
+
+    return this.userMessagesService
+      .sendMessage({
+        edgeId: action.payload.edgeId,
+        body: action.payload.body,
+        recipientId: action.payload.recipientId,
+      })
+      .pipe(
+        tap(({data}) => {
+          if (!data?.sendUserMessage?.success) return; // TODO implement proper failed message send handling involving snackbar and updating state correspondingly
+
+          context.setState((state) => {
+            const sentMessage = convertToUiMessage(
+              {
+                ...data.sendUserMessage.results.sentMessage,
+                username: action.payload.username,
+                thumbnail: action.payload.thumbnail,
+                teaser: sendMessageBody.slice(0, MESSAGE_TEASER_LENGTH),
+              },
+              state.user.id,
+            );
+
+            const newMessages = defineConversationMessagesTime([
+              data.sendUserMessage.results.sentMessage,
+              ...data.sendUserMessage.results.interlocutorMessages,
+            ]);
+
+            return {
+              ...state,
+              messages: {
+                ...state.messages,
+                messages: [sentMessage, ...excludeNewMessages(state.user.id, state.messages.messages, [sentMessage])],
+              },
+              conversations: {
+                ...state.conversations,
+                [conversationKey]: {
+                  ...state.conversations[conversationKey],
+                  messages: actualizeConversationMessagesDateTiles([
+                    ...newMessages,
+                    ...state.conversations[conversationKey].messages,
+                  ]),
+                  unprocessedMessages: state.conversations[conversationKey].unprocessedMessages.filter(
+                    (message) => message !== unprocessedMessage,
+                  ),
+                },
+              },
+            };
+          });
+        }),
+      );
   }
 }

@@ -11,6 +11,7 @@ import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {db} from '../../../data';
 import {queryDeleteNotificationByFollowersRecordId} from '../../../data/queries/user-notifications';
 import {QueryResultRow} from 'pg';
+import {TransactionResult} from '../../../typings/data/data.interfaces';
 
 export const userFollowerMutationTypeDefinitions = gql`
   type Mutation {
@@ -63,7 +64,7 @@ const acceptFollowRequest = async (
   _: unknown,
   {recordId}: {recordId: string},
   {accessToken}: {accessToken: string},
-): Promise<SuccessResponse | ApolloError | null> => {
+): Promise<TransactionResult | ApolloError | null> => {
   const {error} = bigintValidator.validate(recordId);
 
   if (error) return null;
@@ -72,19 +73,17 @@ const acceptFollowRequest = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.transaction(
+  return await db.transaction(
     queryAcceptFollowRequest(recordId, tokenData.userId),
     queryDeleteNotificationByFollowersRecordId(recordId, tokenData.userId),
   );
-
-  return result;
 };
 
 const declineFollowRequest = async (
   _: unknown,
   {recordId}: {recordId: string},
   {accessToken}: {accessToken: string},
-): Promise<SuccessResponse | ApolloError | null> => {
+): Promise<TransactionResult | ApolloError | null> => {
   const {error} = bigintValidator.validate(recordId);
 
   if (error) return null;
@@ -93,12 +92,10 @@ const declineFollowRequest = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.transaction(
+  return await db.transaction(
     queryDeleteFollowRequest(recordId, tokenData.userId),
     queryDeleteNotificationByFollowersRecordId(recordId, tokenData.userId),
   );
-
-  return result;
 };
 
 export const userFollowerMutationResolvers = {

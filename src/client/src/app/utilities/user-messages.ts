@@ -15,32 +15,34 @@ import {
 import {MessageTimePoint} from '~app/typings/date/date.enums';
 import {composeRelationKey} from '~app/utilities/data';
 
+export const convertToUiMessage = (message: UserMessage, userId: string): UIUserMessage => {
+  const timePoint = determineMessageTimePoint(message.created_at);
+  let date;
+
+  switch (timePoint) {
+    case MessageTimePoint.TODAY:
+      date = timestampToTime(message.created_at);
+      break;
+    case MessageTimePoint.THIS_YEAR:
+      date = timestampToMonthDay(message.created_at);
+      break;
+    default:
+      date = timestampToMonthDayYear(message.created_at);
+  }
+
+  const nextMessage: UIUserMessage = {
+    ...message,
+    unread: false,
+    date,
+  };
+  // Mark unread if sender is not current user and read value is false
+  if (!message.read) nextMessage.unread = message.sender_id !== userId;
+
+  return nextMessage;
+};
+
 export const convertToUiMessages = (messages: Array<UserMessage>, userId: string): Array<UIUserMessage> => {
-  return messages.map((message) => {
-    const timePoint = determineMessageTimePoint(message.created_at);
-    let date;
-
-    switch (timePoint) {
-      case MessageTimePoint.TODAY:
-        date = timestampToTime(message.created_at);
-        break;
-      case MessageTimePoint.THIS_YEAR:
-        date = timestampToMonthDay(message.created_at);
-        break;
-      default:
-        date = timestampToMonthDayYear(message.created_at);
-    }
-
-    const nextMessage: UIUserMessage = {
-      ...message,
-      unread: false,
-      date,
-    };
-    // Mark unread if sender is not current user and read value is false
-    if (!message.read) nextMessage.unread = message.sender_id !== userId;
-
-    return nextMessage;
-  });
+  return messages.map((message) => convertToUiMessage(message, userId));
 };
 
 export const excludeNewMessages = (
@@ -100,7 +102,7 @@ export const defineConversationMessagesTime = (
   });
 };
 
-export const actualizeConversationMessagesDate = (
+export const actualizeConversationMessagesDateTiles = (
   messages: Array<UIUserConversationMessage>,
 ): Array<UIUserConversationMessage> => {
   const nextMessages = [];

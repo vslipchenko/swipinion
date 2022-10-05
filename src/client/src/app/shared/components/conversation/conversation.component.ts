@@ -108,7 +108,15 @@ export class ConversationComponent implements OnInit, Destroyable {
     const body = textarea.control.value;
     const edgeId = messages.find((message) => message.sender_id === this.interlocutorId)?.id;
 
-    this.store.dispatch(new SendUserMessage({edgeId, body, recipientId: this.interlocutorId}));
+    this.store.dispatch(
+      new SendUserMessage({
+        edgeId,
+        body,
+        username: this.conversationInfo.message.username,
+        thumbnail: this.conversationInfo.message.thumbnail,
+        recipientId: this.interlocutorId,
+      }),
+    );
     textarea.resetValue();
   }
 

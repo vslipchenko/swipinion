@@ -4,5 +4,8 @@
   <div class="time d-flex jc-end ai-center mt-h">{{message.time}}
     <mat-icon class="seen" *ngIf="message.recipient_id === interlocutorId && message.read"
               svgIcon="eye-outline"></mat-icon>
+    <mat-icon class="seen" *ngIf="!message.created_at"
+    >sync
+    </mat-icon>
   </div>
 </div>
