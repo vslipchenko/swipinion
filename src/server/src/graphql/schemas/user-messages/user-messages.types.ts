@@ -12,12 +12,22 @@ export const userMessagesTypes = gql`
     created_at: Float
   }
 
-  type Conversation {
+  type ConversationMessage {
     id: String
     sender_id: String
     recipient_id: String
     body: String
     read: Boolean
     created_at: Float
+  }
+
+  type SendUserMessageTransactionResults {
+    interlocutorMessages: [ConversationMessage]
+    sentMessage: ConversationMessage
+  }
+
+  type SendUserMessageResult {
+    success: Boolean!
+    results: SendUserMessageTransactionResults!
   }
 `;

@@ -18,7 +18,7 @@ export const userMessagesQueryTypeDefinitions = gql`
   type Query {
     fetchUserMessages(edgeId: String): [Message!]
     fetchNewUserMessages(input: [String!]!): [Message!]
-    fetchUserConversation(input: FetchUserConversation): [Conversation!]
+    fetchUserConversation(input: FetchUserConversation): [ConversationMessage!]
     checkConversationMessageStatus(input: String!): String
   }
 `;
