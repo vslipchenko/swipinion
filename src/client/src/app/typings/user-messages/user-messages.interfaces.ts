@@ -62,7 +62,6 @@ export interface Messages {
 export interface Conversations {
   [key: string]: {
     messages: Array<UIUserConversationMessage>;
-    unprocessedMessages: Array<UIUserConversationMessage>;
     canLoadMore: boolean;
   };
 }

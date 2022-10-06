@@ -33,15 +33,6 @@
         class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 
       <ng-template #container>
-        <ng-container *ngIf="conversationUnprocessedMessages$ | async as unprocessedMessages">
-          <ng-container *ngFor="let item of unprocessedMessages; let first = first">
-            <app-conversation-message [first]="first" [message]="item"
-                                      [interlocutorId]="interlocutorId"
-                                      [class.mb-auto]="first"></app-conversation-message>
-          </ng-container>
-        </ng-container>
-
-
         <ng-container *ngFor="let item of messages; let first = first">
           <app-conversation-message [first]="first" [message]="item"
                                     [interlocutorId]="interlocutorId"
@@ -64,7 +55,7 @@
 
       <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
                            (clicked)="sendMessage(textarea, messages)"
-                           [disabled]="$any(loading$ | async)"
+                           [disabled]="$any(loading$ | async) || this.disableSendButton"
                            class="ml-2"></app-mini-fab-button>
     </div>
   </ng-container>

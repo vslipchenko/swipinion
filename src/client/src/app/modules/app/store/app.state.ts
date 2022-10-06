@@ -19,7 +19,6 @@ import {UserMessagesService} from '~app/services/user-messages/user-messages.ser
 import {
   Conversations,
   Messages,
-  UIUserConversationMessage,
   UIUserMessage,
   UnreadMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
@@ -297,39 +296,6 @@ export class AppState {
 
   @Action(SendUserMessage)
   private sendUserMessage(context: StateContext<AppStateModel>, action: SendUserMessage): Observable<unknown> {
-    const sendMessageBody = action.payload.body.trim();
-
-    let conversationKey: string;
-    let unprocessedMessage: UIUserConversationMessage;
-
-    context.setState((state) => {
-      conversationKey = getConversationKey(state.conversations, action.payload.recipientId, state.user.id);
-      unprocessedMessage = {
-        id: '',
-        body: sendMessageBody,
-        sender_id: state.user.id,
-        recipient_id: action.payload.recipientId,
-        read: false,
-        created_at: 0,
-        time: '',
-      };
-
-      const unprocessedMessages = state.conversations[conversationKey].unprocessedMessages
-        ? [unprocessedMessage, ...state.conversations[conversationKey].unprocessedMessages]
-        : [unprocessedMessage];
-
-      return {
-        ...state,
-        conversations: {
-          ...state.conversations,
-          [conversationKey]: {
-            ...state.conversations[conversationKey],
-            unprocessedMessages,
-          },
-        },
-      };
-    });
-
     return this.userMessagesService
       .sendMessage({
         edgeId: action.payload.edgeId,
@@ -341,6 +307,8 @@ export class AppState {
           if (!data?.sendUserMessage?.success) return; // TODO implement proper failed message send handling involving snackbar and updating state correspondingly
 
           context.setState((state) => {
+            const sendMessageBody = action.payload.body.trim();
+            const conversationKey = getConversationKey(state.conversations, action.payload.recipientId, state.user.id);
             const sentMessage = convertToUiMessage(
               {
                 ...data.sendUserMessage.results.sentMessage,
@@ -370,9 +338,6 @@ export class AppState {
                     ...newMessages,
                     ...state.conversations[conversationKey].messages,
                   ]),
-                  unprocessedMessages: state.conversations[conversationKey].unprocessedMessages.filter(
-                    (message) => message !== unprocessedMessage,
-                  ),
                 },
               },
             };

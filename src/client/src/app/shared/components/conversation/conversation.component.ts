@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {
   FetchUserConversationPayload,
   UIUserConversationMessage,
@@ -46,10 +46,11 @@ export class ConversationComponent implements OnInit, Destroyable {
   @Output() public back = new EventEmitter<void>();
   // @Output() public loadStart = new EventEmitter<void>();
   // @Output() public loadEnd = new EventEmitter<void>();
+  @ViewChild('textarea') public textarea!: TextareaComponent;
 
+  public disableSendButton = false;
   public username = '';
   public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
-  public conversationUnprocessedMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
   public canLoadMore$: Observable<boolean> = of(true);
   public interlocutorId = '';
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
@@ -59,6 +60,13 @@ export class ConversationComponent implements OnInit, Destroyable {
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation), take(1)).subscribe(() => {
       this.loading$.next(false);
+    });
+
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(SendUserMessage), take(1)).subscribe(() => {
+      this.textarea.resetValue();
+      this.textarea.control.enable();
+
+      this.disableSendButton = false;
     });
   }
 
@@ -75,10 +83,6 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     this.conversationMessages$ = this.store.select(
       AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
-    );
-
-    this.conversationUnprocessedMessages$ = this.store.select(
-      AppSelectors.conversationUnprocessedMessages(message.sender_id, message.recipient_id),
     );
 
     this.canLoadMore$ = this.store.select(
@@ -105,6 +109,9 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   public sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
+    this.disableSendButton = true;
+    textarea.control.disable();
+
     const body = textarea.control.value;
     const edgeId = messages.find((message) => message.sender_id === this.interlocutorId)?.id;
 
@@ -117,7 +124,6 @@ export class ConversationComponent implements OnInit, Destroyable {
         recipientId: this.interlocutorId,
       }),
     );
-    textarea.resetValue();
   }
 
   private actualizeConversationIfStale(): void {
@@ -132,21 +138,12 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.unreadMessages$
       .pipe(
         takeUntil(this.destroy$),
-        skipWhile(() => !this.conversationInitialized),
+        skipWhile(() => !this.conversationInitialized || this.disableSendButton), // Ignore if conversation is not initializer or while messages processing is in progress
       )
       .subscribe((messages) => {
         const unreadMessage = messages.find((message) => message.sender_id === this.interlocutorId);
 
         if (!unreadMessage) return;
-
-        const unprocessedMessages = this.store.selectSnapshot(
-          AppSelectors.conversationUnprocessedMessages(
-            this.conversationInfo.message.sender_id,
-            this.conversationInfo.message.recipient_id,
-          ),
-        );
-
-        if (unprocessedMessages.length) return; // Ignore while messages processing is in progress
 
         const recentMessageId = this.conversation[0].id;
 
