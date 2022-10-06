@@ -3,6 +3,7 @@ import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {
   queryFetchNewUserMessages,
+  queryFetchSavedUserMessage,
   queryFetchUserConversation,
   queryFetchUserMessages,
   queryMarkUserConversationMessagesRead,
@@ -38,9 +39,13 @@ const fetchUserMessages = async (
 
   const result = await db.query(queryFetchUserMessages(tokenData.userId, edgeId));
 
-  if (!result.rowCount) return null;
+  if (!edgeId) {
+    const savedMessageResult = await db.query(queryFetchSavedUserMessage(tokenData.userId));
 
-  return result.rows;
+    if (savedMessageResult.rowCount) result.rows.push(savedMessageResult.rows[0]);
+  }
+
+  return result.rows; // Return either [] | [saved_message] | [...messages, saved_message] to improve resilience
 };
 
 const fetchNewUserMessages = async (

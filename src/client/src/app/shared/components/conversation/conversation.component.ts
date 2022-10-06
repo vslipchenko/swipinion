@@ -7,6 +7,7 @@ import {
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
   FetchUserConversation,
+  FetchUserSavedMessages,
   RunConversationMessageStatusCheck,
   SendUserMessage,
 } from '~app/modules/app/store/app.actions';
@@ -58,11 +59,13 @@ export class ConversationComponent implements OnInit, Destroyable {
   public readonly destroy$ = new Subject<void>();
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation), take(1)).subscribe(() => {
-      this.loading$.next(false);
-    });
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation, FetchUserSavedMessages), take(1))
+      .subscribe(() => {
+        this.loading$.next(false);
+      });
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(SendUserMessage), take(1)).subscribe(() => {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(SendUserMessage)).subscribe(() => {
       this.textarea.resetValue();
       this.textarea.control.enable();
 
@@ -82,18 +85,24 @@ export class ConversationComponent implements OnInit, Destroyable {
     );
 
     this.conversationMessages$ = this.store.select(
-      AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
+      savedMessages
+        ? AppSelectors.savedMessages
+        : AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
     );
 
     this.canLoadMore$ = this.store.select(
-      AppSelectors.canLoadMoreConversationMessages(message.sender_id, message.recipient_id),
+      savedMessages
+        ? AppSelectors.canLoadMoreSavedMessages
+        : AppSelectors.canLoadMoreConversationMessages(message.sender_id, message.recipient_id),
     );
+
+    this.actualizeConversationIfStale();
+
+    if (savedMessages) return;
 
     this.runMessageStatusCheck();
 
     this.listenToUnreadMessagesChanges();
-
-    this.actualizeConversationIfStale();
   }
 
   public ngOnDestroy(): void {
@@ -102,10 +111,10 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.loading$.complete();
   }
 
-  public spinnerInView(inView: boolean, edgeMessageId: string): void {
+  public spinnerInView(inView: boolean, edgeId: string): void {
     if (!inView) return;
 
-    this.fetchUserConversation(edgeMessageId);
+    this.conversationInfo.savedMessages ? this.fetchSavedMessages(edgeId) : this.fetchUserConversation(edgeId);
   }
 
   public sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
@@ -113,6 +122,9 @@ export class ConversationComponent implements OnInit, Destroyable {
     textarea.control.disable();
 
     const body = textarea.control.value;
+
+    if (this.conversationInfo.savedMessages) return; // TODO dispatch send message to save action
+
     const edgeId = messages.find((message) => message.sender_id === this.interlocutorId)?.id;
 
     this.store.dispatch(
@@ -131,7 +143,10 @@ export class ConversationComponent implements OnInit, Destroyable {
     // Fetch only new messages
     if (hasNewMessage) return this.fetchUserConversation(this.conversationInfo.message.id, true, true);
     // Init conversation messages fetch;
-    if (!relevant) this.fetchUserConversation('', this.conversationInfo.message.unread);
+    if (!relevant)
+      this.conversationInfo.savedMessages
+        ? this.fetchSavedMessages()
+        : this.fetchUserConversation('', this.conversationInfo.message.unread);
   }
 
   private listenToUnreadMessagesChanges(): void {
@@ -158,6 +173,10 @@ export class ConversationComponent implements OnInit, Destroyable {
       .subscribe(() => {
         this.store.dispatch(new RunConversationMessageStatusCheck(this.interlocutorId));
       });
+  }
+
+  private fetchSavedMessages(edgeId?: string): void {
+    this.store.dispatch(new FetchUserSavedMessages(edgeId));
   }
 
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {

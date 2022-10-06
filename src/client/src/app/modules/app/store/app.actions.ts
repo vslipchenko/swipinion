@@ -59,3 +59,9 @@ export class SendUserMessage {
 
   public constructor(public payload: SendUserMessagePayload) {}
 }
+
+export class FetchUserSavedMessages {
+  public static readonly type = '[App] FetchUserSavedMessages';
+
+  public constructor(public payload?: string) {}
+}

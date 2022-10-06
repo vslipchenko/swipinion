@@ -19,6 +19,7 @@ import {UserMessagesService} from '~app/services/user-messages/user-messages.ser
 import {
   Conversations,
   Messages,
+  SavedMessages,
   UIUserMessage,
   UnreadMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
@@ -42,6 +43,7 @@ import {
 
 export interface AppStateModel {
   user: UserEssentials;
+  savedMessages: SavedMessages;
   messages: Messages;
   conversations: Conversations;
   role: UserRole;
@@ -60,6 +62,22 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       username: '',
       thumbnail: '',
       language: 'en',
+    },
+    savedMessages: {
+      message: {
+        id: '',
+        username: '',
+        thumbnail: '',
+        sender_id: '',
+        recipient_id: '',
+        teaser: '',
+        read: true,
+        created_at: 0,
+        date: '',
+        unread: false,
+      },
+      messages: [],
+      canLoadMore: false,
     },
     messages: {
       messages: [],
@@ -145,25 +163,59 @@ export class AppState {
     );
   }
 
-  @Action(FetchUserMessages)
+  @Action(FetchUserMessages) // Fetch saved messages as well as messages from other users
   private fetchUserMessages(context: StateContext<AppStateModel>, action: FetchUserMessages): Observable<unknown> {
     return this.userMessagesService.fetchUserMessages(action.payload).pipe(
       tap(({data}) => {
-        if (!data.fetchUserMessages) return;
+        // Expected response value is one of: [] | [saved_message] | [...messages] | [...messages, saved_message]
+        if (!data.fetchUserMessages?.length) return;
 
-        context.setState((state) => ({
-          ...state,
-          messages: {
-            ...state.messages,
-            messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
-            canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
-          },
-        }));
+        context.setState((state) => {
+          if (!action.payload) {
+            const savedMessage = data.fetchUserMessages.find((message) => !message.sender_id); // * Saved messages does not have sender_id nor recipient_id columns
+
+            if (savedMessage) {
+              if (data.fetchUserMessages.length === 1)
+                // Response value is [saved_message]
+                return {
+                  ...state,
+                  savedMessages: {
+                    ...state.savedMessages,
+                    message: convertToUiMessage(savedMessage, state.user.id),
+                  },
+                };
+              // Response value is [...messages, saved_message]
+              data.fetchUserMessages.pop(); // Remove saved message
+
+              return {
+                ...state,
+                savedMessages: {
+                  ...state.savedMessages,
+                  message: convertToUiMessage(savedMessage, state.user.id),
+                },
+                messages: {
+                  ...state.messages,
+                  messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
+                  canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
+                },
+              };
+            }
+          }
+          // Response value is [...messages]
+          return {
+            ...state,
+            messages: {
+              ...state.messages,
+              messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
+              canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
+            },
+          };
+        });
       }),
     );
   }
 
-  @Action(FetchNewUserMessages)
+  @Action(FetchNewUserMessages) // Reason for why we cant simply extend FetchUserMessages's action logic: we can't rely on state.messages[0].id as it can be out of sync, therefore array of unread message id's is used as a payload
   private fetchNewUserMessages(
     context: StateContext<AppStateModel>,
     action: FetchNewUserMessages,

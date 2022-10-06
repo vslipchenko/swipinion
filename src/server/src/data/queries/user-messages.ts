@@ -54,6 +54,17 @@ export const queryFetchAndMarkInterlocutorMessages = (
   values: edgeId ? [senderId, recipientId, edgeId] : [senderId, recipientId],
 });
 
+export const queryFetchSavedUserMessage = (userId: string): QueryConfig => ({
+  text: `
+    SELECT id, teaser, created_at
+    FROM user_saved_messages
+    WHERE user_id = $1
+    ORDER BY id DESC
+    LIMIT 1
+  `,
+  values: [userId],
+});
+
 export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryConfig => ({
   text: `
     SELECT conversations.conversation_id AS id, 

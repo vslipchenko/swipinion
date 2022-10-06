@@ -32,6 +32,18 @@ export class AppSelectors {
     return state.unreadMessages;
   });
 
+  public static savedMessage = createSelector([AppState], (state: AppStateModel) => {
+    return state.savedMessages.message;
+  });
+
+  public static savedMessages = createSelector([AppState], (state: AppStateModel) => {
+    return state.savedMessages.messages;
+  });
+
+  public static canLoadMoreSavedMessages = createSelector([AppState], (state: AppStateModel) => {
+    return state.savedMessages.canLoadMore;
+  });
+
   public static conversationMessages = (
     userId1: string,
     userId2: string,

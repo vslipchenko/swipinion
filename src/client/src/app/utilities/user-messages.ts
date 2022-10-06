@@ -102,6 +102,48 @@ export const defineConversationMessagesTime = (
   });
 };
 
+export const actualizeConversationMessageDateTile = (
+  message: UIUserConversationMessage,
+  date?: number,
+): {message: UIUserConversationMessage; dayTimestamp: number} => {
+  let nextMessage: UIUserConversationMessage = message;
+
+  if (nextMessage.dateTile) {
+    // Clean-up existing dates
+    nextMessage = {
+      ...message,
+    };
+
+    delete nextMessage.dateTile;
+  }
+
+  const dayTimestamp = new Date(message.created_at).setHours(0, 0, 0, 0);
+
+  if (dayTimestamp === date) return {message: nextMessage, dayTimestamp}; // Belongs to the day already processed
+
+  const timePoint = determineMessageTimePoint(message.created_at);
+  let dateTile: string;
+
+  switch (timePoint) {
+    case MessageTimePoint.TODAY:
+      dateTile = 'Today';
+      break;
+    case MessageTimePoint.THIS_YEAR:
+      dateTile = timestampToMonthDay(message.created_at, true);
+      break;
+    default:
+      dateTile = timestampToMonthDayYear(message.created_at, true);
+  }
+
+  return {
+    message: {
+      ...nextMessage,
+      dateTile,
+    },
+    dayTimestamp,
+  };
+};
+
 export const actualizeConversationMessagesDateTiles = (
   messages: Array<UIUserConversationMessage>,
 ): Array<UIUserConversationMessage> => {
@@ -109,44 +151,9 @@ export const actualizeConversationMessagesDateTiles = (
   let date = 0;
 
   for (let i = messages.length - 1; i > -1; i--) {
-    const message = messages[i];
+    const {message, dayTimestamp} = actualizeConversationMessageDateTile(messages[i], date);
 
-    let nextMessage: UIUserConversationMessage = message;
-
-    if (nextMessage.dateTile) {
-      // Clean-up existing dates
-      nextMessage = {
-        ...message,
-      };
-
-      delete nextMessage.dateTile;
-    }
-
-    const dayTimestamp = new Date(message.created_at).setHours(0, 0, 0, 0);
-
-    if (dayTimestamp === date) {
-      nextMessages.unshift(nextMessage);
-      continue;
-    }
-
-    const timePoint = determineMessageTimePoint(message.created_at);
-    let dateTile = '';
-
-    switch (timePoint) {
-      case MessageTimePoint.TODAY:
-        dateTile = 'Today';
-        break;
-      case MessageTimePoint.THIS_YEAR:
-        dateTile = timestampToMonthDay(message.created_at, true);
-        break;
-      default:
-        dateTile = timestampToMonthDayYear(message.created_at, true);
-    }
-
-    nextMessages.unshift({
-      ...message,
-      dateTile,
-    });
+    nextMessages.unshift(message);
 
     date = dayTimestamp;
   }

@@ -54,16 +54,19 @@ export interface UIUserConversationMessage extends UserConversationMessage {
   dateTile?: string;
 }
 
-export interface Messages {
-  messages: Array<UIUserMessage>;
+export type Messages = MessageList<UIUserMessage>; // TODO move to .types.ts
+
+export interface SavedMessages extends MessageList<UIUserConversationMessage> {
+  message: UIUserMessage;
+}
+
+interface MessageList<T> {
+  messages: Array<T>;
   canLoadMore: boolean;
 }
 
 export interface Conversations {
-  [key: string]: {
-    messages: Array<UIUserConversationMessage>;
-    canLoadMore: boolean;
-  };
+  [key: string]: MessageList<UIUserConversationMessage>;
 }
 
 export interface UserMessage {
