@@ -159,7 +159,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.unreadMessages$
       .pipe(
         takeUntil(this.destroy$),
-        skipWhile(() => !this.conversationInitialized || this.disableSendButton), // Ignore if conversation is not initializer or while messages processing is in progress
+        skipWhile(() => !this.conversationInitialized || this.disableSendButton), // Ignore if conversation is not initializer or while messages processing is in progress; TODO replace disableSendButton with an actual logic to determine last time interlocutor messages were fetched
       )
       .subscribe((messages) => {
         const unreadMessage = messages.find((message) => message.sender_id === this.interlocutorId);
@@ -175,7 +175,10 @@ export class ConversationComponent implements OnInit, Destroyable {
 
   private runMessageStatusCheck(): void {
     timer(0, USER_STATUS_POLLING_INTERVAL)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        skipWhile(() => this.disableSendButton),
+      ) // TODO replace disableSendButton with an actual logic to determine last time interlocutor messages were fetched
       .subscribe(() => {
         this.store.dispatch(new RunConversationMessageStatusCheck(this.interlocutorId));
       });

@@ -245,7 +245,7 @@ export class AppState {
   ): Observable<unknown> {
     return this.userMessagesService.fetchUserConversation(action.payload).pipe(
       tap(({data}) => {
-        if (!data.fetchUserConversation) return;
+        if (!data.fetchUserConversation?.length) return; // Expected value: null | [] | [...conversation_messages]
 
         context.setState((state) => {
           const conversationKey = getConversationKey(
@@ -262,13 +262,14 @@ export class AppState {
             // Fetched messages for initialized conversation
             // Because of the descendant (reverse) order new messages get prepended
             if (action.payload.fetchNew) {
-              const updatedConversation = [...nextConversation, ...state.conversations[conversationKey].messages];
-
-              nextConversation = actualizeConversationMessagesReadStatus(
-                updatedConversation,
-                nextConversation[nextConversation.length - 1].id,
-                state.user.id,
-              );
+              nextConversation = [
+                ...nextConversation,
+                ...actualizeConversationMessagesReadStatus(
+                  state.conversations[conversationKey].messages,
+                  state.conversations[conversationKey].messages[0].id,
+                  state.user.id,
+                ),
+              ];
             } else {
               nextConversation = [...state.conversations[conversationKey].messages, ...nextConversation];
             }
@@ -326,6 +327,8 @@ export class AppState {
           const conversationKey = getConversationKey(state.conversations, action.payload, state.user.id);
           const lastReadMessageId = data.checkConversationMessageStatus;
 
+          if (state.conversations[conversationKey].messages[0].id === lastReadMessageId) return state; // Nothing has changed; May be improved with id condition in the query
+
           return {
             ...state,
             conversations: {
@@ -360,9 +363,17 @@ export class AppState {
           context.setState((state) => {
             const sentMessageBody = action.payload.body.trim();
             const conversationKey = getConversationKey(state.conversations, action.payload.recipientId, state.user.id);
+            const sentMessageFragment = {
+              ...data.sendUserMessage.results.sentMessage,
+              sender_id: state.user.id,
+              recipient_id: action.payload.recipientId,
+              read: false,
+            };
+
             const sentMessage = convertToUiMessage(
               {
                 ...data.sendUserMessage.results.sentMessage,
+                ...sentMessageFragment,
                 username: action.payload.username,
                 thumbnail: action.payload.thumbnail,
                 teaser: convertBodyToTeaser(sentMessageBody),
@@ -370,9 +381,19 @@ export class AppState {
               state.user.id,
             );
 
+            const interlocutorMessages = data.sendUserMessage.results.interlocutorMessages.map((message) => ({
+              ...message,
+              sender_id: action.payload.recipientId,
+              recipient_id: state.user.id,
+              read: true,
+            }));
+
             const newMessages = defineConversationMessagesTime([
-              data.sendUserMessage.results.sentMessage,
-              ...data.sendUserMessage.results.interlocutorMessages,
+              {
+                ...sentMessageFragment,
+                body: sentMessageBody,
+              },
+              ...interlocutorMessages,
             ]);
 
             return {
@@ -387,7 +408,11 @@ export class AppState {
                   ...state.conversations[conversationKey],
                   messages: actualizeConversationMessagesDateTiles([
                     ...newMessages,
-                    ...state.conversations[conversationKey].messages,
+                    ...actualizeConversationMessagesReadStatus(
+                      state.conversations[conversationKey].messages,
+                      state.conversations[conversationKey].messages[0].id,
+                      state.user.id,
+                    ),
                   ]),
                 },
               },

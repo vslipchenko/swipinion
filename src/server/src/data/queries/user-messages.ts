@@ -46,10 +46,16 @@ export const queryFetchAndMarkInterlocutorMessages = (
   edgeId?: string,
 ): QueryConfig => ({
   text: `
-    UPDATE user_messages
-    SET read = TRUE
-    WHERE ${edgeId ? 'id > $3 AND' : ''} sender_id = $1 AND recipient_id = $2
-    RETURNING id, sender_id, recipient_id, body, read, created_at
+    WITH updated AS 
+    (
+      UPDATE user_messages
+      SET read = TRUE
+      WHERE ${edgeId ? 'id > $3 AND' : ''} sender_id = $1 AND recipient_id = $2
+      RETURNING id, body, created_at
+    )
+    SELECT id, body, created_at
+    FROM updated
+    ORDER BY id DESC
   `,
   values: edgeId ? [senderId, recipientId, edgeId] : [senderId, recipientId],
 });

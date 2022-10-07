@@ -7,8 +7,8 @@ export interface SendUserMessage {
 interface SendUserMessageResult {
   success: boolean;
   results: {
-    interlocutorMessages: Array<UserConversationMessage>;
-    sentMessage: UserConversationMessage;
+    interlocutorMessages: Array<{id: string; body: string; created_at: number}>;
+    sentMessage: {id: string; created_at: number};
   };
 }
 

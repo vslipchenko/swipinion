@@ -21,9 +21,20 @@ export const userMessagesTypes = gql`
     created_at: Float
   }
 
+  type InterlocutorConversationMessage {
+    id: String
+    body: String
+    created_at: Float
+  }
+
+  type SentConversationMessage {
+    id: String
+    created_at: Float
+  }
+
   type SendUserMessageTransactionResults {
-    interlocutorMessages: [ConversationMessage]
-    sentMessage: ConversationMessage
+    interlocutorMessages: [InterlocutorConversationMessage]
+    sentMessage: SentConversationMessage
   }
 
   type SendUserMessageResult {
