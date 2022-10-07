@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
-import {SEND_USER_MESSAGE} from '~app/graphql/user-messages/user-messages.mutations';
+import {SEND_USER_MESSAGE, SEND_USER_SAVED_MESSAGE} from '~app/graphql/user-messages/user-messages.mutations';
 import {
   CheckConversationMessageStatusQueryResult,
   FetchNewUserMessagesQueryResult,
@@ -10,6 +10,7 @@ import {
   FetchUserMessagesQueryResult,
   SendUserMessage,
   SendUserMessageMutationResult,
+  SendUserSavedMessageMutationResult,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
@@ -28,6 +29,13 @@ export class UserMessagesService {
   public sendMessage(input: SendUserMessage): Observable<MutationResult<SendUserMessageMutationResult>> {
     return this.apollo.mutate<SendUserMessageMutationResult>({
       mutation: SEND_USER_MESSAGE,
+      variables: {input},
+    });
+  }
+
+  public sendSavedMessage(input: string): Observable<MutationResult<SendUserSavedMessageMutationResult>> {
+    return this.apollo.mutate<SendUserSavedMessageMutationResult>({
+      mutation: SEND_USER_SAVED_MESSAGE,
       variables: {input},
     });
   }

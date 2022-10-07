@@ -7,6 +7,7 @@ import {
   RunConversationMessageStatusCheck,
   RunUserStatusPolling,
   SendUserMessage,
+  SendUserSavedMessage,
   UpdateUserEssentials,
   UpdateUserRole,
   UpdateUtcTimestamp,
@@ -27,19 +28,17 @@ import {
   actualizeConversationMessagesDateTiles,
   actualizeConversationMessagesReadStatus,
   actualizeUnreadMessages,
+  convertBodyToTeaser,
   convertToUiMessage,
   convertToUiMessages,
   defineConversationMessagesTime,
+  defineConversationMessageTime,
   excludeNewMessages,
   getConversationKey,
   getInterlocutorId,
   markMessagesRead,
 } from '~app/utilities/user-messages';
-import {
-  MESSAGE_TEASER_LENGTH,
-  USER_CONVERSATION_MESSAGES_FETCH_LIMIT,
-  USER_MESSAGES_FETCH_LIMIT,
-} from '~app/constants/user-messages';
+import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -359,14 +358,14 @@ export class AppState {
           if (!data?.sendUserMessage?.success) return; // TODO implement proper failed message send handling involving snackbar and updating state correspondingly
 
           context.setState((state) => {
-            const sendMessageBody = action.payload.body.trim();
+            const sentMessageBody = action.payload.body.trim();
             const conversationKey = getConversationKey(state.conversations, action.payload.recipientId, state.user.id);
             const sentMessage = convertToUiMessage(
               {
                 ...data.sendUserMessage.results.sentMessage,
                 username: action.payload.username,
                 thumbnail: action.payload.thumbnail,
-                teaser: sendMessageBody.slice(0, MESSAGE_TEASER_LENGTH),
+                teaser: convertBodyToTeaser(sentMessageBody),
               },
               state.user.id,
             );
@@ -396,5 +395,44 @@ export class AppState {
           });
         }),
       );
+  }
+
+  @Action(SendUserSavedMessage)
+  private sendUserSavedMessage(
+    context: StateContext<AppStateModel>,
+    action: SendUserSavedMessage,
+  ): Observable<unknown> {
+    return this.userMessagesService.sendSavedMessage(action.payload).pipe(
+      tap(({data}) => {
+        if (!data?.sendUserSavedMessage) return;
+
+        const trimmedBody = action.payload.trim();
+
+        context.setState((state) => {
+          const savedMessage = {
+            ...data.sendUserSavedMessage,
+            sender_id: '',
+            recipient_id: '',
+            username: '',
+            thumbnail: '',
+            body: trimmedBody,
+            teaser: convertBodyToTeaser(trimmedBody),
+            read: false,
+          };
+
+          return {
+            ...state,
+            savedMessages: {
+              ...state.savedMessages, //convertBodyToTeaser
+              message: convertToUiMessage(savedMessage, state.user.id),
+              messages: actualizeConversationMessagesDateTiles([
+                defineConversationMessageTime(savedMessage),
+                ...state.savedMessages.messages,
+              ]),
+            },
+          };
+        });
+      }),
+    );
   }
 }

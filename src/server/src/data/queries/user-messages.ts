@@ -54,6 +54,16 @@ export const queryFetchAndMarkInterlocutorMessages = (
   values: edgeId ? [senderId, recipientId, edgeId] : [senderId, recipientId],
 });
 
+export const querySendUserSavedMessage = (userId: string, body: string, teaser: string): QueryConfig => ({
+  text: `
+    INSERT INTO user_saved_messages
+    (user_id, body, teaser)
+    VALUES ($1, $2, $3)
+    RETURNING id, created_at
+  `,
+  values: [userId, body, teaser],
+});
+
 export const queryFetchSavedUserMessage = (userId: string): QueryConfig => ({
   text: `
     SELECT id, teaser, created_at

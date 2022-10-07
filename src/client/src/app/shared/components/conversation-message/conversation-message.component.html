@@ -1,5 +1,5 @@
 <div class="message p-1"
-     [ngClass]="{'mb-1': !first, 'first-in-group': message.sender_id === interlocutorId, 'last-in-group ml-auto': message.recipient_id === interlocutorId}">
+     [ngClass]="{'mb-1': !first, 'first-in-group': interlocutorId && message.sender_id === interlocutorId, 'last-in-group ml-auto': message.recipient_id === interlocutorId || !interlocutorId}">
   {{message.body}}
   <div class="time d-flex jc-end ai-center mt-h">{{message.time}}
     <mat-icon class="seen" *ngIf="message.recipient_id === interlocutorId && message.read"

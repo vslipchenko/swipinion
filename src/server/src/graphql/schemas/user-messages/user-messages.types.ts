@@ -30,4 +30,9 @@ export const userMessagesTypes = gql`
     success: Boolean!
     results: SendUserMessageTransactionResults!
   }
+
+  type SendUserSavedMessage {
+    id: String!
+    created_at: Float!
+  }
 `;

@@ -1,11 +1,11 @@
 import Joi from 'joi';
-import {bigintValidator, booleanValidator} from './shared';
+import {bigintValidator, booleanValidator, messageBodyValidator} from './shared';
 import {FetchUserConversationPayload} from '../typings/user-messages/user-messages.interfaces';
 
 export const sendUserMessageValidator = Joi.object({
   edgeId: bigintValidator,
   recipientId: bigintValidator,
-  body: Joi.string().trim().min(1).max(3000), // No empty/whitespace string
+  body: messageBodyValidator, // No empty/whitespace string
 });
 
 export const fetchUserConversationValidator = Joi.object<FetchUserConversationPayload>({

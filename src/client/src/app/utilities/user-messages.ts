@@ -14,6 +14,7 @@ import {
 } from '~app/utilities/date';
 import {MessageTimePoint} from '~app/typings/date/date.enums';
 import {composeRelationKey} from '~app/utilities/data';
+import {MESSAGE_TEASER_LENGTH} from '~app/constants/user-messages';
 
 export const convertToUiMessage = (message: UserMessage, userId: string): UIUserMessage => {
   const timePoint = determineMessageTimePoint(message.created_at);
@@ -91,16 +92,14 @@ export const markMessagesRead = (messages: Array<UIUserMessage>, interlocutorId:
   });
 };
 
+export const defineConversationMessageTime = (message: UserConversationMessage): UIUserConversationMessage => ({
+  ...message,
+  time: timestampToTime(message.created_at),
+});
+
 export const defineConversationMessagesTime = (
   messages: Array<UserConversationMessage>,
-): Array<UIUserConversationMessage> => {
-  return messages.map((message) => {
-    return {
-      ...message,
-      time: timestampToTime(message.created_at),
-    };
-  });
-};
+): Array<UIUserConversationMessage> => messages.map(defineConversationMessageTime);
 
 export const actualizeConversationMessageDateTile = (
   message: UIUserConversationMessage,
@@ -192,3 +191,5 @@ export const getConversationKey = (conversations: Conversations, userId1: string
 
   return conversations[key1] ? key1 : composeRelationKey(userId2, userId1);
 };
+
+export const convertBodyToTeaser = (body: string): string => body.slice(0, MESSAGE_TEASER_LENGTH); // *Accepts TRIMMED body

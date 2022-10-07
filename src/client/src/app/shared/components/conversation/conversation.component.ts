@@ -10,6 +10,7 @@ import {
   FetchUserSavedMessages,
   RunConversationMessageStatusCheck,
   SendUserMessage,
+  SendUserSavedMessage,
 } from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
@@ -65,12 +66,14 @@ export class ConversationComponent implements OnInit, Destroyable {
         this.loading$.next(false);
       });
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(SendUserMessage)).subscribe(() => {
-      this.textarea.resetValue();
-      this.textarea.control.enable();
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionCompleted(SendUserMessage, SendUserSavedMessage))
+      .subscribe(() => {
+        this.textarea.resetValue();
+        this.textarea.control.enable();
 
-      this.disableSendButton = false;
-    });
+        this.disableSendButton = false;
+      });
   }
 
   public ngOnInit(): void {
@@ -123,7 +126,10 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     const body = textarea.control.value;
 
-    if (this.conversationInfo.savedMessages) return; // TODO dispatch send message to save action
+    if (this.conversationInfo.savedMessages) {
+      this.store.dispatch(new SendUserSavedMessage(body));
+      return;
+    }
 
     const edgeId = messages.find((message) => message.sender_id === this.interlocutorId)?.id;
 

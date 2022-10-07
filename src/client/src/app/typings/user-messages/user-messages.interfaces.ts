@@ -16,6 +16,15 @@ export interface SendUserMessageMutationResult {
   sendUserMessage: SendUserMessageResult;
 }
 
+interface SendUserSavedMessageResult {
+  id: string;
+  created_at: number;
+}
+
+export interface SendUserSavedMessageMutationResult {
+  sendUserSavedMessage: SendUserSavedMessageResult;
+}
+
 export interface FetchUserMessagesQueryResult {
   fetchUserMessages: Array<UserMessage>;
 }
