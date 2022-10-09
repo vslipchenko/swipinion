@@ -207,7 +207,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean} {
     const conversation = this.conversation;
 
-    if (!conversation) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch
+    if (!conversation?.length) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch
 
     const unreadMessages = this.store.selectSnapshot(AppSelectors.unreadMessages);
 
@@ -229,10 +229,12 @@ export class ConversationComponent implements OnInit, Destroyable {
 
   private get conversation(): Array<UIUserConversationMessage> {
     return this.store.selectSnapshot(
-      AppSelectors.conversationMessages(
-        this.conversationInfo.message.sender_id,
-        this.conversationInfo.message.recipient_id,
-      ),
+      this.conversationInfo.savedMessages
+        ? AppSelectors.savedMessages
+        : AppSelectors.conversationMessages(
+            this.conversationInfo.message.sender_id,
+            this.conversationInfo.message.recipient_id,
+          ),
     );
   }
 }

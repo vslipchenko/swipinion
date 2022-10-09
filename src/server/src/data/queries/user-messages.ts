@@ -1,6 +1,10 @@
 import {QueryConfig} from 'pg';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
-import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '../../constants/user-messages';
+import {
+  USER_CONVERSATION_MESSAGES_FETCH_LIMIT,
+  USER_MESSAGES_FETCH_LIMIT,
+  USER_SAVED_MESSAGES_FETCH_LIMIT,
+} from '../../constants/user-messages';
 import {FetchUserConversationPayload} from '../../typings/user-messages/user-messages.interfaces';
 
 export const querySendUserMessage = (
@@ -119,6 +123,7 @@ export const queryFetchUserSavedMessages = (userId: string, edgeId?: string): Qu
     WHERE user_id = $1
     ${edgeId ? 'AND id < $2' : ''}
     ORDER BY id DESC
+    LIMIT ${USER_SAVED_MESSAGES_FETCH_LIMIT}
   `,
   values: edgeId ? [userId, edgeId] : [userId],
 });

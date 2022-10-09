@@ -476,14 +476,17 @@ export class AppState {
         if (!data.fetchUserSavedMessages) return;
 
         context.setState((state) => {
+          const messages = defineConversationMessagesTime(data.fetchUserSavedMessages);
+
           return {
             ...state,
             savedMessages: {
               ...state.savedMessages,
-              messages: actualizeConversationMessagesDateTiles([
-                ...defineConversationMessagesTime(data.fetchUserSavedMessages),
-                ...state.savedMessages.messages,
-              ]),
+              messages: actualizeConversationMessagesDateTiles(
+                action.payload
+                  ? [...state.savedMessages.messages, ...messages] // Fetched old messages
+                  : [...messages, ...state.savedMessages.messages], // Initial fetch
+              ),
               canLoadMore: data.fetchUserSavedMessages.length === USER_SAVED_MESSAGES_FETCH_LIMIT,
             },
           };
