@@ -6,6 +6,7 @@ import {
   queryFetchSavedUserMessage,
   queryFetchUserConversation,
   queryFetchUserMessages,
+  queryFetchUserSavedMessages,
   queryMarkUserConversationMessagesRead,
   queryUserConversationMessageStatus,
 } from '../../../data/queries/user-messages';
@@ -18,6 +19,7 @@ import {getInterlocutorId} from '../../../utilities/user-messages';
 export const userMessagesQueryTypeDefinitions = gql`
   type Query {
     fetchUserMessages(edgeId: String): [Message!]
+    fetchUserSavedMessages(edgeId: String): [SavedMessage!]
     fetchNewUserMessages(input: [String!]!): [Message!]
     fetchUserConversation(input: FetchUserConversation): [ConversationMessage!]
     checkConversationMessageStatus(input: String!): String
@@ -26,7 +28,7 @@ export const userMessagesQueryTypeDefinitions = gql`
 
 const fetchUserMessages = async (
   _: unknown,
-  {edgeId}: {edgeId: number},
+  {edgeId}: {edgeId: string},
   {accessToken}: {accessToken: string},
 ): Promise<Array<unknown> | ApolloError | null> => {
   const {error} = bigintValidator.validate(edgeId);
@@ -46,6 +48,26 @@ const fetchUserMessages = async (
   }
 
   return result.rows; // Return either [] | [saved_message] | [...messages, saved_message] to improve resilience
+};
+
+const fetchUserSavedMessages = async (
+  _: unknown,
+  {edgeId}: {edgeId: string},
+  {accessToken}: {accessToken: string},
+): Promise<Array<unknown> | ApolloError | null> => {
+  const {error} = bigintValidator.validate(edgeId);
+
+  if (error) return null;
+
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  if (authenticationError) return authenticationError;
+
+  const result = await db.query(queryFetchUserSavedMessages(tokenData.userId, edgeId));
+
+  if (!result.rowCount) return null;
+
+  return result.rows;
 };
 
 const fetchNewUserMessages = async (
@@ -123,6 +145,7 @@ const checkConversationMessageStatus = async (
 export const userMessagesQueryResolvers = {
   Query: {
     fetchUserMessages,
+    fetchUserSavedMessages,
     fetchNewUserMessages,
     fetchUserConversation,
     checkConversationMessageStatus,

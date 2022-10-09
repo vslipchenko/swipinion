@@ -81,7 +81,7 @@ export const queryFetchSavedUserMessage = (userId: string): QueryConfig => ({
   values: [userId],
 });
 
-export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryConfig => ({
+export const queryFetchUserMessages = (userId: string, edgeId?: string): QueryConfig => ({
   text: `
     SELECT conversations.conversation_id AS id, 
       user_messages.sender_id,
@@ -107,6 +107,20 @@ export const queryFetchUserMessages = (userId: string, edgeId?: number): QueryCo
     ORDER BY id DESC
   `,
   values: edgeId ? [userId, USER_MESSAGES_FETCH_LIMIT, edgeId] : [userId, USER_MESSAGES_FETCH_LIMIT],
+});
+
+export const queryFetchUserSavedMessages = (userId: string, edgeId?: string): QueryConfig => ({
+  text: `
+    SELECT
+      id,
+      body,
+      created_at
+    FROM user_saved_messages
+    WHERE user_id = $1
+    ${edgeId ? 'AND id < $2' : ''}
+    ORDER BY id DESC
+  `,
+  values: edgeId ? [userId, edgeId] : [userId],
 });
 
 export const queryFetchNewUserMessages = (messageIds: Array<string>, recipientId: string): QueryConfig => ({

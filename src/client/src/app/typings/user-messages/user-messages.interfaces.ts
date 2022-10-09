@@ -29,6 +29,10 @@ export interface FetchUserMessagesQueryResult {
   fetchUserMessages: Array<UserMessage>;
 }
 
+export interface FetchUserSavedMessagesQueryResult {
+  fetchUserSavedMessages: Array<UserConversationMessage>; // Array type is not quite accurate but meets field requirement
+}
+
 export interface FetchNewUserMessagesQueryResult {
   fetchNewUserMessages: Array<UserMessage>;
 }

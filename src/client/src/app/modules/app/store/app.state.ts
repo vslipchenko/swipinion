@@ -4,6 +4,7 @@ import {
   FetchNewUserMessages,
   FetchUserConversation,
   FetchUserMessages,
+  FetchUserSavedMessages,
   RunConversationMessageStatusCheck,
   RunUserStatusPolling,
   SendUserMessage,
@@ -38,7 +39,11 @@ import {
   getInterlocutorId,
   markMessagesRead,
 } from '~app/utilities/user-messages';
-import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT, USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
+import {
+  USER_CONVERSATION_MESSAGES_FETCH_LIMIT,
+  USER_MESSAGES_FETCH_LIMIT,
+  USER_SAVED_MESSAGES_FETCH_LIMIT,
+} from '~app/constants/user-messages';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -454,6 +459,32 @@ export class AppState {
                 defineConversationMessageTime(savedMessage),
                 ...state.savedMessages.messages,
               ]),
+            },
+          };
+        });
+      }),
+    );
+  }
+
+  @Action(FetchUserSavedMessages)
+  private fetchUserSavedMessages(
+    context: StateContext<AppStateModel>,
+    action: FetchUserSavedMessages,
+  ): Observable<unknown> {
+    return this.userMessagesService.fetchUserSavedMessages(action.payload).pipe(
+      tap(({data}) => {
+        if (!data.fetchUserSavedMessages) return;
+
+        context.setState((state) => {
+          return {
+            ...state,
+            savedMessages: {
+              ...state.savedMessages,
+              messages: actualizeConversationMessagesDateTiles([
+                ...defineConversationMessagesTime(data.fetchUserSavedMessages),
+                ...state.savedMessages.messages,
+              ]),
+              canLoadMore: data.fetchUserSavedMessages.length === USER_SAVED_MESSAGES_FETCH_LIMIT,
             },
           };
         });

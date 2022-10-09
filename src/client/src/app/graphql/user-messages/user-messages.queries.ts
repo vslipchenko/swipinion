@@ -15,6 +15,16 @@ export const FETCH_USER_MESSAGES = gql`
   }
 `;
 
+export const FETCH_USER_SAVED_MESSAGES = gql`
+  query ($edgeId: String) {
+    fetchUserSavedMessages(edgeId: $edgeId) {
+      id
+      body
+      created_at
+    }
+  }
+`;
+
 export const FETCH_NEW_USER_MESSAGES = gql`
   query ($input: [String!]!) {
     fetchNewUserMessages(input: $input) {

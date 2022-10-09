@@ -8,6 +8,7 @@ import {
   FetchUserConversationPayload,
   FetchUserConversationQueryResult,
   FetchUserMessagesQueryResult,
+  FetchUserSavedMessagesQueryResult,
   SendUserMessage,
   SendUserMessageMutationResult,
   SendUserSavedMessageMutationResult,
@@ -18,6 +19,7 @@ import {
   FETCH_NEW_USER_MESSAGES,
   FETCH_USER_CONVERSATION,
   FETCH_USER_MESSAGES,
+  FETCH_USER_SAVED_MESSAGES,
 } from '~app/graphql/user-messages/user-messages.queries';
 
 @Injectable({
@@ -43,6 +45,14 @@ export class UserMessagesService {
   public fetchUserMessages(edgeId?: string): Observable<ApolloQueryResult<FetchUserMessagesQueryResult>> {
     return this.apollo.query<FetchUserMessagesQueryResult>({
       query: FETCH_USER_MESSAGES,
+      variables: {edgeId},
+      fetchPolicy: 'no-cache',
+    });
+  }
+
+  public fetchUserSavedMessages(edgeId?: string): Observable<ApolloQueryResult<FetchUserSavedMessagesQueryResult>> {
+    return this.apollo.query<FetchUserSavedMessagesQueryResult>({
+      query: FETCH_USER_SAVED_MESSAGES,
       variables: {edgeId},
       fetchPolicy: 'no-cache',
     });

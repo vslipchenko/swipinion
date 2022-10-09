@@ -12,6 +12,12 @@ export const userMessagesTypes = gql`
     created_at: Float
   }
 
+  type SavedMessage {
+    id: String
+    body: String
+    created_at: Float
+  }
+
   type ConversationMessage {
     id: String
     sender_id: String
