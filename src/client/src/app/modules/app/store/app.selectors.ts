@@ -2,8 +2,16 @@ import {createSelector} from '@ngxs/store';
 import {AppState, AppStateModel} from '~app/modules/app/store/app.state';
 import {UIUserConversationMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {getConversationKey} from '~app/utilities/user-messages';
+import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
 
 export class AppSelectors {
+  public static userStatus = createSelector([AppState], (state: AppStateModel): UserStatus => {
+    return {
+      hasUnreadMessage: Boolean(state.unreadMessages.length),
+      hasUnreadNotification: Boolean(state.unreadNotification),
+    };
+  });
+
   public static userId = createSelector([AppState], (state: AppStateModel) => {
     return state.user.id;
   });

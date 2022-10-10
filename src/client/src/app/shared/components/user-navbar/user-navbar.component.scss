@@ -4,6 +4,33 @@
 .navbar {
   border-radius: 20px;
   background-color: var.$color-light-darker;
+  position: relative;
+}
+
+.navbar::before {
+  content: '';
+  z-index: -1;
+  display: none;
+  position: absolute;
+  width: calc(100% + 4px);
+  border-radius: 100px;
+  height: calc(100% + 4px);
+  left: -2px;
+}
+
+.unread-both::before {
+  display: block;
+  background-image: linear-gradient(to right, var.$color-primary, var.$color-accent);
+}
+
+.unread-message::before {
+  display: block;
+  background-color: var.$color-primary;
+}
+
+.unread-notification::before {
+  display: block;
+  background-color: var.$color-accent;
 }
 
 .thumbnail {

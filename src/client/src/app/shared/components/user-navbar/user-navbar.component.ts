@@ -9,6 +9,7 @@ import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dial
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
 
 @Component({
   selector: 'app-user-navbar',
@@ -19,6 +20,8 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 export class UserNavbarComponent implements Destroyable {
   @Select(AppSelectors.userEssentials)
   public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
+  @Select(AppSelectors.userStatus) public readonly status$!: Observable<UserStatus>; // TODO provide typing
+
   public readonly destroy$ = new Subject<void>();
 
   public readonly navbarItems: Array<MenuItem> = [
@@ -52,5 +55,15 @@ export class UserNavbarComponent implements Destroyable {
 
   public shareOpinion(): void {
     this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+  }
+
+  public defineIndicatorClass({hasUnreadMessage, hasUnreadNotification}: UserStatus): string {
+    if (hasUnreadMessage && hasUnreadNotification) return 'unread-both';
+
+    if (hasUnreadMessage) return 'unread-message';
+
+    if (hasUnreadNotification) return 'unread-notification';
+
+    return '';
   }
 }
