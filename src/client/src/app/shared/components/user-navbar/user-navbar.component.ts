@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {MatDialog} from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import {AuthenticationService} from '~app/services/authentication/authentication
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
+import {UserNavbarMenuItem} from '~app/typings/menu/menu.enums';
 
 @Component({
   selector: 'app-user-navbar',
@@ -17,27 +18,39 @@ import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
   styleUrls: ['./user-navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserNavbarComponent implements Destroyable {
+export class UserNavbarComponent implements OnInit, Destroyable {
   @Select(AppSelectors.userEssentials)
   public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
   @Select(AppSelectors.userStatus) public readonly status$!: Observable<UserStatus>; // TODO provide typing
 
   public readonly destroy$ = new Subject<void>();
 
-  public readonly navbarItems: Array<MenuItem> = [
-    {title: 'Share opinion', icon: 'post_add', click: (): void => this.shareOpinion()},
-    {title: 'Profile', routerLink: '/profile', icon: 'person'},
-    {title: 'Messages', routerLink: '/profile/messages', svgIcon: 'email-multiple'},
-    // {title: 'Search', routerLink: '/search', icon: 'search'},
-    {title: 'Notifications', routerLink: '/profile/notifications', icon: 'notifications'},
-    {title: 'Settings', routerLink: '/profile/settings', icon: 'settings'},
+  public readonly navbarItems$ = new BehaviorSubject([
     {
+      id: UserNavbarMenuItem.ShareOpinion,
+      title: 'Share opinion',
+      icon: 'post_add',
+      click: (): void => this.shareOpinion(),
+    },
+    {id: UserNavbarMenuItem.Profile, title: 'Profile', routerLink: '/profile', icon: 'person'},
+    {id: UserNavbarMenuItem.Messages, title: 'Messages', routerLink: '/profile/messages', svgIcon: 'email-multiple'},
+    // {title: 'Search', routerLink: '/search', icon: 'search'},
+    {
+      id: UserNavbarMenuItem.Notifications,
+      title: 'Notifications',
+      routerLink: '/profile/notifications',
+      icon: 'notifications',
+    },
+    {id: UserNavbarMenuItem.Settings, title: 'Settings', routerLink: '/profile/settings', icon: 'settings'},
+    {
+      id: UserNavbarMenuItem.Logout,
       title: 'Logout',
       icon: 'logout',
       color: 'warn',
       click: (): void => this.authenticationService.logout(),
     },
-  ];
+  ] as Array<MenuItem>);
+  public indicatorClass = '';
 
   public constructor(
     private readonly store: Store,
@@ -46,6 +59,30 @@ export class UserNavbarComponent implements Destroyable {
     private readonly userNavbarService: UserNavbarService,
   ) {
     this.userNavbarService.shareOpinion$.pipe(takeUntil(this.destroy$)).subscribe(() => this.shareOpinion());
+  }
+
+  public ngOnInit(): void {
+    this.status$.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+      this.indicatorClass = this.defineIndicatorClass(status);
+
+      this.navbarItems$.next(
+        this.navbarItems$.value.map((item) => {
+          if (item.id === UserNavbarMenuItem.Messages) {
+            return {
+              ...item,
+              color: status.hasUnreadMessage ? 'primary' : undefined,
+            };
+          } else if (item.id === UserNavbarMenuItem.Notifications) {
+            return {
+              ...item,
+              color: status.hasUnreadNotification ? 'accent' : undefined,
+            };
+          }
+
+          return item;
+        }),
+      );
+    });
   }
 
   public ngOnDestroy(): void {
@@ -57,7 +94,7 @@ export class UserNavbarComponent implements Destroyable {
     this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
   }
 
-  public defineIndicatorClass({hasUnreadMessage, hasUnreadNotification}: UserStatus): string {
+  private defineIndicatorClass({hasUnreadMessage, hasUnreadNotification}: UserStatus): string {
     if (hasUnreadMessage && hasUnreadNotification) return 'unread-both';
 
     if (hasUnreadMessage) return 'unread-message';

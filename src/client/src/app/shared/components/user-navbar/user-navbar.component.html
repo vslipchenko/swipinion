@@ -1,13 +1,15 @@
 <ng-container *ngIf="menuItems.menu">
   <ng-container *ngIf="status$ | async as status">
-    <div *ngIf="authedUserProfileTeaser$ | async as userProfile" [matMenuTriggerFor]="menuItems.menu"
-         class="navbar d-flex ai-center py-1 px-2 pointer" [class]="defineIndicatorClass(status)">
-      <img *ngIf="userProfile.thumbnail" [src]="userProfile.thumbnail" class="thumbnail mr-1">
-      <div *ngIf="!userProfile.thumbnail" class="thumbnail mr-1"></div>
+    <div [matMenuTriggerFor]="menuItems.menu"
+         class="navbar d-flex ai-center py-1 px-2 pointer" [class]="indicatorClass">
+      <ng-container *ngIf="authedUserProfileTeaser$ | async as userProfile">
+        <img *ngIf="userProfile.thumbnail" [src]="userProfile.thumbnail" class="thumbnail mr-1">
+        <div *ngIf="!userProfile.thumbnail" class="thumbnail mr-1"></div>
 
-      <span class="username fw-medium truncate">{{userProfile.username}}</span>
+        <span class="username fw-medium truncate">{{userProfile.username}}</span>
+      </ng-container>
     </div>
   </ng-container>
 </ng-container>
 
-<app-menu-items #menuItems [items]="navbarItems"></app-menu-items>
+<app-menu-items #menuItems [items]="$any(navbarItems$ | async)"></app-menu-items>

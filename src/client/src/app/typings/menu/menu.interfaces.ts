@@ -1,6 +1,7 @@
 import {ThemePalette} from '@angular/material/core';
 
 export interface MenuItem {
+  id?: any;
   title: string;
   svgIcon?: string;
   icon?: string;
