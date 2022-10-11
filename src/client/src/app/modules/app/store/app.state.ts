@@ -212,7 +212,7 @@ export class AppState {
                     ...state.savedMessages,
                     message: convertToUiMessage(savedMessage, state.user.id),
                   },
-                  unreadMessages: unreadMessages,
+                  unreadMessages,
                 };
               // Response value is [...messages, saved_message]
               data.fetchUserMessages.pop(); // Remove saved message
@@ -228,7 +228,7 @@ export class AppState {
                   messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
                   canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
                 },
-                unreadMessages: unreadMessages,
+                unreadMessages,
               };
             }
           }
@@ -240,7 +240,7 @@ export class AppState {
               messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
               canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
             },
-            unreadMessages: unreadMessages,
+            unreadMessages,
           };
         });
       }),
