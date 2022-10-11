@@ -240,7 +240,7 @@ export class AppState {
               messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
               canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
             },
-            unreadMessages,
+            unreadMessages: unreadMessages.length ? unreadMessages : state.unreadMessages,
           };
         });
       }),
