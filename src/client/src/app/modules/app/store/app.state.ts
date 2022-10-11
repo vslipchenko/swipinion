@@ -175,6 +175,31 @@ export class AppState {
         if (!data.fetchUserMessages?.length) return;
 
         context.setState((state) => {
+          // Sync unread messages in case if fetched data contains unread messages that are not part of the state.unreadMessages;
+          // Typically this happens when messages are not yet fetched and new messages get sent in between of user status polling calls
+          // It may be solved the other way: simply running user status polling on initial messages fetch, but in that case interval has to be adjusted in order to preserve proper time interval between queries
+          const unreadMessagesSlice = data.fetchUserMessages.filter(
+            (message) => message.recipient_id === state.user.id && !message.read,
+          );
+          let unreadMessages: Array<UnreadMessage> = [];
+
+          if (unreadMessagesSlice.length) {
+            if (state.unreadMessages.length) {
+              unreadMessages = [...state.unreadMessages];
+
+              unreadMessagesSlice.forEach((message) => {
+                const index = state.unreadMessages.findIndex((unreadMessage) => message.id === unreadMessage.id);
+
+                if (index < 0) unreadMessages.push({id: message.id, sender_id: message.sender_id}); // Push only distinct
+              });
+            } else {
+              unreadMessages = unreadMessagesSlice.map((message) => ({
+                id: message.id,
+                sender_id: message.sender_id,
+              }));
+            }
+          }
+
           if (!action.payload) {
             const savedMessage = data.fetchUserMessages.find((message) => !message.sender_id); // * Saved messages does not have sender_id nor recipient_id columns
 
@@ -187,6 +212,7 @@ export class AppState {
                     ...state.savedMessages,
                     message: convertToUiMessage(savedMessage, state.user.id),
                   },
+                  unreadMessages: unreadMessages,
                 };
               // Response value is [...messages, saved_message]
               data.fetchUserMessages.pop(); // Remove saved message
@@ -202,6 +228,7 @@ export class AppState {
                   messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
                   canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
                 },
+                unreadMessages: unreadMessages,
               };
             }
           }
@@ -213,6 +240,7 @@ export class AppState {
               messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
               canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
             },
+            unreadMessages: unreadMessages,
           };
         });
       }),
