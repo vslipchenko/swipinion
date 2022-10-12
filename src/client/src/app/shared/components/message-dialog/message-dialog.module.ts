@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MessageDialogComponent} from '~app/shared/components/user-message-dialog/message-dialog.component';
+import {MessageDialogComponent} from '~app/shared/components/message-dialog/message-dialog.component';
 
 @NgModule({
   declarations: [MessageDialogComponent],
