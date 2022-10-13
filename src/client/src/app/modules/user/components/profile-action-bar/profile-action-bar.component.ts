@@ -9,6 +9,7 @@ import {UnfollowUserDialogComponent} from '~app/modules/user/components/unfollow
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {MessageDialogComponent} from '~app/shared/components/message-dialog/message-dialog.component';
+import {MessageDialogData} from '~app/typings/user-messages/user-messages.interfaces';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -40,12 +41,27 @@ export class ProfileActionBarComponent {
   }
 
   public message(): void {
-    console.log('message', this.id);
-    // this.userMessagesService.sendMessage({
-    //   recipientId: this.id
-    // });
+    let data: MessageDialogData;
+
+    if (this.role === UserRole.User) {
+      data = {
+        saveMessage: true,
+      } as MessageDialogData;
+    } else {
+      // Assume role is viewer
+      const {username, thumbnail, id} = this.store.selectSnapshot(UserSelectors.resolvedUserEssentials);
+
+      data = {
+        saveMessage: false,
+        username,
+        thumbnail,
+        recipientId: id,
+      };
+    }
+
     this.dialog.open(MessageDialogComponent, {
       panelClass: ['dialog', 'extended-dialog'],
+      data,
     });
   }
 

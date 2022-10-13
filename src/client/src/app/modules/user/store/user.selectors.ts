@@ -15,6 +15,14 @@ export class UserSelectors {
     };
   });
 
+  public static resolvedUserEssentials = createSelector([UserState], (state: UserStateModel) => {
+    return {
+      id: state.id,
+      username: state.username,
+      thumbnail: state.thumbnail,
+    };
+  });
+
   public static profileOpinionsSlice = createSelector([UserState], (state: UserStateModel) => {
     return state.canLoadMore ? state.profileOpinions.slice(0, state.profileOpinions.length - 1) : state.profileOpinions;
   });

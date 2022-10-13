@@ -71,6 +71,7 @@ export type Messages = MessageList<UIUserMessage>; // TODO move to .types.ts
 
 export interface SavedMessages extends MessageList<UIUserConversationMessage> {
   message: UIUserMessage;
+  initialized: boolean;
 }
 
 interface MessageList<T> {
@@ -78,8 +79,12 @@ interface MessageList<T> {
   canLoadMore: boolean;
 }
 
+interface Conversation extends MessageList<UIUserConversationMessage> {
+  initialized: boolean;
+}
+
 export interface Conversations {
-  [key: string]: MessageList<UIUserConversationMessage>;
+  [key: string]: Conversation;
 }
 
 export interface UserMessage {
@@ -104,6 +109,13 @@ export interface UnreadMessage {
 }
 
 export interface SendUserMessagePayload extends SendUserMessage {
+  username: string;
+  thumbnail: string;
+}
+
+export interface MessageDialogData {
+  saveMessage: boolean;
+  recipientId: string;
   username: string;
   thumbnail: string;
 }

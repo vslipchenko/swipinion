@@ -48,6 +48,10 @@ export class AppSelectors {
     return state.savedMessages.messages;
   });
 
+  public static savedMessagesInitialized = createSelector([AppState], (state: AppStateModel) => {
+    return state.savedMessages.initialized;
+  });
+
   public static canLoadMoreSavedMessages = createSelector([AppState], (state: AppStateModel) => {
     return state.savedMessages.canLoadMore;
   });
@@ -60,6 +64,17 @@ export class AppSelectors {
       const conversationKey = getConversationKey(state.conversations, userId1, userId2);
 
       return state.conversations[conversationKey].messages;
+    });
+  };
+
+  public static conversationMessagesInitialized = (
+    userId1: string,
+    userId2: string,
+  ): ((state: AppStateModel) => boolean) => {
+    return createSelector([AppState], (state: AppStateModel) => {
+      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+
+      return state.conversations[conversationKey].initialized;
     });
   };
 

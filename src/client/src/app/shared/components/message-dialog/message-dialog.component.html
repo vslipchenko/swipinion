@@ -1,1 +1,21 @@
-<p>user-message-dialog works!</p>
+<h2 mat-dialog-title>{{title}}</h2>
+<ng-container *ngIf="{loading: loading$ | async} as state">
+  <div *ngIf="state.loading" class="dialog-loading-veil"></div>
+
+  <mat-dialog-content class="visible">
+    <app-textarea #textarea label="Message" class="d-block w-100" extendClass="w-100"
+                  appearance="outline"></app-textarea>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="relative">
+    <app-progress-bar
+      *ngIf="state.loading"
+      class="absolute t-0 dialog-progress-bar">
+    </app-progress-bar>
+
+    <app-button mat-dialog-close text="Cancel" (clicked)="null"></app-button>
+    <app-button color="primary" [text]="actionText" (clicked)="message(textarea.control.value)"
+                [disabled]="state.loading || false"></app-button>
+  </mat-dialog-actions>
+</ng-container>
+

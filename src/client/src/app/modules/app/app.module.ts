@@ -25,6 +25,7 @@ import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recov
 import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
 import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
 import {UserService} from '~app/services/user/user.service';
+import {MessageDialogModule} from '~app/shared/components/message-dialog/message-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +42,7 @@ import {UserService} from '~app/services/user/user.service';
     MatSnackBarModule,
     HeaderModule,
     MessagesModule,
+    MessageDialogModule,
     AddOpinionDialogModule,
     OpinionSuccessSnackbarModule,
     EmailConfirmationDialogModule,
