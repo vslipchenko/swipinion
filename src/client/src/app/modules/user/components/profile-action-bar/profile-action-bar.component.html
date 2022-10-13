@@ -1,7 +1,8 @@
 <div class="d-flex ai-center w-100 jc-evenly">
   <app-statistics-action></app-statistics-action>
 
-  <app-icon-button *ngIf="canMessage" icon="email" [appAuthClick]="message.bind(this)"></app-icon-button>
+  <app-icon-button *ngIf="canMessage" [svgIcon]="role === userRole.User ? 'email-bookmark' : 'email'"
+                   [appAuthClick]="message.bind(this)"></app-icon-button>
 
   <ng-container [ngTemplateOutlet]="followActions"></ng-container>
 </div>
@@ -29,7 +30,8 @@
       <ng-container *ngIf="state.followingState?.following">
         <!-- Assume authed -->
         <ng-container *ngIf="showMessageOnFollowing">
-          <app-icon-button *ngIf="canMessage" icon="email" (clicked)="message()"></app-icon-button>
+          <app-icon-button *ngIf="canMessage" icon="email"
+                           (clicked)="message()"></app-icon-button>
 
           <ng-container *ngIf="!canMessage">
             <ng-container *ngIf="pendingFollowing" [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
