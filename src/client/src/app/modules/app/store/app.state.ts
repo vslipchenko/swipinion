@@ -511,7 +511,7 @@ export class AppState {
               messages: actualizeConversationMessagesDateTiles(
                 action.payload
                   ? [...state.savedMessages.messages, ...messages] // Fetched old messages
-                  : [...messages, ...state.savedMessages.messages], // Initial fetch
+                  : [...messages], // Initial fetch
               ),
               canLoadMore: data.fetchUserSavedMessages.length === USER_SAVED_MESSAGES_FETCH_LIMIT,
               initialized: true,
