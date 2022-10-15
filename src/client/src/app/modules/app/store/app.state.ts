@@ -82,6 +82,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       },
       messages: [],
       canLoadMore: false,
+      initialized: false,
     },
     messages: {
       messages: [],
@@ -188,9 +189,9 @@ export class AppState {
               unreadMessages = [...state.unreadMessages];
 
               unreadMessagesSlice.forEach((message) => {
-                const index = state.unreadMessages.findIndex((unreadMessage) => message.id === unreadMessage.id);
+                const intersection = state.unreadMessages.some((unreadMessage) => message.id === unreadMessage.id);
 
-                if (index < 0) unreadMessages.push({id: message.id, sender_id: message.sender_id}); // Push only distinct
+                if (!intersection) unreadMessages.push({id: message.id, sender_id: message.sender_id}); // Push only distinct
               });
             } else {
               unreadMessages = unreadMessagesSlice.map((message) => ({
@@ -314,12 +315,12 @@ export class AppState {
               [conversationKey]: {
                 ...state.conversations[conversationKey],
                 messages: actualizeConversationMessagesDateTiles(nextConversation),
+                initialized: true,
               },
             },
           };
 
           if (action.payload.markRead) {
-            // Fetched anew / initialized conversation messages
             const interlocutorId = getInterlocutorId(action.payload.user_id_1, action.payload.user_id_2, state.user.id);
 
             nextState.unreadMessages = actualizeUnreadMessages(state.unreadMessages, interlocutorId);
@@ -479,7 +480,7 @@ export class AppState {
             ...state,
             savedMessages: {
               ...state.savedMessages, //convertBodyToTeaser
-              message: convertToUiMessage(savedMessage, state.user.id),
+              message: convertToUiMessage(savedMessage),
               messages: actualizeConversationMessagesDateTiles([
                 defineConversationMessageTime(savedMessage),
                 ...state.savedMessages.messages,
@@ -513,6 +514,7 @@ export class AppState {
                   : [...messages, ...state.savedMessages.messages], // Initial fetch
               ),
               canLoadMore: data.fetchUserSavedMessages.length === USER_SAVED_MESSAGES_FETCH_LIMIT,
+              initialized: true,
             },
           };
         });
