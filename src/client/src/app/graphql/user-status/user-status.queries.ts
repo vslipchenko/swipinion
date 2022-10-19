@@ -1,8 +1,8 @@
 import {gql} from 'apollo-angular';
 
 export const CHECK_USER_STATUS = gql`
-  query ($input: UserStatusCheck!) {
-    checkUserStatus(input: $input) {
+  query ($checkMessage: Boolean!) {
+    checkUserStatus(checkMessage: $checkMessage) {
       unreadMessages {
         id
         sender_id
