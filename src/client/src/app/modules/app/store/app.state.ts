@@ -87,6 +87,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
     messages: {
       messages: [],
       canLoadMore: false,
+      initialized: false,
     },
     conversations: {},
     role: UserRole.Guest,
@@ -135,32 +136,41 @@ export class AppState {
     context: StateContext<AppStateModel>,
     action: RunUserStatusPolling,
   ): Observable<unknown> {
-    return this.userStatusService.checkUserStatus(action.payload).pipe(
+    return this.userStatusService.checkUserStatus(action.payload.checkMessage).pipe(
       tap(({data}) => {
         if (!data.checkUserStatus) return;
+
+        if (action.payload.dispatchActionAfterStatusChecked)
+          this.store.dispatch(new UserStatusUpdatedBeforeMessagesInitialFetch());
 
         context.setState((state) => {
           const nextState = {
             ...state,
-            ...data.checkUserStatus,
           };
 
-          const recentMessageId = Number(state.messages.messages[0]?.id);
+          if (action.payload.checkMessage) {
+            nextState.unreadMessages = data.checkUserStatus.unreadMessages;
 
-          const fetchNewMessages =
-            state.messages.messages.length &&
-            data.checkUserStatus.unreadMessages.length &&
-            data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > recentMessageId);
+            const recentMessageId = Number(state.messages.messages[0]?.id);
 
-          if (fetchNewMessages) {
-            const fetchMessages: Array<string> = [];
+            const fetchNewMessages =
+              state.messages.messages.length &&
+              data.checkUserStatus.unreadMessages.length &&
+              data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > recentMessageId);
 
-            data.checkUserStatus.unreadMessages.forEach((message) => {
-              if (Number(message.id) > recentMessageId) fetchMessages.push(message.id);
-            });
+            if (fetchNewMessages) {
+              const fetchMessages: Array<string> = [];
 
-            if (fetchMessages.length) context.dispatch(new FetchNewUserMessages(fetchMessages));
+              data.checkUserStatus.unreadMessages.forEach((message) => {
+                if (Number(message.id) > recentMessageId) fetchMessages.push(message.id);
+              });
+
+              if (fetchMessages.length) context.dispatch(new FetchNewUserMessages(fetchMessages));
+            }
           }
+
+          // if (action.payload.checkNotification)
+          nextState.unreadNotification = data.checkUserStatus.unreadNotification;
 
           return nextState;
         });
