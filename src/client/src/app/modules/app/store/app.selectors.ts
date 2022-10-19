@@ -32,6 +32,10 @@ export class AppSelectors {
     return state.messages.messages;
   });
 
+  public static messagesInitialized = createSelector([AppState], (state: AppStateModel) => {
+    return state.messages.initialized;
+  });
+
   public static canLoadMoreMessages = createSelector([AppState], (state: AppStateModel) => {
     return state.messages.canLoadMore;
   });

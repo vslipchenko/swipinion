@@ -131,7 +131,7 @@ export class ConversationComponent implements OnInit, Destroyable {
       return;
     }
 
-    const edgeId = messages.find((message) => message.sender_id === this.interlocutorId)?.id;
+    const edgeId = messages[0].id; // Use the most recent message as the edge
 
     this.store.dispatch(
       new SendUserMessage({
@@ -205,16 +205,13 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean} {
-    const conversation = this.conversation;
-
-    if (!conversation?.length) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch
+    if (!this.conversationInitialized) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch
 
     const unreadMessages = this.store.selectSnapshot(AppSelectors.unreadMessages);
 
     if (!unreadMessages.length) return {relevant: true}; // No new messages, conversation can be renewed
 
-    // const recentMessageId = conversation.find((message) => message.sender_id === interlocutorId).id;
-    const recentMessageId = conversation[0].id;
+    const recentMessageId = this.conversation[0].id;
 
     const hasNewMessage = unreadMessages.some(
       (message) => message.sender_id === this.interlocutorId && message.id > recentMessageId,
@@ -224,7 +221,14 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private get conversationInitialized(): boolean {
-    return Boolean(this.conversation?.length);
+    return this.store.selectSnapshot(
+      this.conversationInfo.savedMessages
+        ? AppSelectors.savedMessagesInitialized
+        : AppSelectors.conversationMessagesInitialized(
+            this.conversationInfo.message.sender_id,
+            this.conversationInfo.message.recipient_id,
+          ),
+    );
   }
 
   private get conversation(): Array<UIUserConversationMessage> {

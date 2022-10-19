@@ -1,6 +1,6 @@
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserEssentials} from '~app/typings/user/user.interfaces';
-import {UserStatusCheck} from '~app/typings/user-status/user-status.interfaces';
+import {UserStatusCheckOptions} from '~app/typings/user-status/user-status.interfaces';
 import {
   FetchUserConversationPayload,
   SendUserMessagePayload,
@@ -27,7 +27,7 @@ export class UpdateUtcTimestamp {
 export class RunUserStatusPolling {
   public static readonly type = '[App] RunUserStatusPolling';
 
-  public constructor(public payload: UserStatusCheck) {}
+  public constructor(public payload: UserStatusCheckOptions) {}
 }
 
 export class FetchUserMessages {
@@ -70,4 +70,8 @@ export class FetchUserSavedMessages {
   public static readonly type = '[App] FetchUserSavedMessages';
 
   public constructor(public payload?: string) {}
+}
+
+export class UserStatusUpdatedBeforeMessagesInitialFetch {
+  public static readonly type = '[App] UserStatusUpdatedBeforeMessagesInitialFetch';
 }

@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchUserMessages} from '~app/modules/app/store/app.actions';
+import {FetchUserMessages, UserStatusUpdatedBeforeMessagesInitialFetch} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, take, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
+import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 
 @Component({
   selector: 'app-messages',
@@ -50,12 +51,24 @@ export class MessagesComponent implements Destroyable {
   public readonly destroy$ = new Subject<void>();
   public userId = '';
 
-  public constructor(private readonly store: Store, private readonly actions$: Actions) {
+  public constructor(
+    private readonly store: Store,
+    private readonly actions$: Actions,
+    private readonly userStatusPingService: UserStatusPingService,
+  ) {
     this.userId = this.store.selectSnapshot(AppSelectors.userId);
 
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages), take(1)).subscribe(() => {
       this.loading$.next(false);
     });
+
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofActionCompleted(UserStatusUpdatedBeforeMessagesInitialFetch), take(1))
+      .subscribe(() => {
+        this.setDispatchActionAfterStatusChecked(false);
+        
+        this.store.dispatch(new FetchUserMessages());
+      });
   }
 
   public ngOnDestroy(): void {
@@ -71,14 +84,25 @@ export class MessagesComponent implements Destroyable {
   }
 
   public afterExpand(): void {
-    const fetchedMessages = this.store.selectSnapshot(AppSelectors.messages).length;
+    const messagesInitialized = this.store.selectSnapshot(AppSelectors.messagesInitialized);
 
-    if (!fetchedMessages) this.store.dispatch(new FetchUserMessages());
+    if (messagesInitialized) return;
+
+    this.setDispatchActionAfterStatusChecked(true);
+
+    this.userStatusPingService.runStatusPing$.next();
   }
 
   public loadConversation(savedMessages: boolean, message?: UIUserMessage): void {
     this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
 
     this.showConversation = true;
+  }
+
+  private setDispatchActionAfterStatusChecked(value: boolean): void {
+    this.userStatusPingService.pingOptions = {
+      ...this.userStatusPingService.pingOptions,
+      dispatchActionAfterStatusChecked: value,
+    };
   }
 }

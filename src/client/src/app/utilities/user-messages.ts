@@ -34,7 +34,10 @@ export const convertToUiMessage = (message: UserMessage, unreadMessages?: Array<
   return {
     ...message,
     unread: unreadMessages
-      ? unreadMessages.some((unreadMessage) => unreadMessage.sender_id === message.sender_id)
+      ? unreadMessages.some(
+          (unreadMessage) =>
+            unreadMessage.sender_id === message.sender_id || unreadMessage.sender_id === message.recipient_id, // If conversation contains unread message
+        )
       : false, // Skip and set to false for saved message
     date,
   };

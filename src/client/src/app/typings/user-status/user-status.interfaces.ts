@@ -1,8 +1,9 @@
 import {UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 
-export interface UserStatusCheck {
+export interface UserStatusCheckOptions {
   checkMessage: boolean;
   checkNotification: boolean;
+  dispatchActionAfterStatusChecked?: boolean;
 }
 
 export interface CheckUserStatusQueryResult {
