@@ -1,3 +1,5 @@
+import {Conversation} from '~app/typings/user-messages/user-messages.types';
+
 export interface SendUserMessage {
   edgeId?: string;
   recipientId: string;
@@ -67,19 +69,13 @@ export interface UIUserConversationMessage extends UserConversationMessage {
   dateTile?: string;
 }
 
-export type Messages = MessageList<UIUserMessage>; // TODO move to .types.ts
-
 export interface SavedMessages extends MessageList<UIUserConversationMessage> {
   message: UIUserMessage;
-  initialized: boolean;
 }
 
-interface MessageList<T> {
+export interface MessageList<T> {
   messages: Array<T>;
   canLoadMore: boolean;
-}
-
-interface Conversation extends MessageList<UIUserConversationMessage> {
   initialized: boolean;
 }
 
