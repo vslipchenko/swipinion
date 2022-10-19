@@ -12,6 +12,7 @@ import {UINotification} from '~app/typings/user-notifications/user-notifications
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 
 @Component({
   selector: 'app-user-notifications',
@@ -29,8 +30,14 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
   public constructor(
     private readonly store: Store,
     private readonly snackbar: MatSnackBar,
+    private readonly userStatusPingService: UserStatusPingService,
     private readonly actions$: Actions,
   ) {
+    this.userStatusPingService.pingOptions = {
+      ...this.userStatusPingService.pingOptions,
+      checkNotification: false, // Set false in case if navigating from another page instead of direct navigation
+    };
+
     this.actions$
       .pipe(
         takeUntil(this.destroy$),
@@ -54,6 +61,11 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
   }
 
   public ngOnDestroy(): void {
+    this.userStatusPingService.pingOptions = {
+      ...this.userStatusPingService.pingOptions,
+      checkNotification: true, // Reset flag while navigating away
+    };
+
     this.destroy$.next();
     this.destroy$.complete();
     this.loading$.complete();

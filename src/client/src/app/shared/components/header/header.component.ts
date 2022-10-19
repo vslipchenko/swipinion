@@ -4,7 +4,7 @@ import {distinctUntilChanged, map, merge, Observable, of, Subject, takeUntil} fr
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
 import {SignUpDialogComponent} from '~app/shared/components/sign-up-dialog/sign-up-dialog.component';
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
@@ -53,7 +53,20 @@ export class HeaderComponent implements OnInit, Destroyable {
       this.recoverPassword(false);
     });
 
-    if (this.authenticationService.authenticated) this.runUserStatusPolling();
+    if (this.authenticationService.authenticated) {
+      this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+        if (!(event instanceof NavigationEnd)) return;
+
+        if (event.url === '/profile/notifications') {
+          this.userStatusPingService.pingOptions = {
+            ...this.userStatusPingService.pingOptions,
+            checkNotification: false,
+          };
+        }
+
+        this.runUserStatusPolling();
+      });
+    }
   }
 
   public ngOnDestroy(): void {
