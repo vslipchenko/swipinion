@@ -6,6 +6,7 @@ import {MessageDialogData} from '~app/typings/user-messages/user-messages.interf
 import {Actions, ofActionCompleted, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {SendUserMessage, SendUserSavedMessage} from '~app/modules/app/store/app.actions';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
 
 @Component({
   selector: 'app-message-dialog',
@@ -71,7 +72,18 @@ export class MessageDialogComponent implements Destroyable, OnInit {
             username: this.data.username,
             thumbnail: this.data.thumbnail,
             recipientId: this.data.recipientId,
+            edgeId: this.interlocutorMessageEdgeId,
           }),
     );
+  }
+
+  private get interlocutorMessageEdgeId(): string | undefined {
+    const conversation = this.store.selectSnapshot(
+      AppSelectors.conversationMessages(this.store.selectSnapshot(AppSelectors.userId), this.data.recipientId),
+    );
+
+    if (!conversation) return undefined; // Do not include this field in a payload
+
+    return conversation.find((message) => message.sender_id === this.data.recipientId)?.id;
   }
 }
