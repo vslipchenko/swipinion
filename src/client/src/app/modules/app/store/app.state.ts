@@ -12,6 +12,7 @@ import {
   UpdateUserEssentials,
   UpdateUserRole,
   UpdateUtcTimestamp,
+  UserStatusUpdatedBeforeMessagesInitialFetch,
 } from '~app/modules/app/store/app.actions';
 import {UserEssentials} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
@@ -20,7 +21,6 @@ import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 import {
   Conversations,
-  Messages,
   SavedMessages,
   UIUserMessage,
   UnreadMessage,
@@ -44,6 +44,7 @@ import {
   USER_MESSAGES_FETCH_LIMIT,
   USER_SAVED_MESSAGES_FETCH_LIMIT,
 } from '~app/constants/user-messages';
+import {Messages} from '~app/typings/user-messages/user-messages.types';
 
 export interface AppStateModel {
   user: UserEssentials;
@@ -238,7 +239,7 @@ export class AppState {
         if (!data.fetchNewUserMessages) return;
 
         context.setState((state) => {
-          const messages = convertToUiMessages(data.fetchNewUserMessages, state.user.id);
+          const messages = convertToUiMessages(data.fetchNewUserMessages, state.unreadMessages);
 
           return {
             ...state,
@@ -279,7 +280,7 @@ export class AppState {
                 ...nextConversation,
                 ...actualizeConversationMessagesReadStatus(
                   state.conversations[conversationKey].messages,
-                  state.conversations[conversationKey].messages[0].id,
+                  state.conversations[conversationKey].messages[0].id, // TODO FIX this might be wrong; as interlocutor can leave messages unread if message was sent via dialog; so it seems that message status has to be checked as well
                   state.user.id,
                 ),
               ];
@@ -383,13 +384,12 @@ export class AppState {
 
             const sentMessage = convertToUiMessage(
               {
-                ...data.sendUserMessage.results.sentMessage,
                 ...sentMessageFragment,
                 username: action.payload.username,
                 thumbnail: action.payload.thumbnail,
                 teaser: convertBodyToTeaser(sentMessageBody),
               },
-              state.user.id,
+              state.unreadMessages,
             );
 
             const interlocutorMessages = data.sendUserMessage.results.interlocutorMessages.map((message) => ({
@@ -415,17 +415,26 @@ export class AppState {
               },
               conversations: {
                 ...state.conversations,
-                [conversationKey]: {
-                  ...state.conversations[conversationKey],
-                  messages: actualizeConversationMessagesDateTiles([
-                    ...newMessages,
-                    ...actualizeConversationMessagesReadStatus(
-                      state.conversations[conversationKey].messages,
-                      state.conversations[conversationKey].messages[0].id,
-                      state.user.id,
-                    ),
-                  ]),
-                },
+                [conversationKey]: state.conversations[conversationKey]
+                  ? {
+                      ...state.conversations[conversationKey],
+                      messages: actualizeConversationMessagesDateTiles([
+                        ...newMessages,
+                        ...(interlocutorMessages.length
+                          ? actualizeConversationMessagesReadStatus(
+                              state.conversations[conversationKey].messages,
+                              interlocutorMessages[0].id, // TODO FIX This does not serve as source of truth; last read message id has to be requested and current user conv status check interval reinitialized
+                              state.user.id,
+                            )
+                          : state.conversations[conversationKey].messages),
+                      ]),
+                    }
+                  : {
+                      // Initialized conversation: in case if message was sent via dialog and conversation has not being initialized
+                      messages: [],
+                      canLoadMore: false,
+                      initialized: false,
+                    },
               },
             };
           });
