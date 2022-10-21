@@ -1,0 +1,13 @@
+<app-accordion [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
+               [content]="content" (afterExpand)="null">
+  <ng-template #title>
+    jo2
+  </ng-template>
+
+  <ng-template #description>
+    <mat-icon class="expand-arrow">expand_less</mat-icon>
+  </ng-template>
+
+  <ng-template #content>
+  </ng-template>
+</app-accordion>

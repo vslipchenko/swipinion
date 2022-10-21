@@ -3,72 +3,69 @@
 
 $thumbnail-size: 40px;
 
-.messages {
+.messages-panel {
+  width: 100%;
+  max-width: var.$breakpoint-medium;
   bottom: 0;
-  right: var.$unit-2;
-  width: 500px;
+  right: 0;
   z-index: 1;
-
-  @include media.zero-small {
-    display: none;
-  }
 }
 
-.messages .mat-accordion {
+.messages-panel .mat-accordion {
   display: flex;
   max-height: calc(100vh - 75px); // 75px - header height
 }
 
-.messages .mat-expansion-panel {
+.messages-panel .mat-expansion-panel {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.messages .mat-expansion-panel-header {
+.messages-panel .mat-expansion-panel-header {
   flex-shrink: 0;
 }
 
-.messages .mat-expansion-panel-content,
-.messages .mat-expansion-panel-body {
+.messages-panel .mat-expansion-panel-content,
+.messages-panel .mat-expansion-panel-body {
   min-height: 0;
 }
 
-.messages .thumbnail,
-.messages .saved-messages-icon {
+.messages-panel .thumbnail,
+.messages-panel .saved-messages-icon {
   width: $thumbnail-size;
   min-width: $thumbnail-size;
   height: $thumbnail-size;
 }
 
-.messages .mat-expansion-panel-header {
+.messages-panel .mat-expansion-panel-header {
   padding-left: var.$unit-2;
   padding-right: var.$unit-2;
 }
 
-.messages .mat-form-field-wrapper {
+.messages-panel .mat-form-field-wrapper {
   padding-bottom: 0;
 }
 
-.messages .mat-tab-label {
+.messages-panel .mat-tab-label {
   flex: 1;
 }
 
-.messages .mat-expansion-panel-header-description {
+.messages-panel .mat-expansion-panel-header-description {
   display: flex;
   justify-content: flex-end;
   margin-right: 0;
 }
 
-.messages .mat-expanded .expand-arrow {
+.messages-panel .mat-expanded .expand-arrow {
   transform: rotate(180deg);
 }
 
-.messages .mat-expansion-panel-body {
+.messages-panel .mat-expansion-panel-body {
   padding-bottom: 0 !important;
 }
 
-.messages .conversations-spinner {
+.messages-panel .conversations-spinner {
   transform: scale(0.5);
   height: 80px;
 }

@@ -1,4 +1,5 @@
-<app-accordion class="messages fixed" [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
+<app-accordion [hideToggle]="true" [panelTitle]="title"
+               [panelDescription]="description"
                [content]="content" (afterExpand)="afterExpand()">
   <ng-template #title>
       <span class="relative d-flex mr-1">
@@ -36,7 +37,8 @@
               <ng-template #messageList>
                 <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
-                  <app-message [thumbnail]="message.thumbnail" [username]="message.username" [message]="message.teaser"
+                  <app-message [thumbnail]="message.thumbnail" [username]="message.username"
+                               [message]="message.teaser"
                                [date]="message.date" [outgoing]="message.sender_id === userId"
                                (clicked)="loadConversation(false, message)"
                                [unread]="message.unread"></app-message>
