@@ -183,76 +183,46 @@ export class AppState {
     return this.userMessagesService.fetchUserMessages(action.payload).pipe(
       tap(({data}) => {
         // Expected response value is one of: [] | [saved_message] | [...messages] | [...messages, saved_message]
-        if (!data.fetchUserMessages?.length) return;
+        if (!data.fetchUserMessages || (!data.fetchUserMessages.length && action.payload)) return;
 
         context.setState((state) => {
-          // Sync unread messages in case if fetched data contains unread messages that are not part of the state.unreadMessages;
-          // Typically this happens when messages are not yet fetched and new messages get sent in between of user status polling calls
-          // It may be solved the other way: simply running user status polling on initial messages fetch, but in that case interval has to be adjusted in order to preserve proper time interval between queries
-          const unreadMessagesSlice = data.fetchUserMessages.filter(
-            (message) => message.recipient_id === state.user.id && !message.read,
-          );
-          let unreadMessages: Array<UnreadMessage> = [];
-
-          if (unreadMessagesSlice.length) {
-            if (state.unreadMessages.length) {
-              unreadMessages = [...state.unreadMessages];
-
-              unreadMessagesSlice.forEach((message) => {
-                const intersection = state.unreadMessages.some((unreadMessage) => message.id === unreadMessage.id);
-
-                if (!intersection) unreadMessages.push({id: message.id, sender_id: message.sender_id}); // Push only distinct
-              });
-            } else {
-              unreadMessages = unreadMessagesSlice.map((message) => ({
-                id: message.id,
-                sender_id: message.sender_id,
-              }));
-            }
-          }
+          const nextState = {
+            ...state,
+            messages: action.payload ? state.messages : {...state.messages, messages: []},
+          };
 
           if (!action.payload) {
+            nextState.messages.initialized = true;
+
+            if (!data.fetchUserMessages.length) return nextState;
+
             const savedMessage = data.fetchUserMessages.find((message) => !message.sender_id); // * Saved messages does not have sender_id nor recipient_id columns
 
             if (savedMessage) {
+              nextState.savedMessages = {
+                ...nextState.savedMessages,
+                message: convertToUiMessage(savedMessage),
+              };
+
               if (data.fetchUserMessages.length === 1)
                 // Response value is [saved_message]
-                return {
-                  ...state,
-                  savedMessages: {
-                    ...state.savedMessages,
-                    message: convertToUiMessage(savedMessage, state.user.id),
-                  },
-                  unreadMessages,
-                };
+                return nextState;
+
               // Response value is [...messages, saved_message]
               data.fetchUserMessages.pop(); // Remove saved message
-
-              return {
-                ...state,
-                savedMessages: {
-                  ...state.savedMessages,
-                  message: convertToUiMessage(savedMessage, state.user.id),
-                },
-                messages: {
-                  ...state.messages,
-                  messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
-                  canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
-                },
-                unreadMessages,
-              };
             }
           }
           // Response value is [...messages]
-          return {
-            ...state,
-            messages: {
-              ...state.messages,
-              messages: [...state.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
-              canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
-            },
-            unreadMessages: unreadMessages.length ? unreadMessages : state.unreadMessages,
+          nextState.messages = {
+            ...nextState.messages,
+            messages: [
+              ...nextState.messages.messages,
+              ...convertToUiMessages(data.fetchUserMessages, nextState.unreadMessages),
+            ],
+            canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
           };
+
+          return nextState;
         });
       }),
     );
