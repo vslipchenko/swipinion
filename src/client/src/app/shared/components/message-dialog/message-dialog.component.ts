@@ -84,6 +84,6 @@ export class MessageDialogComponent implements Destroyable, OnInit {
 
     if (!conversation) return undefined; // Do not include this field in a payload
 
-    return conversation.find((message) => message.sender_id === this.data.recipientId)?.id;
+    return conversation[0].id;
   }
 }
