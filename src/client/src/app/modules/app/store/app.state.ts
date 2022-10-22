@@ -21,6 +21,7 @@ import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
 import {UserMessagesService} from '~app/services/user-messages/user-messages.service';
 import {
+  ActiveConversation,
   Conversations,
   SavedMessages,
   UIUserMessage,
@@ -52,7 +53,7 @@ export interface AppStateModel {
   savedMessages: SavedMessages;
   messages: Messages;
   conversations: Conversations;
-  activeConversation: string;
+  conversation: ActiveConversation | null;
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -93,7 +94,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       initialized: false,
     },
     conversations: {},
-    activeConversation: '',
+    conversation: null,
     role: UserRole.Guest,
     unreadMessages: [],
     unreadNotification: '',
@@ -519,7 +520,7 @@ export class AppState {
     context.setState((state) => {
       return {
         ...state,
-        activeConversation: action.payload,
+        conversation: action.payload,
       };
     });
   }

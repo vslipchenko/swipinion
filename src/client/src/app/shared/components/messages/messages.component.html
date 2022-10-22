@@ -24,7 +24,7 @@
           <!--        <app-tabs [tabs]="tabs"></app-tabs>-->
           <div class="list primary-scrollbar h-100 d-flex f-column">
             <div class="transparent-divider"></div>
-            <app-message *ngIf="savedMessage$ | async as savedMessage" icon="bookmark" [username]="'Saved Messages'"
+            <app-message *ngIf="savedMessage$ | async as savedMessage" icon="bookmark" username="Saved Messages"
                          [message]="savedMessage.teaser"
                          [date]="savedMessage.date" (clicked)="loadConversation(true)"></app-message>
 

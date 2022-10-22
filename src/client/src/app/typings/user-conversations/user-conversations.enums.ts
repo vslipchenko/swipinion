@@ -1,5 +1,5 @@
-export enum UserActiveConversationKey {
-  SavedMessages = '0',
-  NewConversation = '1',
-  // else string 'sender_id-recipient_id'
+export enum ActiveConversationType {
+  NewConversation = 1,
+  SavedMessages,
+  UserConversation,
 }

@@ -60,8 +60,8 @@ export class AppSelectors {
     return state.savedMessages.canLoadMore;
   });
 
-  public static activeConversation = createSelector([AppState], (state: AppStateModel) => {
-    return state.activeConversation;
+  public static conversation = createSelector([AppState], (state: AppStateModel) => {
+    return state.conversation;
   });
 
   public static conversationMessages = (

@@ -1,4 +1,5 @@
 import {Conversation} from '~app/typings/user-messages/user-messages.types';
+import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 
 export interface SendUserMessage {
   edgeId?: string;
@@ -114,4 +115,12 @@ export interface MessageDialogData {
   recipientId: string;
   username: string;
   thumbnail: string;
+}
+
+export interface ActiveConversation {
+  userId1?: string;
+  userId2?: string;
+  username?: string;
+  thumbnail?: string;
+  type: ActiveConversationType;
 }

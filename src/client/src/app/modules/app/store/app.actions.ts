@@ -2,6 +2,7 @@ import {UserRole} from '~app/typings/user/user.enums';
 import {UserEssentials} from '~app/typings/user/user.interfaces';
 import {UserStatusCheckOptions} from '~app/typings/user-status/user-status.interfaces';
 import {
+  ActiveConversation,
   FetchUserConversationPayload,
   SendUserMessagePayload,
 } from '~app/typings/user-messages/user-messages.interfaces';
@@ -79,5 +80,5 @@ export class UserStatusUpdatedBeforeMessagesInitialFetch {
 export class SetActiveConversation {
   public static readonly type = '[App] SetActiveConversation';
 
-  public constructor(public payload: string) {}
+  public constructor(public payload: ActiveConversation) {}
 }
