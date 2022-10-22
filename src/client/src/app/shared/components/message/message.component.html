@@ -1,11 +1,5 @@
 <div class="d-flex ai-center p-2 message pointer relative" [class.unread]="unread" (click)="clicked.emit(senderId)">
-  <mat-icon *ngIf="icon; else image" color="accent"
-            class="saved-messages-icon d-flex jc-center ai-center mr-2">{{icon}}</mat-icon>
-
-  <ng-template #image>
-    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail mr-2">
-    <div *ngIf="!thumbnail" class="thumbnail mr-2"></div>
-  </ng-template>
+  <app-message-thumbnail [icon]="icon" [thumbnail]="thumbnail"></app-message-thumbnail>
 
   <div class="w-100 message-info">
     <div class="d-flex jc-between ai-center">
