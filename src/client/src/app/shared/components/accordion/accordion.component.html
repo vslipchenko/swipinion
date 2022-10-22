@@ -1,4 +1,4 @@
-<mat-accordion>
+<mat-accordion [multi]="multi">
   <mat-expansion-panel [hideToggle]="hideToggle" (afterExpand)="afterExpand.emit()"
                        (afterCollapse)="afterCollapse.emit()">
     <mat-expansion-panel-header>

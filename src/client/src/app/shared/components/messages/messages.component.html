@@ -20,7 +20,7 @@
                             class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 
       <ng-template #container>
-        <div [class.h-0]="showConversation" class="h-100">
+        <div class="h-100">
           <!--        <app-tabs [tabs]="tabs"></app-tabs>-->
           <div class="list primary-scrollbar h-100 d-flex f-column">
             <div class="transparent-divider"></div>
@@ -54,10 +54,10 @@
         </div>
       </ng-template>
 
-      <div class="messaging h-100" *ngIf="showConversation">
-        <app-conversation [conversationInfo]="$any(conversationInfo$ | async)"
-                          (back)="showConversation = false"></app-conversation>
-      </div>
+      <!--      <div class="messaging h-100" *ngIf="showConversation">-->
+      <!--        <app-conversation [conversationInfo]="$any(conversationInfo$ | async)"-->
+      <!--                          (back)="showConversation = false"></app-conversation>-->
+      <!--      </div>-->
     </div>
   </ng-template>
 </app-accordion>

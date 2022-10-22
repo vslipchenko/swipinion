@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, Input, ViewChild} from '@angular/core';
+import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 
 @Component({
   selector: 'app-conversation-accordion',
@@ -6,10 +7,15 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./conversation-accordion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationAccordionComponent implements OnInit {
+export class ConversationAccordionComponent implements AfterViewInit {
   @Input() public activeConversation = '';
+  @ViewChild(AccordionComponent, {static: true}) private readonly accordionComponent!: AccordionComponent;
 
-  constructor() {}
+  public ngAfterViewInit(): void {
+    this.expandAccordion();
+  }
 
-  ngOnInit(): void {}
+  public expandAccordion(): void {
+    this.accordionComponent.accordion.openAll();
+  }
 }
