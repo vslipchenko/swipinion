@@ -75,3 +75,9 @@ export class FetchUserSavedMessages {
 export class UserStatusUpdatedBeforeMessagesInitialFetch {
   public static readonly type = '[App] UserStatusUpdatedBeforeMessagesInitialFetch';
 }
+
+export class SetActiveConversation {
+  public static readonly type = '[App] SetActiveConversation';
+
+  public constructor(public payload: string) {}
+}

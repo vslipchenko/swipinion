@@ -1,4 +1,7 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Select} from '@ngxs/store';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-messages-panel',
@@ -6,8 +9,6 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./messages-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MessagesPanelComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
+export class MessagesPanelComponent {
+  @Select(AppSelectors.activeConversation) protected activeConversation$!: Observable<string>;
 }

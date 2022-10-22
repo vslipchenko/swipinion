@@ -9,6 +9,7 @@ import {
   RunUserStatusPolling,
   SendUserMessage,
   SendUserSavedMessage,
+  SetActiveConversation,
   UpdateUserEssentials,
   UpdateUserRole,
   UpdateUtcTimestamp,
@@ -51,6 +52,7 @@ export interface AppStateModel {
   savedMessages: SavedMessages;
   messages: Messages;
   conversations: Conversations;
+  activeConversation: string;
   role: UserRole;
   utcTimestamp: number;
   unreadMessages: Array<UnreadMessage>;
@@ -91,6 +93,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       initialized: false,
     },
     conversations: {},
+    activeConversation: '',
     role: UserRole.Guest,
     unreadMessages: [],
     unreadNotification: '',
@@ -509,5 +512,15 @@ export class AppState {
         });
       }),
     );
+  }
+
+  @Action(SetActiveConversation)
+  private setActiveConversation(context: StateContext<AppStateModel>, action: SetActiveConversation): void {
+    context.setState((state) => {
+      return {
+        ...state,
+        activeConversation: action.payload,
+      };
+    });
   }
 }

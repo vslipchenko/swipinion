@@ -1,12 +1,6 @@
 @use 'src/assets/scss/variables' as var;
 @use 'media';
 
-.messages {
-  @include media.zero-medium {
-    display: none !important;
-  }
-}
-
 .content {
   height: 600px;
   margin-left: -24px;

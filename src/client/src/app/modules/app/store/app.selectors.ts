@@ -60,6 +60,10 @@ export class AppSelectors {
     return state.savedMessages.canLoadMore;
   });
 
+  public static activeConversation = createSelector([AppState], (state: AppStateModel) => {
+    return state.activeConversation;
+  });
+
   public static conversationMessages = (
     userId1: string,
     userId2: string,

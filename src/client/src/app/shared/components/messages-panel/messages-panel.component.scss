@@ -1,0 +1,11 @@
+@use 'media';
+
+.messages {
+  @include media.zero-medium {
+    display: none !important;
+  }
+}
+
+.f-h {
+  flex: 0.5;
+}

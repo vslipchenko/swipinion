@@ -1,12 +1,18 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchUserMessages, UserStatusUpdatedBeforeMessagesInitialFetch} from '~app/modules/app/store/app.actions';
+import {
+  FetchUserMessages,
+  SetActiveConversation,
+  UserStatusUpdatedBeforeMessagesInitialFetch,
+} from '~app/modules/app/store/app.actions';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, take, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
+import {UserActiveConversationKey} from '~app/typings/user-conversations/user-conversations.enums';
+import {composeRelationKey} from '~app/utilities/data';
 
 @Component({
   selector: 'app-messages',
@@ -66,7 +72,7 @@ export class MessagesComponent implements Destroyable {
       .pipe(takeUntil(this.destroy$), ofActionCompleted(UserStatusUpdatedBeforeMessagesInitialFetch), take(1))
       .subscribe(() => {
         this.setDispatchActionAfterStatusChecked(false);
-        
+
         this.store.dispatch(new FetchUserMessages());
       });
   }
@@ -94,9 +100,15 @@ export class MessagesComponent implements Destroyable {
   }
 
   public loadConversation(savedMessages: boolean, message?: UIUserMessage): void {
-    this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
+    this.store.dispatch(
+      new SetActiveConversation(
+        message ? composeRelationKey(message.sender_id, message.recipient_id) : UserActiveConversationKey.SavedMessages,
+      ),
+    );
 
-    this.showConversation = true;
+    // this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
+    //
+    // this.showConversation = true;
   }
 
   private setDispatchActionAfterStatusChecked(value: boolean): void {
