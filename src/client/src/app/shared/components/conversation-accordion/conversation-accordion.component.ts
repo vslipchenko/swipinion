@@ -11,24 +11,33 @@ import {ActiveConversationType} from '~app/typings/user-conversations/user-conve
 })
 export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   @Input() public conversation!: ActiveConversation;
-  @ViewChild(AccordionComponent, {static: true}) private readonly accordionComponent!: AccordionComponent;
+  @ViewChild(AccordionComponent, {static: true}) private readonly accordion!: AccordionComponent;
 
   protected headline = '';
+  protected icon = '';
+  protected thumbnail = '';
 
   public ngOnInit(): void {
-    this.headline =
-      this.conversation.type === ActiveConversationType.UserConversation
-        ? (this.conversation.username as string)
-        : this.conversation.type === ActiveConversationType.NewConversation
-        ? 'New Message'
-        : 'Save Message';
+    switch (this.conversation.type) {
+      case ActiveConversationType.NewConversation:
+        this.headline = 'New Message';
+        break;
+      case ActiveConversationType.SavedMessages:
+        this.headline = 'Save Message';
+        this.icon = 'bookmark';
+        break;
+      case ActiveConversationType.UserConversation:
+        this.headline = this.conversation.username as string;
+        this.thumbnail = this.conversation.thumbnail as string;
+        break;
+    }
   }
 
   public ngAfterViewInit(): void {
-    this.expandAccordion();
+    setTimeout(() => this.expandAccordion()); // If used without timeout accordion content is not caught up
   }
 
   public expandAccordion(): void {
-    this.accordionComponent.accordion.openAll();
+    this.accordion.panel.open();
   }
 }

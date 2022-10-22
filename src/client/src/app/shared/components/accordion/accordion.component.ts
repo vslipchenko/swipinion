@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild} from '@angular/core';
-import {MatAccordion, MatExpansionPanel} from '@angular/material/expansion';
+import {MatExpansionPanel} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-accordion',
@@ -12,11 +12,9 @@ export class AccordionComponent {
   @Input() public panelDescription?: TemplateRef<any>;
   @Input() public content?: TemplateRef<any>;
   @Input() public hideToggle = false;
-  @Input() public multi = false;
 
   @Output() public afterExpand = new EventEmitter<void>();
   @Output() public afterCollapse = new EventEmitter<void>();
 
-  @ViewChild(MatAccordion, {static: true}) public accordion!: MatAccordion;
   @ViewChild(MatExpansionPanel, {static: true}) public panel!: MatExpansionPanel;
 }

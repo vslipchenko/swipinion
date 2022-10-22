@@ -50,8 +50,8 @@ import {Messages} from '~app/typings/user-messages/user-messages.types';
 
 export interface AppStateModel {
   user: UserEssentials;
-  savedMessages: SavedMessages;
-  messages: Messages;
+  savedMessages: SavedMessages; // TODO flatten state shape
+  messages: Messages; // TODO flatten state shape
   conversations: Conversations;
   conversation: ActiveConversation | null;
   role: UserRole;

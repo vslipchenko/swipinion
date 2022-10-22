@@ -1,7 +1,8 @@
-<app-accordion [hideToggle]="true" [multi]="true" [panelTitle]="title" [panelDescription]="description"
+<app-accordion [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
                [content]="content">
   <ng-template #title>
-    <span class="d-flex">{{headline}}</span>
+    <span class="d-flex ai-center"><app-message-thumbnail></app-message-thumbnail>
+      {{headline}}</span>
   </ng-template>
 
   <ng-template #description>
@@ -9,5 +10,8 @@
   </ng-template>
 
   <ng-template #content>
+    <div class="content h-100">
+      Something
+    </div>
   </ng-template>
 </app-accordion>
