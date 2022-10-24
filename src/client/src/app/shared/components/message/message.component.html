@@ -1,5 +1,4 @@
-<div class="d-flex ai-center p-2 message pointer relative" [class.active]="active" [class.unread]="unread"
-     (click)="clicked.emit(senderId)">
+<div class="d-flex ai-center p-2 message pointer relative" [class.unread]="unread" (click)="clicked.emit(senderId)">
   <app-message-thumbnail iconClass="saved-messages-icon mr-2" thumbnailClass="message-thumbnail" [icon]="icon"
                          [thumbnail]="thumbnail"></app-message-thumbnail>
 

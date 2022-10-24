@@ -35,13 +35,12 @@
                                        [gradient]="false"></app-content-placeholder>
 
               <ng-template #messageList>
-                <div *ngFor="let message of messages; trackBy: messageTrackBy">
+                <div *ngFor="let message of messages$ | async">
                   <div class="transparent-divider"></div>
                   <app-message [thumbnail]="message.thumbnail" [username]="message.username"
                                [message]="message.teaser"
                                [date]="message.date" [outgoing]="message.sender_id === userId"
                                (clicked)="loadConversation(false, message)"
-                               [active]="message.active"
                                [unread]="message.unread"></app-message>
                 </div>
               </ng-template>

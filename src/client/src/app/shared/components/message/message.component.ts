@@ -13,7 +13,6 @@ export class MessageComponent {
   @Input() public username = '';
   @Input() public date = '';
   @Input() public message = '';
-  @Input() public active = false;
   @Input() public unread = false;
   @Input() public outgoing = false;
 

@@ -97,7 +97,6 @@ export interface UserMessage {
 
 export interface UIUserMessage extends UserMessage {
   date: string;
-  active: boolean;
   unread: boolean;
 }
 
