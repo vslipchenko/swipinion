@@ -2,8 +2,8 @@
   <ng-container *ngIf="{conversation: conversation$ | async} as data">
     <app-conversation-accordion *ngIf="data.conversation"
                                 [conversation]="data.conversation"
-                                class="d-block f-h mt-auto"></app-conversation-accordion>
+                                class="d-block f-h mt-auto mw-0"></app-conversation-accordion>
 
-    <app-messages class="d-block ml-2 mt-auto messages f-h"></app-messages>
+    <app-messages class="d-block ml-2 mt-auto messages f-h mw-0"></app-messages>
   </ng-container>
 </div>
