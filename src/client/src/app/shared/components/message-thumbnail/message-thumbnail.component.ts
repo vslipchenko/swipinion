@@ -11,5 +11,6 @@ export class MessageThumbnailComponent {
   // @Input() public iconColor: ThemePalette;
   @Input() public icon = '';
   @Input() public iconClass = '';
+  @Input() public thumbnailClass = '';
   @Input() public thumbnail = '';
 }
