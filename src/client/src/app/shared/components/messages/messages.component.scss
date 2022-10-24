@@ -1,12 +1,6 @@
 @use 'src/assets/scss/variables' as var;
 @use 'media';
 
-.content {
-  height: 600px;
-  margin-left: -24px;
-  margin-right: -24px;
-}
-
 .progress-bar {
   z-index: 2;
 }

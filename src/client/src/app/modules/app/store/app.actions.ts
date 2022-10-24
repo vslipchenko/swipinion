@@ -80,5 +80,5 @@ export class UserStatusUpdatedBeforeMessagesInitialFetch {
 export class SetActiveConversation {
   public static readonly type = '[App] SetActiveConversation';
 
-  public constructor(public payload: ActiveConversation) {}
+  public constructor(public payload: ActiveConversation | null) {}
 }

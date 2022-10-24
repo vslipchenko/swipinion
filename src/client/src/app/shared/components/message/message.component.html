@@ -1,5 +1,6 @@
 <div class="d-flex ai-center p-2 message pointer relative" [class.unread]="unread" (click)="clicked.emit(senderId)">
-  <app-message-thumbnail [icon]="icon" [thumbnail]="thumbnail"></app-message-thumbnail>
+  <app-message-thumbnail iconClass="saved-messages-icon" [icon]="icon"
+                         [thumbnail]="thumbnail"></app-message-thumbnail>
 
   <div class="w-100 message-info">
     <div class="d-flex jc-between ai-center">

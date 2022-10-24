@@ -11,6 +11,16 @@ $thumbnail-size: 40px;
   z-index: 1;
 }
 
+.messages-panel .content {
+  height: 600px;
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+.messages-panel .mat-content-hide-toggle {
+  margin-right: 0 !important;
+}
+
 .messages-panel .mat-accordion {
   display: flex;
   max-height: calc(100vh - 75px); // 75px - header height
@@ -57,9 +67,9 @@ $thumbnail-size: 40px;
   margin-right: 0;
 }
 
-.messages-panel .mat-expanded .expand-arrow {
-  transform: rotate(180deg);
-}
+//.messages-panel .mat-expanded .expand-arrow {
+//  transform: rotate(180deg);
+//}
 
 .messages-panel .mat-expansion-panel-body {
   padding-bottom: 0 !important;

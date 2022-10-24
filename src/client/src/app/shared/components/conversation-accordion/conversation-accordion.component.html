@@ -1,12 +1,15 @@
 <app-accordion [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
                [content]="content">
   <ng-template #title>
-    <span class="d-flex ai-center"><app-message-thumbnail></app-message-thumbnail>
+    <span class="d-flex ai-center title">
+      <app-message-thumbnail class="d-flex" [icon]="icon"
+                             [thumbnail]="thumbnail"></app-message-thumbnail>
       {{headline}}</span>
   </ng-template>
 
   <ng-template #description>
-    <mat-icon class="expand-arrow">expand_less</mat-icon>
+    <!--    <mat-icon class="expand-arrow">expand_less</mat-icon>-->
+    <app-icon-button icon="close" (clicked)="closeAccordion($event)"></app-icon-button>
   </ng-template>
 
   <ng-template #content>

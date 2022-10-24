@@ -7,6 +7,9 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageThumbnailComponent {
+  // @Input() public svgIcon = '';
+  // @Input() public iconColor: ThemePalette;
   @Input() public icon = '';
+  @Input() public iconClass = '';
   @Input() public thumbnail = '';
 }

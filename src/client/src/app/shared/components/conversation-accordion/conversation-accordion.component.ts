@@ -2,6 +2,8 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ViewCh
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {ActiveConversation} from '~app/typings/user-messages/user-messages.interfaces';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
+import {Store} from '@ngxs/store';
+import {SetActiveConversation} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-conversation-accordion',
@@ -15,15 +17,19 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
 
   protected headline = '';
   protected icon = '';
+  // protected svgIcon = '';
   protected thumbnail = '';
+
+  public constructor(private readonly store: Store) {}
 
   public ngOnInit(): void {
     switch (this.conversation.type) {
       case ActiveConversationType.NewConversation:
         this.headline = 'New Message';
+        this.icon = 'outgoing_mail';
         break;
       case ActiveConversationType.SavedMessages:
-        this.headline = 'Save Message';
+        this.headline = 'Saved Messages';
         this.icon = 'bookmark';
         break;
       case ActiveConversationType.UserConversation:
@@ -37,7 +43,13 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
     setTimeout(() => this.expandAccordion()); // If used without timeout accordion content is not caught up
   }
 
-  public expandAccordion(): void {
+  protected closeAccordion(event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.store.dispatch(new SetActiveConversation(null));
+  }
+
+  private expandAccordion(): void {
     this.accordion.panel.open();
   }
 }
