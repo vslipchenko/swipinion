@@ -37,7 +37,7 @@ export class FileBrowserComponent implements OnDestroy {
     const fileInput = document.createElement('input');
 
     fileInput.type = 'file';
-    fileInput.accept = this.accept.join(',');
+    fileInput.accept = this.accept.join();
     fileInput.onchange = (): void => {
       const file = fileInput.files?.[0];
 

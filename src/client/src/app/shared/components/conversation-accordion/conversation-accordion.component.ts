@@ -33,7 +33,7 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
         this.icon = 'bookmark';
         break;
       case ActiveConversationType.UserConversation:
-        this.headline = this.conversation.username as string;
+        this.headline = this.conversation.username || 'Deleted Account';
         this.thumbnail = this.conversation.thumbnail as string;
         break;
     }

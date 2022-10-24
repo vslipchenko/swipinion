@@ -3,7 +3,7 @@ import {CreateOpinion} from '../../typings/opinion/opinion.interfaces';
 import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
 
 export const concatenateTagValues = (values: Array<string>): string => {
-  return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join(', ');
+  return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join();
 };
 
 export const queryOpinionCreateWithTags = ({
