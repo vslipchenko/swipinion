@@ -118,6 +118,10 @@ export class MessagesComponent implements Destroyable {
     // this.showConversation = true;
   }
 
+  protected messageTrackBy(_: number, message: UIUserMessage): string {
+    return message.id;
+  }
+
   private setDispatchActionAfterStatusChecked(value: boolean): void {
     this.userStatusPingService.pingOptions = {
       ...this.userStatusPingService.pingOptions,
