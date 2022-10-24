@@ -11,6 +11,7 @@ export class AccordionComponent {
   @Input() public panelTitle?: TemplateRef<any>;
   @Input() public panelDescription?: TemplateRef<any>;
   @Input() public content?: TemplateRef<any>;
+  @Input() public titleClass = '';
   @Input() public hideToggle = false;
 
   @Output() public afterExpand = new EventEmitter<void>();

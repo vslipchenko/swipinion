@@ -1,29 +1,29 @@
 <div class="messaging-content relative pb-2 h-100 d-flex f-column">
-  <div class="panel p-2 d-flex jc-between">
-    <div class="d-flex ai-center">
-      <!-- TODO try to apply app-message-thumbnail if appropriate -->
-      <mat-icon *ngIf="conversationInfo.savedMessages; else image" color="accent"
-                class="saved-messages-icon d-flex jc-center ai-center mr-2">bookmark
-      </mat-icon>
+  <!--  <div class="panel p-2 d-flex jc-between">-->
+  <!--    <div class="d-flex ai-center">-->
+  <!--      &lt;!&ndash; TODO try to apply app-message-thumbnail if appropriate &ndash;&gt;-->
+  <!--      <mat-icon *ngIf="conversationInfo.savedMessages; else image" color="accent"-->
+  <!--                class="saved-messages-icon d-flex jc-center ai-center mr-2">bookmark-->
+  <!--      </mat-icon>-->
 
-      <ng-template #image>
-        <img *ngIf="conversationInfo.message.thumbnail" [src]="conversationInfo.message.thumbnail"
-             alt="" class="thumbnail mr-2">
-        <div *ngIf="!conversationInfo.message.thumbnail" class="thumbnail mr-2"></div>
-      </ng-template>
+  <!--      <ng-template #image>-->
+  <!--        <img *ngIf="conversationInfo.message.thumbnail" [src]="conversationInfo.message.thumbnail"-->
+  <!--             alt="" class="thumbnail mr-2">-->
+  <!--        <div *ngIf="!conversationInfo.message.thumbnail" class="thumbnail mr-2"></div>-->
+  <!--      </ng-template>-->
 
-      <div>
-        <a *ngIf="conversationInfo.message.username" class="fw-medium truncate link"
-           routerLink="/user/{{username}}">{{username}}</a>
+  <!--      <div>-->
+  <!--        <a *ngIf="conversationInfo.message.username" class="fw-medium truncate link"-->
+  <!--           routerLink="/user/{{username}}">{{username}}</a>-->
 
-        <span *ngIf="!conversationInfo.message.username" class="fw-medium truncate">{{username}}</span>
-      </div>
-    </div>
+  <!--        <span *ngIf="!conversationInfo.message.username" class="fw-medium truncate">{{username}}</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
 
-    <div>
-      <app-icon-button icon="arrow_back" (clicked)="back.emit()"></app-icon-button>
-    </div>
-  </div>
+  <!--    <div>-->
+  <!--      <app-icon-button icon="arrow_back" (clicked)="back.emit()"></app-icon-button>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <ng-container *ngIf="conversationMessages$ | async as messages">
     <div class="message-body d-flex px-2 primary-scrollbar relative h-100"

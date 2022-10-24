@@ -6,6 +6,12 @@
   }
 }
 
-.f-h {
-  flex: 0.5;
+.f-1-h {
+  @include media.zero-medium {
+    flex: 1;
+  }
+
+  @include media.above-medium {
+    flex: 0.5;
+  }
 }

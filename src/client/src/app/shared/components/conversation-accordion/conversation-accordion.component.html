@@ -1,10 +1,12 @@
 <app-accordion [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
-               [content]="content">
+               [content]="content" titleClass="conversation-title mw-0">
   <ng-template #title>
-    <span class="d-flex ai-center title">
-      <app-message-thumbnail class="d-flex" thumbnailClass="conversation-thumbnail" iconClass="mr-1" [icon]="icon"
-                             [thumbnail]="thumbnail"></app-message-thumbnail>
-      {{headline}}</span>
+    <span class="d-flex ai-center title mw-0">
+      <app-message-thumbnail class="d-flex" thumbnailClass="conversation-thumbnail mr-1" iconClass="mr-1" [icon]="icon"
+                             [thumbnail]="thumbnail"
+                             [thumbnailLink]="userConversation ? '/user/' + headline : ''"></app-message-thumbnail>
+      <span class="truncate">{{headline}}</span>
+    </span>
   </ng-template>
 
   <ng-template #description>

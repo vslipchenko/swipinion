@@ -78,6 +78,10 @@ $conversation-thumbnail-size: 30px;
   transform: scale(1.5);
 }
 
+.conversation-title {
+  flex-basis: auto !important; // Fixes full width issue
+}
+
 .conversation-thumbnail {
   width: $conversation-thumbnail-size;
   min-width: $conversation-thumbnail-size;

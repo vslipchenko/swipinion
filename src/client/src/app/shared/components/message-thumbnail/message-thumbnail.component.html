@@ -3,6 +3,12 @@
 >{{icon}}</mat-icon>
 
 <ng-template #image>
-  <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail mr-2" [class]="thumbnailClass">
-  <div *ngIf="!thumbnail" class="thumbnail mr-2" [class]="thumbnailClass"></div>
+  <a *ngIf="thumbnailLink; else thumbnailContent" [routerLink]="thumbnailLink">
+    <ng-container [ngTemplateOutlet]="thumbnailContent"></ng-container>
+  </a>
+
+  <ng-template #thumbnailContent>
+    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail" [class]="thumbnailClass">
+    <div *ngIf="!thumbnail" class="thumbnail" [class]="thumbnailClass"></div>
+  </ng-template>
 </ng-template>

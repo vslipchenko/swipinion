@@ -1,9 +1,7 @@
 <div class="messages-panel fixed d-flex px-2 jc-end">
-  <ng-container *ngIf="{conversation: conversation$ | async} as data">
-    <app-conversation-accordion *ngIf="data.conversation"
-                                [conversation]="data.conversation"
-                                class="d-block f-h mt-auto mw-0"></app-conversation-accordion>
+  <app-conversation-accordion *ngIf="conversation$ | async as conversation"
+                              [conversation]="conversation"
+                              class="d-block f-1-h mt-auto mw-0"></app-conversation-accordion>
 
-    <app-messages class="d-block ml-2 mt-auto messages f-h mw-0"></app-messages>
-  </ng-container>
+  <app-messages class="d-block ml-2 mt-auto messages f-1-h mw-0"></app-messages>
 </div>

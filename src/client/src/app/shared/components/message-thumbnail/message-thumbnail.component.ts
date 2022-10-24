@@ -13,4 +13,5 @@ export class MessageThumbnailComponent {
   @Input() public iconClass = '';
   @Input() public thumbnailClass = '';
   @Input() public thumbnail = '';
+  @Input() public thumbnailLink = '';
 }
