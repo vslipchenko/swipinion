@@ -1,15 +1,27 @@
 @use 'src/assets/scss/variables' as var;
 
-.message:hover {
-  background-color: var.$color-light-transparent;
-}
-
-.unread::before {
+%accent-border {
   content: '';
   position: absolute;
   height: 100%;
   left: 0;
-  border-left: 4px solid var.$color-primary;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.active,
+.message:hover {
+  background-color: var.$color-light-transparent;
+}
+
+.active::before {
+  @extend %accent-border;
+  border-left-color: white;
+}
+
+.unread::before {
+  @extend %accent-border;
+  border-left-color: var.$color-primary;
 }
 
 .outgoing-label {

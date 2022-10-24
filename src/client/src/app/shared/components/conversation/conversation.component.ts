@@ -38,6 +38,7 @@ export class ConversationComponent implements OnInit, Destroyable {
       username: '',
       thumbnail: '',
       date: '',
+      active: false,
       unread: false,
       read: false,
       created_at: 0,

@@ -33,6 +33,7 @@ export const convertToUiMessage = (message: UserMessage, unreadMessages?: Array<
 
   return {
     ...message,
+    active: false,
     unread: unreadMessages
       ? unreadMessages.some(
           (unreadMessage) =>

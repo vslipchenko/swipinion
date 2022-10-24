@@ -82,6 +82,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
         read: true,
         created_at: 0,
         date: '',
+        active: false,
         unread: false,
       },
       messages: [],
@@ -518,9 +519,22 @@ export class AppState {
   @Action(SetActiveConversation)
   private setActiveConversation(context: StateContext<AppStateModel>, action: SetActiveConversation): void {
     context.setState((state) => {
+      const interlocutorId = action.payload?.userId1
+        ? getInterlocutorId(action.payload.userId1, action.payload.userId2 as string, state.user.id)
+        : '';
+
       return {
         ...state,
         conversation: action.payload,
+        messages: {
+          ...state.messages,
+          messages: state.messages.messages.map((message) => ({
+            ...message,
+            active: action.payload?.userId1
+              ? message.sender_id === interlocutorId || message.recipient_id === interlocutorId
+              : false,
+          })),
+        },
       };
     });
   }

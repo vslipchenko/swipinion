@@ -8,7 +8,7 @@ import {
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, Observable, Subject, take, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
+import {ActiveConversation, UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
@@ -24,6 +24,7 @@ export class MessagesComponent implements Destroyable {
   @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
   @Select(AppSelectors.canLoadMoreMessages) public canLoadMore$!: Observable<boolean>;
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
+  @Select(AppSelectors.conversation) public conversation$!: Observable<ActiveConversation | null>;
 
   // public readonly tabs = [
   //   {text: 'Inbox', icon: 'inbox'},
@@ -46,6 +47,7 @@ export class MessagesComponent implements Destroyable {
       thumbnail: '',
       date: '',
       read: false,
+      active: false,
       unread: false,
       created_at: 0,
     },
@@ -116,6 +118,10 @@ export class MessagesComponent implements Destroyable {
     // this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
     //
     // this.showConversation = true;
+  }
+
+  protected messageTrackBy(_: number, message: UIUserMessage): string {
+    return message.id;
   }
 
   private setDispatchActionAfterStatusChecked(value: boolean): void {
