@@ -12,6 +12,11 @@ $conversation-thumbnail-size: 30px;
   z-index: 1;
 }
 
+.messages-panel .mat-expansion-panel:last-of-type {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
 .messages-panel .content {
   height: 600px;
   margin-left: -24px;
@@ -24,7 +29,14 @@ $conversation-thumbnail-size: 30px;
 
 .messages-panel .mat-accordion {
   display: flex;
-  max-height: calc(100vh - 75px); // 75px - header height
+
+  @include media.zero-small {
+    max-height: calc(100vh - 57px); // 57px - header height
+  }
+
+  @include media.above-small {
+    max-height: calc(100vh - 75px); // 75px - header height
+  }
 }
 
 .messages-panel .mat-expansion-panel {
