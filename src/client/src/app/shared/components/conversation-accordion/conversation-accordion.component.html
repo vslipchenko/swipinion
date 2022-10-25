@@ -2,10 +2,12 @@
                [content]="content" titleClass="conversation-title mw-0">
   <ng-template #title>
     <span class="d-flex ai-center title mw-0">
-      <app-message-thumbnail class="d-flex" thumbnailClass="conversation-thumbnail mr-1" iconClass="mr-1" [icon]="icon"
+      <app-message-thumbnail class="d-flex conversation-accordion-thumbnail"
+                             thumbnailClass="conversation-thumbnail"
+                             [icon]="icon"
                              [thumbnail]="thumbnail"
                              [thumbnailLink]="userConversation ? '/user/' + headline : ''"></app-message-thumbnail>
-      <span class="truncate">{{headline}}</span>
+      <span class="truncate ml-1" [class.conversation-headline]="userConversation">{{headline}}</span>
     </span>
   </ng-template>
 
