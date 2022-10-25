@@ -31,6 +31,7 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   // protected svgIcon = '';
   protected thumbnail = '';
   protected userConversation = false;
+  protected newConversation = false;
 
   public constructor(private readonly store: Store) {}
 
@@ -39,6 +40,7 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
       case ActiveConversationType.NewConversation:
         this.headline = 'New Message';
         this.icon = 'outgoing_mail';
+        this.newConversation = true;
         break;
       case ActiveConversationType.SavedMessages:
         this.headline = 'Saved Messages';
