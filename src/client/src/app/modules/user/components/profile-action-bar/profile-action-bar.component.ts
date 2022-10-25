@@ -8,8 +8,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {UnfollowUserDialogComponent} from '~app/modules/user/components/unfollow-user-dialog/unfollow-user-dialog.component';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
-import {MessageDialogComponent} from '~app/shared/components/message-dialog/message-dialog.component';
-import {MessageDialogData} from '~app/typings/user-messages/user-messages.interfaces';
+import {SetActiveConversation} from '~app/modules/app/store/app.actions';
+import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -41,28 +42,23 @@ export class ProfileActionBarComponent {
   }
 
   public message(): void {
-    let data: MessageDialogData;
-
     if (this.role === UserRole.User) {
-      data = {
-        saveMessage: true,
-      } as MessageDialogData;
-    } else {
-      // Assume role is viewer
-      const {username, thumbnail, id} = this.store.selectSnapshot(UserSelectors.resolvedUserEssentials);
-
-      data = {
-        saveMessage: false,
-        username,
-        thumbnail,
-        recipientId: id,
-      };
+      this.store.dispatch(new SetActiveConversation({type: ActiveConversationType.SavedMessages}));
+      return;
     }
 
-    this.dialog.open(MessageDialogComponent, {
-      panelClass: ['dialog', 'extended-dialog'],
-      data,
-    });
+    // Assume role is viewer; otherwise guard
+    const {username, thumbnail, id} = this.store.selectSnapshot(UserSelectors.resolvedUserEssentials);
+
+    this.store.dispatch(
+      new SetActiveConversation({
+        userId1: this.store.selectSnapshot(AppSelectors.userId), // authed user id
+        userId2: id,
+        username,
+        thumbnail,
+        type: ActiveConversationType.UserConversation,
+      }),
+    );
   }
 
   public follow(): void {
