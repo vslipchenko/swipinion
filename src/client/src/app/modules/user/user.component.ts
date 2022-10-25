@@ -10,6 +10,7 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserContentTabIndex, UserRole} from '~app/typings/user/user.enums';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
 import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MessageAccordionService} from '~app/services/message-accordion/message-accordion.service';
 
 @Component({
   selector: 'app-user',
@@ -43,7 +44,11 @@ export class UserComponent implements AfterViewInit, Destroyable {
     {text: 'Favorites', icon: 'star'},
   ];
 
-  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
+  public constructor(
+    private readonly store: Store,
+    private readonly dialog: MatDialog,
+    private readonly messagesPanelService: MessageAccordionService,
+  ) {
     const profileSnapshot = this.profileSnapshot;
     this.username = profileSnapshot.username;
     this.isProfilePath = profileSnapshot.isProfilePath;
@@ -57,6 +62,8 @@ export class UserComponent implements AfterViewInit, Destroyable {
     this.destroy$.next();
     this.destroy$.complete();
     this.showBottomBar$.complete();
+
+    this.messagesPanelService.liftUpConversationAccordion$.next(false);
   }
 
   public openEditProfile(): void {
@@ -78,6 +85,8 @@ export class UserComponent implements AfterViewInit, Destroyable {
           (event.target as HTMLDivElement).scrollTop > this.userBlock.nativeElement.clientHeight;
 
         this.showBottomBar$.next(userBlockScrolledThrough);
+
+        this.messagesPanelService.liftUpConversationAccordion$.next(userBlockScrolledThrough);
       });
   }
 

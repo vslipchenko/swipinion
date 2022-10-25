@@ -4,17 +4,13 @@
 $message-thumbnail-size: 40px;
 $conversation-thumbnail-size: 30px;
 
-.messages-panel {
-  width: 100%;
-  max-width: var.$breakpoint-medium;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
-}
-
 .messages-panel .mat-expansion-panel:last-of-type {
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
+}
+
+.messages-panel .mat-expansion-panel {
+  box-shadow: none;
 }
 
 .messages-panel .content {
@@ -30,6 +26,26 @@ $conversation-thumbnail-size: 30px;
 .messages-panel .mat-accordion {
   display: flex;
 
+  //@include media.zero-small {
+  //  max-height: calc(100vh - 57px); // 57px - header height
+  //}
+  //
+  //@include media.above-small {
+  //  max-height: calc(100vh - 75px); // 75px - header height
+  //}
+}
+
+.messages-panel.lifted-up .mat-accordion {
+  @include media.zero-small {
+    max-height: calc(100vh - 113px); // 57px - header height, 56px - profile's bottom userbar height
+  }
+
+  @include media.above-small {
+    max-height: calc(100vh - 75px); // Simply ignore userbar height as it is not displayed on media.above-small
+  }
+}
+
+.messages-panel:not(.lifted-up) .mat-accordion {
   @include media.zero-small {
     max-height: calc(100vh - 57px); // 57px - header height
   }

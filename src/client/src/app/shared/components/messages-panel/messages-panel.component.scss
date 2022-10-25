@@ -1,4 +1,26 @@
+@use 'variables' as var;
 @use 'media';
+
+.messages-panel {
+  width: 100%;
+  max-width: var.$breakpoint-medium;
+  right: 0;
+  z-index: 1;
+}
+
+.messages-panel:not(.lifted-up) {
+  bottom: 0;
+}
+
+.messages-panel.lifted-up {
+  @include media.zero-small {
+    bottom: 56px;
+  }
+
+  @include media.above-small {
+    bottom: 0; // Simply ignore userbar height as it is not displayed on media.above-small
+  }
+}
 
 .messages {
   @include media.zero-medium {
