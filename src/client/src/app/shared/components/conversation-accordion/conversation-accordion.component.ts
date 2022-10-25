@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {ActiveConversation} from '~app/typings/user-messages/user-messages.interfaces';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
@@ -13,7 +22,9 @@ import {SetActiveConversation} from '~app/modules/app/store/app.actions';
 })
 export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   @Input() public conversation!: ActiveConversation;
-  @ViewChild(AccordionComponent, {static: true}) private readonly accordion!: AccordionComponent;
+  @Output() public navigateProfile = new EventEmitter<void>();
+
+  @ViewChild(AccordionComponent, {static: true}) protected readonly accordion!: AccordionComponent;
 
   protected headline = '';
   protected icon = '';
@@ -43,6 +54,14 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit(): void {
     setTimeout(() => this.expandAccordion()); // If used without timeout accordion content is not caught up
+  }
+
+  protected collapseAccordions(event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.accordion.panel.close();
+
+    this.navigateProfile.emit();
   }
 
   protected closeAccordion(event: MouseEvent): void {

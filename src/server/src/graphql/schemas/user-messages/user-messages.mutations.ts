@@ -32,6 +32,8 @@ const sendUserMessage = async (
 
   if (authenticationError) return authenticationError;
 
+  if (input.recipientId === tokenData.userId) return null; // Prevent self sent messages
+
   const trimmedBody = input.body.trim();
 
   const result = await db.transaction(

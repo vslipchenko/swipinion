@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
   FetchUserMessages,
@@ -12,6 +12,7 @@ import {UIUserMessage, UnreadMessage} from '~app/typings/user-messages/user-mess
 import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
+import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 
 @Component({
   selector: 'app-messages',
@@ -24,6 +25,8 @@ export class MessagesComponent implements Destroyable {
   @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
   @Select(AppSelectors.canLoadMoreMessages) public canLoadMore$!: Observable<boolean>;
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
+
+  @ViewChild(AccordionComponent, {static: true}) public accordion!: AccordionComponent;
 
   // public readonly tabs = [
   //   {text: 'Inbox', icon: 'inbox'},

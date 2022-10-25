@@ -3,7 +3,7 @@
 >{{icon}}</mat-icon>
 
 <ng-template #image>
-  <a *ngIf="thumbnailLink; else thumbnailContent" [routerLink]="thumbnailLink">
+  <a *ngIf="thumbnailLink; else thumbnailContent" [routerLink]="thumbnailLink" class="d-flex">
     <ng-container [ngTemplateOutlet]="thumbnailContent"></ng-container>
   </a>
 
