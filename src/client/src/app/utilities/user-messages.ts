@@ -16,7 +16,7 @@ import {MessageTimePoint} from '~app/typings/date/date.enums';
 import {composeRelationKey} from '~app/utilities/data';
 import {MESSAGE_TEASER_LENGTH} from '~app/constants/user-messages';
 
-export const convertToUiMessage = (message: UserMessage, unreadMessages?: Array<UnreadMessage>): UIUserMessage => {
+export const convertToUiMessage = (message: UserMessage, userId?: string): UIUserMessage => {
   const timePoint = determineMessageTimePoint(message.created_at);
   let date;
 
@@ -31,23 +31,19 @@ export const convertToUiMessage = (message: UserMessage, unreadMessages?: Array<
       date = timestampToMonthDayYear(message.created_at);
   }
 
-  return {
+  const nextMessage: UIUserMessage = {
     ...message,
-    unread: unreadMessages
-      ? unreadMessages.some(
-          (unreadMessage) =>
-            unreadMessage.sender_id === message.sender_id || unreadMessage.sender_id === message.recipient_id, // If conversation contains unread message
-        )
-      : false, // Skip and set to false for saved message
+    unread: false,
     date,
   };
+  // Mark unread if sender is not current user and read value is false; Check userId in a case of saved message
+  if (userId && !message.read) nextMessage.unread = message.sender_id !== userId;
+
+  return nextMessage;
 };
 
-export const convertToUiMessages = (
-  messages: Array<UserMessage>,
-  unreadMessages: Array<UnreadMessage>,
-): Array<UIUserMessage> => {
-  return messages.map((message) => convertToUiMessage(message, unreadMessages));
+export const convertToUiMessages = (messages: Array<UserMessage>, userId: string): Array<UIUserMessage> => {
+  return messages.map((message) => convertToUiMessage(message, userId));
 };
 
 export const excludeNewMessages = (

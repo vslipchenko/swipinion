@@ -201,7 +201,7 @@ export class AppState {
 
             if (!data.fetchUserMessages.length) return nextState;
 
-            const savedMessage = data.fetchUserMessages.find((message) => !message.sender_id); // * Saved messages does not have sender_id nor recipient_id columns
+            const savedMessage = data.fetchUserMessages.find((message) => !message.sender_id); // * Saved messages does not have sender_id nor recipient_id values
 
             if (savedMessage) {
               nextState.savedMessages = {
@@ -220,10 +220,7 @@ export class AppState {
           // Response value is [...messages]
           nextState.messages = {
             ...nextState.messages,
-            messages: [
-              ...nextState.messages.messages,
-              ...convertToUiMessages(data.fetchUserMessages, nextState.unreadMessages),
-            ],
+            messages: [...nextState.messages.messages, ...convertToUiMessages(data.fetchUserMessages, state.user.id)],
             canLoadMore: data.fetchUserMessages.length === USER_MESSAGES_FETCH_LIMIT,
           };
 
@@ -243,7 +240,7 @@ export class AppState {
         if (!data.fetchNewUserMessages) return;
 
         context.setState((state) => {
-          const messages = convertToUiMessages(data.fetchNewUserMessages, state.unreadMessages);
+          const messages = convertToUiMessages(data.fetchNewUserMessages, state.user.id);
 
           return {
             ...state,
@@ -393,7 +390,7 @@ export class AppState {
                 thumbnail: action.payload.thumbnail,
                 teaser: convertBodyToTeaser(sentMessageBody),
               },
-              state.unreadMessages,
+              state.user.id,
             );
 
             const interlocutorMessages = data.sendUserMessage.results.interlocutorMessages.map((message) => ({
