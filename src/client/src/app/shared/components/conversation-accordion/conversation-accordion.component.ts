@@ -34,7 +34,6 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   protected userConversation = false;
   protected newConversation = false;
   protected savedMessages = false;
-  protected deletedAccount = false;
   protected validConversation = false;
 
   public constructor(private readonly store: Store) {}
