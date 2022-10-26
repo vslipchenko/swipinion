@@ -81,10 +81,9 @@ export const actualizeUnreadMessages = (
 
 export const markMessagesRead = (messages: Array<UIUserMessage>, interlocutorId: string): Array<UIUserMessage> => {
   return messages.map((message) => {
-    if (message.sender_id === interlocutorId || message.recipient_id === interlocutorId)
+    if (message.sender_id === interlocutorId)
       return {
         ...message,
-        // Consider to set read property to true as well
         unread: false,
       };
 
@@ -170,7 +169,7 @@ export const actualizeConversationMessagesReadStatus = (
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
 
-    if (!message.read && message.id <= lastReadMessageId && message.sender_id === userId) {
+    if (!message.read && Number(message.id) <= Number(lastReadMessageId) && message.sender_id === userId) {
       // Ignore messages from interlocutor or that which are read already or id is greater than latestSeenMessageId
       // Mark as read
       nextMessages.push({

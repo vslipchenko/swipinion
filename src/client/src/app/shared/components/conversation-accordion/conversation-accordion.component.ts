@@ -30,9 +30,12 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   protected icon = '';
   // protected svgIcon = '';
   protected thumbnail = '';
+  protected thumbnailLink = '';
   protected userConversation = false;
   protected newConversation = false;
   protected savedMessages = false;
+  protected deletedAccount = false;
+  protected validConversation = false;
 
   public constructor(private readonly store: Store) {}
 
@@ -50,6 +53,8 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
         break;
       case ActiveConversationType.UserConversation:
         this.headline = this.conversation.username || 'Deleted Account';
+        this.thumbnailLink = this.conversation.username ? `/user/${this.conversation.username}` : '';
+        this.validConversation = Boolean(this.conversation.username);
         this.thumbnail = this.conversation.thumbnail;
         this.userConversation = true;
         break;
@@ -61,6 +66,8 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   }
 
   protected collapseAccordions(event: MouseEvent): void {
+    if (!this.validConversation) return;
+
     event.stopPropagation();
 
     this.accordion.panel.close();

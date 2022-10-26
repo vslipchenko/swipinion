@@ -281,7 +281,7 @@ export class AppState {
                 ...nextConversation,
                 ...actualizeConversationMessagesReadStatus(
                   state.conversations[conversationKey].messages,
-                  state.conversations[conversationKey].messages[0].id, // TODO FIX this might be wrong; as interlocutor can leave messages unread if message was sent via dialog; so it seems that message status has to be checked as well
+                  state.conversations[conversationKey].messages[0].id,
                   state.user.id,
                 ),
               ];
@@ -424,7 +424,7 @@ export class AppState {
                         ...(interlocutorMessages.length
                           ? actualizeConversationMessagesReadStatus(
                               state.conversations[conversationKey].messages,
-                              interlocutorMessages[0].id, // TODO FIX This does not serve as source of truth; last read message id has to be requested and current user conv status check interval reinitialized
+                              state.conversations[conversationKey].messages[0].id,
                               state.user.id,
                             )
                           : state.conversations[conversationKey].messages),

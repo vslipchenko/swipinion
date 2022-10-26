@@ -6,9 +6,9 @@
                              thumbnailClass="conversation-thumbnail"
                              [icon]="icon"
                              [thumbnail]="thumbnail"
-                             [thumbnailLink]="userConversation ? '/user/' + headline : ''"
+                             [thumbnailLink]="thumbnailLink"
                              (click)="collapseAccordions($event)"></app-message-thumbnail>
-      <span class="truncate ml-1" [class.conversation-headline]="userConversation">{{headline}}</span>
+      <span class="truncate ml-1" [class.conversation-headline]="validConversation">{{headline}}</span>
     </span>
   </ng-template>
 
