@@ -43,19 +43,33 @@ export class ProfileActionBarComponent {
 
   public message(): void {
     if (this.role === UserRole.User) {
-      this.store.dispatch(new SetActiveConversation({type: ActiveConversationType.SavedMessages}));
+      this.store.dispatch(
+        new SetActiveConversation({
+          edgeId: '',
+          userId1: '',
+          userId2: '',
+          username: '',
+          thumbnail: '',
+          unread: false,
+          type: ActiveConversationType.SavedMessages,
+        }),
+      );
       return;
     }
 
     // Assume role is viewer; otherwise guard
     const {username, thumbnail, id} = this.store.selectSnapshot(UserSelectors.resolvedUserEssentials);
 
+    const userId = this.store.selectSnapshot(AppSelectors.userId);
+
     this.store.dispatch(
       new SetActiveConversation({
-        userId1: this.store.selectSnapshot(AppSelectors.userId), // authed user id
-        userId2: id,
+        edgeId: this.store.selectSnapshot(AppSelectors.conversationMessages(userId, id))?.[0]?.id,
+        userId1: userId, // Authed user id
+        userId2: id, // Resolved user id / Interlocutor id
         username,
         thumbnail,
+        unread: this.store.selectSnapshot(AppSelectors.unreadMessages).some((message) => message.sender_id === id),
         type: ActiveConversationType.UserConversation,
       }),
     );

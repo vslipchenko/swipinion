@@ -27,7 +27,7 @@
 
   <ng-container *ngIf="conversationMessages$ | async as messages">
     <div class="message-body d-flex px-2 primary-scrollbar relative h-100"
-         [class.pb-2]="conversationInfo.message.username || conversationInfo.savedMessages">
+         [class.pb-2]="username || savedMessages">
       <app-progress-spinner
         *ngIf="loading$ | async; else container"
         class="d-flex jc-center ai-center h-100"></app-progress-spinner>
@@ -50,7 +50,7 @@
       </ng-template>
     </div>
 
-    <div *ngIf="conversationInfo.message.username || conversationInfo.savedMessages" class="px-2 d-flex ai-center">
+    <div *ngIf="username || savedMessages" class="px-2 d-flex ai-center">
       <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
 
       <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"

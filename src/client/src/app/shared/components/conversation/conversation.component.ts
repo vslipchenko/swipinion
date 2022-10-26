@@ -29,21 +29,13 @@ import {TextareaComponent} from '~app/shared/components/textarea/textarea.compon
 export class ConversationComponent implements OnInit, Destroyable {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UIUserMessage>>;
 
-  @Input() public conversationInfo: {message: UIUserMessage; savedMessages: boolean} = {
-    message: {
-      id: '',
-      sender_id: '',
-      recipient_id: '',
-      teaser: '',
-      username: '',
-      thumbnail: '',
-      date: '',
-      unread: false,
-      read: false,
-      created_at: 0,
-    },
-    savedMessages: false,
-  };
+  @Input() public edgeId = '';
+  @Input() public username = '';
+  @Input() public thumbnail = '';
+  @Input() public userId1 = '';
+  @Input() public userId2 = '';
+  @Input() public unread = false;
+  @Input() public savedMessages = false;
 
   @Output() public back = new EventEmitter<void>();
   // @Output() public loadStart = new EventEmitter<void>();
@@ -51,13 +43,13 @@ export class ConversationComponent implements OnInit, Destroyable {
   @ViewChild('textarea') public textarea!: TextareaComponent;
 
   public disableSendButton = false;
-  public username = '';
   public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
   public canLoadMore$: Observable<boolean> = of(true);
   public interlocutorId = '';
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
+  protected definedUsername = '';
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$
@@ -77,31 +69,23 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   public ngOnInit(): void {
-    const {message, savedMessages} = this.conversationInfo;
+    this.definedUsername = this.username ? this.username : this.savedMessages ? 'Saved Messages' : 'Deleted Account';
 
-    this.username = message.username ? message.username : savedMessages ? 'Saved Messages' : 'Deleted Account';
-
-    this.interlocutorId = getInterlocutorId(
-      message.sender_id,
-      message.recipient_id,
-      this.store.selectSnapshot(AppSelectors.userId),
-    );
+    this.interlocutorId = getInterlocutorId(this.userId1, this.userId2, this.store.selectSnapshot(AppSelectors.userId));
 
     this.conversationMessages$ = this.store.select(
-      savedMessages
-        ? AppSelectors.savedMessages
-        : AppSelectors.conversationMessages(message.sender_id, message.recipient_id),
+      this.savedMessages ? AppSelectors.savedMessages : AppSelectors.conversationMessages(this.userId1, this.userId2),
     );
 
     this.canLoadMore$ = this.store.select(
-      savedMessages
+      this.savedMessages
         ? AppSelectors.canLoadMoreSavedMessages
-        : AppSelectors.canLoadMoreConversationMessages(message.sender_id, message.recipient_id),
+        : AppSelectors.canLoadMoreConversationMessages(this.userId1, this.userId2),
     );
 
     this.actualizeConversationIfStale();
 
-    if (savedMessages) return;
+    if (this.savedMessages) return;
 
     this.runMessageStatusCheck();
 
@@ -117,7 +101,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   public spinnerInView(inView: boolean, edgeId: string): void {
     if (!inView) return;
 
-    this.conversationInfo.savedMessages ? this.fetchSavedMessages(edgeId) : this.fetchUserConversation(edgeId);
+    this.savedMessages ? this.fetchSavedMessages(edgeId) : this.fetchUserConversation(edgeId);
   }
 
   public sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
@@ -126,7 +110,7 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     const body = textarea.control.value;
 
-    if (this.conversationInfo.savedMessages) {
+    if (this.savedMessages) {
       this.store.dispatch(new SendUserSavedMessage(body));
       return;
     }
@@ -137,8 +121,8 @@ export class ConversationComponent implements OnInit, Destroyable {
       new SendUserMessage({
         edgeId,
         body,
-        username: this.conversationInfo.message.username,
-        thumbnail: this.conversationInfo.message.thumbnail,
+        username: this.username,
+        thumbnail: this.thumbnail,
         recipientId: this.interlocutorId,
       }),
     );
@@ -147,12 +131,9 @@ export class ConversationComponent implements OnInit, Destroyable {
   private actualizeConversationIfStale(): void {
     const {relevant, hasNewMessage} = this.conversationIsRelevant;
     // Fetch only new messages
-    if (hasNewMessage) return this.fetchUserConversation(this.conversationInfo.message.id, true, true);
+    if (hasNewMessage) return this.fetchUserConversation(this.edgeId, true, true);
     // Init conversation messages fetch;
-    if (!relevant)
-      this.conversationInfo.savedMessages
-        ? this.fetchSavedMessages()
-        : this.fetchUserConversation('', this.conversationInfo.message.unread);
+    if (!relevant) this.savedMessages ? this.fetchSavedMessages() : this.fetchUserConversation('', this.unread);
   }
 
   private listenToUnreadMessagesChanges(): void {
@@ -193,8 +174,8 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     const payload = {
       // Order does not matter here
-      user_id_1: this.conversationInfo.message.sender_id,
-      user_id_2: this.conversationInfo.message.recipient_id,
+      user_id_1: this.userId1,
+      user_id_2: this.userId2,
       fetchNew,
       markRead,
     } as FetchUserConversationPayload;
@@ -222,23 +203,15 @@ export class ConversationComponent implements OnInit, Destroyable {
 
   private get conversationInitialized(): boolean {
     return this.store.selectSnapshot(
-      this.conversationInfo.savedMessages
+      this.savedMessages
         ? AppSelectors.savedMessagesInitialized
-        : AppSelectors.conversationMessagesInitialized(
-            this.conversationInfo.message.sender_id,
-            this.conversationInfo.message.recipient_id,
-          ),
+        : AppSelectors.conversationMessagesInitialized(this.userId1, this.userId2),
     );
   }
 
   private get conversation(): Array<UIUserConversationMessage> {
     return this.store.selectSnapshot(
-      this.conversationInfo.savedMessages
-        ? AppSelectors.savedMessages
-        : AppSelectors.conversationMessages(
-            this.conversationInfo.message.sender_id,
-            this.conversationInfo.message.recipient_id,
-          ),
+      this.savedMessages ? AppSelectors.savedMessages : AppSelectors.conversationMessages(this.userId1, this.userId2),
     );
   }
 }

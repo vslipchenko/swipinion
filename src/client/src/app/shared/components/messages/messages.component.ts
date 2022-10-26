@@ -106,13 +106,23 @@ export class MessagesComponent implements Destroyable {
       new SetActiveConversation(
         message
           ? {
+              edgeId: message.id,
               userId1: message.sender_id,
               userId2: message.recipient_id,
               username: message.username,
               thumbnail: message.thumbnail,
+              unread: message.unread,
               type: ActiveConversationType.UserConversation,
             }
-          : {type: ActiveConversationType.SavedMessages},
+          : {
+              edgeId: '',
+              userId1: '',
+              userId2: '',
+              username: '',
+              thumbnail: '',
+              unread: false,
+              type: ActiveConversationType.SavedMessages,
+            },
       ),
     );
 

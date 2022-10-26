@@ -118,9 +118,11 @@ export interface MessageDialogData {
 }
 
 export interface ActiveConversation {
-  userId1?: string;
-  userId2?: string;
-  username?: string;
-  thumbnail?: string;
+  edgeId: string;
+  userId1: string;
+  userId2: string;
+  username: string;
+  thumbnail: string;
+  unread: boolean;
   type: ActiveConversationType;
 }

@@ -32,6 +32,7 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
   protected thumbnail = '';
   protected userConversation = false;
   protected newConversation = false;
+  protected savedMessages = false;
 
   public constructor(private readonly store: Store) {}
 
@@ -45,10 +46,11 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
       case ActiveConversationType.SavedMessages:
         this.headline = 'Saved Messages';
         this.icon = 'bookmark';
+        this.savedMessages = true;
         break;
       case ActiveConversationType.UserConversation:
         this.headline = this.conversation.username || 'Deleted Account';
-        this.thumbnail = this.conversation.thumbnail as string;
+        this.thumbnail = this.conversation.thumbnail;
         this.userConversation = true;
         break;
     }
