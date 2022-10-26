@@ -14,7 +14,7 @@ import {
 } from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, Observable, of, skipWhile, Subject, take, takeUntil, timer} from 'rxjs';
+import {BehaviorSubject, map, Observable, of, skipWhile, Subject, take, takeUntil, timer} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
@@ -73,9 +73,11 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     this.interlocutorId = getInterlocutorId(this.userId1, this.userId2, this.store.selectSnapshot(AppSelectors.userId));
 
-    this.conversationMessages$ = this.store.select(
-      this.savedMessages ? AppSelectors.savedMessages : AppSelectors.conversationMessages(this.userId1, this.userId2),
-    );
+    this.conversationMessages$ = this.store
+      .select(
+        this.savedMessages ? AppSelectors.savedMessages : AppSelectors.conversationMessages(this.userId1, this.userId2),
+      )
+      .pipe(map((value) => value || []));
 
     this.canLoadMore$ = this.store.select(
       this.savedMessages
@@ -166,6 +168,8 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private fetchSavedMessages(edgeId?: string): void {
+    if (!edgeId) this.loading$.next(true); // Show loading spinner only on initial loading
+
     this.store.dispatch(new FetchUserSavedMessages(edgeId));
   }
 
