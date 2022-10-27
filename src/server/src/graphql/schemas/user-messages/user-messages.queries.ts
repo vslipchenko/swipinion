@@ -65,8 +65,6 @@ const fetchUserSavedMessages = async (
 
   const result = await db.query(queryFetchUserSavedMessages(tokenData.userId, edgeId));
 
-  if (!result.rowCount) return null;
-
   return result.rows;
 };
 

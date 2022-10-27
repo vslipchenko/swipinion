@@ -492,21 +492,31 @@ export class AppState {
         if (!data.fetchUserSavedMessages) return;
 
         context.setState((state) => {
-          const messages = defineConversationMessagesTime(data.fetchUserSavedMessages);
-
-          return {
+          const nextState = {
             ...state,
             savedMessages: {
               ...state.savedMessages,
-              messages: actualizeConversationMessagesDateTiles(
-                action.payload
-                  ? [...state.savedMessages.messages, ...messages] // Fetched old messages
-                  : [...messages], // Initial fetch
-              ),
-              canLoadMore: data.fetchUserSavedMessages.length === USER_SAVED_MESSAGES_FETCH_LIMIT,
               initialized: true,
             },
           };
+
+          if (!data.fetchUserSavedMessages.length) {
+            nextState.savedMessages.canLoadMore = false;
+
+            return nextState;
+          }
+
+          const messages = defineConversationMessagesTime(data.fetchUserSavedMessages);
+
+          nextState.savedMessages.canLoadMore = messages.length === USER_SAVED_MESSAGES_FETCH_LIMIT;
+
+          nextState.savedMessages.messages = actualizeConversationMessagesDateTiles(
+            action.payload
+              ? [...state.savedMessages.messages, ...messages] // Fetched old messages
+              : [...messages], // Initial fetch
+          );
+
+          return nextState;
         });
       }),
     );
