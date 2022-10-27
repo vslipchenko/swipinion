@@ -19,6 +19,25 @@ $conversation-thumbnail-size: 30px;
   margin-right: -24px;
 }
 
+.messages-panel.lifted-up .content {
+  @include media.zero-small {
+    max-height: calc(100vh - 177px); // 57px - header height, 64px - panel header height, 56px - bottom userbar height
+  }
+}
+
+.messages-panel:not(.lifted-up) .content {
+  @include media.zero-small {
+    max-height: calc(100vh - 121px); // 57px - header height, 64px - panel header height
+  }
+}
+
+.messages-panel.lifted-up .content,
+.messages-panel:not(.lifted-up) .content {
+  @include media.above-small {
+    max-height: calc(100vh - 139px); // 75px - header height + 64px - panel header height; Simply ignore bottom userbar height as it is not displayed on media.above-small
+  }
+}
+
 .messages-panel .mat-content-hide-toggle {
   margin-right: 0 !important;
 }
@@ -39,17 +58,16 @@ $conversation-thumbnail-size: 30px;
   @include media.zero-small {
     max-height: calc(100vh - 113px); // 57px - header height, 56px - profile's bottom userbar height
   }
-
-  @include media.above-small {
-    max-height: calc(100vh - 75px); // Simply ignore userbar height as it is not displayed on media.above-small
-  }
 }
 
 .messages-panel:not(.lifted-up) .mat-accordion {
   @include media.zero-small {
     max-height: calc(100vh - 57px); // 57px - header height
   }
+}
 
+.messages-panel.lifted-up .mat-accordion,
+.messages-panel:not(.lifted-up) .mat-accordion {
   @include media.above-small {
     max-height: calc(100vh - 75px); // 75px - header height
   }
