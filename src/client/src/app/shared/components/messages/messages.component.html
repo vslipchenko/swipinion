@@ -10,7 +10,7 @@
   </ng-template>
 
   <ng-template #description>
-    <app-icon-button svgIcon="square-edit-outline"></app-icon-button>
+    <app-icon-button svgIcon="square-edit-outline" (clicked)="newMessage($event)"></app-icon-button>
     <!--    <mat-icon class="expand-arrow">expand_less</mat-icon>-->
   </ng-template>
 

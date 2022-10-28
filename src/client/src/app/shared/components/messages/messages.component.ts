@@ -125,14 +125,26 @@ export class MessagesComponent implements Destroyable {
             },
       ),
     );
-
-    // this.conversationInfo$.next({message: message || ({} as UIUserMessage), savedMessages});
-    //
-    // this.showConversation = true;
   }
 
   protected messageTrackBy(_: number, message: UIUserMessage): string {
     return message.id;
+  }
+
+  protected newMessage(event: MouseEvent): void {
+    event.stopPropagation(); // Prevent accordion collapse
+
+    this.store.dispatch(
+      new SetActiveConversation({
+        edgeId: '',
+        userId1: '',
+        userId2: '',
+        username: '',
+        thumbnail: '',
+        unread: false,
+        type: ActiveConversationType.NewConversation,
+      }),
+    );
   }
 
   private setDispatchActionAfterStatusChecked(value: boolean): void {
