@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserRole} from '~app/typings/user/user.enums';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 import {FollowUser} from '~app/modules/user/store/user.actions';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
@@ -29,7 +29,6 @@ export class ProfileActionBarComponent {
   // @Select(UserSelectors.following) public following$!: Observable<boolean>;
   @Select(UserSelectors.followingStatus) public followingStatus$!: Observable<{following: boolean; pending: boolean}>;
 
-  public readonly loading$ = new BehaviorSubject(false);
   public readonly userRole = UserRole;
   public readonly userSettings!: UserSettings;
   public readonly isProfilePath!: boolean;
