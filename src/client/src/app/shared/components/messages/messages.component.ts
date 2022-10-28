@@ -28,32 +28,8 @@ export class MessagesComponent implements Destroyable {
 
   @ViewChild(AccordionComponent, {static: true}) public accordion!: AccordionComponent;
 
-  // public readonly tabs = [
-  //   {text: 'Inbox', icon: 'inbox'},
-  //   {text: 'Sent', icon: 'send'},
-  //   {
-  //     text: 'Saved',
-  //     icon: 'inventory_2',
-  //   },
-  // ];
-
   public showConversation = false;
 
-  public readonly conversationInfo$ = new BehaviorSubject<{message?: UIUserMessage; savedMessages: boolean}>({
-    message: {
-      id: '',
-      sender_id: '',
-      recipient_id: '',
-      teaser: '',
-      username: '',
-      thumbnail: '',
-      date: '',
-      read: false,
-      unread: false,
-      created_at: 0,
-    },
-    savedMessages: false,
-  });
   public readonly messagesFetchLimit = USER_MESSAGES_FETCH_LIMIT;
   public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
