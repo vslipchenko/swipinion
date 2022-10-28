@@ -26,7 +26,7 @@
             <div class="transparent-divider"></div>
             <app-message *ngIf="savedMessage$ | async as savedMessage" icon="bookmark" username="Saved Messages"
                          [message]="savedMessage.teaser"
-                         [date]="savedMessage.date" (clicked)="loadConversation(true)"></app-message>
+                         [date]="savedMessage.date" (clicked)="openConversation(true)"></app-message>
 
             <ng-container *ngIf="messages$ | async as messages">
               <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
@@ -40,7 +40,7 @@
                   <app-message [thumbnail]="message.thumbnail" [username]="message.username"
                                [message]="message.teaser"
                                [date]="message.date" [outgoing]="message.sender_id === userId"
-                               (clicked)="loadConversation(false, message)"
+                               (clicked)="openConversation(false, message)"
                                [unread]="message.unread"></app-message>
                 </div>
               </ng-template>

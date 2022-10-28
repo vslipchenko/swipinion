@@ -101,7 +101,7 @@ export class MessagesComponent implements Destroyable {
     this.userStatusPingService.runStatusPing$.next();
   }
 
-  public loadConversation(savedMessages: boolean, message?: UIUserMessage): void {
+  public openConversation(savedMessages: boolean, message?: UIUserMessage): void {
     this.store.dispatch(
       new SetActiveConversation(
         message

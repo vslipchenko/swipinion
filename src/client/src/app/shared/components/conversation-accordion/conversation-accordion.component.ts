@@ -4,8 +4,9 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
@@ -13,6 +14,7 @@ import {ActiveConversation} from '~app/typings/user-messages/user-messages.inter
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 import {Store} from '@ngxs/store';
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-conversation-accordion',
@@ -20,53 +22,37 @@ import {SetActiveConversation} from '~app/modules/app/store/app.actions';
   styleUrls: ['./conversation-accordion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationAccordionComponent implements OnInit, AfterViewInit {
+export class ConversationAccordionComponent implements AfterViewInit, OnChanges {
   @Input() public conversation!: ActiveConversation;
   @Output() public navigateProfile = new EventEmitter<void>();
 
   @ViewChild(AccordionComponent, {static: true}) protected readonly accordion!: AccordionComponent;
 
-  protected headline = '';
-  protected icon = '';
-  // protected svgIcon = '';
-  protected thumbnail = '';
-  protected thumbnailLink = '';
-  protected userConversation = false;
-  protected newConversation = false;
-  protected savedMessages = false;
-  protected validConversation = false;
+  protected readonly renderUi$ = new BehaviorSubject(true);
 
   public constructor(private readonly store: Store) {}
 
-  public ngOnInit(): void {
-    switch (this.conversation.type) {
-      case ActiveConversationType.NewConversation:
-        this.headline = 'New Message';
-        this.icon = 'outgoing_mail';
-        this.newConversation = true;
-        break;
-      case ActiveConversationType.SavedMessages:
-        this.headline = 'Saved Messages';
-        this.icon = 'bookmark';
-        this.savedMessages = true;
-        break;
-      case ActiveConversationType.UserConversation:
-        this.headline = this.conversation.username || 'Deleted Account';
-        this.thumbnailLink = this.conversation.username ? `/user/${this.conversation.username}` : '';
-        this.validConversation = Boolean(this.conversation.username);
-        this.thumbnail = this.conversation.thumbnail;
-        this.userConversation = true;
-        break;
-    }
+  public ngAfterViewInit(): void {
+    setTimeout(() => this.accordion.panel.open()); // If used without timeout accordion content is not caught up
   }
 
-  public ngAfterViewInit(): void {
-    setTimeout(() => this.expandAccordion()); // If used without timeout accordion content is not caught up
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['conversation'].firstChange) return;
+
+    const sameConversation =
+      (changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId1 &&
+        changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId2) ||
+      (changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId2 &&
+        changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId1);
+
+    if (sameConversation) return; // true for saved messages & conversations between same users
+
+    this.accordion.panel.open(); // Expand in case if collapsed
+
+    this.reinstantiateComponents();
   }
 
   protected collapseAccordions(event: MouseEvent): void {
-    if (!this.validConversation) return;
-
     event.stopPropagation();
 
     this.accordion.panel.close();
@@ -80,7 +66,17 @@ export class ConversationAccordionComponent implements OnInit, AfterViewInit {
     this.store.dispatch(new SetActiveConversation(null));
   }
 
-  private expandAccordion(): void {
-    this.accordion.panel.open();
+  protected get newConversation(): boolean {
+    return this.conversation.type === ActiveConversationType.NewConversation;
+  }
+
+  protected get savedMessages(): boolean {
+    return this.conversation.type === ActiveConversationType.SavedMessages;
+  }
+
+  private reinstantiateComponents(): void {
+    this.renderUi$.next(false);
+
+    setTimeout(() => this.renderUi$.next(true)); // This one is needed in order trigger component destroy and init
   }
 }
