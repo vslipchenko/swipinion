@@ -270,6 +270,18 @@
   }
 }
 
+.px-3-2 {
+  @include media.zero-small {
+    padding-left: var.$unit-3;
+    padding-right: var.$unit-3;
+  }
+
+  @include media.above-small {
+    padding-left: var.$unit-2;
+    padding-right: var.$unit-2;
+  }
+}
+
 .py-1 {
   padding-bottom: var.$unit !important;
   padding-top: var.$unit !important;
