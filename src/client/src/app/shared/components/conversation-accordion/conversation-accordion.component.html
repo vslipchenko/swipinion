@@ -1,7 +1,6 @@
 <app-accordion [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
                [content]="content" titleClass="conversation-title mw-0">
   <ng-template #title>
-
     <app-conversation-thumbnail *ngIf="renderUi$ | async"
                                 class="d-flex ai-center title mw-0"
                                 [thumbnail]="conversation.thumbnail"
@@ -9,7 +8,6 @@
                                 [newConversation]="newConversation"
                                 [savedMessages]="savedMessages"
                                 (thumbnailClicked)="collapseAccordions($event)"></app-conversation-thumbnail>
-
   </ng-template>
 
   <ng-template #description>
@@ -23,6 +21,17 @@
                           [username]="conversation.username" [thumbnail]="conversation.thumbnail"
                           [userId1]="conversation.userId1" [userId2]="conversation.userId2"
                           [unread]="conversation.unread"></app-conversation>
+        <!-- TODO make a reusable component -->
+        <div class="px-3-2 d-flex f-column h-100">
+          <app-input appearance="outline" label="Search people" extendClass="w-100"></app-input>
+
+          <app-progress-spinner *ngIf="true; else container"
+                                class="d-flex jc-center ai-center f-1"></app-progress-spinner>
+
+          <ng-template #container>
+            Test
+          </ng-template>
+        </div>
       </ng-container>
     </div>
   </ng-template>
