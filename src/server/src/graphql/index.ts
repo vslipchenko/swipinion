@@ -14,6 +14,7 @@ import {
 import {appResolvers, appTypeDefinitions} from './schemas/app/app.schema';
 import {userMessagesResolvers, userMessagesTypeDefinitions} from './schemas/user-messages/user-messages.schema';
 import {userStatusResolvers, userStatusTypeDefinitions} from './schemas/user-status/user-status.schema';
+import {userSearchResolvers, userSearchTypeDefinitions} from './schemas/user-search/user-search.schema';
 
 export const schema = makeExecutableSchema({
   typeDefs: [
@@ -28,6 +29,7 @@ export const schema = makeExecutableSchema({
     userNotificationsTypeDefinitions,
     userMessagesTypeDefinitions,
     userStatusTypeDefinitions,
+    userSearchTypeDefinitions,
   ],
   resolvers: merge(
     {},
@@ -41,5 +43,6 @@ export const schema = makeExecutableSchema({
     ...userNotificationsResolvers,
     ...userMessagesResolvers,
     ...userStatusResolvers,
+    ...userSearchResolvers,
   ),
 });

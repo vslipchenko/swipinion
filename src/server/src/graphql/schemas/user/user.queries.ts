@@ -16,7 +16,7 @@ export const userQueryTypeDefinitions = gql`
     userWithEmailExists(email: String!): Exists
     userWithUsernameExists(username: String!): Exists
     userWithRecoveryCodeExists(input: UserCode!): Exists
-    userEssentials: UserEssentials
+    userEssentials: AuthenticatedUserEssentials
   }
 `;
 

@@ -72,7 +72,7 @@ export interface UserProfile {
   username: string;
 }
 
-export interface UserEssentials {
+export interface AuthenticatedUserEssentials {
   id: string;
   thumbnail: string;
   username: string;
@@ -89,7 +89,7 @@ export interface EditProfileMutationResult {
 }
 
 export interface UserEssentialsQueryResult {
-  userEssentials: UserEssentials;
+  userEssentials: AuthenticatedUserEssentials;
 }
 
 export interface ResolvedUserData {

@@ -1,5 +1,5 @@
 import {UserRole} from '~app/typings/user/user.enums';
-import {UserEssentials} from '~app/typings/user/user.interfaces';
+import {AuthenticatedUserEssentials} from '~app/typings/user/user.interfaces';
 import {UserStatusCheckOptions} from '~app/typings/user-status/user-status.interfaces';
 import {
   ActiveConversation,
@@ -10,7 +10,7 @@ import {
 export class UpdateUserEssentials {
   public static readonly type = '[App] UpdateUserEssentials';
 
-  public constructor(public payload: Partial<UserEssentials>) {}
+  public constructor(public payload: Partial<AuthenticatedUserEssentials>) {}
 }
 
 export class UpdateUserRole {

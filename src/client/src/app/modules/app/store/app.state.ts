@@ -15,7 +15,7 @@ import {
   UpdateUtcTimestamp,
   UserStatusUpdatedBeforeMessagesInitialFetch,
 } from '~app/modules/app/store/app.actions';
-import {UserEssentials} from '~app/typings/user/user.interfaces';
+import {AuthenticatedUserEssentials} from '~app/typings/user/user.interfaces';
 import {UserRole} from '~app/typings/user/user.enums';
 import {UserStatusService} from '~app/services/user-status/user-status.service';
 import {Observable, tap} from 'rxjs';
@@ -49,7 +49,7 @@ import {
 import {Messages} from '~app/typings/user-messages/user-messages.types';
 
 export interface AppStateModel {
-  user: UserEssentials;
+  user: AuthenticatedUserEssentials;
   savedMessages: SavedMessages; // TODO flatten state shape
   messages: Messages; // TODO flatten state shape
   conversations: Conversations;
