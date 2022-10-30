@@ -7,7 +7,7 @@ import {queryUserSearchByUsername} from '../../../data/queries/user-search';
 
 export const userSearchQueryTypeDefinitions = gql`
   type Query {
-    userSearch(username: String!): Exists
+    userSearch(username: String!): UserEssentials
   }
 `;
 
