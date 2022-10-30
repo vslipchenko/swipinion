@@ -23,9 +23,9 @@ export const querySendUserMessage = (
                       ON user_settings.user_id = user_followers.user_id
         WHERE  user_settings.user_id = $2 
                AND (
-                user_settings.message != ${PrivacyCommonSettings.NoOne}       -- Check whether messaging is disabled on behalf of receiver
-                AND user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
-                  OR user_followers.follower_id = $1                               -- If messaging is allowed only for followers; check whether sender has accepted following
+                user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
+                OR user_settings.message = ${PrivacyCommonSettings.FollowersOnly} -- If messaging is allowed only for followers; check whether sender has accepted following
+                    AND user_followers.follower_id = $1                               
                      AND user_followers.pending IS FALSE
                 )
       ),
