@@ -2,12 +2,12 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {db} from '../../../data';
 import {authenticationGuard} from '../../../utilities/guard';
 import {QueryResultRow} from 'pg';
-import {usernameValidator} from '../../../validators/shared';
 import {queryUserSearchByUsername} from '../../../data/queries/user-search';
+import {userSearchValidator} from '../../../validators/user-search';
 
 export const userSearchQueryTypeDefinitions = gql`
   type Query {
-    userSearch(username: String!): UserEssentials
+    userSearch(username: String!): [UserEssentials]
   }
 `;
 
@@ -16,7 +16,7 @@ const userSearch = async (
   {username}: {username: string},
   {accessToken}: {accessToken: string},
 ): Promise<QueryResultRow | ApolloError | null> => {
-  const {error} = usernameValidator.validate(username);
+  const {error} = userSearchValidator.validate(username);
 
   if (error) return null;
 
@@ -28,7 +28,7 @@ const userSearch = async (
 
   if (!result.rowCount) return null;
 
-  return result.rows[0];
+  return result.rows;
 };
 
 export const userSearchQueryResolvers = {
