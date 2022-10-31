@@ -8,7 +8,7 @@
   </a>
 
   <ng-template #thumbnailContent>
-    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail" [class]="thumbnailClass">
+    <img *ngIf="thumbnail" [src]="thumbnail" alt="" class="thumbnail d-block" [class]="thumbnailClass">
     <div *ngIf="!thumbnail" class="thumbnail" [class]="thumbnailClass"></div>
   </ng-template>
 </ng-template>
