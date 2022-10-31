@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {BehaviorSubject, debounceTime, finalize, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {BehaviorSubject, debounceTime, finalize, Subject, Subscription, switchMap, takeUntil, tap} from 'rxjs';
 import {UserSearchService} from '~app/services/user-search/user-search.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserEssentials} from '~app/typings/user-search/user-search.interfaces';
@@ -11,17 +11,33 @@ import {UserEssentials} from '~app/typings/user-search/user-search.interfaces';
   styleUrls: ['./conversation-user-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationUserSearchComponent implements OnInit, Destroyable {
+export class ConversationUserSearchComponent implements Destroyable {
   public readonly destroy$ = new Subject<void>();
-  protected readonly searchControl = new FormControl('');
+  protected readonly searchControl = new FormControl();
   protected readonly loading$ = new BehaviorSubject(false);
 
   protected userEssentials: Array<UserEssentials> = [];
 
-  public constructor(private readonly userSearchService: UserSearchService) {}
+  private userSearchSubscription!: Subscription;
 
-  public ngOnInit(): void {
-    this.searchControl.valueChanges
+  public constructor(private readonly userSearchService: UserSearchService) {
+    this.listenToControlValueChanges();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.loading$.complete();
+  }
+
+  protected resetSearch(): void {
+    this.userSearchSubscription.unsubscribe();
+    this.searchControl.setValue('', {emitEvent: false});
+    this.listenToControlValueChanges();
+  }
+
+  private listenToControlValueChanges(): void {
+    this.userSearchSubscription = this.searchControl.valueChanges
       .pipe(
         takeUntil(this.destroy$),
         tap(() => {
@@ -38,11 +54,5 @@ export class ConversationUserSearchComponent implements OnInit, Destroyable {
 
         this.userEssentials = data.userSearch;
       });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.loading$.complete();
   }
 }

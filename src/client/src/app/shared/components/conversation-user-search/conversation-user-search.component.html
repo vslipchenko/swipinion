@@ -1,5 +1,9 @@
 <app-input appearance="outline" label="Search people" extendClass="w-100"
-           [control]="searchControl"></app-input>
+           [control]="searchControl" [suffix]="suffix">
+  <ng-template #suffix>
+    <app-input-reset-suffix [show]="searchControl.value" (resetValue)="resetSearch()"></app-input-reset-suffix>
+  </ng-template>
+</app-input>
 
 <app-progress-spinner *ngIf="loading$ | async; else container"
                       class="d-flex jc-center ai-center f-1"></app-progress-spinner>
