@@ -42,10 +42,11 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges 
     this.accordion.panel.open(); // Expand in case if collapsed
 
     const sameConversation =
-      (changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId1 &&
+      changes['conversation'].currentValue.type === changes['conversation'].previousValue.type &&
+      ((changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId1 &&
         changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId2) ||
-      (changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId2 &&
-        changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId1);
+        (changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId2 &&
+          changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId1));
 
     if (sameConversation) return; // true for saved messages & conversations between same users
 
