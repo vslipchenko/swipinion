@@ -39,6 +39,8 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['conversation'].firstChange) return;
 
+    this.accordion.panel.open(); // Expand in case if collapsed
+
     const sameConversation =
       (changes['conversation'].currentValue.userId1 === changes['conversation'].previousValue.userId1 &&
         changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId2) ||
@@ -46,8 +48,6 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges 
         changes['conversation'].currentValue.userId2 === changes['conversation'].previousValue.userId1);
 
     if (sameConversation) return; // true for saved messages & conversations between same users
-
-    this.accordion.panel.open(); // Expand in case if collapsed
 
     this.reinstantiateComponents();
   }

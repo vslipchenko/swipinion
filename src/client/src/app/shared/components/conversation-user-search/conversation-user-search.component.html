@@ -1,0 +1,9 @@
+<app-input appearance="outline" label="Search people" extendClass="w-100"
+           [control]="searchControl"></app-input>
+
+<app-progress-spinner *ngIf="loading$ | async; else container"
+                      class="d-flex jc-center ai-center f-1"></app-progress-spinner>
+
+<ng-template #container>
+  <div *ngFor="let item of userEssentials">{{item.username}}</div>
+</ng-template>

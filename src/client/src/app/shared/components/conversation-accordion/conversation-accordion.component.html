@@ -17,21 +17,13 @@
   <ng-template #content>
     <div class="content h-100">
       <ng-container *ngIf="renderUi$ | async">
+        <app-conversation-user-search *ngIf="newConversation"
+                                      class="px-3-2 d-flex f-column h-100"></app-conversation-user-search>
+        
         <app-conversation *ngIf="!newConversation" [savedMessages]="savedMessages" [edgeId]="conversation.edgeId"
                           [username]="conversation.username" [thumbnail]="conversation.thumbnail"
                           [userId1]="conversation.userId1" [userId2]="conversation.userId2"
                           [unread]="conversation.unread"></app-conversation>
-        <!-- TODO make a reusable component -->
-        <div class="px-3-2 d-flex f-column h-100">
-          <app-input appearance="outline" label="Search people" extendClass="w-100"></app-input>
-
-          <app-progress-spinner *ngIf="true; else container"
-                                class="d-flex jc-center ai-center f-1"></app-progress-spinner>
-
-          <ng-template #container>
-            Test
-          </ng-template>
-        </div>
       </ng-container>
     </div>
   </ng-template>
