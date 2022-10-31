@@ -1,4 +1,4 @@
-<app-input appearance="outline" label="Search people" extendClass="w-100"
+<app-input class="px-3-2" appearance="outline" label="Search people" extendClass="w-100"
            [control]="searchControl" [suffix]="suffix">
   <ng-template #suffix>
     <app-input-reset-suffix [show]="searchControl.value" (resetValue)="resetSearch()"></app-input-reset-suffix>
@@ -9,5 +9,13 @@
                       class="d-flex jc-center ai-center f-1"></app-progress-spinner>
 
 <ng-template #container>
-  <div *ngFor="let item of userEssentials">{{item.username}}</div>
+  <div class="primary-scrollbar mt-2">
+    <div *ngFor="let user of userEssentials"
+         class="d-flex ai-center py-2 px-3-2 message pointer search-results" (click)="startConversation(user)">
+      <app-message-thumbnail thumbnailClass="message-thumbnail mr-2"
+                             [thumbnail]="user.thumbnail"></app-message-thumbnail>
+
+      <span class="truncate">{{user.username}}</span>
+    </div>
+  </div>
 </ng-template>

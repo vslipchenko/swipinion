@@ -18,8 +18,8 @@
     <div class="content h-100">
       <ng-container *ngIf="renderUi$ | async">
         <app-conversation-user-search *ngIf="newConversation"
-                                      class="px-3-2 d-flex f-column h-100"></app-conversation-user-search>
-        
+                                      class="d-flex f-column h-100"></app-conversation-user-search>
+
         <app-conversation *ngIf="!newConversation" [savedMessages]="savedMessages" [edgeId]="conversation.edgeId"
                           [username]="conversation.username" [thumbnail]="conversation.thumbnail"
                           [userId1]="conversation.userId1" [userId2]="conversation.userId2"

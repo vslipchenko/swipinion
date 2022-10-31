@@ -4,6 +4,10 @@ import {BehaviorSubject, debounceTime, finalize, Subject, Subscription, switchMa
 import {UserSearchService} from '~app/services/user-search/user-search.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserEssentials} from '~app/typings/user-search/user-search.interfaces';
+import {Store} from '@ngxs/store';
+import {SetActiveConversation} from '~app/modules/app/store/app.actions';
+import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
 
 @Component({
   selector: 'app-conversation-user-search',
@@ -20,7 +24,7 @@ export class ConversationUserSearchComponent implements Destroyable {
 
   private userSearchSubscription!: Subscription;
 
-  public constructor(private readonly userSearchService: UserSearchService) {
+  public constructor(private readonly store: Store, private readonly userSearchService: UserSearchService) {
     this.listenToControlValueChanges();
   }
 
@@ -33,7 +37,24 @@ export class ConversationUserSearchComponent implements Destroyable {
   protected resetSearch(): void {
     this.userSearchSubscription.unsubscribe();
     this.searchControl.setValue('', {emitEvent: false});
+    this.userEssentials = [];
     this.listenToControlValueChanges();
+  }
+
+  protected startConversation(user: UserEssentials): void {
+    const userId = this.store.selectSnapshot(AppSelectors.userId);
+
+    this.store.dispatch(
+      new SetActiveConversation({
+        edgeId: this.store.selectSnapshot(AppSelectors.conversationMessages(userId, user.id))?.[0]?.id,
+        userId1: userId, // Authed user id
+        userId2: user.id, // Resolved user id / Interlocutor id
+        username: user.username,
+        thumbnail: user.thumbnail,
+        unread: this.store.selectSnapshot(AppSelectors.unreadMessages).some((message) => message.sender_id === user.id),
+        type: ActiveConversationType.UserConversation,
+      }),
+    );
   }
 
   private listenToControlValueChanges(): void {
