@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MessageThumbnailComponent} from './message-thumbnail.component';
+import {ThumbnailComponent} from './thumbnail.component';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterLinkWithHref} from '@angular/router';
 
 @NgModule({
-  declarations: [MessageThumbnailComponent],
+  declarations: [ThumbnailComponent],
   imports: [CommonModule, MatIconModule, RouterLinkWithHref],
-  exports: [MessageThumbnailComponent],
+  exports: [ThumbnailComponent],
 })
-export class MessageThumbnailModule {}
+export class ThumbnailModule {}

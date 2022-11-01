@@ -1,7 +1,7 @@
-<app-message-thumbnail class="conversation-accordion-thumbnail"
-                       thumbnailClass="conversation-thumbnail"
-                       [icon]="icon"
-                       [thumbnail]="thumbnail"
-                       [thumbnailLink]="thumbnailLink"
-                       (click)="emitClick($event)"></app-message-thumbnail>
+<app-thumbnail class="conversation-accordion-thumbnail"
+               thumbnailClass="conversation-thumbnail"
+               [icon]="icon"
+               [thumbnail]="thumbnail"
+               [thumbnailLink]="thumbnailLink"
+               (click)="emitClick($event)"></app-thumbnail>
 <span class="truncate ml-1" [class.conversation-headline]="validConversation">{{headline}}</span>

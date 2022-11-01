@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 
 @Component({
-  selector: 'app-message-thumbnail',
-  templateUrl: './message-thumbnail.component.html',
-  styleUrls: ['./message-thumbnail.component.scss'],
+  selector: 'app-thumbnail',
+  templateUrl: './thumbnail.component.html',
+  styleUrls: ['./thumbnail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MessageThumbnailComponent {
+export class ThumbnailComponent {
   // @Input() public svgIcon = '';
   // @Input() public iconColor: ThemePalette;
   @Input() public icon = '';
