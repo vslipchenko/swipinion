@@ -24,7 +24,6 @@ import {
   ActiveConversation,
   Conversations,
   SavedMessages,
-  UIUserMessage,
   UnreadMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {
@@ -272,7 +271,6 @@ export class AppState {
           );
 
           let nextConversation = defineConversationMessagesTime(data.fetchUserConversation);
-          let messages: Array<UIUserMessage> = [];
 
           if (action.payload.edgeId) {
             // Fetched messages for initialized conversation
@@ -308,19 +306,16 @@ export class AppState {
 
             nextState.unreadMessages = actualizeUnreadMessages(state.unreadMessages, interlocutorId);
 
-            messages = markMessagesRead(state.messages.messages, interlocutorId);
+            nextState.messages = {
+              ...state.messages,
+              messages: markMessagesRead(state.messages.messages, interlocutorId),
+            };
           }
 
           if (!action.payload.fetchNew)
             // Avoid canLoadMore value rewrite on a new message fetch
             nextState.conversations[conversationKey].canLoadMore =
               data.fetchUserConversation.length === USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
-
-          if (messages.length)
-            nextState.messages = {
-              ...state.messages,
-              messages,
-            };
 
           return nextState;
         });
