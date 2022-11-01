@@ -19,7 +19,10 @@
       ></app-content-placeholder>
 
       <ng-template #notificationList>
-        <app-user-notification *ngFor="let notification of notifications$ | async" [notification]="notification"
+        <app-user-notification *ngFor="let notification of notifications$ | async; let last = last"
+                               [notification]="notification"
+                               class="d-block"
+                               [class.mb-2]="!last"
                                (accept)="acceptFollowRequest(notification)"
                                (decline)="declineFollowRequest(notification)"
                                (delete)="deleteNotification(notification)"></app-user-notification>
