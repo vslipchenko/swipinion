@@ -10,8 +10,9 @@
 
 <ng-template #container>
   <div class="primary-scrollbar mt-2">
-    <div *ngFor="let user of userEssentials"
-         class="d-flex ai-center py-2 px-3-2 message pointer search-results" (click)="startConversation(user)">
+    <div *ngFor="let user of userEssentials; let first = first; let last = last"
+         class="d-flex ai-center py-2 px-3-2 message pointer search-results bt-transparent"
+         [class.bb-transparent]="first && last" (click)="startConversation(user)">
       <app-thumbnail thumbnailClass="message-thumbnail mr-2"
                      [thumbnail]="user.thumbnail"></app-thumbnail>
 
