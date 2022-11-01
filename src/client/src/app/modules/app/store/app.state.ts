@@ -34,10 +34,10 @@ import {
   convertBodyToTeaser,
   convertToUiMessage,
   convertToUiMessages,
+  defineConversationKey,
   defineConversationMessagesTime,
   defineConversationMessageTime,
   excludeNewMessages,
-  getConversationKey,
   getInterlocutorId,
   markMessagesRead,
 } from '~app/utilities/user-messages';
@@ -47,6 +47,7 @@ import {
   USER_SAVED_MESSAGES_FETCH_LIMIT,
 } from '~app/constants/user-messages';
 import {Messages} from '~app/typings/user-messages/user-messages.types';
+import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 
 export interface AppStateModel {
   user: AuthenticatedUserEssentials;
@@ -264,7 +265,7 @@ export class AppState {
         if (!data.fetchUserConversation?.length) return; // Expected value: null | [] | [...conversation_messages]
 
         context.setState((state) => {
-          const conversationKey = getConversationKey(
+          const conversationKey = defineConversationKey(
             state.conversations,
             action.payload.user_id_1,
             action.payload.user_id_2,
@@ -337,7 +338,7 @@ export class AppState {
         if (!data.checkConversationMessageStatus) return;
 
         context.setState((state) => {
-          const conversationKey = getConversationKey(state.conversations, action.payload, state.user.id);
+          const conversationKey = defineConversationKey(state.conversations, action.payload, state.user.id);
           const lastReadMessageId = data.checkConversationMessageStatus;
 
           if (state.conversations[conversationKey].messages[0].id === lastReadMessageId) return state; // Nothing has changed; May be improved with id condition in the query
@@ -375,7 +376,11 @@ export class AppState {
 
           context.setState((state) => {
             const sentMessageBody = action.payload.body.trim();
-            const conversationKey = getConversationKey(state.conversations, action.payload.recipientId, state.user.id);
+            const conversationKey = defineConversationKey(
+              state.conversations,
+              action.payload.recipientId,
+              state.user.id,
+            );
             const sentMessageFragment = {
               ...data.sendUserMessage.results.sentMessage,
               sender_id: state.user.id,
@@ -525,10 +530,31 @@ export class AppState {
   @Action(SetActiveConversation)
   private setActiveConversation(context: StateContext<AppStateModel>, action: SetActiveConversation): void {
     context.setState((state) => {
-      return {
+      const nextState = {
         ...state,
         conversation: action.payload,
       };
+
+      if (action.payload?.type === ActiveConversationType.UserConversation) {
+        const conversationKey = defineConversationKey(
+          state.conversations,
+          action.payload.userId1,
+          action.payload.userId2,
+        );
+
+        if (!state.conversations[conversationKey])
+          // Initialize new conversation in order for ui to render conversation messages properly when the first message is sent
+          nextState.conversations = {
+            ...state.conversations,
+            [conversationKey]: {
+              messages: [],
+              canLoadMore: false,
+              initialized: false, // Has to be false as it can be out of sync so we have to fetch conversation messages no matter what
+            },
+          };
+      }
+
+      return nextState;
     });
   }
 }

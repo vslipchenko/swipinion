@@ -1,7 +1,7 @@
 import {createSelector} from '@ngxs/store';
 import {AppState, AppStateModel} from '~app/modules/app/store/app.state';
 import {UIUserConversationMessage} from '~app/typings/user-messages/user-messages.interfaces';
-import {getConversationKey} from '~app/utilities/user-messages';
+import {defineConversationKey} from '~app/utilities/user-messages';
 import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
 
 export class AppSelectors {
@@ -69,7 +69,7 @@ export class AppSelectors {
     userId2: string,
   ): ((state: AppStateModel) => Array<UIUserConversationMessage>) => {
     return createSelector([AppState], (state: AppStateModel) => {
-      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+      const conversationKey = defineConversationKey(state.conversations, userId1, userId2);
 
       return state.conversations[conversationKey].messages;
     });
@@ -80,7 +80,7 @@ export class AppSelectors {
     userId2: string,
   ): ((state: AppStateModel) => boolean) => {
     return createSelector([AppState], (state: AppStateModel) => {
-      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+      const conversationKey = defineConversationKey(state.conversations, userId1, userId2);
 
       return state.conversations[conversationKey].initialized;
     });
@@ -91,7 +91,7 @@ export class AppSelectors {
     userId2: string,
   ): ((state: AppStateModel) => boolean) => {
     return createSelector([AppState], (state: AppStateModel) => {
-      const conversationKey = getConversationKey(state.conversations, userId1, userId2);
+      const conversationKey = defineConversationKey(state.conversations, userId1, userId2);
 
       return state.conversations[conversationKey].canLoadMore;
     });

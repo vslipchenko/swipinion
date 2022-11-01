@@ -117,7 +117,7 @@ export class ConversationComponent implements OnInit, Destroyable {
       return;
     }
 
-    const edgeId = messages[0].id; // Use the most recent message as the edge
+    const edgeId = messages[0]?.id; // Use the most recent message as the edge
 
     this.store.dispatch(
       new SendUserMessage({
