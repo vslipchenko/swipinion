@@ -69,12 +69,21 @@ const routes: Routes = [
     ...userModule,
   },
   {
+    path: 'profile/messages',
+    loadChildren: (): Promise<typeof UserNotificationsModule> =>
+      import('~app/modules/user-messages/user-messages.module').then((m) => m.UserMessagesModule),
+    ...userGuards,
+    // resolve: {
+    //   profile: userResolvers.profile,
+    // },
+  },
+  {
     path: 'profile/settings',
     loadChildren: (): Promise<typeof UserSettingsModule> =>
       import('~app/modules/user-settings/user-settings.module').then((m) => m.UserSettingsModule),
     ...userGuards,
     resolve: {
-      profile: userResolvers.profile,
+      // profile: userResolvers.profile,
       settings: ProfileSettingsResolver,
     },
   },
@@ -83,9 +92,9 @@ const routes: Routes = [
     loadChildren: (): Promise<typeof UserNotificationsModule> =>
       import('~app/modules/user-notifications/user-notifications.module').then((m) => m.UserNotificationsModule),
     ...userGuards,
-    resolve: {
-      profile: userResolvers.profile,
-    },
+    // resolve: {
+    //   profile: userResolvers.profile,
+    // },
   },
   {
     path: 'user/:username',
