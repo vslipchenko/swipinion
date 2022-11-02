@@ -43,6 +43,9 @@ export class ConversationUserSearchComponent implements Destroyable {
 
   protected startConversation(user: UserEssentials): void {
     const userId = this.store.selectSnapshot(AppSelectors.userId);
+    const conversationPreviewMessagePresent = this.store
+      .selectSnapshot(AppSelectors.messages)
+      .some((message) => message.sender_id === user.id || message.recipient_id === user.id);
 
     this.store.dispatch(
       new SetActiveConversation({
@@ -51,7 +54,9 @@ export class ConversationUserSearchComponent implements Destroyable {
         userId2: user.id, // Resolved user id / Interlocutor id
         username: user.username,
         thumbnail: user.thumbnail,
-        unread: this.store.selectSnapshot(AppSelectors.unreadMessages).some((message) => message.sender_id === user.id),
+        unread: conversationPreviewMessagePresent
+          ? this.store.selectSnapshot(AppSelectors.unreadMessages).some((message) => message.sender_id === user.id)
+          : true, // Force true in order to mark messages as unread in advance in order to prevent unread messages desync
         type: ActiveConversationType.UserConversation,
       }),
     );
