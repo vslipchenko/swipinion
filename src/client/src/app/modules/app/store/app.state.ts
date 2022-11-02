@@ -25,6 +25,7 @@ import {
   Conversations,
   SavedMessages,
   UnreadMessage,
+  UserMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {
   actualizeConversationMessagesDateTiles,
@@ -259,10 +260,12 @@ export class AppState {
     context: StateContext<AppStateModel>,
     action: FetchUserConversation,
   ): Observable<unknown> {
+    const activeConversation = context.getState().conversation; // Capture snapshot in order to avoid possible null value due to async operation
+
     return this.userMessagesService.fetchUserConversation(action.payload).pipe(
       tap(({data}) => {
         if (!data.fetchUserConversation?.length) return; // Expected value: null | [] | [...conversation_messages]
-
+        console.log(action.payload);
         context.setState((state) => {
           const conversationKey = defineConversationKey(
             state.conversations,
@@ -310,6 +313,23 @@ export class AppState {
               ...state.messages,
               messages: markMessagesRead(state.messages.messages, interlocutorId),
             };
+
+            if (!action.payload.fetchNew) {
+              const conversationPreviewMessagePresent = nextState.messages.messages.some(
+                (message) => message.sender_id === interlocutorId || message.recipient_id === interlocutorId,
+              );
+              // Sync new message with messages list
+              if (!conversationPreviewMessagePresent) {
+                const recentMessage: UserMessage = {
+                  ...nextConversation[0],
+                  username: activeConversation?.username as string,
+                  thumbnail: activeConversation?.thumbnail as string,
+                  teaser: convertBodyToTeaser(nextConversation[0].body),
+                };
+
+                nextState.messages.messages = [convertToUiMessage(recentMessage), ...nextState.messages.messages];
+              }
+            }
           }
 
           if (!action.payload.fetchNew)
