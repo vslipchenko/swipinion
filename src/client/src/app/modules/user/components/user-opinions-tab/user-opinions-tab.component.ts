@@ -19,7 +19,7 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
 
   @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
 
-  public readonly opinions$!: Observable<Array<Opinion>>;
+  public opinions$!: Observable<Array<Opinion>>;
   public readonly loading$ = new BehaviorSubject(true);
   public readonly disableLoadMore$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
@@ -33,15 +33,13 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
       this.loading$.next(false);
       this.disableLoadMore$.next(false);
     });
-
-    this.isProfilePath = this.store.selectSnapshot(UserSelectors.isProfilePath);
-
-    this.opinions$ = this.store.select(
-      this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
-    );
   }
 
   public ngOnInit(): void {
+    this.opinions$ = this.store.select(
+      this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
+    );
+
     this.fetchUserOpinions(0);
   }
 
