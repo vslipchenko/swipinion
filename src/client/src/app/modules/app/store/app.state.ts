@@ -265,7 +265,7 @@ export class AppState {
     return this.userMessagesService.fetchUserConversation(action.payload).pipe(
       tap(({data}) => {
         if (!data.fetchUserConversation?.length) return; // Expected value: null | [] | [...conversation_messages]
-        console.log(action.payload);
+
         context.setState((state) => {
           const conversationKey = defineConversationKey(
             state.conversations,
