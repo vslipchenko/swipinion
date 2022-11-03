@@ -30,6 +30,7 @@ export const USER_ESSENTIALS = gql`
       id
       username
       thumbnail
+      bio
       language
     }
   }

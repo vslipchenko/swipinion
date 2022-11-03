@@ -70,6 +70,7 @@ const APP_STATE = new StateToken<AppStateModel>('app');
       id: '',
       username: '',
       thumbnail: '',
+      bio: '',
       language: 'en',
     },
     savedMessages: {

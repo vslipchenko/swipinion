@@ -5,6 +5,7 @@ export const userTypes = gql`
     id: String
     username: String
     thumbnail: String
+    bio: String
     language: String
   }
 `;

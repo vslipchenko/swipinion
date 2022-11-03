@@ -76,6 +76,7 @@ export interface AuthenticatedUserEssentials {
   id: string;
   thumbnail: string;
   username: string;
+  bio: string;
   language: Language;
 }
 

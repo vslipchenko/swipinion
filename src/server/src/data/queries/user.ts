@@ -59,7 +59,7 @@ export const queryUserCheckExistenceByUsername = (username: string): QueryConfig
 
 export const queryUserEssentialsById = (userId: string): QueryConfig => ({
   text: `
-    SELECT id, thumbnail, username, language
+    SELECT id, thumbnail, username, bio, language
     FROM users
     WHERE id = $1
   `,
