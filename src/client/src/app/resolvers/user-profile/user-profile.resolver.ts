@@ -25,11 +25,21 @@ export class UserProfileResolver implements Resolve<unknown> {
     const navigatingProfile = route.url.some((item) => item.path === 'profile');
     const username = navigatingProfile ? profile.username : route.params['username'];
 
-    const query = navigatingProfile
-      ? this.profileService.getProfileData() // Assume user authed and querying own profile data
-      : this.profileService.getProfileData(username);
+    if (navigatingProfile) {
+      return this.store.dispatch(
+        new UpdateResolvedUserData({
+          id: profile.id,
+          username,
+          bio: profile.bio,
+          thumbnail: profile.thumbnail,
+          isProfilePath: true,
+          following: false,
+          pending: false,
+        }),
+      );
+    }
 
-    return query.pipe(
+    return this.profileService.getProfileData(username).pipe(
       switchMap(({data}) => {
         if (!data?.userProfile) {
           // User was not found, redirect 404
@@ -40,21 +50,18 @@ export class UserProfileResolver implements Resolve<unknown> {
         // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
 
         this.store.dispatch(
-          // TODO update based on navigatingProfile condition
           new UpdateResolvedUserData({
             id: data.userProfile.id,
             username,
             bio: data.userProfile.bio,
-            thumbnail: data.userProfile.thumbnail, // TODO might be a room for a small improvement; can be excluded from querying as it might be present for the /profile route
+            thumbnail: data.userProfile.thumbnail,
             isProfilePath: navigatingProfile,
             following: Boolean(data.userProfile.follower_id),
             pending: data.userProfile.pending,
           }),
         );
 
-        return navigatingProfile
-          ? of({} as ApolloQueryResult<GetUserSettingsQueryResult>) // This case is handled by profile settings resolver
-          : this.userSettingsService.getUserSettings(data.userProfile.id);
+        return this.userSettingsService.getUserSettings(data.userProfile.id);
       }),
       tap(({data}: ApolloQueryResult<GetUserSettingsQueryResult>) => {
         if (!data?.userSettings) return; // Assume user settings double-checked following server side processing
