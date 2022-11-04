@@ -97,6 +97,6 @@ body {
 
 .date {
   opacity: .6; // This corresponds to inactive tabs opacity
-  font-size: 0.7rem;
+  font-size: var.$font-size-tiny;
   white-space: nowrap;
 }
