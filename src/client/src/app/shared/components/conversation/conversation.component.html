@@ -33,7 +33,7 @@
   <!--  </div>-->
 
   <ng-container *ngIf="conversationMessages$ | async as messages">
-    <div class="message-body d-flex px-3-2 primary-scrollbar relative h-100"
+    <div class="message-body d-flex px-3-2 primary-scrollbar h-100"
          [class.pb-2]="username || savedMessages">
       <app-progress-spinner
         *ngIf="loading$ | async; else container"
