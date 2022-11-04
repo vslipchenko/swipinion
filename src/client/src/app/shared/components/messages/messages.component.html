@@ -31,7 +31,7 @@
             <ng-container *ngIf="messages$ | async as messages">
               <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
                                        text="New messages will show up here"
-                                       class="h-100 messages-placeholder" [border]="false"
+                                       class="h-100 bt-transparent" [border]="false"
                                        [gradient]="false"></app-content-placeholder>
 
               <ng-template #messageList>
