@@ -21,7 +21,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 export class UserNotificationsComponent implements OnInit, Destroyable {
   @Select(UserNotificationsSelectors.notifications) public notifications$!: Observable<Array<UINotification>>;
 
-  public readonly loading$ = new BehaviorSubject(false);
+  public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
 
   public constructor(
@@ -30,7 +30,10 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
     private readonly actions$: Actions,
   ) {
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionCompleted(AcceptFollowRequest, DeclineFollowRequest, DeleteNotification))
+      .pipe(
+        takeUntil(this.destroy$),
+        ofActionCompleted(FetchUserNotifications, AcceptFollowRequest, DeclineFollowRequest, DeleteNotification),
+      )
       .subscribe(() => {
         this.loading$.next(false);
       });

@@ -44,7 +44,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   // @Output() public loadEnd = new EventEmitter<void>();
   @ViewChild('textarea') public textarea!: TextareaComponent;
 
-  public disableSendButton = false;
+  // public disableSendButton = false;
   public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
   public canLoadMore$: Observable<boolean> = of(true);
   public interlocutorId = '';
@@ -71,7 +71,9 @@ export class ConversationComponent implements OnInit, Destroyable {
         this.textarea.resetValue();
         this.textarea.control.enable();
 
-        this.disableSendButton = false;
+        // this.disableSendButton = false;
+
+        this.updating$.next(false);
       });
   }
 
@@ -117,8 +119,10 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   public sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
-    this.disableSendButton = true;
+    // this.disableSendButton = true;
     textarea.control.disable();
+
+    this.updating$.next(true);
 
     const body = textarea.control.value;
 
@@ -152,7 +156,7 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.unreadMessagesSubscription = this.unreadMessages$
       .pipe(
         takeUntil(this.destroy$),
-        skipWhile(() => !this.conversationInitialized || this.disableSendButton), // Ignore if conversation is not initializer or while messages processing is in progress; TODO replace disableSendButton with an actual logic to determine last time interlocutor messages were fetched
+        skipWhile(() => !this.conversationInitialized || this.updating$.getValue()), // Ignore if conversation is not initializer or while messages processing is in progress;
       )
       .subscribe((messages) => {
         const unreadMessage = messages.find((message) => message.sender_id === this.interlocutorId);
