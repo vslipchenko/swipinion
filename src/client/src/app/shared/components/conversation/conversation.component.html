@@ -1,4 +1,11 @@
 <div class="messaging-content relative pb-2 h-100 d-flex f-column">
+  <div *ngIf="updating$ | async"
+       class="absolute py-h pl-2 pr-1 status bt-transparent br-transparent bb-transparent bg-light-darker">
+    <span class="status-content d-flex ai-center fs-regular-small">
+      <mat-icon class="status-icon">sync</mat-icon>
+    Updating
+    </span>
+  </div>
   <!--  <div class="panel p-2 d-flex jc-between">-->
   <!--    <div class="d-flex ai-center">-->
   <!--      &lt;!&ndash; TODO try to apply app-thumbnail if appropriate &ndash;&gt;-->

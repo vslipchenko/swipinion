@@ -20,7 +20,9 @@
         <app-conversation-user-search *ngIf="newConversation"
                                       class="d-flex f-column h-100"></app-conversation-user-search>
 
-        <app-conversation *ngIf="!newConversation" [savedMessages]="savedMessages" [edgeId]="conversation.edgeId"
+        <app-conversation *ngIf="!newConversation" [accordionExpanded]="accordion.afterExpand"
+                          [accordionCollapsed]="accordion.afterCollapse" [savedMessages]="savedMessages"
+                          [edgeId]="conversation.edgeId"
                           [username]="conversation.username" [thumbnail]="conversation.thumbnail"
                           [userId1]="conversation.userId1" [userId2]="conversation.userId2"
                           [unread]="conversation.unread"></app-conversation>

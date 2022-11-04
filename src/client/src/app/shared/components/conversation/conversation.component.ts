@@ -14,7 +14,7 @@ import {
 } from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, map, Observable, of, skipWhile, Subject, take, takeUntil, timer} from 'rxjs';
+import {BehaviorSubject, map, Observable, of, skipWhile, Subject, Subscription, takeUntil, timer} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
@@ -36,6 +36,8 @@ export class ConversationComponent implements OnInit, Destroyable {
   @Input() public userId2 = '';
   @Input() public unread = false;
   @Input() public savedMessages = false;
+  @Input() public accordionExpanded!: EventEmitter<void>;
+  @Input() public accordionCollapsed!: EventEmitter<void>;
 
   @Output() public back = new EventEmitter<void>();
   // @Output() public loadStart = new EventEmitter<void>();
@@ -47,15 +49,20 @@ export class ConversationComponent implements OnInit, Destroyable {
   public canLoadMore$: Observable<boolean> = of(true);
   public interlocutorId = '';
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
+  public readonly updating$ = new BehaviorSubject(false);
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   protected definedUsername = '';
+  protected unreadMessagesSubscription!: Subscription;
+  protected messageStatusCheckSubscription!: Subscription;
+  private messageStatusCheckTimestamp = 0;
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation, FetchUserSavedMessages), take(1))
+      .pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation, FetchUserSavedMessages))
       .subscribe(() => {
         this.loading$.next(false);
+        this.updating$.next(false);
       });
 
     this.actions$
@@ -89,14 +96,17 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     if (this.savedMessages) return;
 
-    this.runMessageStatusCheck();
+    if (this.accordionExpanded) return this.listenToAccordionStateChange();
 
     this.listenToUnreadMessagesChanges();
+
+    this.runMessageStatusCheck();
   }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.updating$.complete();
     this.loading$.complete();
   }
 
@@ -139,7 +149,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private listenToUnreadMessagesChanges(): void {
-    this.unreadMessages$
+    this.unreadMessagesSubscription = this.unreadMessages$
       .pipe(
         takeUntil(this.destroy$),
         skipWhile(() => !this.conversationInitialized || this.disableSendButton), // Ignore if conversation is not initializer or while messages processing is in progress; TODO replace disableSendButton with an actual logic to determine last time interlocutor messages were fetched
@@ -157,11 +167,24 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private runMessageStatusCheck(): void {
-    timer(0, USER_STATUS_POLLING_INTERVAL)
+    this.messageStatusCheckSubscription = timer(0, USER_STATUS_POLLING_INTERVAL)
       .pipe(
         takeUntil(this.destroy$),
-        skipWhile(() => this.disableSendButton),
-      ) // TODO replace disableSendButton with an actual logic to determine last time interlocutor messages were fetched
+        skipWhile(() => {
+          // Run status check only if enough time passed between current and previous check; Needed due to a possible accordion toggle api call overhead
+          const time = new Date().getTime();
+
+          if (
+            this.messageStatusCheckTimestamp &&
+            time - this.messageStatusCheckTimestamp < USER_STATUS_POLLING_INTERVAL
+          )
+            return true;
+
+          this.messageStatusCheckTimestamp = time;
+
+          return false;
+        }),
+      )
       .subscribe(() => {
         this.store.dispatch(new RunConversationMessageStatusCheck(this.interlocutorId));
       });
@@ -174,7 +197,11 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private fetchUserConversation(edgeId: string, markRead = false, fetchNew = false): void {
-    if (!edgeId) this.loading$.next(true); // Show loading spinner only on initial loading
+    if (!edgeId) {
+      this.loading$.next(true); // Show loading spinner only on initial loading
+    } else if (fetchNew) {
+      this.updating$.next(true); // Show Updating status label
+    }
 
     const payload = {
       // Order does not matter here
@@ -187,6 +214,18 @@ export class ConversationComponent implements OnInit, Destroyable {
     if (edgeId) payload.edgeId = edgeId;
 
     this.store.dispatch(new FetchUserConversation(payload));
+  }
+
+  private listenToAccordionStateChange(): void {
+    this.accordionExpanded.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.runMessageStatusCheck();
+      this.listenToUnreadMessagesChanges(); // Emits immediately on subscription;
+    });
+
+    this.accordionCollapsed.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.unreadMessagesSubscription.unsubscribe();
+      this.messageStatusCheckSubscription.unsubscribe();
+    });
   }
 
   private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean} {
