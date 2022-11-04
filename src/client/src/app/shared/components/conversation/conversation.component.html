@@ -1,4 +1,4 @@
-<div class="messaging-content bg-light-darker pb-2 h-100 d-flex f-column relative">
+<div class="messaging-content bg-light-darker pb-2 h-100 d-flex f-column">
   <!--  <div *ngIf="updating$ | async"-->
   <!--       class="absolute py-h pl-2 pr-1 status bt-transparent br-transparent bb-transparent bg-light-darker">-->
   <!--    <span class="status-content d-flex ai-center fs-regular-small">-->
@@ -6,10 +6,7 @@
   <!--      Loading-->
   <!--    </span>-->
   <!--  </div>-->
-  <app-progress-bar
-    *ngIf="updating$ | async"
-    class="absolute t-0 w-100">
-  </app-progress-bar>
+
   <!--  <div class="p-2 d-flex jc-between bt-transparent">-->
   <!--    <div class="d-flex ai-center">-->
   <!--      &lt;!&ndash; TODO try to apply app-thumbnail if appropriate &ndash;&gt;-->
@@ -61,13 +58,20 @@
       </ng-template>
     </div>
 
-    <div *ngIf="username || savedMessages" class="px-3-2 d-flex ai-center">
-      <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
+    <div *ngIf="username || savedMessages" class="px-3-2 d-flex f-column">
+      <app-progress-bar
+        *ngIf="updating$ | async"
+        class="w-100">
+      </app-progress-bar>
 
-      <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
-                           (clicked)="sendMessage(textarea, messages)"
-                           [disabled]="$any((loading$ | async) || (updating$ | async))"
-                           class="ml-2"></app-mini-fab-button>
+      <div class="d-flex ai-center">
+        <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
+
+        <app-mini-fab-button *ngIf="textarea.control.value?.length" icon="send" color="primary"
+                             (clicked)="sendMessage(textarea, messages)"
+                             [disabled]="$any((loading$ | async) || (updating$ | async))"
+                             class="ml-2"></app-mini-fab-button>
+      </div>
     </div>
   </ng-container>
 </div>
