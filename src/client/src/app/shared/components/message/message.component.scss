@@ -4,14 +4,6 @@
   background-color: var.$color-light-transparent;
 }
 
-.unread::before {
-  content: '';
-  position: absolute;
-  height: 100%;
-  left: 0;
-  border-left: 4px solid var.$color-primary;
-}
-
 .outgoing-label {
   opacity: 0.6;
 }

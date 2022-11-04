@@ -1,5 +1,6 @@
 <app-accordion [hideToggle]="true" [panelTitle]="title" [panelDescription]="description"
-               [content]="content" titleClass="conversation-title mw-0">
+               [content]="content" titleClass="conversation-title mw-0"
+               [headerClass]="(unread$ | async) ? 'primary-indicator' : ''">
   <ng-template #title>
     <app-conversation-thumbnail *ngIf="renderUi$ | async"
                                 class="d-flex ai-center title mw-0"

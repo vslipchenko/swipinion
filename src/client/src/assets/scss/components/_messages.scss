@@ -140,3 +140,12 @@ $conversation-thumbnail-size: 30px;
   min-width: $message-thumbnail-size;
   height: $message-thumbnail-size;
 }
+
+.primary-indicator::before {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  border-left: 4px solid var.$color-primary;
+}

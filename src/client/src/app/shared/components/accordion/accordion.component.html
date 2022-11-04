@@ -1,7 +1,7 @@
 <mat-accordion>
   <mat-expansion-panel [hideToggle]="hideToggle" (afterExpand)="afterExpand.emit()"
                        (afterCollapse)="afterCollapse.emit()">
-    <mat-expansion-panel-header>
+    <mat-expansion-panel-header [class]="headerClass">
       <mat-panel-title *ngIf="panelTitle" [class]="titleClass">
         <ng-container [ngTemplateOutlet]="panelTitle"></ng-container>
       </mat-panel-title>

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output,
 import {
   FetchUserConversationPayload,
   UIUserConversationMessage,
-  UIUserMessage,
+  UnreadMessage,
 } from '~app/typings/user-messages/user-messages.interfaces';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
@@ -27,7 +27,7 @@ import {TextareaComponent} from '~app/shared/components/textarea/textarea.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationComponent implements OnInit, Destroyable {
-  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UIUserMessage>>;
+  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   @Input() public edgeId = '';
   @Input() public username = '';

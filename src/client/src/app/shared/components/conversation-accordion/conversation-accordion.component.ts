@@ -10,11 +10,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
-import {ActiveConversation} from '~app/typings/user-messages/user-messages.interfaces';
+import {ActiveConversation, UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
-import {Store} from '@ngxs/store';
+import {Select, Store} from '@ngxs/store';
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {Destroyable} from '~app/typings/component/component.interfaces';
+import {getInterlocutorId} from '~app/utilities/user-messages';
 
 @Component({
   selector: 'app-conversation-accordion',
@@ -22,18 +25,22 @@ import {BehaviorSubject} from 'rxjs';
   styleUrls: ['./conversation-accordion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationAccordionComponent implements AfterViewInit, OnChanges {
+export class ConversationAccordionComponent implements AfterViewInit, OnChanges, Destroyable {
+  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
+
   @Input() public conversation!: ActiveConversation;
   @Output() public navigateProfile = new EventEmitter<void>();
 
   @ViewChild(AccordionComponent, {static: true}) protected readonly accordion!: AccordionComponent;
 
+  public readonly destroy$ = new Subject<void>();
   protected readonly renderUi$ = new BehaviorSubject(true);
+  protected readonly unread$ = new BehaviorSubject(false);
 
   public constructor(private readonly store: Store) {}
 
   public ngAfterViewInit(): void {
-    setTimeout(() => this.accordion.panel.open()); // If used without timeout accordion content is not caught up
+    setTimeout(() => this.setupAccordion()); // If used without timeout accordion content is not caught up
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -53,6 +60,11 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges 
     this.reinstantiateComponents();
   }
 
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   protected collapseAccordions(event: MouseEvent): void {
     event.stopPropagation();
 
@@ -67,12 +79,35 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges 
     this.store.dispatch(new SetActiveConversation(null));
   }
 
+  protected get userConversation(): boolean {
+    return this.conversation.type === ActiveConversationType.UserConversation;
+  }
+
   protected get newConversation(): boolean {
     return this.conversation.type === ActiveConversationType.NewConversation;
   }
 
   protected get savedMessages(): boolean {
     return this.conversation.type === ActiveConversationType.SavedMessages;
+  }
+
+  private setupAccordion(): void {
+    this.accordion.panel.open();
+
+    if (!this.userConversation) return;
+
+    this.unreadMessages$.pipe(takeUntil(this.destroy$)).subscribe((messages) => {
+      const interlocutorId = getInterlocutorId(
+        this.conversation.userId1,
+        this.conversation.userId2,
+        this.store.selectSnapshot(AppSelectors.userId),
+      );
+
+      this.unread$.next(
+        // Show unread status indicator only when accordion is collapsed
+        !this.accordion.panel.expanded && messages.some((message) => message.sender_id === interlocutorId),
+      );
+    });
   }
 
   private reinstantiateComponents(): void {
