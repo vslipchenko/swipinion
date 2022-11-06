@@ -58,12 +58,12 @@
       </ng-template>
     </div>
 
-    <div *ngIf="username || savedMessages" class="px-3-2 d-flex f-column">
+    <div *ngIf="username || savedMessages" class="px-3-2 d-flex f-column pt-1 relative">
       <app-progress-bar
         *ngIf="updating$ | async"
-        class="w-100">
+        class="w-100 absolute t-0 l-0">
       </app-progress-bar>
-
+      
       <div class="d-flex ai-center">
         <app-textarea #textarea class="d-block w-100" extendClass="w-100" appearance="outline"></app-textarea>
 
