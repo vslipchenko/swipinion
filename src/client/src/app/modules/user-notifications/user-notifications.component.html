@@ -1,6 +1,6 @@
-<div *ngIf="{loading: loading$ | async} as state" class="wrapper bg-dark h-100 d-flex f-column relative">
+<div class="wrapper bg-dark h-100 d-flex f-column relative">
   <app-progress-bar
-    *ngIf="state.loading"
+    *ngIf="loading$ | async"
     class="absolute t-0 w-100">
   </app-progress-bar>
 

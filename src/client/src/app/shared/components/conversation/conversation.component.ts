@@ -112,8 +112,10 @@ export class ConversationComponent implements OnInit, Destroyable {
     this.loading$.complete();
   }
 
-  public spinnerInView(inView: boolean, edgeId: string): void {
+  public spinnerInView(inView: boolean, messages: Array<UIUserConversationMessage>): void {
     if (!inView) return;
+
+    const edgeId = messages[messages.length - 1].id;
 
     this.savedMessages ? this.fetchSavedMessages(edgeId) : this.fetchUserConversation(edgeId);
   }
