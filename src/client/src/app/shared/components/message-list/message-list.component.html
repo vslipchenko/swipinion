@@ -1,0 +1,31 @@
+<div class="primary-scrollbar h-100 d-flex f-column">
+  <app-message *ngIf="savedMessage$ | async as savedMessage" icon="bookmark" username="Saved Messages"
+               [message]="savedMessage.teaser"
+               [date]="savedMessage.date" (clicked)="openConversation(true)"
+               class="bt-transparent"></app-message>
+
+  <ng-container *ngIf="messages$ | async as messages">
+    <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
+                             text="New messages will show up here"
+                             class="h-100 bt-transparent" [border]="false"
+                             [gradient]="false"></app-content-placeholder>
+
+    <ng-template #messageList>
+      <app-message
+        *ngFor="let message of messages; trackBy: messageTrackBy; let first = first; let last = last"
+        [thumbnail]="message.thumbnail"
+        [username]="message.username"
+        [message]="message.teaser"
+        [date]="message.date" [outgoing]="message.sender_id === userId"
+        (clicked)="openConversation(false, message)"
+        [unread]="message.unread"
+        class="bt-transparent"
+        [class.bb-transparent]="first && last"></app-message>
+    </ng-template>
+
+    <app-progress-spinner
+      *ngIf="canLoadMore$ | async"
+      (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
+      class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
+  </ng-container>
+</div>
