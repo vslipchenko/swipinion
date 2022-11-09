@@ -4,9 +4,13 @@ import {UserMessagesComponent} from './user-messages.component';
 import {RouterModule} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
+import {ConversationAccordionModule} from '~app/shared/components/conversation-accordion/conversation-accordion.module';
+import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
+import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.module';
 
 @NgModule({
-  declarations: [UserMessagesComponent],
+  declarations: [UserMessagesComponent, UserMessagesWrapperComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -17,6 +21,9 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
     ]),
     MatIconModule,
     ProgressBarModule,
+    MessageListModule,
+    ConversationAccordionModule,
+    MessagesDirectiveModule,
   ],
 })
 export class UserMessagesModule {}

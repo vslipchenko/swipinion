@@ -1,0 +1,15 @@
+@use 'variables' as var;
+// TODO create a separate component for this type of pages
+:host {
+  min-height: 0;
+  flex: 1;
+}
+
+.headline,
+.container {
+  max-width: 900px;
+}
+
+.primary-scrollbar {
+  overflow-y: auto;
+}
