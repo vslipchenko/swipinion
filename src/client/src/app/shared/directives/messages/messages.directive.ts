@@ -10,8 +10,8 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
   selector: '[appMessages]',
 })
 export class MessagesDirective implements OnInit, Destroyable {
-  public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
+  public readonly loading$ = new BehaviorSubject(true);
 
   public constructor(
     private readonly store: Store,
