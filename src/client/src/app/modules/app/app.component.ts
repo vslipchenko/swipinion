@@ -38,15 +38,24 @@ export class AppComponent implements Destroyable {
       switch (true) {
         case event.url === '/sign-in':
           this.headerService.signIn$.next();
+          this.showMessagesService.hide();
           break;
         case event.url === '/sign-up':
           this.headerService.signUp$.next();
+          this.showMessagesService.hide();
           break;
         case event.url === '/recovery':
           this.recover$.next();
+          this.showMessagesService.hide();
           break;
         // @ts-expect-error
-        case this.authenticationService.authenticated && event.url.startsWith('/profile'):
+        case event.url === '/profile':
+        // @ts-expect-error
+        // eslint-disable-next-line no-fallthrough
+        case event.url === '/profile/notifications':
+        // @ts-expect-error
+        // eslint-disable-next-line no-fallthrough
+        case event.url === '/profile/settings':
         case this.authenticationService.authenticated && event.url.startsWith('/user/'):
           this.showMessagesService.show();
           break;
