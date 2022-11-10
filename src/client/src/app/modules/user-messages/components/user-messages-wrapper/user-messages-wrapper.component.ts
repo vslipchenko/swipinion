@@ -14,7 +14,9 @@ import {MessagesDirective} from '~app/shared/directives/messages/messages.direct
 export class UserMessagesWrapperComponent implements OnInit {
   @Select(AppSelectors.conversation) protected conversation$!: Observable<ActiveConversation>;
 
-  public constructor(private readonly messagesDirective: MessagesDirective) {}
+  public constructor(protected readonly messagesDirective: MessagesDirective) {}
 
-  ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.messagesDirective.initializeMessages();
+  }
 }

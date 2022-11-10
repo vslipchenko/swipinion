@@ -1,6 +1,6 @@
 <div class="wrapper bg-dark h-100 d-flex f-column relative">
   <app-progress-bar
-    *ngIf="true"
+    *ngIf="messagesDirective.loading$ | async"
     class="absolute t-0 w-100">
   </app-progress-bar>
 
@@ -14,7 +14,7 @@
   </div>
 
 
-  <div class="container mx-auto px-2 w-100 h-100 d-flex">
+  <div class="container mx-auto px-2 w-100 h-100 d-flex mh-0">
     <app-message-list class="f-1"></app-message-list>
 
     <app-conversation-accordion *ngIf="conversation$ | async as conversation"
