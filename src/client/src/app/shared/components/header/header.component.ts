@@ -167,7 +167,7 @@ export class HeaderComponent implements OnInit, Destroyable {
         // Run immediately
         this.dispatchUserStatusPolling(options);
 
-        interval = this.setPollingInterval(options);
+        interval = this.setPollingInterval();
       });
   }
 
@@ -177,9 +177,9 @@ export class HeaderComponent implements OnInit, Destroyable {
     this.store.dispatch(new RunUserStatusPolling(options));
   }
 
-  private setPollingInterval(options: UserStatusCheckOptions): number {
+  private setPollingInterval(): number {
     return setInterval(() => {
-      this.dispatchUserStatusPolling(options);
+      this.dispatchUserStatusPolling(this.userStatusPingService.pingOptions); // This one has to reference pingOptions object directly in order to avlid irrelevant value binding due to clojure
     }, USER_STATUS_POLLING_INTERVAL);
   }
 
