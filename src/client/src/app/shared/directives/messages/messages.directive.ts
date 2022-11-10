@@ -11,7 +11,7 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
 })
 export class MessagesDirective implements OnInit, Destroyable {
   public readonly destroy$ = new Subject<void>();
-  public readonly loading$ = new BehaviorSubject(true);
+  public readonly loading$ = new BehaviorSubject(false);
 
   public constructor(
     private readonly store: Store,
@@ -20,6 +20,8 @@ export class MessagesDirective implements OnInit, Destroyable {
   ) {}
 
   public ngOnInit(): void {
+    if (this.messagesInitialized) return;
+
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages), take(1)).subscribe(() => {
       this.loading$.next(false);
     });
@@ -40,9 +42,9 @@ export class MessagesDirective implements OnInit, Destroyable {
   }
 
   public initializeMessages(): void {
-    const messagesInitialized = this.store.selectSnapshot(AppSelectors.messagesInitialized);
+    if (this.messagesInitialized) return; // Getter has to be used as a static variable may cause issue with messages accordion spinner as it contains previous value
 
-    if (messagesInitialized) return;
+    this.loading$.next(true);
 
     this.setDispatchActionAfterStatusChecked(true);
 
@@ -54,5 +56,9 @@ export class MessagesDirective implements OnInit, Destroyable {
       ...this.userStatusPingService.pingOptions,
       dispatchActionAfterStatusChecked: value,
     };
+  }
+
+  private get messagesInitialized(): boolean {
+    return this.store.selectSnapshot(AppSelectors.messagesInitialized);
   }
 }
