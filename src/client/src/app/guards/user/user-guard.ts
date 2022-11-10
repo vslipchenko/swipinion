@@ -24,7 +24,7 @@ export class UserGuardBase {
 
       const profile = this.store.selectSnapshot(AppSelectors.userEssentials);
       // Redirect to profile
-      if (username === profile.username) return this.router.createUrlTree(['/profile']);
+      if (username === profile.username) return this.router.createUrlTree(['/profile']); // TODO fix further url segments being dropped; e.g. /user/jo1/something has to redirect to -> profile/something
     } else {
       if (!this.authenticationService.authenticated) return this.router.createUrlTree(['/sign-in']);
     }

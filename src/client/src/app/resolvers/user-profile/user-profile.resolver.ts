@@ -47,8 +47,6 @@ export class UserProfileResolver implements Resolve<unknown> {
           return of({} as ApolloQueryResult<GetUserSettingsQueryResult>);
         }
 
-        // TODO consider possibility to redirect /user/:currently-signed-in-username to /profile in order to avoid awkward behaviour
-
         this.store.dispatch(
           new UpdateResolvedUserData({
             id: data.userProfile.id,
