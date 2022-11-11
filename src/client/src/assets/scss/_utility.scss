@@ -370,6 +370,23 @@
   border-top: 1px solid var.$color-light-transparent;
 }
 
+.bl-transparent {
+  border-left: 1px solid var.$color-light-transparent;
+}
+
+.br-transparent {
+  border-right: 1px solid var.$color-light-transparent;
+}
+
+//.bx-transparent {
+//  border-left-color: var.$color-light-transparent;
+//  border-right-color: var.$color-light-transparent;
+//  border-left-width: 1px;
+//  border-left-style: solid;
+//  border-right-width: 1px;
+//  border-right-style: solid;
+//}
+
 .bb-transparent {
   border-bottom: 1px solid var.$color-light-transparent;
 }

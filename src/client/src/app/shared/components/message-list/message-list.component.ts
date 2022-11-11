@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Observable} from 'rxjs';
@@ -16,6 +16,8 @@ export class MessageListComponent {
   @Select(AppSelectors.savedMessage) public savedMessage$!: Observable<UIUserMessage>;
   @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
   @Select(AppSelectors.canLoadMoreMessages) public canLoadMore$!: Observable<boolean>;
+
+  @Input() public messageClass = '';
 
   protected userId = '';
 
