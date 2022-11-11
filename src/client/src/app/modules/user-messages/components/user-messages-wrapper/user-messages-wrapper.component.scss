@@ -3,7 +3,11 @@
 
 .headline,
 .container {
-  max-width: 900px;
+  max-width: 960px; // 360px - message list, 568px - conversation plate
+}
+
+.message-list {
+  max-width: 360px; // 360px is width of messages/conversation accordionn
 }
 
 .primary-scrollbar {
