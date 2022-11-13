@@ -63,6 +63,7 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.resetActiveConversation();
   }
 
   protected collapseAccordions(event: MouseEvent): void {
@@ -114,5 +115,10 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
     this.renderUi$.next(false);
 
     setTimeout(() => this.renderUi$.next(true)); // This one is needed in order trigger component destroy and init
+  }
+
+  private resetActiveConversation(): void {
+    // Fixes issue when messages accordion impacts accordion on the user messages page  as it's being expanded automatically and vice versa due to the state.conversation value
+    this.store.dispatch(new SetActiveConversation(null));
   }
 }
