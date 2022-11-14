@@ -8,6 +8,7 @@ import {MessageListModule} from '~app/shared/components/message-list/message-lis
 import {ConversationAccordionModule} from '~app/shared/components/conversation-accordion/conversation-accordion.module';
 import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
 import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.module';
+import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
 
 @NgModule({
   declarations: [UserMessagesComponent, UserMessagesWrapperComponent],
@@ -24,6 +25,7 @@ import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.
     MessageListModule,
     ConversationAccordionModule,
     MessagesDirectiveModule,
+    ContentPlaceholderModule,
   ],
 })
 export class UserMessagesModule {}

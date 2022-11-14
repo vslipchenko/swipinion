@@ -17,10 +17,19 @@
   <div class="container mx-auto px-2 w-100 h-100 d-flex mh-0">
     <app-message-list class="message-list f-1" messageClass="bl-transparent br-transparent"></app-message-list>
 
-    <app-conversation-accordion *ngIf="conversation$ | async as conversation"
+    <app-conversation-accordion *ngIf="conversation$ | async as conversation; else contentPlaceholder"
                                 [conversation]="conversation"
                                 (navigateProfile)="null"
                                 class="f-1"></app-conversation-accordion>
+
+    <ng-template #contentPlaceholder>
+      <app-content-placeholder
+        class="f-1 bt-transparent bl-transparent br-transparent"
+        text="Select a chat to start messaging"
+        icon="forum"
+        [border]="false"
+      ></app-content-placeholder>
+    </ng-template>
   </div>
 </div>
 
