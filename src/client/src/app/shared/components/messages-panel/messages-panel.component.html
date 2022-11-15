@@ -1,9 +1,9 @@
-<div class="messages-panel fixed d-flex px-2 jc-end"
+<div class="messages messages-panel fixed d-flex px-2 jc-end"
      [class.lifted-up]="messagesPanelService.liftUpConversationAccordion$ | async">
   <app-conversation-accordion *ngIf="conversation$ | async as conversation"
                               [conversation]="conversation"
                               (navigateProfile)="collapseMessagesAccordion(messages)"
                               class="d-block f-1-h mt-auto mw-0"></app-conversation-accordion>
 
-  <app-messages #messages appMessages class="d-block ml-2 mt-auto messages f-1-h mw-0"></app-messages>
+  <app-messages #messages appMessages class="d-block ml-2 mt-auto messages-accordion f-1-h mw-0"></app-messages>
 </div>

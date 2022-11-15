@@ -22,7 +22,7 @@
   }
 }
 
-.messages {
+.messages-accordion {
   @include media.zero-medium {
     display: none !important;
   }
