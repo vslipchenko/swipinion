@@ -8,8 +8,8 @@ export = {
   DB_PORT: 5432,
   MAIL_HOST: 'smtp.ethereal.email',
   MAIL_PORT: 587,
-  MAIL_USERNAME: 'jeffry92@ethereal.email',
-  MAIL_PASSWORD: 'xrDfz5C2aUssSfygwq',
+  MAIL_USERNAME: 'celia.kautzer@ethereal.email',
+  MAIL_PASSWORD: 'CvZfcsnSU4vcMmJ6u1',
   ACCESS_TOKEN_EXPIRES_IN: '5m',
   REFRESH_TOKEN_EXPIRES_IN: '30d',
   ACCESS_TOKEN_SECRET: '`uBj$R42VQZ]U6uQjV<+>raXm.K&tC`tYn.MYWnwGps=3/+yQh`W6@.Y&e36wh&g', // 64 chars / 512 bits
