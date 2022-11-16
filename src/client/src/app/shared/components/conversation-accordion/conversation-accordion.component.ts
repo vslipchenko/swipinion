@@ -30,6 +30,8 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
 
   @Input() public conversation!: ActiveConversation;
   @Output() public navigateProfile = new EventEmitter<void>();
+  @Output() public afterExpand = new EventEmitter<void>();
+  @Output() public afterClose = new EventEmitter<void>();
 
   @ViewChild(AccordionComponent, {static: true}) protected readonly accordion!: AccordionComponent;
 
@@ -61,6 +63,8 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
   }
 
   public ngOnDestroy(): void {
+    this.afterClose.emit();
+
     this.destroy$.next();
     this.destroy$.complete();
     this.resetActiveConversation();

@@ -13,3 +13,11 @@
 .primary-scrollbar {
   overflow-y: auto;
 }
+
+.conversation {
+  display: none;
+}
+
+.conversation.active {
+  display: block;
+}
