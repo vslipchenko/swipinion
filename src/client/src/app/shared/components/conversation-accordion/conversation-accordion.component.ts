@@ -29,6 +29,7 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   @Input() public conversation!: ActiveConversation;
+  @Input() public collapsable = false;
   @Output() public navigateProfile = new EventEmitter<void>();
   @Output() public afterExpand = new EventEmitter<void>();
   @Output() public afterClose = new EventEmitter<void>();
@@ -70,12 +71,16 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
     this.resetActiveConversation();
   }
 
+  protected preventCollapse(): void {
+    if (!this.collapsable) this.accordion.panel.open();
+  }
+
   protected collapseAccordions(event: MouseEvent): void {
     event.stopPropagation();
 
-    this.accordion.panel.close();
-
     this.navigateProfile.emit();
+
+    if (this.collapsable) this.accordion.panel.close();
   }
 
   protected closeAccordion(event: MouseEvent): void {

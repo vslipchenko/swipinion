@@ -30,13 +30,11 @@
       <app-conversation-accordion #conversationAccordion
                                   *ngIf="conversation$ | async as conversation"
                                   [conversation]="conversation"
-                                  (navigateProfile)="null"
                                   (afterExpand)="showAccordion = true"
                                   (afterClose)="closeConversation()"
                                   [class.active]="showAccordion"
                                   class="conversation h-100"
       ></app-conversation-accordion>
-
     </div>
   </div>
 </div>

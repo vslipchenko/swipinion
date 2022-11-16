@@ -1,4 +1,4 @@
-<app-accordion (afterExpand)="afterExpand.emit()" [hideToggle]="true"
+<app-accordion (afterExpand)="afterExpand.emit()" (click)="preventCollapse()" [hideToggle]="true"
                [panelTitle]="title"
                [panelDescription]="description"
                [content]="content" titleClass="conversation-title mw-0"
