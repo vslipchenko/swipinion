@@ -18,6 +18,7 @@ export class MessageListComponent {
   @Select(AppSelectors.canLoadMoreMessages) public canLoadMore$!: Observable<boolean>;
 
   @Input() public messageClass = '';
+  @Input() public gradientPlaceholder = false;
 
   protected userId = '';
 

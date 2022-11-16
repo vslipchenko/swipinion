@@ -7,6 +7,7 @@ export const ICONS: Array<string> = [
   'account-arrow-right',
   'square-edit-outline',
   'email-multiple',
+  'email-multiple-gradient',
   'account-clock',
   'eye-outline',
   'email-bookmark',

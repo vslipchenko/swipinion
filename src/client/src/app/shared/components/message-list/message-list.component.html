@@ -5,10 +5,11 @@
                class="bt-transparent" [class]="messageClass"></app-message>
 
   <ng-container *ngIf="messages$ | async as messages">
-    <app-content-placeholder *ngIf="!messages.length; else messageList" svgIcon="email-multiple"
+    <app-content-placeholder *ngIf="!messages.length; else messageList"
+                             [svgIcon]="gradientPlaceholder ? 'email-multiple-gradient' : 'email-multiple'"
                              text="New messages will show up here"
                              class="h-100 bt-transparent" [border]="false"
-                             [gradient]="false"></app-content-placeholder>
+    ></app-content-placeholder>
 
     <ng-template #messageList>
       <app-message
