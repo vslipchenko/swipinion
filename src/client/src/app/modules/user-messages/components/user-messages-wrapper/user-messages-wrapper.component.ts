@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {ActiveConversation} from '~app/typings/user-messages/user-messages.interfaces';
 import {MessagesDirective} from '~app/shared/directives/messages/messages.directive';
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
+import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 
 @Component({
   selector: 'app-user-messages-wrapper',
@@ -27,5 +28,19 @@ export class UserMessagesWrapperComponent implements OnInit {
     this.showAccordion = false;
 
     this.store.dispatch(new SetActiveConversation(null)); // Reset active conversation
+  }
+
+  protected newConversation(): void {
+    this.store.dispatch(
+      new SetActiveConversation({
+        edgeId: '',
+        userId1: '',
+        userId2: '',
+        username: '',
+        thumbnail: '',
+        unread: false,
+        type: ActiveConversationType.NewConversation,
+      }),
+    );
   }
 }
