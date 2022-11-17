@@ -1,3 +1,4 @@
+@use 'media';
 //@use 'variables' as var;
 // TODO create a separate component for this type of pages
 
@@ -6,12 +7,38 @@
   max-width: 960px; // 360px - message list, 568px - conversation plate
 }
 
+.container {
+  @include media.zero-small {
+    position: relative;
+  }
+}
+
+.content-placeholder {
+  @include media.zero-small {
+    display: none;
+  }
+}
+
 .message-list {
-  max-width: 360px; // 360px is width of messages/conversation accordionn
+  @include media.above-small {
+    max-width: 360px; // 360px is width of messages/conversation accordion
+  }
 }
 
 .primary-scrollbar {
   overflow-y: auto;
+}
+
+.conversation-plate {
+  @include media.zero-small {
+    height: 100%;
+    width: calc(100% - 32px);
+    position: absolute;
+  }
+
+  @include media.above-small {
+    position: relative;
+  }
 }
 
 .conversation {
