@@ -1,5 +1,5 @@
 @use 'media';
-//@use 'variables' as var;
+@use 'variables' as var;
 // TODO create a separate component for this type of pages
 
 .headline,
@@ -38,6 +38,12 @@
 
   @include media.above-small {
     position: relative;
+  }
+}
+
+.conversation-plate.underlay {
+  @include media.zero-small {
+    z-index: -1;
   }
 }
 

@@ -22,24 +22,25 @@
     <app-message-list class="message-list f-1 bl-transparent" messageClass="br-transparent" [gradientPlaceholder]="true"
     ></app-message-list>
 
-    <div class="conversation-plate f-1">
-      <app-content-placeholder
-        class="content-placeholder absolute w-100 h-100 bg-light-darker"
-        text="Select a chat to start messaging"
-        icon="forum"
-        [gradient]="false"
-        [border]="false"
-      ></app-content-placeholder>
+    <ng-container *ngIf="{conversation: conversation$ | async} as state">
+      <div class="conversation-plate f-1" [class.underlay]="!state.conversation">
+        <app-content-placeholder
+          class="content-placeholder absolute w-100 h-100 bg-light-darker"
+          text="Select a chat to start messaging"
+          icon="forum"
+          [gradient]="false"
+          [border]="false"
+        ></app-content-placeholder>
 
-      <app-conversation-accordion #conversationAccordion
-                                  *ngIf="conversation$ | async as conversation"
-                                  [conversation]="conversation"
-                                  (afterExpand)="showAccordion = true"
-                                  (afterClose)="closeConversation()"
-                                  [class.active]="showAccordion"
-                                  class="conversation h-100"
-      ></app-conversation-accordion>
-    </div>
+        <app-conversation-accordion *ngIf="state.conversation"
+                                    [conversation]="state.conversation"
+                                    (afterExpand)="showAccordion = true"
+                                    (afterClose)="closeConversation()"
+                                    [class.active]="showAccordion"
+                                    class="conversation h-100"
+        ></app-conversation-accordion>
+      </div>
+    </ng-container>
   </div>
 </div>
 
