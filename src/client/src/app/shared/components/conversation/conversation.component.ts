@@ -14,7 +14,19 @@ import {
 } from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, map, Observable, of, skipWhile, Subject, Subscription, takeUntil, timer} from 'rxjs';
+import {
+  BehaviorSubject,
+  map,
+  Observable,
+  of,
+  skip,
+  skipWhile,
+  startWith,
+  Subject,
+  Subscription,
+  takeUntil,
+  timer,
+} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
@@ -29,7 +41,6 @@ import {TextareaComponent} from '~app/shared/components/textarea/textarea.compon
 export class ConversationComponent implements OnInit, Destroyable {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
-  @Input() public edgeId = '';
   @Input() public username = '';
   @Input() public thumbnail = '';
   @Input() public userId1 = '';
@@ -98,11 +109,11 @@ export class ConversationComponent implements OnInit, Destroyable {
 
     if (this.savedMessages) return;
 
-    if (this.accordionExpanded) return this.listenToAccordionStateChange();
+    this.listenToAccordionStateChange();
 
-    this.listenToUnreadMessagesChanges();
-
-    this.runMessageStatusCheck();
+    // this.listenToUnreadMessagesChanges();
+    //
+    // this.runMessageStatusCheck();
   }
 
   public ngOnDestroy(): void {
@@ -149,7 +160,11 @@ export class ConversationComponent implements OnInit, Destroyable {
   private actualizeConversationIfStale(): void {
     const {relevant, hasNewMessage} = this.conversationIsRelevant;
     // Fetch only new messages
-    if (hasNewMessage) return this.fetchUserConversation(this.edgeId, true, true);
+    if (hasNewMessage) {
+      const edgeId = this.store.selectSnapshot(AppSelectors.conversationMessages(this.userId1, this.userId2))[0].id; // Can't rely on conversation edgeId (message id from message list basically) as it may contain id of message which wasn't fetched yet
+
+      return this.fetchUserConversation(edgeId, true, true);
+    }
     // Init conversation messages fetch;
     if (!relevant) this.savedMessages ? this.fetchSavedMessages() : this.fetchUserConversation('', this.unread);
   }
@@ -223,7 +238,8 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private listenToAccordionStateChange(): void {
-    this.accordionExpanded.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.accordionExpanded.pipe(takeUntil(this.destroy$), skip(1), startWith(void 0)).subscribe(() => {
+      // skip(1) has to be used in order to avoid duplicate emit on accordion open; startWith is used in order to always execute subscription callback on component init (e.g. when conversation is changed via switching between conversations)
       this.runMessageStatusCheck();
       this.listenToUnreadMessagesChanges(); // Emits immediately on subscription;
     });
