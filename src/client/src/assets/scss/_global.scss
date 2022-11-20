@@ -100,3 +100,9 @@ body {
   font-size: var.$font-size-tiny;
   white-space: nowrap;
 }
+
+.list-spinner {
+  transform: scale(0.5);
+  height: 80px;
+}
+

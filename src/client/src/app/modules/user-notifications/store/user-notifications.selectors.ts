@@ -12,4 +12,11 @@ export class UserNotificationsSelectors {
       return state.notifications;
     },
   );
+
+  public static canLoadMore = createSelector(
+    [UserNotificationsState],
+    (state: UserNotificationsStateModel): boolean => {
+      return state.canLoadMore;
+    },
+  );
 }

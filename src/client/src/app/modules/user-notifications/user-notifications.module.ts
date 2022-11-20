@@ -11,6 +11,8 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
 import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
+import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
 
 @NgModule({
   declarations: [UserNotificationsComponent, UserNotificationComponent],
@@ -29,6 +31,8 @@ import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.modu
     ContentPlaceholderModule,
     IconButtonModule,
     MenuItemsModule,
+    ProgressSpinnerModule,
+    InViewModule,
   ],
 })
 export class UserNotificationsModule {}

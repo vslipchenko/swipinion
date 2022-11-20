@@ -20,6 +20,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 })
 export class UserNotificationsComponent implements OnInit, Destroyable {
   @Select(UserNotificationsSelectors.notifications) public notifications$!: Observable<Array<UINotification>>;
+  @Select(UserNotificationsSelectors.canLoadMore) public canLoadMore$!: Observable<boolean>;
 
   public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
@@ -73,5 +74,13 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
     this.loading$.next(true);
 
     this.store.dispatch(new DeleteNotification(notification.id));
+  }
+
+  protected spinnerInView(inView: boolean, notifications: Array<UINotification>): void {
+    if (!inView) return;
+
+    const edgeId = notifications[notifications.length - 1].id;
+
+    // this.store.dispatch(new FetchUserNotifications(edgeId));
   }
 }

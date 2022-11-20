@@ -19,13 +19,20 @@
       ></app-content-placeholder>
 
       <ng-template #notificationList>
-        <app-user-notification *ngFor="let notification of notifications$ | async; let last = last"
-                               [notification]="notification"
-                               class="d-block"
-                               [class.mb-2]="!last"
-                               (accept)="acceptFollowRequest(notification)"
-                               (decline)="declineFollowRequest(notification)"
-                               (delete)="deleteNotification(notification)"></app-user-notification>
+        <ng-container *ngIf="notifications$ | async as notifications">
+          <app-user-notification *ngFor="let notification of notifications; let last = last"
+                                 [notification]="notification"
+                                 class="d-block"
+                                 [class.mb-2]="!last"
+                                 (accept)="acceptFollowRequest(notification)"
+                                 (decline)="declineFollowRequest(notification)"
+                                 (delete)="deleteNotification(notification)"></app-user-notification>
+
+          <app-progress-spinner
+            *ngIf="canLoadMore$ | async"
+            (appInView)="spinnerInView($event, notifications)"
+            class="d-flex jc-center ai-center h-100 list-spinner"></app-progress-spinner>
+        </ng-container>
       </ng-template>
     </div>
   </div>

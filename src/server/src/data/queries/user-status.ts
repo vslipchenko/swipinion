@@ -20,7 +20,7 @@ import {QueryConfig} from 'pg';
 
 export const queryNotificationUserStatus = (userId: string): QueryConfig => ({
   text: `
-    SELECT MAX(id) as id 
+    SELECT MIN(id) as id 
     FROM user_notifications
     WHERE user_id = $1
       AND read = FALSE
