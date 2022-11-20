@@ -1,16 +1,15 @@
 import {QueryConfig} from 'pg';
 import {USER_NOTIFICATIONS_FETCH_LIMIT} from '../../constants/user-notifications';
 
-export const queryUserNotifications = (userId: string, offset: number): QueryConfig => ({
+export const queryUserNotifications = (userId: string, edgeId: string): QueryConfig => ({
   text: `
     SELECT users.username, users.thumbnail, user_notifications.id, user_notifications.type, user_notifications.follower_record_id, user_notifications.read, user_notifications.created_at
     FROM user_notifications
     LEFT JOIN users ON users.id = user_notifications.involved_user_id
-    WHERE user_id = $1
-    LIMIT $3
-    OFFSET $2
+    WHERE user_notifications.user_id = $1 ${edgeId ? 'AND user_notifications.id > $3' : ''}
+    LIMIT $2
   `,
-  values: [userId, offset, USER_NOTIFICATIONS_FETCH_LIMIT],
+  values: edgeId ? [userId, USER_NOTIFICATIONS_FETCH_LIMIT, edgeId] : [userId, USER_NOTIFICATIONS_FETCH_LIMIT],
 });
 
 export const queryDeleteNotificationByFollowersRecordId = (recordId: string, userId: string): QueryConfig => ({

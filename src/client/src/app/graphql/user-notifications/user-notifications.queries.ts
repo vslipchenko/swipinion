@@ -1,8 +1,8 @@
 import {gql} from 'apollo-angular';
 
 export const GET_USER_NOTIFICATIONS = gql`
-  query ($offset: Float!) {
-    userNotifications(offset: $offset) {
+  query ($edgeId: String) {
+    userNotifications(edgeId: $edgeId) {
       id
       type
       username

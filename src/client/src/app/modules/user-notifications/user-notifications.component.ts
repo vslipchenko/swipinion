@@ -49,7 +49,7 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
   }
 
   public ngOnInit(): void {
-    this.store.dispatch(new FetchUserNotifications(0));
+    this.store.dispatch(new FetchUserNotifications());
   }
 
   public ngOnDestroy(): void {
@@ -81,6 +81,6 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
 
     const edgeId = notifications[notifications.length - 1].id;
 
-    // this.store.dispatch(new FetchUserNotifications(edgeId));
+    this.store.dispatch(new FetchUserNotifications(edgeId));
   }
 }

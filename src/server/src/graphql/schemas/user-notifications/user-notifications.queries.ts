@@ -2,21 +2,21 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {queryUserNotifications} from '../../../data/queries/user-notifications';
-import {offsetValidator} from '../../../validators/shared';
+import {bigintValidator} from '../../../validators/shared';
 import {QueryResultRow} from 'pg';
 
 export const userNotificationsQueryTypeDefinitions = gql`
   type Query {
-    userNotifications(offset: Float!): [Notification!]
+    userNotifications(edgeId: String): [Notification!]
   }
 `;
 
 const userNotifications = async (
   _1: unknown,
-  {offset}: {offset: number},
+  {edgeId}: {edgeId: string},
   {accessToken}: {accessToken: string},
 ): Promise<Array<QueryResultRow> | ApolloError | null> => {
-  const {error} = offsetValidator.validate(offset);
+  const {error} = bigintValidator.validate(edgeId);
 
   if (error) return null;
 
@@ -24,7 +24,7 @@ const userNotifications = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryUserNotifications(tokenData.userId, offset));
+  const result = await db.query(queryUserNotifications(tokenData.userId, edgeId));
 
   if (!result.rowCount) return null;
 

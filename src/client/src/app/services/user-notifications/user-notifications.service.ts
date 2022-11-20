@@ -15,10 +15,10 @@ import {ApolloQueryResult} from '@apollo/client/core';
 export class UserNotificationsService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public getNotifications(offset: number): Observable<ApolloQueryResult<GetUserNotificationsQueryResult>> {
+  public getNotifications(edgeId?: string): Observable<ApolloQueryResult<GetUserNotificationsQueryResult>> {
     return this.apollo.query<GetUserNotificationsQueryResult>({
       query: GET_USER_NOTIFICATIONS,
-      variables: {offset},
+      variables: {edgeId},
       fetchPolicy: 'no-cache', // TODO setup proper cache utilization & update mechanism
     });
   }
