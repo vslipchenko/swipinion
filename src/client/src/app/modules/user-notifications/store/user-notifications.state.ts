@@ -25,6 +25,7 @@ import {
 import {ElapsedTimeMeasure} from '~app/typings/date/date.enums';
 import {NotificationType} from '~app/typings/user-notifications/user-notifications.enums';
 import {FollowerService} from '~app/services/follower/follower.service';
+import {SetUnreadNotification} from '~app/modules/app/store/app.actions';
 
 export interface UserNotificationsStateModel {
   notifications: Array<UINotification>;
@@ -91,6 +92,8 @@ export class UserNotificationsState {
             ),
           };
         });
+
+        if (action.payload.markRead) this.store.dispatch(new SetUnreadNotification(''));
 
         context.setState((state) => ({
           ...state,

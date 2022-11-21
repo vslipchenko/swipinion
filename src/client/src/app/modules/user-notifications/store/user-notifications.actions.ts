@@ -1,7 +1,9 @@
+import {FetchUserNotificationsPayload} from '~app/typings/user-notifications/user-notifications.interfaces';
+
 export class FetchUserNotifications {
   public static readonly type = '[UserNotifications] FetchUserNotifications';
 
-  public constructor(public payload?: string) {}
+  public constructor(public payload: FetchUserNotificationsPayload) {}
 }
 
 export class AcceptFollowRequest {

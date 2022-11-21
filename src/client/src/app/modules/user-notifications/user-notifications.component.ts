@@ -11,6 +11,7 @@ import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/
 import {UINotification} from '~app/typings/user-notifications/user-notifications.interfaces';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {AppSelectors} from '~app/modules/app/store/app.selectors';
 
 @Component({
   selector: 'app-user-notifications',
@@ -49,7 +50,7 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
   }
 
   public ngOnInit(): void {
-    this.store.dispatch(new FetchUserNotifications());
+    this.fetchUserNotifications('', Boolean(this.store.selectSnapshot(AppSelectors.unreadNotification)));
   }
 
   public ngOnDestroy(): void {
@@ -81,6 +82,20 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
 
     const edgeId = notifications[notifications.length - 1].id;
 
-    this.store.dispatch(new FetchUserNotifications(edgeId));
+    this.fetchUserNotifications(edgeId);
+  }
+
+  private fetchUserNotifications(edgeId: string, markRead = false): void {
+    this.store.dispatch(
+      new FetchUserNotifications(
+        edgeId
+          ? {
+              edgeId,
+              markRead,
+            }
+          : // : ({markRead} as FetchUserNotificationsPayload),
+            {markRead},
+      ),
+    );
   }
 }

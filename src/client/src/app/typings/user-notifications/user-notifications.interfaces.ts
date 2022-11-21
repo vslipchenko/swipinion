@@ -22,3 +22,8 @@ export interface UINotification extends Notification {
   text: string;
   timeElapsed$: Observable<string>;
 }
+
+export interface FetchUserNotificationsPayload {
+  edgeId?: string;
+  markRead: boolean;
+}

@@ -44,6 +44,10 @@ export class AppSelectors {
     return state.unreadMessages;
   });
 
+  public static unreadNotification = createSelector([AppState], (state: AppStateModel) => {
+    return state.unreadNotification;
+  });
+
   public static savedMessage = createSelector([AppState], (state: AppStateModel) => {
     return state.savedMessages.message;
   });

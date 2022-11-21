@@ -3,6 +3,7 @@ import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {
   DeleteNotificationMutationResult,
+  FetchUserNotificationsPayload,
   GetUserNotificationsQueryResult,
 } from '~app/typings/user-notifications/user-notifications.interfaces';
 import {GET_USER_NOTIFICATIONS} from '~app/graphql/user-notifications/user-notifications.queries';
@@ -15,10 +16,12 @@ import {ApolloQueryResult} from '@apollo/client/core';
 export class UserNotificationsService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public getNotifications(edgeId?: string): Observable<ApolloQueryResult<GetUserNotificationsQueryResult>> {
+  public getNotifications(
+    input: FetchUserNotificationsPayload,
+  ): Observable<ApolloQueryResult<GetUserNotificationsQueryResult>> {
     return this.apollo.query<GetUserNotificationsQueryResult>({
       query: GET_USER_NOTIFICATIONS,
-      variables: {edgeId},
+      variables: {input},
       fetchPolicy: 'no-cache', // TODO setup proper cache utilization & update mechanism
     });
   }

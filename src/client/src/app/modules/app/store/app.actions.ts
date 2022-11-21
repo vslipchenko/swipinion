@@ -82,3 +82,9 @@ export class SetActiveConversation {
 
   public constructor(public payload: ActiveConversation | null) {}
 }
+
+export class SetUnreadNotification {
+  public static readonly type = '[App] SetUnreadNotification';
+
+  public constructor(public payload: string) {}
+}

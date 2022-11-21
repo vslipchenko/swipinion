@@ -10,6 +10,7 @@ import {
   SendUserMessage,
   SendUserSavedMessage,
   SetActiveConversation,
+  SetUnreadNotification,
   UpdateUserEssentials,
   UpdateUserRole,
   UpdateUtcTimestamp,
@@ -572,5 +573,13 @@ export class AppState {
 
       return nextState;
     });
+  }
+
+  @Action(SetUnreadNotification)
+  private setUnreadNotification(context: StateContext<AppStateModel>, action: SetUnreadNotification): void {
+    context.setState((state) => ({
+      ...state,
+      unreadNotification: action.payload,
+    }));
   }
 }
