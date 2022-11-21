@@ -4,9 +4,11 @@ import {
   userNotificationsMutationResolvers,
   userNotificationsMutationTypeDefinitions,
 } from './user-notifications.mutations';
+import {userNotificationsInputs} from './user-notifications.inputs';
 
 export const userNotificationsTypeDefinitions = [
   userNotificationsTypes,
+  userNotificationsInputs,
   userNotificationsQueryTypeDefinitions,
   userNotificationsMutationTypeDefinitions,
 ];

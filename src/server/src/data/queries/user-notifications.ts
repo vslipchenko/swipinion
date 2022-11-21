@@ -6,10 +6,20 @@ export const queryUserNotifications = (userId: string, edgeId: string): QueryCon
     SELECT users.username, users.thumbnail, user_notifications.id, user_notifications.type, user_notifications.follower_record_id, user_notifications.read, user_notifications.created_at
     FROM user_notifications
     LEFT JOIN users ON users.id = user_notifications.involved_user_id
-    WHERE user_notifications.user_id = $1 ${edgeId ? 'AND user_notifications.id > $3' : ''}
+    WHERE user_notifications.user_id = $1 ${edgeId ? 'AND user_notifications.id < $3' : ''}
+    ORDER BY user_notifications.id DESC
     LIMIT $2
   `,
   values: edgeId ? [userId, USER_NOTIFICATIONS_FETCH_LIMIT, edgeId] : [userId, USER_NOTIFICATIONS_FETCH_LIMIT],
+});
+
+export const queryMarkUserNotificationsRead = (userId: string): QueryConfig => ({
+  text: `
+    UPDATE user_notifications
+    SET read = TRUE
+    WHERE user_id = $1
+  `,
+  values: [userId],
 });
 
 export const queryDeleteNotificationByFollowersRecordId = (recordId: string, userId: string): QueryConfig => ({

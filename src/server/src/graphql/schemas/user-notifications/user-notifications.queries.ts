@@ -1,22 +1,22 @@
 import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
-import {queryUserNotifications} from '../../../data/queries/user-notifications';
-import {bigintValidator} from '../../../validators/shared';
+import {queryMarkUserNotificationsRead, queryUserNotifications} from '../../../data/queries/user-notifications';
 import {QueryResultRow} from 'pg';
+import {userNotificationsValidator} from '../../../validators/user-notifications';
 
 export const userNotificationsQueryTypeDefinitions = gql`
   type Query {
-    userNotifications(edgeId: String): [Notification!]
+    userNotifications(input: UserNotificationsInput!): [Notification!]
   }
 `;
 
 const userNotifications = async (
   _1: unknown,
-  {edgeId}: {edgeId: string},
+  {input}: {input: {edgeId: string; markRead: boolean}},
   {accessToken}: {accessToken: string},
 ): Promise<Array<QueryResultRow> | ApolloError | null> => {
-  const {error} = bigintValidator.validate(edgeId);
+  const {error} = userNotificationsValidator.validate(input);
 
   if (error) return null;
 
@@ -24,9 +24,16 @@ const userNotifications = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryUserNotifications(tokenData.userId, edgeId));
+  if (input.markRead) {
+    const result = await db.transaction(
+      queryMarkUserNotificationsRead(tokenData.userId),
+      queryUserNotifications(tokenData.userId, input.edgeId),
+    );
 
-  if (!result.rowCount) return null;
+    return result.results[1].rows;
+  }
+
+  const result = await db.query(queryUserNotifications(tokenData.userId, input.edgeId));
 
   return result.rows;
 };
