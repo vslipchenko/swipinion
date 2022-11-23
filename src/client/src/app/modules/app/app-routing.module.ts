@@ -11,6 +11,7 @@ import {CustomRouteReuseStrategy} from '~app/strategies/route-reuse-strategy';
 import {UserSettingsModule} from '~app/modules/user-settings/user-settings.module';
 import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings.resolver';
 import {UserNotificationsModule} from '~app/modules/user-notifications/user-notifications.module';
+import {UserMessagesModule} from '~app/modules/user-messages/user-messages.module';
 
 const entryModule: Route = {
   pathMatch: 'full',
@@ -70,7 +71,7 @@ const routes: Routes = [
   },
   {
     path: 'profile/messages',
-    loadChildren: (): Promise<typeof UserNotificationsModule> =>
+    loadChildren: (): Promise<typeof UserMessagesModule> =>
       import('~app/modules/user-messages/user-messages.module').then((m) => m.UserMessagesModule),
     ...userGuards,
     // resolve: {
