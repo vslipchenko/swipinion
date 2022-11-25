@@ -169,6 +169,7 @@ export class HeaderComponent implements OnInit, Destroyable {
         distinctUntilChanged((previous, current) => {
           return (
             previous.checkMessage === current.checkMessage &&
+            previous.checkNotification === current.checkNotification &&
             previous.dispatchActionAfterStatusChecked === current.dispatchActionAfterStatusChecked
           );
         }),
@@ -177,6 +178,7 @@ export class HeaderComponent implements OnInit, Destroyable {
         // Always clear interval as each new interval is set on each subsequent subscription callback call
         clearInterval(interval);
 
+        if (!options.checkMessage && !options.checkNotification) return;
         // Run immediately
         this.dispatchUserStatusPolling(options);
 

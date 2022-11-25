@@ -2,21 +2,21 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {queryMessageUserStatus, queryNotificationUserStatus} from '../../../data/queries/user-status';
+import {checkUserStatusValidator} from '../../../validators/user-status';
 import {QueryResultRow} from 'pg';
-import {booleanValidator} from '../../../validators/shared';
 
 export const userStatusQueryTypeDefinitions = gql`
   type Query {
-    checkUserStatus(checkMessage: Boolean!): UserStatus
+    checkUserStatus(input: UserStatusCheck!): UserStatus
   }
 `;
 
 const checkUserStatus = async (
   _1: unknown,
-  {checkMessage}: {checkMessage: boolean},
+  {input}: {input: {checkMessage: boolean; checkNotification: boolean}},
   {accessToken}: {accessToken: string},
 ): Promise<{unreadMessages?: Array<QueryResultRow>; unreadNotification?: string} | ApolloError | null> => {
-  const {error} = booleanValidator.validate(checkMessage);
+  const {error} = checkUserStatusValidator.validate(input);
 
   if (error) return null;
 
@@ -24,22 +24,27 @@ const checkUserStatus = async (
 
   if (authenticationError) return authenticationError;
 
-  if (!checkMessage) {
-    const result = await db.query(queryNotificationUserStatus(tokenData.userId));
+  if (input.checkMessage && input.checkNotification) {
+    const unreadMessages = await db.query(queryMessageUserStatus(tokenData.userId));
+    const unreadNotification = await db.query(queryNotificationUserStatus(tokenData.userId));
 
     return {
-      unreadNotification: result.rows[0]?.id,
+      unreadMessages: unreadMessages.rows,
+      unreadNotification: unreadNotification.rows[0]?.id,
+    };
+  } else if (input.checkMessage) {
+    const result = await db.query(queryMessageUserStatus(tokenData.userId));
+
+    return {
+      unreadMessages: result.rows,
     };
   }
 
-  const result = await db.transaction(
-    queryMessageUserStatus(tokenData.userId),
-    queryNotificationUserStatus(tokenData.userId),
-  );
+  // input.checkNotification
+  const result = await db.query(queryNotificationUserStatus(tokenData.userId));
 
   return {
-    unreadMessages: result.results?.[0]?.rows,
-    unreadNotification: result.results?.[1]?.rows[0]?.id,
+    unreadNotification: result.rows[0]?.id,
   };
 };
 
