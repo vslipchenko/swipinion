@@ -144,7 +144,7 @@ export class AppState {
     context: StateContext<AppStateModel>,
     action: RunUserStatusPolling,
   ): Observable<unknown> {
-    return this.userStatusService.checkUserStatus(action.payload.checkMessage).pipe(
+    return this.userStatusService.checkUserStatus(action.payload).pipe(
       tap(({data}) => {
         if (!data.checkUserStatus) return;
 
