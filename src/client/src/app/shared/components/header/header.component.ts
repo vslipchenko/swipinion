@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {distinctUntilChanged, map, merge, Observable, of, Subject, takeUntil} from 'rxjs';
+import {distinctUntilChanged, filter, map, merge, Observable, of, Subject, take, takeUntil} from 'rxjs';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
@@ -54,18 +54,22 @@ export class HeaderComponent implements OnInit, Destroyable {
     });
 
     if (this.authenticationService.authenticated) {
-      this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
-        if (!(event instanceof NavigationEnd)) return;
+      this.router.events
+        .pipe(
+          takeUntil(this.destroy$),
+          filter((event) => event instanceof NavigationEnd),
+          take(1),
+        )
+        .subscribe((event: any) => {
+          if (event.url === '/profile/notifications') {
+            this.userStatusPingService.pingOptions = {
+              ...this.userStatusPingService.pingOptions,
+              checkNotification: false,
+            };
+          }
 
-        if (event.url === '/profile/notifications') {
-          this.userStatusPingService.pingOptions = {
-            ...this.userStatusPingService.pingOptions,
-            checkNotification: false,
-          };
-        }
-
-        this.runUserStatusPolling();
-      });
+          this.runUserStatusPolling();
+        });
     }
   }
 

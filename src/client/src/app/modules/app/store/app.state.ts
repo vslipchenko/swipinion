@@ -144,46 +144,51 @@ export class AppState {
     context: StateContext<AppStateModel>,
     action: RunUserStatusPolling,
   ): Observable<unknown> {
-    return this.userStatusService.checkUserStatus(action.payload).pipe(
-      tap(({data}) => {
-        if (!data.checkUserStatus) return;
+    return this.userStatusService
+      .checkUserStatus({
+        checkMessage: action.payload.checkMessage,
+        checkNotification: action.payload.checkNotification,
+      })
+      .pipe(
+        tap(({data}) => {
+          if (!data.checkUserStatus) return;
 
-        if (action.payload.dispatchActionAfterStatusChecked)
-          this.store.dispatch(new UserStatusUpdatedBeforeMessagesInitialFetch());
+          if (action.payload.dispatchActionAfterStatusChecked)
+            this.store.dispatch(new UserStatusUpdatedBeforeMessagesInitialFetch());
 
-        context.setState((state) => {
-          const nextState = {
-            ...state,
-          };
+          context.setState((state) => {
+            const nextState = {
+              ...state,
+            };
 
-          if (action.payload.checkMessage) {
-            nextState.unreadMessages = data.checkUserStatus.unreadMessages;
+            if (action.payload.checkMessage) {
+              nextState.unreadMessages = data.checkUserStatus.unreadMessages;
 
-            const recentMessageId = Number(state.messages.messages[0]?.id);
+              const recentMessageId = Number(state.messages.messages[0]?.id);
 
-            const fetchNewMessages =
-              state.messages.messages.length &&
-              data.checkUserStatus.unreadMessages.length &&
-              data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > recentMessageId);
+              const fetchNewMessages =
+                state.messages.messages.length &&
+                data.checkUserStatus.unreadMessages.length &&
+                data.checkUserStatus.unreadMessages.some((message) => Number(message.id) > recentMessageId);
 
-            if (fetchNewMessages) {
-              const fetchMessages: Array<string> = [];
+              if (fetchNewMessages) {
+                const fetchMessages: Array<string> = [];
 
-              data.checkUserStatus.unreadMessages.forEach((message) => {
-                if (Number(message.id) > recentMessageId) fetchMessages.push(message.id);
-              });
+                data.checkUserStatus.unreadMessages.forEach((message) => {
+                  if (Number(message.id) > recentMessageId) fetchMessages.push(message.id);
+                });
 
-              if (fetchMessages.length) context.dispatch(new FetchNewUserMessages(fetchMessages));
+                if (fetchMessages.length) context.dispatch(new FetchNewUserMessages(fetchMessages));
+              }
             }
-          }
 
-          // if (action.payload.checkNotification)
-          nextState.unreadNotification = data.checkUserStatus.unreadNotification;
+            // if (action.payload.checkNotification)
+            nextState.unreadNotification = data.checkUserStatus.unreadNotification;
 
-          return nextState;
-        });
-      }),
-    );
+            return nextState;
+          });
+        }),
+      );
   }
 
   @Action(FetchUserMessages) // Fetch saved messages as well as messages from other users
