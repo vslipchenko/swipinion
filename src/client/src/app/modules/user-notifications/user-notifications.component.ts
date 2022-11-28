@@ -11,7 +11,6 @@ import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/
 import {UINotification} from '~app/typings/user-notifications/user-notifications.interfaces';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 
 @Component({
@@ -57,7 +56,7 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
   }
 
   public ngOnInit(): void {
-    this.fetchUserNotifications('', Boolean(this.store.selectSnapshot(AppSelectors.unreadNotification)));
+    this.fetchUserNotifications('', true);
   }
 
   public ngOnDestroy(): void {

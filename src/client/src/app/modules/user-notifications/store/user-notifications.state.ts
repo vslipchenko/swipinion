@@ -97,7 +97,7 @@ export class UserNotificationsState {
 
         context.setState((state) => ({
           ...state,
-          notifications: action.payload ? [...state.notifications, ...notifications] : notifications,
+          notifications: action.payload.edgeId ? [...state.notifications, ...notifications] : notifications,
           canLoadMore: data.userNotifications.length === USER_NOTIFICATIONS_FETCH_LIMIT,
         }));
       }),
