@@ -158,7 +158,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private actualizeConversationIfStale(): void {
-    const {relevant, hasNewMessage} = this.conversationIsRelevant;
+    const {relevant, hasNewMessage, initialized} = this.conversationIsRelevant;
     // Fetch only new messages
     if (hasNewMessage) {
       const edgeId = this.store.selectSnapshot(AppSelectors.conversationMessages(this.userId1, this.userId2))[0].id; // Can't rely on conversation edgeId (message id from message list basically) as it may contain id of message which wasn't fetched yet
@@ -166,7 +166,8 @@ export class ConversationComponent implements OnInit, Destroyable {
       return this.fetchUserConversation(edgeId, true, true);
     }
     // Init conversation messages fetch;
-    if (!relevant) this.savedMessages ? this.fetchSavedMessages() : this.fetchUserConversation('', this.unread);
+    if (!relevant)
+      this.savedMessages ? this.fetchSavedMessages() : this.fetchUserConversation('', initialized ? this.unread : true);
   }
 
   private listenToUnreadMessagesChanges(): void {
@@ -250,12 +251,12 @@ export class ConversationComponent implements OnInit, Destroyable {
     });
   }
 
-  private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean} {
+  private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean; initialized?: boolean} {
     if (!this.conversationInitialized) return {relevant: false}; // Conversation is not yet stored in the state: requires fetch
 
     const unreadMessages = this.store.selectSnapshot(AppSelectors.unreadMessages);
 
-    if (!unreadMessages.length) return {relevant: true}; // No new messages, conversation can be renewed
+    if (!unreadMessages.length) return {relevant: true, initialized: true}; // No new messages, conversation can be renewed
 
     const recentMessageId = this.conversation[0].id;
 
@@ -263,7 +264,7 @@ export class ConversationComponent implements OnInit, Destroyable {
       (message) => message.sender_id === this.interlocutorId && message.id > recentMessageId,
     );
 
-    return {relevant: !hasNewMessage, hasNewMessage}; // Check if there are ny new messages sent by interlocutor
+    return {relevant: !hasNewMessage, hasNewMessage, initialized: true}; // Check if there are ny new messages sent by interlocutor
   }
 
   private get conversationInitialized(): boolean {
