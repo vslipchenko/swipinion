@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
-import {MatTabChangeEvent, MatTabHeaderPosition} from '@angular/material/tabs';
+import {MatLegacyTabChangeEvent as MatTabChangeEvent, MatLegacyTabHeaderPosition as MatTabHeaderPosition} from '@angular/material/legacy-tabs';
 
 @Component({
   selector: 'app-tabs',

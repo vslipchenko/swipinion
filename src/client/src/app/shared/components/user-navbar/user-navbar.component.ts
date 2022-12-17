@@ -4,7 +4,7 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';

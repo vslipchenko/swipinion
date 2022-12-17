@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 import {FollowUser} from '~app/modules/user/store/user.actions';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {UnfollowUserDialogComponent} from '~app/modules/user/components/unfollow-user-dialog/unfollow-user-dialog.component';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
