@@ -24,9 +24,10 @@
                            [description]="opinion.description" [fileUrl]="opinion.file_url"
                            [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
 
-      <app-flat-button *ngIf="canLoadMore$ | async" text="Load more" color="primary" extendClass="w-100 mt-2-3"
-                       icon="visibility" (clicked)="fetchUserOpinions(opinions.length + 1)"
-                       [disabled]="$any(disableLoadMore$ | async)"></app-flat-button>
+      <app-progress-spinner
+        *ngIf="canLoadMore$ | async"
+        (appInView)="spinnerInView($event, opinions)"
+        class="d-flex jc-center ai-center h-100 list-spinner"></app-progress-spinner>
     </ng-template>
   </ng-container>
 </ng-template>

@@ -86,7 +86,7 @@ export class UserState {
     return this.opinionService
       .getOpinionsByUsername({
         username: action.payload.username,
-        offset: action.payload.offset,
+        edgeId: action.payload.edgeId,
       })
       .pipe(
         tap(({data}) => {
@@ -106,7 +106,7 @@ export class UserState {
             };
             const stateKey = action.payload.isProfilePath ? 'profileOpinions' : 'userOpinions';
 
-            nextState[stateKey] = action.payload.offset ? [...state[stateKey], ...opinions] : opinions; // Offset check prevents duplicating when navigating back and forth between /profile and /user/:username paths
+            nextState[stateKey] = action.payload.edgeId ? [...state[stateKey], ...opinions] : opinions; // EdgeId check prevents duplicating when navigating back and forth between /profile and /user/:username paths
 
             return nextState;
           });

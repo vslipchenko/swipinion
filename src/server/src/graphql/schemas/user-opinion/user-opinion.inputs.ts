@@ -11,6 +11,6 @@ export const userOpinionInputs = gql`
 
   input GetOpinions {
     username: String!
-    offset: Float!
+    edgeId: String
   }
 `;

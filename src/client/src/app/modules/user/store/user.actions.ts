@@ -1,11 +1,11 @@
-import {Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {FetchOpinionsPayload, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {ResolvedUserData, UserProfile} from '~app/typings/user/user.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 
 export class FetchOpinions {
   public static readonly type = '[User] FetchOpinions';
 
-  public constructor(public payload: {username: string; offset: number; isProfilePath: boolean}) {}
+  public constructor(public payload: FetchOpinionsPayload) {}
 }
 
 export class PrependUserOpinion {

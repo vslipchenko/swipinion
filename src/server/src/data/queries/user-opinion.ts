@@ -52,7 +52,7 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
   values: [userId, opinionId],
 });
 
-export const queryOpinionsByUsername = (username: string, offset: number): QueryConfig => ({
+export const queryOpinionsByUsername = (username: string, edgeId: string): QueryConfig => ({
   text: `
     SELECT user_opinions.id, 
         user_opinions.type, 
@@ -62,11 +62,12 @@ export const queryOpinionsByUsername = (username: string, offset: number): Query
         array_agg(tags.tag) as tags
     FROM user_opinions
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id
-      WHERE user_opinions.user_id = (SELECT id FROM users WHERE username = $1)
+      WHERE user_opinions.user_id = (SELECT id FROM users WHERE username = $1) ${
+        edgeId ? 'AND user_opinions.id < $3' : ''
+      }
       GROUP BY user_opinions.id
-      ORDER BY user_opinions.created_at DESC
-      LIMIT $3
-      OFFSET $2
+      ORDER BY user_opinions.id DESC
+      LIMIT $2
   `,
-  values: [username, offset, OPINION_FETCH_LIMIT],
+  values: edgeId ? [username, OPINION_FETCH_LIMIT, edgeId] : [username, OPINION_FETCH_LIMIT],
 });

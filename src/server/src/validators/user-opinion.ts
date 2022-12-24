@@ -3,7 +3,7 @@ import {OpinionType} from '../typings/opinion/opinion.enums';
 import {getNumericEnumValues} from '../utilities/enum';
 import {CreateOpinion} from '../typings/opinion/opinion.interfaces';
 import {FILE_URL_MAX_LENGTH, MAX_TAG_COUNT, TAG_REGEXP} from '../constants/validation';
-import {offsetValidator, usernameValidator} from './shared';
+import {bigintValidator, usernameValidator} from './shared';
 
 export const createOpinionValidator = Joi.object<CreateOpinion>({
   type: Joi.number().valid(...getNumericEnumValues(OpinionType)),
@@ -15,5 +15,5 @@ export const createOpinionValidator = Joi.object<CreateOpinion>({
 
 export const getOpinionsByUsernameValidator = Joi.object<unknown>({
   username: usernameValidator,
-  offset: offsetValidator,
+  edgeId: bigintValidator,
 });

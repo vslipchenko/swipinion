@@ -26,11 +26,17 @@ export interface CreateOpinion {
   tags: Array<string>;
 }
 
+export interface FetchOpinionsPayload {
+  username: string;
+  edgeId?: string;
+  isProfilePath: boolean;
+}
+
 export interface GetOpinionsByUsernameQueryResult {
   getOpinionsByUsername: Array<Opinion>;
 }
 
 export interface GetOpinions {
   username: string;
-  offset: number;
+  edgeId?: string;
 }

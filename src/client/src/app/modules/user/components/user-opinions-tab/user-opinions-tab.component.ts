@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
-import {Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {FetchOpinionsPayload, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchOpinions} from '~app/modules/user/store/user.actions';
@@ -21,7 +21,6 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
 
   public opinions$!: Observable<Array<Opinion>>;
   public readonly loading$ = new BehaviorSubject(true);
-  public readonly disableLoadMore$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
   public constructor(
@@ -31,7 +30,6 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
   ) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchOpinions)).subscribe(() => {
       this.loading$.next(false);
-      this.disableLoadMore$.next(false);
     });
   }
 
@@ -40,7 +38,7 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
       this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
     );
 
-    this.fetchUserOpinions(0);
+    this.fetchUserOpinions();
   }
 
   public ngOnDestroy(): void {
@@ -53,15 +51,22 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
     this.userNavbarService.shareOpinion$.next();
   }
 
-  public fetchUserOpinions(offset: number): void {
-    this.disableLoadMore$.next(true);
+  public fetchUserOpinions(edgeId = ''): void {
+    const payload: FetchOpinionsPayload = {
+      username: this.username,
+      isProfilePath: this.isProfilePath,
+    };
 
-    this.store.dispatch(
-      new FetchOpinions({
-        username: this.username,
-        offset,
-        isProfilePath: this.isProfilePath,
-      }),
-    );
+    if (edgeId) payload.edgeId = edgeId;
+
+    this.store.dispatch(new FetchOpinions(payload));
+  }
+
+  protected spinnerInView(inView: boolean, opinions: Array<Opinion>): void {
+    if (!inView) return;
+
+    const edgeId = opinions[opinions.length - 1].id;
+
+    this.fetchUserOpinions(edgeId);
   }
 }

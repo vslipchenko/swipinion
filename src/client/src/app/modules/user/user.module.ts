@@ -19,7 +19,6 @@ import {TabsModule} from '~app/shared/components/tabs/tabs.module';
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
 import {ButtonModule} from '~app/shared/components/button/button.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
-import {FlatButtonModule} from '~app/shared/components/flat-button/flat-button.module';
 import {OpinionPreviewModule} from '~app/shared/components/opinion-preview/opinion-preview.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
@@ -27,6 +26,7 @@ import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.modu
 import {AuthClickModule} from '~app/shared/directives/auth-click/auth-click.module';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
 import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
+import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +56,6 @@ import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
     ContentPlaceholderModule,
     ButtonModule,
     ProgressSpinnerModule,
-    FlatButtonModule,
     OpinionPreviewModule,
     ProgressBarModule,
     IconButtonModule,
@@ -64,6 +63,7 @@ import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
     AuthClickModule,
     ImageBrowserModule,
     TextareaModule,
+    InViewModule,
   ],
   exports: [],
 })

@@ -11,7 +11,7 @@ export const userOpinionQueryTypeDefinitions = gql`
 
 export const getOpinionsByUsername = async (
   _: unknown,
-  {input}: {input: {username: string; offset: number}},
+  {input}: {input: {username: string; edgeId: string}},
 ): Promise<{exists: boolean} | null | Array<unknown>> => {
   const {error} = getOpinionsByUsernameValidator.validate(input);
 
@@ -24,7 +24,7 @@ export const getOpinionsByUsername = async (
   //   title: string;
   //   description: string;
   // }
-  const result = await db.query(queryOpinionsByUsername(input.username, input.offset));
+  const result = await db.query(queryOpinionsByUsername(input.username, input.edgeId));
 
   if (!result.rowCount) return null;
 

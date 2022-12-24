@@ -1,1 +1,1 @@
-export const OPINION_FETCH_LIMIT = 9;
+export const OPINION_FETCH_LIMIT = 10;
