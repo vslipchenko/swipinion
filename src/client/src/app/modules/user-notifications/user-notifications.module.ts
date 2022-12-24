@@ -5,7 +5,7 @@ import {RouterModule} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxsModule} from '@ngxs/store';
 import {UserNotificationsState} from '~app/modules/user-notifications/store/user-notifications.state';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
+import {MatMenuModule} from '@angular/material/menu';
 import {UserNotificationComponent} from './components/user-notification/user-notification.component';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';

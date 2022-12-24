@@ -9,7 +9,7 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEXP,
 } from '~app/constants/validation';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '~app/services/user/user.service';
 import {Language} from '~app/typings/i18n/i18n.types';
 import {RecoveryStage} from '~app/typings/recovery/recovery.enums';

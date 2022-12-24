@@ -4,9 +4,9 @@ import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/for
 import {BehaviorSubject, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {SignInFailReason} from '~app/typings/authentication/authentication.enums';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
 import {Store} from '@ngxs/store';
 import {Router} from '@angular/router';

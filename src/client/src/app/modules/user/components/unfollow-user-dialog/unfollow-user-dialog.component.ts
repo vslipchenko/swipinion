@@ -5,8 +5,8 @@ import {UnfollowUser} from '~app/modules/user/store/user.actions';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-unfollow-user-dialog',

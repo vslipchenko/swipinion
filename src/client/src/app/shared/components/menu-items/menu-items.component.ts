@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, ViewChild} from '@angular/core';
-import {MatLegacyMenuPanel as MatMenuPanel, LegacyMenuPositionX as MenuPositionX} from '@angular/material/legacy-menu';
+import {MatMenuPanel, MenuPositionX} from '@angular/material/menu';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 
 @Component({

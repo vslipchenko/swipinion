@@ -9,7 +9,7 @@ import {
 } from '~app/modules/user-notifications/store/user-notifications.actions';
 import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/user-notifications.selectors';
 import {UINotification} from '~app/typings/user-notifications/user-notifications.interfaces';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 

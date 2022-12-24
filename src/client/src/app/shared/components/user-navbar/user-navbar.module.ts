@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {UserNavbarComponent} from '~app/shared/components/user-navbar/user-navbar.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [UserNavbarComponent],

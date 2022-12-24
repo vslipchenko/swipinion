@@ -3,7 +3,7 @@ import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '~app/services/user/user.service';
 
 @Component({
