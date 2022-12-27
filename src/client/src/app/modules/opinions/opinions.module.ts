@@ -1,20 +1,20 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {EntryComponent} from './entry.component';
+import {OpinionsComponent} from './opinions.component';
 import {RouterModule} from '@angular/router';
 import {CardModule} from '~app/shared/components/card/card.module';
 
 @NgModule({
-  declarations: [EntryComponent],
+  declarations: [OpinionsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
         path: '',
-        component: EntryComponent,
+        component: OpinionsComponent,
       },
     ]),
     CardModule,
   ],
 })
-export class EntryModule {}
+export class OpinionsModule {}

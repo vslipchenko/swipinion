@@ -8,32 +8,31 @@ import {UserRole} from '~app/typings/user/user.enums';
 @Injectable({
   providedIn: 'root',
 })
-export class UserRoleResolver implements Resolve<boolean> {
+export class UserRoleResolver implements Resolve<void> {
   public constructor(private readonly store: Store) {}
 
-  public resolve(route: ActivatedRouteSnapshot): boolean {
+  public resolve(route: ActivatedRouteSnapshot): void {
     const navigatingProfile = route.url.some((item) => item.path === 'profile');
 
     if (navigatingProfile) {
       this.store.dispatch(new UpdateUserRole(UserRole.User));
-      return true;
+      return;
     }
 
     const {username} = this.store.selectSnapshot(AppSelectors.userEssentials);
 
     if (!username) {
       this.store.dispatch(new UpdateUserRole(UserRole.Guest));
-      return true;
+      return;
     }
 
     const urlUsername = route.params['username'];
 
     if (urlUsername === username) {
       this.store.dispatch(new UpdateUserRole(UserRole.User));
-      return true;
+      return;
     }
 
     this.store.dispatch(new UpdateUserRole(UserRole.Viewer));
-    return true;
   }
 }

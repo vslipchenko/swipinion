@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Route, RouteReuseStrategy, RouterModule, Routes} from '@angular/router';
-import {EntryModule} from '~app/modules/entry/entry.module';
+import {OpinionsModule} from '~app/modules/opinions/opinions.module';
 import {PageNotFoundModule} from '~app/modules/page-not-found/page-not-found.module';
 import {UserModule} from '~app/modules/user/user.module';
 import {UserCanActivateGuard} from '~app/guards/user/can-activate/user-can-activate.guard';
@@ -12,10 +12,15 @@ import {UserSettingsModule} from '~app/modules/user-settings/user-settings.modul
 import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings.resolver';
 import {UserNotificationsModule} from '~app/modules/user-notifications/user-notifications.module';
 import {UserMessagesModule} from '~app/modules/user-messages/user-messages.module';
+import {OpinionsRoleResolver} from '~app/resolvers/opinions-role/opinions-role.resolver';
 
-const entryModule: Route = {
+const opinionsModule: Route = {
   pathMatch: 'full',
-  loadChildren: (): Promise<typeof EntryModule> => import('~app/modules/entry/entry.module').then((m) => m.EntryModule),
+  loadChildren: (): Promise<typeof OpinionsModule> =>
+    import('~app/modules/opinions/opinions.module').then((m) => m.OpinionsModule),
+  resolve: {
+    role: OpinionsRoleResolver,
+  },
 };
 
 const userGuards = {
@@ -23,43 +28,41 @@ const userGuards = {
   canActivate: [UserCanActivateGuard],
 };
 
-const userResolvers = {
-  role: UserRoleResolver,
-  profile: UserProfileResolver,
-};
-
 const userModule = {
   loadChildren: (): Promise<typeof UserModule> => import('~app/modules/user/user.module').then((m) => m.UserModule),
   ...userGuards,
-  resolve: userResolvers,
+  resolve: {
+    role: UserRoleResolver,
+    profile: UserProfileResolver,
+  },
 };
 
 const routes: Routes = [
   {
     path: '',
-    ...entryModule,
+    ...opinionsModule,
   },
   {
     path: 'opinion/:username/:id',
-    ...entryModule,
+    ...opinionsModule,
   },
   {
     path: 'sign-in',
-    ...entryModule,
+    ...opinionsModule,
     data: {
       path: 'sign-in',
     },
   },
   {
     path: 'sign-up',
-    ...entryModule,
+    ...opinionsModule,
     data: {
       path: 'sign-up',
     },
   },
   {
     path: 'recovery',
-    ...entryModule,
+    ...opinionsModule,
     data: {
       path: 'recovery',
     },
