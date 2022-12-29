@@ -6,3 +6,8 @@ export enum OpinionType {
   // Gif
   // Audio
 }
+
+export enum OpinionsView {
+  General = 1,
+  Individual,
+}

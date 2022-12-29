@@ -4,37 +4,32 @@ import {UpdateUserRole} from '~app/modules/app/store/app.actions';
 import {UserRole} from '~app/typings/user/user.enums';
 import {Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OpinionsRoleResolver implements Resolve<void> {
+export class OpinionsViewResolver implements Resolve<OpinionsView> {
   public constructor(private readonly store: Store) {}
 
-  // Guest role corresponds to viewing other user opinions
+  // Guest role corresponds to unauthed used
   // Viewer role corresponds to viewing opinions of others
-  // User role corresponds to viewing own opinions
-  public resolve(route: ActivatedRouteSnapshot): void {
+  // User role corresponds to own opinion view
+  public resolve(route: ActivatedRouteSnapshot): OpinionsView {
     const {username} = this.store.selectSnapshot(AppSelectors.userEssentials);
-
-    if (!username) {
-      this.store.dispatch(new UpdateUserRole(UserRole.Viewer));
-      return;
-    }
-
     const urlUsername = route.params['username'];
 
     if (!urlUsername) {
-      this.store.dispatch(new UpdateUserRole(UserRole.Viewer));
-      return;
+      this.store.dispatch(new UpdateUserRole(username ? UserRole.Viewer : UserRole.Guest));
+      return OpinionsView.General;
     }
 
     if (urlUsername === username) {
       this.store.dispatch(new UpdateUserRole(UserRole.User));
     } else {
-      this.store.dispatch(new UpdateUserRole(UserRole.Guest));
+      this.store.dispatch(new UpdateUserRole(username ? UserRole.Viewer : UserRole.Guest));
     }
 
-    return;
+    return OpinionsView.Individual;
   }
 }

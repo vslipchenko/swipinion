@@ -12,14 +12,14 @@ import {UserSettingsModule} from '~app/modules/user-settings/user-settings.modul
 import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-settings.resolver';
 import {UserNotificationsModule} from '~app/modules/user-notifications/user-notifications.module';
 import {UserMessagesModule} from '~app/modules/user-messages/user-messages.module';
-import {OpinionsRoleResolver} from '~app/resolvers/opinions-role/opinions-role.resolver';
+import {OpinionsViewResolver} from '~app/resolvers/opinions-view/opinions-view.resolver';
 
 const opinionsModule: Route = {
   pathMatch: 'full',
   loadChildren: (): Promise<typeof OpinionsModule> =>
     import('~app/modules/opinions/opinions.module').then((m) => m.OpinionsModule),
   resolve: {
-    role: OpinionsRoleResolver,
+    view: OpinionsViewResolver,
   },
 };
 
