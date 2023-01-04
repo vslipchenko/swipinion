@@ -1,4 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject} from 'rxjs';
+import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 
 @Component({
   selector: 'app-opinions',
@@ -6,4 +9,11 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   styleUrls: ['./opinions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionsComponent {}
+export class OpinionsComponent {
+  public readonly loading$ = new BehaviorSubject(true);
+  private readonly view: OpinionsView;
+
+  public constructor(private readonly route: ActivatedRoute) {
+    this.view = (this.route.snapshot.data as {view: OpinionsView}).view;
+  }
+}

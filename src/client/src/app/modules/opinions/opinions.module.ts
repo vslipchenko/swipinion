@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {OpinionsComponent} from './opinions.component';
 import {RouterModule} from '@angular/router';
 import {CardModule} from '~app/shared/components/card/card.module';
+import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 
 @NgModule({
   declarations: [OpinionsComponent],
@@ -15,6 +16,7 @@ import {CardModule} from '~app/shared/components/card/card.module';
       },
     ]),
     CardModule,
+    ProgressSpinnerModule,
   ],
 })
 export class OpinionsModule {}
