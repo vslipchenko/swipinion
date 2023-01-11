@@ -1,6 +1,6 @@
 export const ICONS: Array<string> = [
-  'like-n-comment',
-  'dislike-n-comment',
+  // 'like-n-comment',
+  // 'dislike-n-comment',
   'account-edit',
   'account-check',
   'account-arrow-left',
@@ -12,5 +12,7 @@ export const ICONS: Array<string> = [
   'eye-outline',
   'email-bookmark',
   'email',
+  'comment-outline',
+  'comment',
 ];
 export const ICONS_PATH = '../assets/icons';

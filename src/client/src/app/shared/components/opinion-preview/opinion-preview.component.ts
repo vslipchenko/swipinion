@@ -22,8 +22,10 @@ export class OpinionPreviewComponent {
   public readonly stats = [
     {icon: 'thumb_up', value: 12},
     {icon: 'thumb_down', value: 10},
-    {svgIcon: 'like-n-comment', value: 10},
-    {svgIcon: 'dislike-n-comment', value: 10},
+    // {icon: 'chat_bubble', value: 10},
+    // {svgIcon: 'message-outline', value: 10},
+    // {svgIcon: 'comment', value: 10},
+    {svgIcon: 'comment-outline', value: 10},
     // {icon: 'visibility', value: 14},
   ];
 
