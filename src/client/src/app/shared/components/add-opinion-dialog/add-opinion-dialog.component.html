@@ -3,23 +3,6 @@
   <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
   <mat-dialog-content class="primary-scrollbar">
-    <app-select
-      class="d-block"
-      extendClass="w-100"
-      appearance="outline"
-      label="Type"
-      [items]="options"
-      [control]="type"
-    ></app-select>
-
-    <div *ngIf="imageType" [class.error-border]="hasImageErrorBorder">
-      <app-image-browser
-        [imageUrl]="fileUrl"
-        [file]="file"
-        [imageUrlErrorMessage]="imageUrlErrorMessage"
-      ></app-image-browser>
-    </div>
-
     <app-input
       class="d-block"
       extendClass="w-100"
@@ -59,6 +42,14 @@
     >
       <ng-template #chipsHint> Tag can contain letters, numbers, dash as separator (35 characters at max)</ng-template>
     </app-chips>
+
+    <app-image-browser
+      class="d-block pt-2"
+      [class.mt-2]="file.value"
+      browseText="Add accompanying media"
+      [file]="file"
+      [errorMessage]="imageFileErrorMessage"
+    ></app-image-browser>
   </mat-dialog-content>
   <mat-dialog-actions class="relative">
     <app-progress-bar

@@ -9,6 +9,7 @@ import {FormControl} from '@angular/forms';
 })
 export class FileBrowserComponent implements OnDestroy {
   @Input() public control = new FormControl();
+  @Input() public browseText = 'Browse';
   @Input() public accept: Array<string> = [];
   @Output() public fileChange = new EventEmitter<File | void>();
 

@@ -5,9 +5,10 @@
   <mat-dialog-content class="primary-scrollbar">
     <app-image-browser
       extendClass="edit-profile"
+      browseText="Add image"
       [imageUrl]="imageUrl"
       [file]="file"
-      [imageUrlErrorMessage]="imageUrlErrorMessage"
+      [errorMessage]="imageUrlErrorMessage"
     ></app-image-browser>
 
     <app-textarea

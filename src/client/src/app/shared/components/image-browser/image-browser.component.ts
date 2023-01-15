@@ -11,7 +11,8 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 export class ImageBrowserComponent implements OnDestroy {
   @Input() public imageUrl = new FormControl();
   @Input() public file = new FormControl();
-  @Input() public imageUrlErrorMessage!: (errors: ValidationErrors | null) => string | void;
+  @Input() public browseText = '';
+  @Input() public errorMessage!: (errors: ValidationErrors | null) => string | void;
   @Input() public extendClass = '';
 
   public imagePreview: SafeUrl | null = '';

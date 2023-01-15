@@ -20,7 +20,7 @@ export interface DeleteOpinionMutationResult {
 
 export interface CreateOpinion {
   type: OpinionType;
-  fileUrl: string;
+  fileUrl?: string;
   title: string;
   description: string;
   tags: Array<string>;
