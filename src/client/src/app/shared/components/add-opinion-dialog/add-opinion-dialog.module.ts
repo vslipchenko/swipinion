@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {SelectModule} from '~app/shared/components/select/select.module';
 import {InputModule} from '~app/shared/components/input/input.module';
 import {TextareaModule} from '~app/shared/components/textarea/textarea.module';

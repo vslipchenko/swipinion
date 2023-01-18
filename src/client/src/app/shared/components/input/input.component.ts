@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Te
 import {InputType} from '~app/typings/input/input.types';
 import {FormControl, ValidationErrors} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
-import {FloatLabelType, MatFormFieldAppearance} from '@angular/material/form-field';
+import {LegacyFloatLabelType as FloatLabelType, MatLegacyFormFieldAppearance as MatFormFieldAppearance} from '@angular/material/legacy-form-field';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 

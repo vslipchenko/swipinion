@@ -3,7 +3,7 @@ import {UserService} from '~app/services/user/user.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {Actions, ofActionErrored, ofActionSuccessful, Select, Store} from '@ngxs/store';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';

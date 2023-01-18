@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CheckboxComponent} from '~app/shared/components/checkbox/checkbox.component';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
 import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({

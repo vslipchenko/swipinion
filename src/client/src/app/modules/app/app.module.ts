@@ -14,7 +14,7 @@ import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {environment} from '~environments/environment';
 import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateUserEssentials, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
 import {AppService} from '~app/services/app/app.service';
 import {HeaderModule} from '~app/shared/components/header/header.module';
 import {AddOpinionDialogModule} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.module';

@@ -12,8 +12,8 @@ import {
 } from '~app/constants/validation';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ImageService} from '~app/services/image/image.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {MutationResult} from 'apollo-angular';
 import {CreateOpinionMutationResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {Store} from '@ngxs/store';

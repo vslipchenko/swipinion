@@ -11,7 +11,7 @@ import {
   USERNAME_MIN_LENGTH,
   USERNAME_REGEXP,
 } from '~app/constants/validation';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({

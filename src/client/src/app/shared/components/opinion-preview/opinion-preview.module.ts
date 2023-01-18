@@ -5,7 +5,7 @@ import {CardTagsModule} from '~app/shared/components/card-tags/card-tags.module'
 import {ButtonModule} from '~app/shared/components/button/button.module';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {CardStatsModule} from '~app/shared/components/card-stats/card-stats.module';
-import {MatMenuModule} from '@angular/material/menu';
+import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 import {RouterModule} from '@angular/router';
 
 @NgModule({

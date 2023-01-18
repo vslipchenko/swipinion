@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {distinctUntilChanged, filter, map, merge, Observable, of, Subject, take, takeUntil} from 'rxjs';
 import {Location} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';

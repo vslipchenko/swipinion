@@ -3,11 +3,11 @@ import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} f
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {isValidHttpUrl} from '~app/utilities/url';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {UserService} from '~app/services/user/user.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {ImageService} from '~app/services/image/image.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {Store} from '@ngxs/store';
 import {UpdateUserEssentials} from '~app/modules/app/store/app.actions';
 import {EditProfileMutationResult, ResolvedUserData} from '~app/typings/user/user.interfaces';
