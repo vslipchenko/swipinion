@@ -68,52 +68,56 @@
         "@typescript-eslint/member-ordering": [
           "error",
           {
-            "default": {
-              "memberTypes": [
-                // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/member-ordering.md#member-types-granular-form
-                // Index signature
-                "signature",
-
-                // Fields
-                "public-static-field",
-                "protected-static-field",
-                "private-static-field",
-
-                "public-decorated-field",
-                "protected-decorated-field",
-                "private-decorated-field",
-
-                "public-instance-field",
-                "protected-instance-field",
-                "private-instance-field",
-
-                "public-abstract-field",
-                "protected-abstract-field",
-                "private-abstract-field",
-
-                // Constructors
-                "public-constructor",
-                "protected-constructor",
-                "private-constructor",
-
-                // Methods
-                "public-static-method",
-                "protected-static-method",
-                "private-static-method",
-
-                "public-decorated-method",
-                "protected-decorated-method",
-                "private-decorated-method",
-
-                "public-instance-method",
-                "protected-instance-method",
-                "private-instance-method",
-
-                "public-abstract-method",
-                "protected-abstract-method",
-                "private-abstract-method"
-              ]
-            }
+            "default": [
+              // https://typescript-eslint.io/rules/member-ordering
+              // Index signature
+              "signature",
+              // Fields
+              "public-static-field",
+              "protected-static-field",
+              "private-static-field",
+              "public-decorated-field",
+              "protected-decorated-field",
+              "private-decorated-field",
+              "public-decorated-set",
+              "protected-decorated-set",
+              "private-decorated-set",
+              "public-instance-field",
+              "protected-instance-field",
+              "private-instance-field",
+              "public-abstract-field",
+              "protected-abstract-field",
+              "public-field",
+              "protected-field",
+              "private-field",
+              // Constructors
+              "public-constructor",
+              "protected-constructor",
+              "private-constructor",
+              // Methods
+              "public-static-method",
+              "protected-static-method",
+              "private-static-method",
+              "public-decorated-method",
+              "protected-decorated-method",
+              "private-decorated-method",
+              "public-instance-method",
+              "protected-instance-method",
+              "private-instance-method",
+              "public-abstract-method",
+              "protected-abstract-method",
+              "public-method",
+              "protected-method",
+              "private-method",
+              // Getters
+              "public-get",
+              "protected-get",
+              "private-get",
+              // Setters
+              "public-set",
+              "protected-set",
+              "private-set"
+            ]
           }
         ],
         "@angular-eslint/directive-selector": [
