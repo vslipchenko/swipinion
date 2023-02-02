@@ -12,7 +12,7 @@ export const userStatusQueryTypeDefinitions = gql`
 `;
 
 const checkUserStatus = async (
-  _1: unknown,
+  _: unknown,
   {input}: {input: {checkMessage: boolean; checkNotification: boolean}},
   {accessToken}: {accessToken: string},
 ): Promise<{unreadMessages?: Array<QueryResultRow>; unreadNotification?: string} | ApolloError | null> => {

@@ -13,7 +13,7 @@ export const userSettingsQueryTypeDefinitions = gql`
 `;
 
 const userSettings = async (
-  _1: unknown,
+  _: unknown,
   {userId}: {userId: string},
   {accessToken}: {accessToken: string},
 ): Promise<QueryResultRow | ApolloError | null> => {

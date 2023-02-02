@@ -9,6 +9,7 @@ import {UserNotificationsTable} from './tables/user-notifications';
 import {UserMessagesTable} from './tables/user-messages';
 import {UserSavedMessagesTable} from './tables/user-saved-messages';
 import {TransactionResult} from '../typings/data/data.interfaces';
+import {UserOpinionReactionsTable} from './tables/user-opinion-reactions';
 
 // PostgreSQL v14
 const {DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOSTNAME, DB_PORT} = environment;
@@ -56,6 +57,7 @@ export const db = {
       UserMessagesTable,
       UserSavedMessagesTable,
       UserOpinionsTable,
+      UserOpinionReactionsTable,
       TagsTable,
       FollowersTable,
       // ... Append other tables to sync

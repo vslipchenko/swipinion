@@ -9,6 +9,6 @@ export const queryUserSearchByUsername = (username: string, userId: string): Que
     LEFT JOIN user_followers ON users.id = user_followers.user_id
     WHERE (user_settings.message = ${PrivacyCommonSettings.Everyone} OR user_settings.message = ${PrivacyCommonSettings.FollowersOnly} AND user_followers.follower_id = $2) 
       AND users.username LIKE '%' || $1 || '%'
-  `,
+  `, // TODO implement some sort of LIMIT or min length of the lookup value
   values: [username, userId],
 });

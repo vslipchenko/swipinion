@@ -12,7 +12,7 @@ export const userNotificationsQueryTypeDefinitions = gql`
 `;
 
 const userNotifications = async (
-  _1: unknown,
+  _: unknown,
   {input}: {input: {edgeId: string; markRead: boolean}},
   {accessToken}: {accessToken: string},
 ): Promise<Array<QueryResultRow> | ApolloError | null> => {

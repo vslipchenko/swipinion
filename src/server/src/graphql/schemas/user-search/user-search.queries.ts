@@ -12,7 +12,7 @@ export const userSearchQueryTypeDefinitions = gql`
 `;
 
 const userSearch = async (
-  _1: unknown,
+  _: unknown,
   {username}: {username: string},
   {accessToken}: {accessToken: string},
 ): Promise<QueryResultRow | ApolloError | null> => {

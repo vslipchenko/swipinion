@@ -5,7 +5,7 @@ import {getOpinionsByUsernameValidator} from '../../../validators/user-opinion';
 
 export const userOpinionQueryTypeDefinitions = gql`
   type Query {
-    getOpinionsByUsername(input: GetOpinions!): [Opinion!]
+    getOpinionsByUsername(input: GetOpinions!): [UserOpinion!]
   }
 `;
 

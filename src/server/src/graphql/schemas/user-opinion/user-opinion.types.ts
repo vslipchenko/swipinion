@@ -1,8 +1,8 @@
 import {gql} from 'apollo-server-core';
 
 export const userOpinionTypes = gql`
-  type Opinion {
-    id: ID
+  type UserOpinion {
+    id: String
     type: Int
     file_url: String
     title: String
