@@ -1,7 +1,7 @@
 import {OpinionType} from '~app/typings/user-opinion/user-opinion.enums';
 import {SuccessResponse} from '~app/typings/response/response.interfaces';
 
-export interface Opinion {
+export interface UserOpinion {
   id: string;
   type: OpinionType;
   file_url: string;
@@ -33,7 +33,7 @@ export interface FetchOpinionsPayload {
 }
 
 export interface GetOpinionsByUsernameQueryResult {
-  getOpinionsByUsername: Array<Opinion>;
+  getOpinionsByUsername: Array<UserOpinion>;
 }
 
 export interface GetOpinions {

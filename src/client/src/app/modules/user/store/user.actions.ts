@@ -1,4 +1,4 @@
-import {FetchOpinionsPayload, Opinion} from '~app/typings/user-opinion/user-opinion.interfaces';
+import {FetchOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {ResolvedUserData, UserProfile} from '~app/typings/user/user.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 
@@ -11,7 +11,7 @@ export class FetchOpinions {
 export class PrependUserOpinion {
   public static readonly type = '[User] PrependUserOpinion';
 
-  public constructor(public payload: Opinion) {}
+  public constructor(public payload: UserOpinion) {}
 }
 
 export class DeleteUserOpinion {

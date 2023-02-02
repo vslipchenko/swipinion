@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
-import {FetchOpinionsPayload, Opinion} from '~app/typings/user-opinion/user-opinion.interfaces';
+import {FetchOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchOpinions} from '~app/modules/user/store/user.actions';
@@ -17,9 +17,9 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
   @Input() public username = '';
   @Input() public isProfilePath = false;
 
-  @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<Opinion>>;
+  @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<UserOpinion>>;
 
-  public opinions$!: Observable<Array<Opinion>>;
+  public opinions$!: Observable<Array<UserOpinion>>;
   public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
 
@@ -62,7 +62,7 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
     this.store.dispatch(new FetchOpinions(payload));
   }
 
-  protected spinnerInView(inView: boolean, opinions: Array<Opinion>): void {
+  protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {
     if (!inView) return;
 
     const edgeId = opinions[opinions.length - 1].id;

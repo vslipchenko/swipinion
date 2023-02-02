@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {
   DeleteOpinionMutationResult,
   GetOpinionsByUsernameQueryResult,
-  Opinion,
+  UserOpinion,
 } from '~app/typings/user-opinion/user-opinion.interfaces';
 import {
   DeleteUserOpinion,
@@ -30,8 +30,8 @@ export interface UserStateModel {
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
   settings: UserSettings;
-  userOpinions: Array<Opinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
-  profileOpinions: Array<Opinion>; // Authed user opinions
+  userOpinions: Array<UserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
+  profileOpinions: Array<UserOpinion>; // Authed user opinions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
   following: boolean; // Whether authed user follows resolved
   pending: boolean; // Pending following

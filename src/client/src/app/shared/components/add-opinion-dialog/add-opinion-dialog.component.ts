@@ -15,7 +15,7 @@ import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {MutationResult} from 'apollo-angular';
-import {CreateOpinionMutationResult, Opinion} from '~app/typings/user-opinion/user-opinion.interfaces';
+import {CreateOpinionMutationResult, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
@@ -163,7 +163,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     return null;
   }
 
-  private opinionShared({data}: MutationResult<CreateOpinionMutationResult>, opinion: Opinion): void {
+  private opinionShared({data}: MutationResult<CreateOpinionMutationResult>, opinion: UserOpinion): void {
     if (!data?.createOpinion) return this.errorSnackbar();
 
     this.snackbar.openFromComponent(OpinionSuccessSnackbarComponent, {
