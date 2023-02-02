@@ -8,7 +8,7 @@ import {
   DeleteOpinionMutationResult,
   GetOpinions,
   GetOpinionsByUsernameQueryResult,
-} from '~app/typings/opinion/opinion.interfaces';
+} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {GET_OPINIONS_BY_USERNAME} from '~app/graphql/user-opinion/user-opinion.queries';
 import {ApolloQueryResult} from '@apollo/client/core';
 

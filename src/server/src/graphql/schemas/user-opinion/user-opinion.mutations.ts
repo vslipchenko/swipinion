@@ -8,7 +8,7 @@ import {
   queryOpinionCreateWithTags,
   queryOpinionDelete,
 } from '../../../data/queries/user-opinion';
-import {CreateOpinion} from '../../../typings/opinion/opinion.interfaces';
+import {CreateOpinion} from '../../../typings/user-opinion/user-opinion.interfaces';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {bigintValidator} from '../../../validators/shared';
 

@@ -4,7 +4,7 @@ import {UpdateUserRole} from '~app/modules/app/store/app.actions';
 import {UserRole} from '~app/typings/user/user.enums';
 import {Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {OpinionsView} from '~app/typings/opinion/opinion.enums';
+import {OpinionsView} from '~app/typings/user-opinion/user-opinion.enums';
 
 @Injectable({
   providedIn: 'root',

@@ -1,4 +1,4 @@
-import {FetchOpinionsPayload, Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {FetchOpinionsPayload, Opinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {ResolvedUserData, UserProfile} from '~app/typings/user/user.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 

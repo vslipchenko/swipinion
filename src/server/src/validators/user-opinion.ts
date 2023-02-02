@@ -1,7 +1,7 @@
 import Joi from 'joi';
-import {OpinionType} from '../typings/opinion/opinion.enums';
+import {OpinionType} from '../typings/user-opinion/user-opinion.enums';
 import {getNumericEnumValues} from '../utilities/enum';
-import {CreateOpinion} from '../typings/opinion/opinion.interfaces';
+import {CreateOpinion} from '../typings/user-opinion/user-opinion.interfaces';
 import {FILE_URL_MAX_LENGTH, MAX_TAG_COUNT, TAG_REGEXP} from '../constants/validation';
 import {bigintValidator, usernameValidator} from './shared';
 

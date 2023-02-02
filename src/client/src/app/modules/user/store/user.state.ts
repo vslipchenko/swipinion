@@ -4,7 +4,7 @@ import {
   DeleteOpinionMutationResult,
   GetOpinionsByUsernameQueryResult,
   Opinion,
-} from '~app/typings/opinion/opinion.interfaces';
+} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {
   DeleteUserOpinion,
   EditUserProfile,

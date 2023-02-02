@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
-import {FetchOpinionsPayload, Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {FetchOpinionsPayload, Opinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchOpinions} from '~app/modules/user/store/user.actions';

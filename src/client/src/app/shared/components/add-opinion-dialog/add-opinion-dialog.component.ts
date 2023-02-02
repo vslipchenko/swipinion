@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionType} from '~app/typings/user-opinion/user-opinion.enums';
 import {
   DESCRIPTION_MAX_LENGTH,
   MAX_IMAGE_SIZE_MB,
@@ -15,7 +15,7 @@ import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {MutationResult} from 'apollo-angular';
-import {CreateOpinionMutationResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {CreateOpinionMutationResult, Opinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';

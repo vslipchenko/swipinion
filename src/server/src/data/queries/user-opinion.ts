@@ -1,5 +1,5 @@
 import {QueryConfig} from 'pg';
-import {CreateOpinion} from '../../typings/opinion/opinion.interfaces';
+import {CreateOpinion} from '../../typings/user-opinion/user-opinion.interfaces';
 import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
 
 export const concatenateTagValues = (values: Array<string>): string => {
