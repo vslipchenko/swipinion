@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
-import {CREATE_OPINION, DELETE_OPINION} from '~app/graphql/opinion/opinion.mutations';
+import {CREATE_OPINION, DELETE_OPINION} from '~app/graphql/user-opinion/user-opinion.mutations';
 import {
   CreateOpinion,
   CreateOpinionMutationResult,
@@ -9,13 +9,13 @@ import {
   GetOpinions,
   GetOpinionsByUsernameQueryResult,
 } from '~app/typings/opinion/opinion.interfaces';
-import {GET_OPINIONS_BY_USERNAME} from '~app/graphql/opinion/opinions.queries';
+import {GET_OPINIONS_BY_USERNAME} from '~app/graphql/user-opinion/user-opinion.queries';
 import {ApolloQueryResult} from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OpinionService {
+export class UserOpinionService {
   public constructor(private readonly apollo: Apollo) {}
 
   public createOpinion(input: CreateOpinion): Observable<MutationResult<CreateOpinionMutationResult>> {

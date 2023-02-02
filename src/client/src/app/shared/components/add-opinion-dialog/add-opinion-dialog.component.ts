@@ -10,7 +10,7 @@ import {
   TAG_REGEXP,
   TITLE_MAX_LENGTH,
 } from '~app/constants/validation';
-import {OpinionService} from '~app/services/opinion/opinion.service';
+import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
@@ -35,7 +35,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
   public constructor(
-    private readonly opinionService: OpinionService,
+    private readonly userOpinionService: UserOpinionService,
     private readonly imageService: ImageService,
     private readonly snackbar: MatSnackBar,
     private readonly dialogRef: MatDialogRef<AddOpinionDialogComponent>,
@@ -71,7 +71,7 @@ export class AddOpinionDialogComponent implements Destroyable {
             const isGif = result.data.image.extension === 'gif';
             thumbnail = isGif ? result.data.image.url : result.data.thumb.url;
 
-            return this.opinionService.createOpinion({
+            return this.userOpinionService.createOpinion({
               type,
               fileUrl: thumbnail,
               title,
@@ -100,7 +100,7 @@ export class AddOpinionDialogComponent implements Destroyable {
       return;
     }
 
-    this.opinionService
+    this.userOpinionService
       .createOpinion({
         type,
         title,

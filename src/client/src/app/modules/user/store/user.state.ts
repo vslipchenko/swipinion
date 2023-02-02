@@ -15,7 +15,7 @@ import {
   UnfollowUser,
   UpdateResolvedUserData,
 } from '~app/modules/user/store/user.actions';
-import {OpinionService} from '~app/services/opinion/opinion.service';
+import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {map, Observable, tap, throwError} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
@@ -66,7 +66,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
 @Injectable()
 export class UserState {
   public constructor(
-    private readonly opinionService: OpinionService,
+    private readonly userOpinionService: UserOpinionService,
     private readonly followerService: FollowerService,
   ) {}
 
@@ -83,7 +83,7 @@ export class UserState {
     context: StateContext<UserStateModel>,
     action: FetchOpinions,
   ): Observable<MutationResult<GetOpinionsByUsernameQueryResult>> {
-    return this.opinionService
+    return this.userOpinionService
       .getOpinionsByUsername({
         username: action.payload.username,
         edgeId: action.payload.edgeId,
@@ -127,7 +127,7 @@ export class UserState {
     context: StateContext<UserStateModel>,
     action: DeleteUserOpinion,
   ): Observable<MutationResult<DeleteOpinionMutationResult>> {
-    return this.opinionService.deleteOpinion(action.payload).pipe(
+    return this.userOpinionService.deleteOpinion(action.payload).pipe(
       tap(({data}) => {
         if (!data?.deleteOpinion?.success) return;
 
