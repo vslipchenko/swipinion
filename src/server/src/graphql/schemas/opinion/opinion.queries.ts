@@ -9,7 +9,7 @@ import {QueryResult} from 'pg';
 
 export const opinionQueryTypeDefinitions = gql`
   type Query {
-    getGeneralOpinions: [UserOpinion!]
+    getGeneralOpinions: [Opinion!]
   }
 `;
 // We can show users only that opinions which he can react to which are:
