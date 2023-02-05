@@ -13,7 +13,7 @@ export class CardComponent {
     {icon: 'thumb_up', value: 12},
     {icon: 'thumb_down', value: 10},
     // {icon: 'chat_bubble', value: 10},
-    {svgIcon: 'message-outline', value: 10},
+    {svgIcon: 'comment-outline', value: 10},
     // {icon: 'visibility', value: 14},
   ];
 }
