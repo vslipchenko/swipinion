@@ -1,4 +1,4 @@
-import {OpinionType} from './opinion.enums';
+import {OpinionType} from './user-opinion.enums';
 
 export interface CreateOpinion {
   type: OpinionType;

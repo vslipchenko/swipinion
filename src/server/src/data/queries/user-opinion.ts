@@ -1,6 +1,6 @@
 import {QueryConfig} from 'pg';
 import {CreateOpinion} from '../../typings/user-opinion/user-opinion.interfaces';
-import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
+import {USER_OPINION_FETCH_LIMIT} from '../../constants/opinions';
 
 export const concatenateTagValues = (values: Array<string>): string => {
   return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join();
@@ -69,5 +69,5 @@ export const queryOpinionsByUsername = (username: string, edgeId: string): Query
       ORDER BY user_opinions.id DESC
       LIMIT $2
   `,
-  values: edgeId ? [username, OPINION_FETCH_LIMIT, edgeId] : [username, OPINION_FETCH_LIMIT],
+  values: edgeId ? [username, USER_OPINION_FETCH_LIMIT, edgeId] : [username, USER_OPINION_FETCH_LIMIT],
 });

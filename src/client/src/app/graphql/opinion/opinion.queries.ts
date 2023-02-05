@@ -1,8 +1,8 @@
 import {gql} from 'apollo-angular';
 
 export const GET_GENERAL_OPINIONS = gql`
-  query {
-    getGeneralOpinions {
+  query ($edgeId: String) {
+    getGeneralOpinions(edgeId: $edgeId) {
       id
       user_id
       type

@@ -11,9 +11,10 @@ import {GetGeneralOpinionsQueryResult} from '~app/typings/opinion/opinion.interf
 export class OpinionService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public getGeneralOpinions(): Observable<ApolloQueryResult<GetGeneralOpinionsQueryResult>> {
+  public getGeneralOpinions(edgeId?: string): Observable<ApolloQueryResult<GetGeneralOpinionsQueryResult>> {
     return this.apollo.query<GetGeneralOpinionsQueryResult>({
       query: GET_GENERAL_OPINIONS,
+      variables: {edgeId},
       fetchPolicy: 'no-cache',
     });
   }

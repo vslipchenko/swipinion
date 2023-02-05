@@ -10,7 +10,7 @@ import {OpinionsView} from '~app/typings/user-opinion/user-opinion.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpinionsComponent {
-  public readonly loading$ = new BehaviorSubject(true);
+  public readonly loading$ = new BehaviorSubject(false);
   private readonly view: OpinionsView;
 
   public constructor(private readonly route: ActivatedRoute) {

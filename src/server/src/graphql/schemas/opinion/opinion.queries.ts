@@ -6,10 +6,11 @@ import {
   queryGeneralOpinionsForUnauthorizedUser,
 } from '../../../data/queries/opinion';
 import {QueryResult} from 'pg';
+import {bigintValidator} from '../../../validators/shared';
 
 export const opinionQueryTypeDefinitions = gql`
   type Query {
-    getGeneralOpinions: [Opinion!]
+    getGeneralOpinions(edgeId: String): [Opinion!]
   }
 `;
 // We can show users only that opinions which he can react to which are:
@@ -19,17 +20,21 @@ export const opinionQueryTypeDefinitions = gql`
 // (OpinionsView.Individual)
 // 1. All opinions even to which he reacted to (fetch opinions where user_opinions.user_id = DESIRED USER ID)
 export const getGeneralOpinions = async (
-  _1: unknown,
-  _2: unknown,
+  _: unknown,
+  {edgeId}: {edgeId: string},
   {accessToken}: {accessToken: string},
 ): Promise<QueryResult | null> => {
+  const {error} = bigintValidator.validate(edgeId);
+
+  if (error) return null;
+
   const {tokenData} = authenticationGuard(accessToken);
 
   if (tokenData) {
-    return await db.query(queryGeneralOpinionsForAuthorizedUser(tokenData.userId));
+    return await db.query(queryGeneralOpinionsForAuthorizedUser(tokenData.userId, edgeId));
   }
 
-  return await db.query(queryGeneralOpinionsForUnauthorizedUser());
+  return await db.query(queryGeneralOpinionsForUnauthorizedUser(edgeId));
 };
 
 export const opinionQueryResolvers = {

@@ -18,7 +18,7 @@ import {
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {map, Observable, tap, throwError} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
-import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
+import {USER_OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
 import {FollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
@@ -102,7 +102,7 @@ export class UserState {
           context.setState((state) => {
             const nextState = {
               ...state,
-              canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
+              canLoadMore: opinions.length === USER_OPINION_FETCH_LIMIT,
             };
             const stateKey = action.payload.isProfilePath ? 'profileOpinions' : 'userOpinions';
 
