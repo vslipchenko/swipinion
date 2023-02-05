@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
-import {OpinionsView} from '~app/typings/user-opinion/user-opinion.enums';
+import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 
 @Component({
   selector: 'app-opinions',

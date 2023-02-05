@@ -1,4 +1,4 @@
-import {OpinionType} from '~app/typings/user-opinion/user-opinion.enums';
+import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
 export interface Opinion {
   id: string;

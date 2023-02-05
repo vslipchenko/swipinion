@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {OpinionType} from '~app/typings/user-opinion/user-opinion.enums';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {Store} from '@ngxs/store';
 import {DeleteUserOpinion} from '~app/modules/user/store/user.actions';
+import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
 @Component({
   selector: 'app-opinion-preview',

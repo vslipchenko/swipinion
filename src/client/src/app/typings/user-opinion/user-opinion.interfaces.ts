@@ -1,5 +1,5 @@
-import {OpinionType} from '~app/typings/user-opinion/user-opinion.enums';
 import {SuccessResponse} from '~app/typings/response/response.interfaces';
+import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
 export interface UserOpinion {
   id: string;

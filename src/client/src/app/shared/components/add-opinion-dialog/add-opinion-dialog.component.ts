@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {OpinionType} from '~app/typings/user-opinion/user-opinion.enums';
 import {
   DESCRIPTION_MAX_LENGTH,
   MAX_IMAGE_SIZE_MB,
@@ -19,6 +18,7 @@ import {CreateOpinionMutationResult, UserOpinion} from '~app/typings/user-opinio
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
+import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
 @Component({
   selector: 'app-add-opinion-dialog',
