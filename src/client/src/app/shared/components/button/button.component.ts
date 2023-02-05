@@ -10,7 +10,9 @@ import {ThemePalette} from '@angular/material/core';
 export class ButtonComponent {
   @Input() public text = '';
   @Input() public extendClass = '';
+  @Input() public iconClass = '';
   @Input() public icon = '';
+  @Input() public svgIcon = '';
   @Input() public color: ThemePalette;
   @Input() public disabled = false;
 

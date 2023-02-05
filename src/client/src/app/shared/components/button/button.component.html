@@ -5,6 +5,6 @@
   [color]="color"
   (click)="clicked.emit()"
 >
-  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+  <mat-icon *ngIf="svgIcon || icon" [svgIcon]="svgIcon" [class]="iconClass">{{ icon }}</mat-icon>
   {{ text }}
 </button>

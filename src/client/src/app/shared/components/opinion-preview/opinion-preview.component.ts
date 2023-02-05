@@ -20,12 +20,12 @@ export class OpinionPreviewComponent {
   @Input() public username = '';
 
   public readonly stats = [
-    {icon: 'thumb_up', value: 12},
-    {icon: 'thumb_down', value: 10},
+    {icon: 'thumb_up', value: '12'},
+    {icon: 'thumb_down', value: '10'},
     // {icon: 'chat_bubble', value: 10},
     // {svgIcon: 'message-outline', value: 10},
     // {svgIcon: 'comment', value: 10},
-    {svgIcon: 'comment-outline', value: 10},
+    {svgIcon: 'comment-outline', value: '10'},
     // {icon: 'visibility', value: 14},
   ];
 

@@ -7,5 +7,5 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardStatsComponent {
-  @Input() public stats: Array<{icon?: string; svgIcon?: string; value: number}> = [];
+  @Input() public stats: Array<{icon?: string; svgIcon?: string; value: string}> = [];
 }
