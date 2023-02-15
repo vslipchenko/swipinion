@@ -5,10 +5,10 @@ import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy
 import {InputModule} from '~app/shared/components/input/input.module';
 import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {ButtonModule} from '~app/shared/components/button/button.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @NgModule({
   declarations: [RecoveryDialogComponent],
-  imports: [CommonModule, MatDialogModule, InputModule, InputHideSuffixModule, ProgressBarModule, ButtonModule],
+  imports: [CommonModule, MatDialogModule, InputModule, InputHideSuffixModule, ProgressBarModule, ButtonComponent],
 })
 export class RecoveryDialogModule {}

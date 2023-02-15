@@ -5,7 +5,7 @@ import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy
 import {InputModule} from '~app/shared/components/input/input.module';
 import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {ButtonModule} from '~app/shared/components/button/button.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 
 @NgModule({
@@ -17,7 +17,7 @@ import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-i
     InputModule,
     InputHideSuffixModule,
     ProgressBarModule,
-    ButtonModule,
+    ButtonComponent,
   ],
 })
 export class SignUpDialogModule {}

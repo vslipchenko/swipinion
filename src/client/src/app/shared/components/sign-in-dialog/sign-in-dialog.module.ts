@@ -6,7 +6,7 @@ import {InputModule} from '~app/shared/components/input/input.module';
 import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
 import {CheckboxModule} from '~app/shared/components/checkbox/checkbox.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {ButtonModule} from '~app/shared/components/button/button.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 
 @NgModule({
@@ -19,7 +19,7 @@ import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-i
     InputHideSuffixModule,
     CheckboxModule,
     ProgressBarModule,
-    ButtonModule,
+    ButtonComponent,
   ],
 })
 export class SignInDialogModule {}

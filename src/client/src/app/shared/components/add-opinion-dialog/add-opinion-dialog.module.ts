@@ -7,7 +7,7 @@ import {InputModule} from '~app/shared/components/input/input.module';
 import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
 import {ChipsModule} from '~app/shared/components/chips/chips.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {ButtonModule} from '~app/shared/components/button/button.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
 
 @NgModule({
@@ -20,7 +20,7 @@ import {ImageBrowserModule} from '~app/shared/components/image-browser/image-bro
     TextareaModule,
     ChipsModule,
     ProgressBarModule,
-    ButtonModule,
+    ButtonComponent,
     ImageBrowserModule,
   ],
 })

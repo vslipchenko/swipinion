@@ -4,10 +4,10 @@ import {EmailConfirmationDialogComponent} from '~app/shared/components/email-con
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {InputModule} from '~app/shared/components/input/input.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {ButtonModule} from '~app/shared/components/button/button.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @NgModule({
   declarations: [EmailConfirmationDialogComponent],
-  imports: [CommonModule, MatDialogModule, InputModule, ProgressBarModule, ButtonModule],
+  imports: [CommonModule, MatDialogModule, InputModule, ProgressBarModule, ButtonComponent],
 })
 export class EmailConfirmationDialogModule {}
