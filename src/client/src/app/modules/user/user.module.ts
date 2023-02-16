@@ -14,7 +14,7 @@ import {UnfollowUserDialogComponent} from './components/unfollow-user-dialog/unf
 import {UserOpinionsTabComponent} from './components/user-opinions-tab/user-opinions-tab.component';
 import {UserReactionsTabComponent} from './components/user-reactions-tab/user-reactions-tab.component';
 import {UserFavoritesTabComponent} from './components/user-favorites-tab/user-favorites-tab.component';
-import {MiniFabButtonModule} from '~app/shared/components/mini-fab-button/mini-fab-button.module';
+import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/mini-fab-button.component';
 import {TabsModule} from '~app/shared/components/tabs/tabs.module';
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
@@ -51,7 +51,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     MatDialogModule,
     MatIconModule,
     MatMenuModule,
-    MiniFabButtonModule,
+    MiniFabButtonComponent,
     TabsModule,
     ContentPlaceholderModule,
     ButtonComponent,

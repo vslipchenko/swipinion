@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ConversationComponent} from './conversation.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
-import {MiniFabButtonModule} from '~app/shared/components/mini-fab-button/mini-fab-button.module';
+import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/mini-fab-button.component';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
 import {ConversationMessageModule} from '~app/shared/components/conversation-message/conversation-message.module';
@@ -16,7 +16,7 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
     CommonModule,
     IconButtonComponent,
     TextareaModule,
-    MiniFabButtonModule,
+    MiniFabButtonComponent,
     ProgressSpinnerModule,
     InViewModule,
     ConversationMessageModule,
