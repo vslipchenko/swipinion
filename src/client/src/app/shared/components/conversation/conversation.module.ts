@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ConversationComponent} from './conversation.component';
-import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
 import {MiniFabButtonModule} from '~app/shared/components/mini-fab-button/mini-fab-button.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
@@ -14,7 +14,7 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
   exports: [ConversationComponent],
   imports: [
     CommonModule,
-    IconButtonModule,
+    IconButtonComponent,
     TextareaModule,
     MiniFabButtonModule,
     ProgressSpinnerModule,

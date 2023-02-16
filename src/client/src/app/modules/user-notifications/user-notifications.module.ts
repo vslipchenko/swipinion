@@ -9,7 +9,7 @@ import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-men
 import {UserNotificationComponent} from './components/user-notification/user-notification.component';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
-import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
@@ -29,7 +29,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     MatMenuModule,
     ProgressBarModule,
     ContentPlaceholderModule,
-    IconButtonModule,
+    IconButtonComponent,
     MenuItemsModule,
     ProgressSpinnerModule,
     InViewModule,

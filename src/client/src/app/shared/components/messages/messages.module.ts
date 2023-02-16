@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {MessagesComponent} from '~app/shared/components/messages/messages.component';
 import {AccordionModule} from '~app/shared/components/accordion/accordion.module';
 import {MatIconModule} from '@angular/material/icon';
-import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {RouterModule} from '@angular/router';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
@@ -15,7 +15,7 @@ import {MessageListModule} from '~app/shared/components/message-list/message-lis
     RouterModule,
     AccordionModule,
     MatIconModule,
-    IconButtonModule,
+    IconButtonComponent,
     ProgressSpinnerModule,
     MessageListModule,
   ],

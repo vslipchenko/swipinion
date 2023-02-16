@@ -21,7 +21,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {OpinionPreviewModule} from '~app/shared/components/opinion-preview/opinion-preview.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {AuthClickModule} from '~app/shared/directives/auth-click/auth-click.module';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
@@ -58,7 +58,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     ProgressSpinnerModule,
     OpinionPreviewModule,
     ProgressBarModule,
-    IconButtonModule,
+    IconButtonComponent,
     MenuItemsModule,
     AuthClickModule,
     ImageBrowserModule,

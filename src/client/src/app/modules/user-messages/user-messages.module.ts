@@ -9,7 +9,7 @@ import {ConversationAccordionModule} from '~app/shared/components/conversation-a
 import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
 import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.module';
 import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
-import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.module';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 
 @NgModule({
   declarations: [UserMessagesComponent, UserMessagesWrapperComponent],
@@ -27,7 +27,7 @@ import {IconButtonModule} from '~app/shared/components/icon-button/icon-button.m
     ConversationAccordionModule,
     MessagesDirectiveModule,
     ContentPlaceholderModule,
-    IconButtonModule,
+    IconButtonComponent,
   ],
 })
 export class UserMessagesModule {}
