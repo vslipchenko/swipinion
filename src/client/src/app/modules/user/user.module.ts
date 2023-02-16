@@ -25,7 +25,7 @@ import {IconButtonComponent} from '~app/shared/components/icon-button/icon-butto
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {AuthClickModule} from '~app/shared/directives/auth-click/auth-click.module';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
-import {TextareaModule} from '~app/shared/components/textarea/textarea.module';
+import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
 
 @NgModule({
@@ -62,7 +62,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     MenuItemsModule,
     AuthClickModule,
     ImageBrowserModule,
-    TextareaModule,
+    TextareaComponent,
     InViewModule,
   ],
   exports: [],

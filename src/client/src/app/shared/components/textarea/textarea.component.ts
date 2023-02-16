@@ -1,13 +1,17 @@
 import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
-import {FormControl, ValidationErrors} from '@angular/forms';
+import {FormControl, ReactiveFormsModule, ValidationErrors} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import {MatLegacyFormFieldAppearance as MatFormFieldAppearance} from '@angular/material/legacy-form-field';
+import {NgIf, NgTemplateOutlet} from '@angular/common';
+import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 
 @Component({
   selector: 'app-textarea',
   templateUrl: './textarea.component.html',
   styleUrls: ['./textarea.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, NgTemplateOutlet, MatInputModule, ReactiveFormsModule],
 })
 export class TextareaComponent {
   @Input() public control = new FormControl();
