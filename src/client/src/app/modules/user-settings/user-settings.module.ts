@@ -12,7 +12,7 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
 import {InputModule} from '~app/shared/components/input/input.module';
 import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
 import {RadioGroupModule} from '~app/shared/components/radio-group/radio-group.module';
-import {FlatButtonModule} from '~app/shared/components/flat-button/flat-button.module';
+import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-button.component';
 
 @NgModule({
   declarations: [UserSettingsComponent, SettingsAccordionComponent],
@@ -32,7 +32,7 @@ import {FlatButtonModule} from '~app/shared/components/flat-button/flat-button.m
     InputModule,
     InputHideSuffixModule,
     RadioGroupModule,
-    FlatButtonModule,
+    FlatButtonComponent,
   ],
 })
 export class UserSettingsModule {}
