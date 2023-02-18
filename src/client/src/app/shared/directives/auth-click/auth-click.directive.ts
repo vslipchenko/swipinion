@@ -6,6 +6,7 @@ import {UserRole} from '~app/typings/user/user.enums';
 
 @Directive({
   selector: '[appAuthClick]',
+  standalone: true,
 })
 export class AuthClickDirective {
   public constructor(private readonly store: Store, private readonly headerService: HeaderService) {}

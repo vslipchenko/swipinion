@@ -23,7 +23,7 @@ import {OpinionPreviewModule} from '~app/shared/components/opinion-preview/opini
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
-import {AuthClickModule} from '~app/shared/directives/auth-click/auth-click.module';
+import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
@@ -60,7 +60,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     ProgressBarModule,
     IconButtonComponent,
     MenuItemsModule,
-    AuthClickModule,
+    AuthClickDirective,
     ImageBrowserModule,
     TextareaComponent,
     InViewDirective,
