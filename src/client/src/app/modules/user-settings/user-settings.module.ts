@@ -6,7 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {SettingsAccordionComponent} from './components/settings-accordion/settings-accordion.component';
 import {NgxsModule} from '@ngxs/store';
 import {UserSettingsState} from '~app/modules/user-settings/store/user-settings.state';
-import {AccordionModule} from '~app/shared/components/accordion/accordion.module';
+import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {InputComponent} from '~app/shared/components/input/input.component';
@@ -26,7 +26,7 @@ import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-butto
     ]),
     NgxsModule.forFeature([UserSettingsState]),
     MatIconModule,
-    AccordionModule,
+    AccordionComponent,
     ButtonComponent,
     ProgressBarModule,
     InputComponent,

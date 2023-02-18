@@ -1,11 +1,14 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild} from '@angular/core';
-import {MatExpansionPanel} from '@angular/material/expansion';
+import {MatExpansionModule, MatExpansionPanel} from '@angular/material/expansion';
+import {NgIf, NgTemplateOutlet} from '@angular/common';
 
 @Component({
   selector: 'app-accordion',
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatExpansionModule, NgIf, NgTemplateOutlet],
 })
 export class AccordionComponent {
   @Input() public panelTitle?: TemplateRef<any>;

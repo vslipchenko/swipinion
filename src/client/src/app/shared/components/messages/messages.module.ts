@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MessagesComponent} from '~app/shared/components/messages/messages.component';
-import {AccordionModule} from '~app/shared/components/accordion/accordion.module';
+import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {MatIconModule} from '@angular/material/icon';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {RouterModule} from '@angular/router';
@@ -13,7 +13,7 @@ import {MessageListModule} from '~app/shared/components/message-list/message-lis
   imports: [
     CommonModule,
     RouterModule,
-    AccordionModule,
+    AccordionComponent,
     MatIconModule,
     IconButtonComponent,
     ProgressSpinnerModule,
