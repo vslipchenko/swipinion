@@ -12,19 +12,38 @@ import {
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatLegacyDialogModule, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {MutationResult} from 'apollo-angular';
 import {CreateOpinionMutationResult, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {InputComponent} from '~app/shared/components/input/input.component';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
+import {ChipsModule} from '~app/shared/components/chips/chips.module';
+import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
+import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
   selector: 'app-add-opinion-dialog',
   templateUrl: './add-opinion-dialog.component.html',
   styleUrls: ['./add-opinion-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatLegacyDialogModule,
+    InputComponent,
+    TextareaComponent,
+    ChipsModule,
+    ImageBrowserModule,
+    ProgressBarModule,
+    ButtonComponent,
+  ],
 })
 export class AddOpinionDialogComponent implements Destroyable {
   public readonly loading$ = new BehaviorSubject(false);

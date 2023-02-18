@@ -17,7 +17,7 @@ import {UpdateUserEssentials, UpdateUtcTimestamp} from '~app/modules/app/store/a
 import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
 import {AppService} from '~app/services/app/app.service';
 import {HeaderComponent} from '~app/shared/components/header/header.component';
-import {AddOpinionDialogModule} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.module';
+import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {OpinionSuccessSnackbarModule} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.module';
 import {EmailConfirmationDialogModule} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.module';
 import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recovery-dialog.module';
@@ -40,7 +40,7 @@ import {MessagesPanelModule} from '~app/shared/components/messages-panel/message
     // Following modules considered global as they available across the app, mostly because of being used in the header or on multiple pages
     MatSnackBarModule,
     HeaderComponent,
-    AddOpinionDialogModule,
+    AddOpinionDialogComponent,
     OpinionSuccessSnackbarModule,
     EmailConfirmationDialogModule,
     RecoveryDialogModule,
