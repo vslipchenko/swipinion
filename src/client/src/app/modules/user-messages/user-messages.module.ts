@@ -7,7 +7,7 @@ import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-ba
 import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
 import {ConversationAccordionComponent} from '~app/shared/components/conversation-accordion/conversation-accordion.component';
 import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
-import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.module';
+import {MessagesDirective} from '~app/shared/directives/messages/messages.directive';
 import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 
@@ -25,7 +25,7 @@ import {IconButtonComponent} from '~app/shared/components/icon-button/icon-butto
     ProgressBarModule,
     MessageListModule,
     ConversationAccordionComponent,
-    MessagesDirectiveModule,
+    MessagesDirective,
     ContentPlaceholderComponent,
     IconButtonComponent,
   ],

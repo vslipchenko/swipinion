@@ -8,6 +8,7 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
 
 @Directive({
   selector: '[appMessages]',
+  standalone: true,
 })
 export class MessagesDirective implements OnInit, Destroyable {
   public readonly destroy$ = new Subject<void>();
