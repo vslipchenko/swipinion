@@ -8,7 +8,7 @@ import {UserNotificationsState} from '~app/modules/user-notifications/store/user
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 import {UserNotificationComponent} from './components/user-notification/user-notification.component';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
+import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
@@ -28,7 +28,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     MatIconModule,
     MatMenuModule,
     ProgressBarModule,
-    ContentPlaceholderModule,
+    ContentPlaceholderComponent,
     IconButtonComponent,
     MenuItemsModule,
     ProgressSpinnerModule,

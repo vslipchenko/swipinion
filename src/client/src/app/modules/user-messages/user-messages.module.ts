@@ -8,7 +8,7 @@ import {MessageListModule} from '~app/shared/components/message-list/message-lis
 import {ConversationAccordionModule} from '~app/shared/components/conversation-accordion/conversation-accordion.module';
 import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
 import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.module';
-import {ContentPlaceholderModule} from '~app/shared/components/content-placeholder/content-placeholder.module';
+import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 
 @NgModule({
@@ -26,7 +26,7 @@ import {IconButtonComponent} from '~app/shared/components/icon-button/icon-butto
     MessageListModule,
     ConversationAccordionModule,
     MessagesDirectiveModule,
-    ContentPlaceholderModule,
+    ContentPlaceholderComponent,
     IconButtonComponent,
   ],
 })
