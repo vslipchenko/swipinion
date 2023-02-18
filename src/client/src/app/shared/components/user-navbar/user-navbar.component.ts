@@ -11,12 +11,17 @@ import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
 import {UserNavbarMenuItem} from '~app/typings/menu/menu.enums';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatLegacyMenuModule} from '@angular/material/legacy-menu';
+import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 
 @Component({
   selector: 'app-user-navbar',
   templateUrl: './user-navbar.component.html',
   styleUrls: ['./user-navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, AsyncPipe, MatLegacyMenuModule, MenuItemsModule],
 })
 export class UserNavbarComponent implements OnInit, Destroyable {
   @Select(AppSelectors.userEssentials)
