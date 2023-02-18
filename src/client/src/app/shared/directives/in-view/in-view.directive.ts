@@ -2,6 +2,7 @@ import {AfterViewInit, Directive, ElementRef, EventEmitter, OnDestroy, Output} f
 
 @Directive({
   selector: '[appInView]',
+  standalone: true,
 })
 export class InViewDirective implements AfterViewInit, OnDestroy {
   @Output() public appInView = new EventEmitter<boolean>();

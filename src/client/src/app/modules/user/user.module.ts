@@ -26,7 +26,7 @@ import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.modu
 import {AuthClickModule} from '~app/shared/directives/auth-click/auth-click.module';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
-import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
+import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 
 @NgModule({
   declarations: [
@@ -63,7 +63,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     AuthClickModule,
     ImageBrowserModule,
     TextareaComponent,
-    InViewModule,
+    InViewDirective,
   ],
   exports: [],
 })

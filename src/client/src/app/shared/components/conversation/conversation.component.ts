@@ -31,12 +31,30 @@ import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ConversationMessageModule} from '~app/shared/components/conversation-message/conversation-message.module';
+import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/mini-fab-button.component';
+import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 
 @Component({
   selector: 'app-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgForOf,
+    AsyncPipe,
+    ProgressSpinnerModule,
+    ConversationMessageModule,
+    ProgressBarModule,
+    TextareaComponent,
+    MiniFabButtonComponent,
+    InViewDirective,
+  ],
 })
 export class ConversationComponent implements OnInit, Destroyable {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;

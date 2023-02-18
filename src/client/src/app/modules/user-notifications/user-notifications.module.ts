@@ -12,7 +12,7 @@ import {ContentPlaceholderComponent} from '~app/shared/components/content-placeh
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
-import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
+import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 
 @NgModule({
   declarations: [UserNotificationsComponent, UserNotificationComponent],
@@ -32,7 +32,7 @@ import {InViewModule} from '~app/shared/directives/in-view/in-view.module';
     IconButtonComponent,
     MenuItemsModule,
     ProgressSpinnerModule,
-    InViewModule,
+    InViewDirective,
   ],
 })
 export class UserNotificationsModule {}

@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ConversationAccordionComponent} from './conversation-accordion.component';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
-import {ConversationModule} from '~app/shared/components/conversation/conversation.module';
+import {ConversationComponent} from '~app/shared/components/conversation/conversation.component';
 import {ConversationThumbnailModule} from '~app/shared/components/conversation-thumbnail/conversation-thumbnail.module';
 import {ConversationUserSearchModule} from '~app/shared/components/conversation-user-search/conversation-user-search.module';
 
@@ -13,7 +13,7 @@ import {ConversationUserSearchModule} from '~app/shared/components/conversation-
     CommonModule,
     AccordionComponent,
     IconButtonComponent,
-    ConversationModule,
+    ConversationComponent,
     ConversationThumbnailModule,
     ConversationUserSearchModule,
   ],
