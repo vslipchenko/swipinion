@@ -5,7 +5,7 @@ import {RouterModule} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
-import {ConversationAccordionModule} from '~app/shared/components/conversation-accordion/conversation-accordion.module';
+import {ConversationAccordionComponent} from '~app/shared/components/conversation-accordion/conversation-accordion.component';
 import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
 import {MessagesDirectiveModule} from '~app/shared/directives/messages/messages.module';
 import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
@@ -24,7 +24,7 @@ import {IconButtonComponent} from '~app/shared/components/icon-button/icon-butto
     MatIconModule,
     ProgressBarModule,
     MessageListModule,
-    ConversationAccordionModule,
+    ConversationAccordionComponent,
     MessagesDirectiveModule,
     ContentPlaceholderComponent,
     IconButtonComponent,

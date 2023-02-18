@@ -18,12 +18,27 @@ import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {getInterlocutorId} from '~app/utilities/user-messages';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {ConversationThumbnailModule} from '~app/shared/components/conversation-thumbnail/conversation-thumbnail.module';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
+import {ConversationUserSearchModule} from '~app/shared/components/conversation-user-search/conversation-user-search.module';
+import {ConversationComponent} from '~app/shared/components/conversation/conversation.component';
 
 @Component({
   selector: 'app-conversation-accordion',
   templateUrl: './conversation-accordion.component.html',
   styleUrls: ['./conversation-accordion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    AccordionComponent,
+    ConversationThumbnailModule,
+    IconButtonComponent,
+    ConversationUserSearchModule,
+    ConversationComponent,
+  ],
 })
 export class ConversationAccordionComponent implements AfterViewInit, OnChanges, Destroyable {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
@@ -89,18 +104,6 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
     this.store.dispatch(new SetActiveConversation(null));
   }
 
-  protected get userConversation(): boolean {
-    return this.conversation.type === ActiveConversationType.UserConversation;
-  }
-
-  protected get newConversation(): boolean {
-    return this.conversation.type === ActiveConversationType.NewConversation;
-  }
-
-  protected get savedMessages(): boolean {
-    return this.conversation.type === ActiveConversationType.SavedMessages;
-  }
-
   private setupAccordion(): void {
     this.accordion.panel.open();
 
@@ -129,5 +132,17 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
   private resetActiveConversation(): void {
     // Fixes issue when messages accordion impacts accordion on the user messages page  as it's being expanded automatically and vice versa due to the state.conversation value
     this.store.dispatch(new SetActiveConversation(null));
+  }
+
+  protected get userConversation(): boolean {
+    return this.conversation.type === ActiveConversationType.UserConversation;
+  }
+
+  protected get newConversation(): boolean {
+    return this.conversation.type === ActiveConversationType.NewConversation;
+  }
+
+  protected get savedMessages(): boolean {
+    return this.conversation.type === ActiveConversationType.SavedMessages;
   }
 }
