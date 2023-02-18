@@ -4,11 +4,11 @@ import {ConversationUserSearchComponent} from './conversation-user-search.compon
 import {InputModule} from '~app/shared/components/input/input.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
 import {InputResetSuffixModule} from '~app/shared/components/input-reset-suffix/input-reset-suffix.module';
-import {ThumbnailModule} from '~app/shared/components/thumbnail/thumbnail.module';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @NgModule({
   declarations: [ConversationUserSearchComponent],
-  imports: [CommonModule, InputModule, ProgressSpinnerModule, InputResetSuffixModule, ThumbnailModule],
+  imports: [CommonModule, InputModule, ProgressSpinnerModule, InputResetSuffixModule, ThumbnailComponent],
   exports: [ConversationUserSearchComponent],
 })
 export class ConversationUserSearchModule {}

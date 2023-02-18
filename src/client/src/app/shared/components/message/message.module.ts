@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MessageComponent} from './message.component';
-import {ThumbnailModule} from '~app/shared/components/thumbnail/thumbnail.module';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @NgModule({
   declarations: [MessageComponent],
   exports: [MessageComponent],
-  imports: [CommonModule, ThumbnailModule],
+  imports: [CommonModule, ThumbnailComponent],
 })
 export class MessageModule {}
