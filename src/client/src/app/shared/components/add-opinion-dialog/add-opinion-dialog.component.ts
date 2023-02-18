@@ -22,7 +22,7 @@ import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
-import {ChipsModule} from '~app/shared/components/chips/chips.module';
+import {ChipsComponent} from '~app/shared/components/chips/chips.component';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
@@ -39,7 +39,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     MatLegacyDialogModule,
     InputComponent,
     TextareaComponent,
-    ChipsModule,
+    ChipsComponent,
     ImageBrowserModule,
     ProgressBarModule,
     ButtonComponent,

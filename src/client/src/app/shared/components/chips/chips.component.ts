@@ -1,14 +1,24 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef} from '@angular/core';
-import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
+import {
+  MatLegacyChipInputEvent as MatChipInputEvent,
+  MatLegacyChipsModule as MatChipsModule,
+} from '@angular/material/legacy-chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatLegacyFormFieldAppearance as MatFormFieldAppearance} from '@angular/material/legacy-form-field';
+import {
+  MatLegacyFormFieldAppearance as MatFormFieldAppearance,
+  MatLegacyFormFieldModule as MatFormFieldModule,
+} from '@angular/material/legacy-form-field';
 import {FormControl} from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {NgForOf, NgIf, NgTemplateOutlet} from '@angular/common';
 
 @Component({
   selector: 'app-chips',
   templateUrl: './chips.component.html',
   styleUrls: ['./chips.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatChipsModule, MatFormFieldModule, MatIconModule, NgIf, NgTemplateOutlet, NgForOf],
 })
 export class ChipsComponent implements OnInit {
   @Input() public label = '';
