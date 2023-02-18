@@ -4,7 +4,7 @@ import {OpinionPreviewComponent} from '~app/shared/components/opinion-preview/op
 import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
-import {CardStatsModule} from '~app/shared/components/card-stats/card-stats.module';
+import {CardStatsComponent} from '~app/shared/components/card-stats/card-stats.component';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 import {RouterModule} from '@angular/router';
 
@@ -16,7 +16,7 @@ import {RouterModule} from '@angular/router';
     CardTagsComponent,
     ButtonComponent,
     MenuItemsModule,
-    CardStatsModule,
+    CardStatsComponent,
     MatMenuModule,
   ],
   exports: [OpinionPreviewComponent],
