@@ -1,14 +1,18 @@
 import {ChangeDetectionStrategy, Component, Input, TemplateRef} from '@angular/core';
-import {AbstractControl, FormControl, ValidationErrors} from '@angular/forms';
+import {AbstractControl, FormControl, ReactiveFormsModule, ValidationErrors} from '@angular/forms';
 import {MatLegacyFormFieldAppearance as MatFormFieldAppearance} from '@angular/material/legacy-form-field';
 import {ThemePalette} from '@angular/material/core';
 import {SelectItem} from '~app/typings/select/select.interfaces';
+import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
+import {NgForOf, NgIf, NgTemplateOutlet} from '@angular/common';
 
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatSelectModule, ReactiveFormsModule, NgIf, NgTemplateOutlet, NgForOf],
 })
 export class SelectComponent {
   @Input() public control = new FormControl();

@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
-import {SelectModule} from '~app/shared/components/select/select.module';
+import {SelectComponent} from '~app/shared/components/select/select.component';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {ChipsModule} from '~app/shared/components/chips/chips.module';
@@ -15,7 +15,7 @@ import {ImageBrowserModule} from '~app/shared/components/image-browser/image-bro
   imports: [
     CommonModule,
     MatDialogModule,
-    SelectModule,
+    SelectComponent,
     InputComponent,
     TextareaComponent,
     ChipsModule,
