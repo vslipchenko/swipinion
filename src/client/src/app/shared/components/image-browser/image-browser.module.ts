@@ -5,7 +5,7 @@ import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-butto
 import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
 import {FileBrowserComponent} from '~app/shared/components/file-browser/file-browser.component';
 import {InputComponent} from '~app/shared/components/input/input.component';
-import {InputResetSuffixModule} from '~app/shared/components/input-reset-suffix/input-reset-suffix.module';
+import {InputResetSuffixComponent} from '~app/shared/components/input-reset-suffix/input-reset-suffix.component';
 
 @NgModule({
   declarations: [ImageBrowserComponent],
@@ -15,7 +15,7 @@ import {InputResetSuffixModule} from '~app/shared/components/input-reset-suffix/
     MatFormFieldModule,
     FileBrowserComponent,
     InputComponent,
-    InputResetSuffixModule,
+    InputResetSuffixComponent,
   ],
   exports: [ImageBrowserComponent],
 })
