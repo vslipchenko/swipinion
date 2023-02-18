@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OpinionsComponent} from './opinions.component';
 import {RouterModule} from '@angular/router';
-import {CardModule} from '~app/shared/components/card/card.module';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {CardComponent} from '~app/shared/components/card/card.component';
 
 @NgModule({
   declarations: [OpinionsComponent],
@@ -15,7 +15,7 @@ import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/pro
         component: OpinionsComponent,
       },
     ]),
-    CardModule,
+    CardComponent,
     ProgressSpinnerModule,
   ],
 })
