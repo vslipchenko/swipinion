@@ -19,7 +19,7 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {AsyncPipe, NgIf} from '@angular/common';
-import {ConversationThumbnailModule} from '~app/shared/components/conversation-thumbnail/conversation-thumbnail.module';
+import {ConversationThumbnailComponent} from '~app/shared/components/conversation-thumbnail/conversation-thumbnail.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {ConversationUserSearchModule} from '~app/shared/components/conversation-user-search/conversation-user-search.module';
 import {ConversationComponent} from '~app/shared/components/conversation/conversation.component';
@@ -34,7 +34,7 @@ import {ConversationComponent} from '~app/shared/components/conversation/convers
     NgIf,
     AsyncPipe,
     AccordionComponent,
-    ConversationThumbnailModule,
+    ConversationThumbnailComponent,
     IconButtonComponent,
     ConversationUserSearchModule,
     ConversationComponent,

@@ -1,10 +1,13 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @Component({
   selector: 'app-conversation-thumbnail',
   templateUrl: './conversation-thumbnail.component.html',
   styleUrls: ['./conversation-thumbnail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ThumbnailComponent],
 })
 export class ConversationThumbnailComponent implements OnInit {
   @Input() public username!: string;
