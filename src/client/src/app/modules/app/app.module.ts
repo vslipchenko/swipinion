@@ -16,7 +16,7 @@ import {AppState} from '~app/modules/app/store/app.state';
 import {UpdateUserEssentials, UpdateUtcTimestamp} from '~app/modules/app/store/app.actions';
 import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
 import {AppService} from '~app/services/app/app.service';
-import {HeaderModule} from '~app/shared/components/header/header.module';
+import {HeaderComponent} from '~app/shared/components/header/header.component';
 import {AddOpinionDialogModule} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.module';
 import {OpinionSuccessSnackbarModule} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.module';
 import {EmailConfirmationDialogModule} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.module';
@@ -39,7 +39,7 @@ import {MessagesPanelModule} from '~app/shared/components/messages-panel/message
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
     // Following modules considered global as they available across the app, mostly because of being used in the header or on multiple pages
     MatSnackBarModule,
-    HeaderModule,
+    HeaderComponent,
     AddOpinionDialogModule,
     OpinionSuccessSnackbarModule,
     EmailConfirmationDialogModule,

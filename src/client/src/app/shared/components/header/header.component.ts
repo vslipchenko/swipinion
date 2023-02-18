@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {distinctUntilChanged, filter, map, merge, Observable, of, Subject, take, takeUntil} from 'rxjs';
-import {Location} from '@angular/common';
+import {AsyncPipe, Location, NgIf} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
-import {NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router, RouterLink} from '@angular/router';
 import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
 import {SignUpDialogComponent} from '~app/shared/components/sign-up-dialog/sign-up-dialog.component';
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
@@ -14,12 +14,17 @@ import {RunUserStatusPolling} from '~app/modules/app/store/app.actions';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 import {Store} from '@ngxs/store';
 import {UserStatusCheckOptions} from '~app/typings/user-status/user-status.interfaces';
+import {UserNavbarComponent} from '~app/shared/components/user-navbar/user-navbar.component';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
+import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-button.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [AsyncPipe, NgIf, RouterLink, UserNavbarComponent, ButtonComponent, FlatButtonComponent],
 })
 export class HeaderComponent implements OnInit, Destroyable {
   @Input() public showSignIn = of<void>();
