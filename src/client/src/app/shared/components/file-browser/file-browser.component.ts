@@ -1,11 +1,15 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
+import {NgIf} from '@angular/common';
+import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-button.component';
 
 @Component({
   selector: 'app-file-browser',
   templateUrl: './file-browser.component.html',
   styleUrls: ['./file-browser.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, FlatButtonComponent],
 })
 export class FileBrowserComponent implements OnDestroy {
   @Input() public control = new FormControl();
