@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
-import {InputModule} from '~app/shared/components/input/input.module';
+import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
 import {CheckboxModule} from '~app/shared/components/checkbox/checkbox.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
@@ -15,7 +15,7 @@ import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-i
     CommonModule,
     MatInputModule,
     MatDialogModule,
-    InputModule,
+    InputComponent,
     InputHideSuffixModule,
     CheckboxModule,
     ProgressBarModule,

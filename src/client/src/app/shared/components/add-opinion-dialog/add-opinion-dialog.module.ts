@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {SelectModule} from '~app/shared/components/select/select.module';
-import {InputModule} from '~app/shared/components/input/input.module';
+import {InputComponent} from '~app/shared/components/input/input.component';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {ChipsModule} from '~app/shared/components/chips/chips.module';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
@@ -16,7 +16,7 @@ import {ImageBrowserModule} from '~app/shared/components/image-browser/image-bro
     CommonModule,
     MatDialogModule,
     SelectModule,
-    InputModule,
+    InputComponent,
     TextareaComponent,
     ChipsModule,
     ProgressBarModule,

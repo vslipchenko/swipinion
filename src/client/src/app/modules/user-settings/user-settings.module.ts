@@ -9,7 +9,7 @@ import {UserSettingsState} from '~app/modules/user-settings/store/user-settings.
 import {AccordionModule} from '~app/shared/components/accordion/accordion.module';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
-import {InputModule} from '~app/shared/components/input/input.module';
+import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixModule} from '~app/shared/components/input-hide-suffix/input-hide-suffix.module';
 import {RadioGroupModule} from '~app/shared/components/radio-group/radio-group.module';
 import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-button.component';
@@ -29,7 +29,7 @@ import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-butto
     AccordionModule,
     ButtonComponent,
     ProgressBarModule,
-    InputModule,
+    InputComponent,
     InputHideSuffixModule,
     RadioGroupModule,
     FlatButtonComponent,

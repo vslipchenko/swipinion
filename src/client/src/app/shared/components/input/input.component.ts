@@ -1,16 +1,23 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {InputType} from '~app/typings/input/input.types';
-import {FormControl, ValidationErrors} from '@angular/forms';
+import {FormControl, ReactiveFormsModule, ValidationErrors} from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
-import {LegacyFloatLabelType as FloatLabelType, MatLegacyFormFieldAppearance as MatFormFieldAppearance} from '@angular/material/legacy-form-field';
+import {
+  LegacyFloatLabelType as FloatLabelType,
+  MatLegacyFormFieldAppearance as MatFormFieldAppearance,
+} from '@angular/material/legacy-form-field';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {NgIf, NgTemplateOutlet} from '@angular/common';
+import {MatLegacyInputModule} from '@angular/material/legacy-input';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatLegacyInputModule, ReactiveFormsModule, NgIf, NgTemplateOutlet],
 })
 export class InputComponent implements OnInit, Destroyable {
   @Input() public type: InputType = 'text';
