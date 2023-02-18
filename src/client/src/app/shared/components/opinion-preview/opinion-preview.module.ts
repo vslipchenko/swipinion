@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OpinionPreviewComponent} from '~app/shared/components/opinion-preview/opinion-preview.component';
-import {CardTagsModule} from '~app/shared/components/card-tags/card-tags.module';
+import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {CardStatsModule} from '~app/shared/components/card-stats/card-stats.module';
@@ -13,7 +13,7 @@ import {RouterModule} from '@angular/router';
   imports: [
     CommonModule,
     RouterModule,
-    CardTagsModule,
+    CardTagsComponent,
     ButtonComponent,
     MenuItemsModule,
     CardStatsModule,

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {CardStatsModule} from '~app/shared/components/card-stats/card-stats.module';
-import {CardTagsModule} from '~app/shared/components/card-tags/card-tags.module';
+import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {RouterLink} from '@angular/router';
 
@@ -11,7 +11,7 @@ import {RouterLink} from '@angular/router';
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [RouterLink, MatIconModule, CardStatsModule, CardTagsModule, IconButtonComponent],
+  imports: [RouterLink, MatIconModule, CardStatsModule, CardTagsComponent, IconButtonComponent],
 })
 export class CardComponent {
   @Input() public backgroundThumbnail = '';
