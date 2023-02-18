@@ -33,7 +33,7 @@ import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
-import {ConversationMessageModule} from '~app/shared/components/conversation-message/conversation-message.module';
+import {ConversationMessageComponent} from '~app/shared/components/conversation-message/conversation-message.component';
 import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
 import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/mini-fab-button.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
@@ -49,7 +49,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     NgForOf,
     AsyncPipe,
     ProgressSpinnerModule,
-    ConversationMessageModule,
+    ConversationMessageComponent,
     ProgressBarModule,
     TextareaComponent,
     MiniFabButtonComponent,
