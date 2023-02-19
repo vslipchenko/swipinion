@@ -22,7 +22,7 @@ import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/pro
 import {OpinionPreviewModule} from '~app/shared/components/opinion-preview/opinion-preview.module';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
-import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
+import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
 import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
 import {ImageBrowserComponent} from '~app/shared/components/image-browser/image-browser.component';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
@@ -59,7 +59,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     OpinionPreviewModule,
     ProgressBarComponent,
     IconButtonComponent,
-    MenuItemsModule,
+    MenuItemsComponent,
     AuthClickDirective,
     ImageBrowserComponent,
     TextareaComponent,
