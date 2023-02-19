@@ -1,12 +1,17 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
-import {LegacyProgressSpinnerMode as ProgressSpinnerMode} from '@angular/material/legacy-progress-spinner';
+import {
+  LegacyProgressSpinnerMode as ProgressSpinnerMode,
+  MatLegacyProgressSpinnerModule as MatProgressSpinnerModule,
+} from '@angular/material/legacy-progress-spinner';
 
 @Component({
   selector: 'app-progress-spinner',
   templateUrl: './progress-spinner.component.html',
   styleUrls: ['./progress-spinner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatProgressSpinnerModule],
 })
 export class ProgressSpinnerComponent {
   @Input() public color: ThemePalette;

@@ -11,7 +11,7 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputResetSuffixComponent} from '~app/shared/components/input-reset-suffix/input-reset-suffix.component';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @Component({
@@ -26,7 +26,7 @@ import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.com
     AsyncPipe,
     InputComponent,
     InputResetSuffixComponent,
-    ProgressSpinnerModule,
+    ProgressSpinnerComponent,
     ThumbnailComponent,
   ],
 })

@@ -32,7 +32,7 @@ import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messag
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {ConversationMessageComponent} from '~app/shared/components/conversation-message/conversation-message.component';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/mini-fab-button.component';
@@ -48,7 +48,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     NgIf,
     NgForOf,
     AsyncPipe,
-    ProgressSpinnerModule,
+    ProgressSpinnerComponent,
     ConversationMessageComponent,
     ProgressBarComponent,
     TextareaComponent,

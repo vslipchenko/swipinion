@@ -5,7 +5,7 @@ import {
   MatLegacyMenuPanel as MatMenuPanel,
 } from '@angular/material/legacy-menu';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {NgForOf, NgIf} from '@angular/common';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
@@ -16,7 +16,7 @@ import {MatIconModule} from '@angular/material/icon';
   styleUrls: ['./menu-items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, NgForOf, RouterLinkActive, RouterLink, MatMenuModule, ProgressSpinnerModule, MatIconModule],
+  imports: [NgIf, NgForOf, RouterLinkActive, RouterLink, MatMenuModule, ProgressSpinnerComponent, MatIconModule],
 })
 export class MenuItemsComponent {
   @Input() public items: Array<MenuItem> = [];

@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OpinionsComponent} from './opinions.component';
 import {RouterModule} from '@angular/router';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {CardComponent} from '~app/shared/components/card/card.component';
 
 @NgModule({
@@ -16,7 +16,7 @@ import {CardComponent} from '~app/shared/components/card/card.component';
       },
     ]),
     CardComponent,
-    ProgressSpinnerModule,
+    ProgressSpinnerComponent,
   ],
 })
 export class OpinionsModule {}

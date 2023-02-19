@@ -5,7 +5,7 @@ import {AccordionComponent} from '~app/shared/components/accordion/accordion.com
 import {MatIconModule} from '@angular/material/icon';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {RouterModule} from '@angular/router';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
 
 @NgModule({
@@ -16,7 +16,7 @@ import {MessageListModule} from '~app/shared/components/message-list/message-lis
     AccordionComponent,
     MatIconModule,
     IconButtonComponent,
-    ProgressSpinnerModule,
+    ProgressSpinnerComponent,
     MessageListModule,
   ],
   exports: [MessagesComponent],

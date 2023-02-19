@@ -18,7 +18,7 @@ import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/min
 import {TabsModule} from '~app/shared/components/tabs/tabs.module';
 import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {OpinionPreviewModule} from '~app/shared/components/opinion-preview/opinion-preview.module';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
@@ -55,7 +55,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     TabsModule,
     ContentPlaceholderComponent,
     ButtonComponent,
-    ProgressSpinnerModule,
+    ProgressSpinnerComponent,
     OpinionPreviewModule,
     ProgressBarComponent,
     IconButtonComponent,

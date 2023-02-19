@@ -11,7 +11,7 @@ import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress
 import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
-import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 
 @NgModule({
@@ -31,7 +31,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     ContentPlaceholderComponent,
     IconButtonComponent,
     MenuItemsComponent,
-    ProgressSpinnerModule,
+    ProgressSpinnerComponent,
     InViewDirective,
   ],
 })
