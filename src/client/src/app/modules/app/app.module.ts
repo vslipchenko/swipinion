@@ -24,7 +24,7 @@ import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recov
 import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
 import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
 import {UserService} from '~app/services/user/user.service';
-import {MessagesPanelModule} from '~app/shared/components/messages-panel/messages-panel.module';
+import {MessagesPanelComponent} from '~app/shared/components/messages-panel/messages-panel.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -46,7 +46,7 @@ import {MessagesPanelModule} from '~app/shared/components/messages-panel/message
     RecoveryDialogModule,
     SignInDialogModule,
     SignUpDialogModule,
-    MessagesPanelModule,
+    MessagesPanelComponent,
   ],
   providers: [
     AuthenticationInterceptorProvider,
