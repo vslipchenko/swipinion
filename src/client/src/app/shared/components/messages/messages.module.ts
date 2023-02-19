@@ -6,7 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {RouterModule} from '@angular/router';
 import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
-import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
+import {MessageListComponent} from '~app/shared/components/message-list/message-list.component';
 
 @NgModule({
   declarations: [MessagesComponent],
@@ -17,7 +17,7 @@ import {MessageListModule} from '~app/shared/components/message-list/message-lis
     MatIconModule,
     IconButtonComponent,
     ProgressSpinnerComponent,
-    MessageListModule,
+    MessageListComponent,
   ],
   exports: [MessagesComponent],
 })

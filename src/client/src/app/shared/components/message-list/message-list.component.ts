@@ -5,12 +5,27 @@ import {Observable} from 'rxjs';
 import {UIUserMessage} from '~app/typings/user-messages/user-messages.interfaces';
 import {FetchUserMessages, SetActiveConversation} from '~app/modules/app/store/app.actions';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
+import {MessageComponent} from '~app/shared/components/message/message.component';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
+import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
+import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 
 @Component({
   selector: 'app-message-list',
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    NgIf,
+    NgForOf,
+    MessageComponent,
+    ProgressSpinnerComponent,
+    ContentPlaceholderComponent,
+    InViewDirective,
+  ],
 })
 export class MessageListComponent {
   @Select(AppSelectors.savedMessage) public savedMessage$!: Observable<UIUserMessage>;
