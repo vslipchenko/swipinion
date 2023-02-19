@@ -21,7 +21,7 @@ import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dial
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
 import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/recovery-dialog.component';
-import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
+import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
 import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
 import {UserService} from '~app/services/user/user.service';
 import {MessagesPanelComponent} from '~app/shared/components/messages-panel/messages-panel.component';
@@ -44,7 +44,7 @@ import {MessagesPanelComponent} from '~app/shared/components/messages-panel/mess
     OpinionSuccessSnackbarComponent,
     EmailConfirmationDialogComponent,
     RecoveryDialogComponent,
-    SignInDialogModule,
+    SignInDialogComponent,
     SignUpDialogModule,
     MessagesPanelComponent,
   ],

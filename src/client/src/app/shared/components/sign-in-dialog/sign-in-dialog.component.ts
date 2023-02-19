@@ -6,7 +6,10 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {SignInFailReason} from '~app/typings/authentication/authentication.enums';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogModule as MatDialogModule,
+} from '@angular/material/legacy-dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
 import {Store} from '@ngxs/store';
 import {Router} from '@angular/router';
@@ -14,12 +17,29 @@ import {UserService} from '~app/services/user/user.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {UserEssentialsQueryResult} from '~app/typings/user/user.interfaces';
 import {UpdateUserEssentials} from '~app/modules/app/store/app.actions';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {InputComponent} from '~app/shared/components/input/input.component';
+import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
+import {CheckboxComponent} from '~app/shared/components/checkbox/checkbox.component';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
   selector: 'app-sign-in-dialog',
   templateUrl: './sign-in-dialog.component.html',
   styleUrls: ['./sign-in-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatDialogModule,
+    InputComponent,
+    InputHideSuffixComponent,
+    CheckboxComponent,
+    ProgressBarComponent,
+    ButtonComponent,
+  ],
 })
 export class SignInDialogComponent implements OnInit, Destroyable {
   @Output() public readonly authenticated = new EventEmitter();
