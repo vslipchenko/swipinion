@@ -22,7 +22,7 @@ import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-su
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
 import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/recovery-dialog.component';
 import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
-import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
+import {SignUpDialogComponent} from '~app/shared/components/sign-up-dialog/sign-up-dialog.component';
 import {UserService} from '~app/services/user/user.service';
 import {MessagesPanelComponent} from '~app/shared/components/messages-panel/messages-panel.component';
 
@@ -45,7 +45,7 @@ import {MessagesPanelComponent} from '~app/shared/components/messages-panel/mess
     EmailConfirmationDialogComponent,
     RecoveryDialogComponent,
     SignInDialogComponent,
-    SignUpDialogModule,
+    SignUpDialogComponent,
     MessagesPanelComponent,
   ],
   providers: [

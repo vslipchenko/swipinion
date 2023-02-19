@@ -13,12 +13,28 @@ import {
 } from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {InputComponent} from '~app/shared/components/input/input.component';
+import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
   selector: 'app-sign-up-component',
   templateUrl: './sign-up-dialog.component.html',
   styleUrls: ['./sign-up-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatDialogModule,
+    InputComponent,
+    InputHideSuffixComponent,
+    ProgressBarComponent,
+    ButtonComponent,
+  ],
 })
 export class SignUpDialogComponent implements Destroyable {
   @Output() public readonly signedUp = new EventEmitter<string>();
