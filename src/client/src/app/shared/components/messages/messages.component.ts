@@ -8,12 +8,27 @@ import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {MessagesDirective} from '~app/shared/directives/messages/messages.directive';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
+import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
+import {MessageListComponent} from '~app/shared/components/message-list/message-list.component';
 
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    AccordionComponent,
+    MatIconModule,
+    IconButtonComponent,
+    ProgressSpinnerComponent,
+    MessageListComponent,
+  ],
   // TODO Angular v15 make messages directive a part of hostDirectives
 })
 export class MessagesComponent {
