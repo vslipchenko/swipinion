@@ -15,7 +15,7 @@ import {UserOpinionsTabComponent} from './components/user-opinions-tab/user-opin
 import {UserReactionsTabComponent} from './components/user-reactions-tab/user-reactions-tab.component';
 import {UserFavoritesTabComponent} from './components/user-favorites-tab/user-favorites-tab.component';
 import {MiniFabButtonComponent} from '~app/shared/components/mini-fab-button/mini-fab-button.component';
-import {TabsModule} from '~app/shared/components/tabs/tabs.module';
+import {TabsComponent} from '~app/shared/components/tabs/tabs.component';
 import {ContentPlaceholderComponent} from '~app/shared/components/content-placeholder/content-placeholder.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
@@ -52,7 +52,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     MatIconModule,
     MatMenuModule,
     MiniFabButtonComponent,
-    TabsModule,
+    TabsComponent,
     ContentPlaceholderComponent,
     ButtonComponent,
     ProgressSpinnerComponent,

@@ -1,7 +1,13 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
-import {MatLegacyTabChangeEvent as MatTabChangeEvent, MatLegacyTabHeaderPosition as MatTabHeaderPosition} from '@angular/material/legacy-tabs';
+import {
+  MatLegacyTabChangeEvent as MatTabChangeEvent,
+  MatLegacyTabHeaderPosition as MatTabHeaderPosition,
+  MatLegacyTabsModule as MatTabsModule,
+} from '@angular/material/legacy-tabs';
+import {NgForOf, NgIf} from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-tabs',
@@ -9,6 +15,8 @@ import {MatLegacyTabChangeEvent as MatTabChangeEvent, MatLegacyTabHeaderPosition
   styleUrls: ['./tabs.component.scss'],
   // providers: [{provide: ANIMATION_MODULE_TYPE, useValue: 'NoopAnimations'}],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgForOf, NgIf, MatTabsModule, MatIconModule],
 })
 export class TabsComponent {
   @Input() public color: ThemePalette;
