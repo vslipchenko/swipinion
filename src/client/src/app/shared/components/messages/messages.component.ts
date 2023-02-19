@@ -29,7 +29,7 @@ import {MessageListComponent} from '~app/shared/components/message-list/message-
     ProgressSpinnerComponent,
     MessageListComponent,
   ],
-  // TODO Angular v15 make messages directive a part of hostDirectives
+  hostDirectives: [MessagesDirective],
 })
 export class MessagesComponent {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;

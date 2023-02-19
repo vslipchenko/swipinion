@@ -1,1 +1,46 @@
-<app-user-messages-wrapper appMessages></app-user-messages-wrapper>
+<div class="wrapper bg-dark h-100 d-flex f-column relative">
+  <app-progress-bar
+    *ngIf="messagesDirective.loading$ | async"
+    class="absolute t-0 w-100">
+  </app-progress-bar>
+
+  <!--  <div class="px-2">-->
+  <div class="divider mb-2"></div>
+  <!--  </div>-->
+
+  <div class="headline d-flex jc-between px-2 mb-2 w-100 mx-auto">
+    <div class="d-flex ai-center">
+      <mat-icon svgIcon="email-multiple" class="mr-1"></mat-icon>
+      <h2>Messages</h2>
+    </div>
+
+    <app-icon-button svgIcon="square-edit-outline" (clicked)="newConversation()"></app-icon-button>
+  </div>
+
+
+  <div class="container messages-page messages mx-auto px-2 w-100 h-100 d-flex mh-0">
+    <app-message-list class="message-list f-1 bl-transparent" messageClass="br-transparent" [gradientPlaceholder]="true"
+    ></app-message-list>
+
+    <ng-container *ngIf="{conversation: conversation$ | async} as state">
+      <div class="conversation-plate f-1" [class.underlay]="!state.conversation">
+        <app-content-placeholder
+          class="content-placeholder absolute w-100 h-100 bg-light-darker"
+          text="Select a chat to start messaging"
+          icon="forum"
+          [gradient]="false"
+          [border]="false"
+        ></app-content-placeholder>
+
+        <app-conversation-accordion *ngIf="state.conversation"
+                                    [conversation]="state.conversation"
+                                    (afterExpand)="showAccordion = true"
+                                    (afterClose)="closeConversation()"
+                                    [class.active]="showAccordion"
+                                    class="conversation h-100"
+        ></app-conversation-accordion>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
