@@ -5,12 +5,19 @@ import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {UserService} from '~app/services/user/user.service';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {InputComponent} from '~app/shared/components/input/input.component';
+import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
   selector: 'app-email-confirmation-dialog',
   templateUrl: './email-confirmation-dialog.component.html',
   styleUrls: ['./email-confirmation-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, AsyncPipe, MatDialogModule, InputComponent, ProgressBarModule, ButtonComponent],
 })
 export class EmailConfirmationDialogComponent implements Destroyable {
   @Output() public readonly emailConfirmed = new EventEmitter();
