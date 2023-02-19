@@ -13,12 +13,28 @@ import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-b
 import {UserService} from '~app/services/user/user.service';
 import {Language} from '~app/typings/i18n/i18n.types';
 import {RecoveryStage} from '~app/typings/recovery/recovery.enums';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {InputComponent} from '~app/shared/components/input/input.component';
+import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
   selector: 'app-recovery-dialog',
   templateUrl: './recovery-dialog.component.html',
   styleUrls: ['./recovery-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatDialogModule,
+    InputComponent,
+    InputHideSuffixComponent,
+    ProgressBarComponent,
+    ButtonComponent,
+  ],
 })
 export class RecoveryDialogComponent implements Destroyable {
   @Output() public readonly recovered = new EventEmitter();

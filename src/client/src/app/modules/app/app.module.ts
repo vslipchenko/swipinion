@@ -20,7 +20,7 @@ import {HeaderComponent} from '~app/shared/components/header/header.component';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
-import {RecoveryDialogModule} from '~app/shared/components/recovery-dialog/recovery-dialog.module';
+import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/recovery-dialog.component';
 import {SignInDialogModule} from '~app/shared/components/sign-in-dialog/sign-in-dialog.module';
 import {SignUpDialogModule} from '~app/shared/components/sign-up-dialog/sign-up-dialog.module';
 import {UserService} from '~app/services/user/user.service';
@@ -43,7 +43,7 @@ import {MessagesPanelComponent} from '~app/shared/components/messages-panel/mess
     AddOpinionDialogComponent,
     OpinionSuccessSnackbarComponent,
     EmailConfirmationDialogComponent,
-    RecoveryDialogModule,
+    RecoveryDialogComponent,
     SignInDialogModule,
     SignUpDialogModule,
     MessagesPanelComponent,
