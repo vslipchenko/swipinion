@@ -3,12 +3,29 @@ import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {Store} from '@ngxs/store';
 import {DeleteUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {NgIf} from '@angular/common';
+import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
+import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
+import {CardStatsComponent} from '~app/shared/components/card-stats/card-stats.component';
+import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-opinion-preview',
   templateUrl: './opinion-preview.component.html',
   styleUrls: ['./opinion-preview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    CardTagsComponent,
+    ButtonComponent,
+    MenuItemsComponent,
+    CardStatsComponent,
+    MatMenuModule,
+  ],
 })
 export class OpinionPreviewComponent {
   @Input() public id = '';
