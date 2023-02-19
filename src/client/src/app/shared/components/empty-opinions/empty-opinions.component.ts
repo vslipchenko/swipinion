@@ -5,5 +5,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   templateUrl: './empty-opinions.component.html',
   styleUrls: ['./empty-opinions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class EmptyOpinionsComponent {}
