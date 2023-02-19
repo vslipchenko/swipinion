@@ -8,7 +8,7 @@ import {UserService} from '~app/services/user/user.service';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {InputComponent} from '~app/shared/components/input/input.component';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
@@ -17,7 +17,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
   styleUrls: ['./email-confirmation-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatDialogModule, InputComponent, ProgressBarModule, ButtonComponent],
+  imports: [NgIf, AsyncPipe, MatDialogModule, InputComponent, ProgressBarComponent, ButtonComponent],
 })
 export class EmailConfirmationDialogComponent implements Destroyable {
   @Output() public readonly emailConfirmed = new EventEmitter();

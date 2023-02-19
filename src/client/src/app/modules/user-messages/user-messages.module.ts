@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {UserMessagesComponent} from './user-messages.component';
 import {RouterModule} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {MessageListModule} from '~app/shared/components/message-list/message-list.module';
 import {ConversationAccordionComponent} from '~app/shared/components/conversation-accordion/conversation-accordion.component';
 import {UserMessagesWrapperComponent} from './components/user-messages-wrapper/user-messages-wrapper.component';
@@ -22,7 +22,7 @@ import {IconButtonComponent} from '~app/shared/components/icon-button/icon-butto
       },
     ]),
     MatIconModule,
-    ProgressBarModule,
+    ProgressBarComponent,
     MessageListModule,
     ConversationAccordionComponent,
     MessagesDirective,

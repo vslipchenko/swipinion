@@ -4,7 +4,7 @@ import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/re
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @NgModule({
@@ -14,7 +14,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     MatDialogModule,
     InputComponent,
     InputHideSuffixComponent,
-    ProgressBarModule,
+    ProgressBarComponent,
     ButtonComponent,
   ],
 })

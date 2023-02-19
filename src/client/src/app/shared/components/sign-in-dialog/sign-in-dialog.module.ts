@@ -5,7 +5,7 @@ import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
 import {CheckboxComponent} from '~app/shared/components/checkbox/checkbox.component';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 
@@ -18,7 +18,7 @@ import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-i
     InputComponent,
     InputHideSuffixComponent,
     CheckboxComponent,
-    ProgressBarModule,
+    ProgressBarComponent,
     ButtonComponent,
   ],
 })

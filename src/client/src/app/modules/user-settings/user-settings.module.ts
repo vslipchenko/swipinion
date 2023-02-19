@@ -8,7 +8,7 @@ import {NgxsModule} from '@ngxs/store';
 import {UserSettingsState} from '~app/modules/user-settings/store/user-settings.state';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
 import {RadioGroupModule} from '~app/shared/components/radio-group/radio-group.module';
@@ -28,7 +28,7 @@ import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-butto
     MatIconModule,
     AccordionComponent,
     ButtonComponent,
-    ProgressBarModule,
+    ProgressBarComponent,
     InputComponent,
     InputHideSuffixComponent,
     RadioGroupModule,

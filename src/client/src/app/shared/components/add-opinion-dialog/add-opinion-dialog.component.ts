@@ -24,7 +24,7 @@ import {AsyncPipe, NgIf} from '@angular/common';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {ChipsComponent} from '~app/shared/components/chips/chips.component';
 import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
-import {ProgressBarModule} from '~app/shared/components/progress-bar/progress-bar.module';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @Component({
@@ -41,7 +41,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     TextareaComponent,
     ChipsComponent,
     ImageBrowserModule,
-    ProgressBarModule,
+    ProgressBarComponent,
     ButtonComponent,
   ],
 })
