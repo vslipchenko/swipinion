@@ -14,9 +14,9 @@
     <app-button class="f-1" extendClass="w-100 p-1 br-0" icon="open_in_new"
                 routerLink="/opinion/{{username}}/{{id}}"></app-button>
 
-    <app-button *ngIf="menuItems.menu" [matMenuTriggerFor]="menuItems.menu" class="f-1" extendClass="w-100 p-1 br-0"
+    <app-button *ngIf="menuItems.menu" [matMenuTriggerFor]="menuItems.menu" class="f-1" extendClass="w-100 py-1 br-0"
                 icon="menu"></app-button>
     <app-menu-items #menuItems [items]="opinionItems" [context]="id"></app-menu-items>
   </div>
-  <app-card-stats [stats]="stats" class="d-flex jc-around p-2"></app-card-stats>
+  <app-card-stats [stats]="stats" class="d-flex jc-around" buttonClass="py-1"></app-card-stats>
 </div>

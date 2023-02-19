@@ -12,4 +12,5 @@ import {NgForOf} from '@angular/common';
 })
 export class CardStatsComponent {
   @Input() public stats: Array<{icon?: string; svgIcon?: string; value: string}> = [];
+  @Input() public buttonClass = '';
 }
