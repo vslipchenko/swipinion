@@ -24,7 +24,7 @@ import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {MenuItemsModule} from '~app/shared/components/menu-items/menu-items.module';
 import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
-import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
+import {ImageBrowserComponent} from '~app/shared/components/image-browser/image-browser.component';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 
@@ -61,7 +61,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     IconButtonComponent,
     MenuItemsModule,
     AuthClickDirective,
-    ImageBrowserModule,
+    ImageBrowserComponent,
     TextareaComponent,
     InViewDirective,
   ],

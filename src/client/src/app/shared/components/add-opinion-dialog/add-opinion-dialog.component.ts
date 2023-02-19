@@ -23,7 +23,7 @@ import {InputComponent} from '~app/shared/components/input/input.component';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {ChipsComponent} from '~app/shared/components/chips/chips.component';
-import {ImageBrowserModule} from '~app/shared/components/image-browser/image-browser.module';
+import {ImageBrowserComponent} from '~app/shared/components/image-browser/image-browser.component';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 
@@ -40,7 +40,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     InputComponent,
     TextareaComponent,
     ChipsComponent,
-    ImageBrowserModule,
+    ImageBrowserComponent,
     ProgressBarComponent,
     ButtonComponent,
   ],
