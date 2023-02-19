@@ -1,4 +1,62 @@
+@use 'media';
+@use 'variables' as var;
+
 :host {
   min-height: 0;
   flex: 1;
 }
+
+// TODO create a separate component for this type of pages
+.headline,
+.container {
+  max-width: var.$page-content-width; // 360px - message list, 568px - conversation plate
+}
+
+.container {
+  @include media.zero-small {
+    position: relative;
+  }
+}
+
+.content-placeholder {
+  @include media.zero-small {
+    display: none;
+  }
+}
+
+.message-list {
+  @include media.above-small {
+    max-width: 360px; // 360px is width of messages/conversation accordion
+  }
+}
+
+.primary-scrollbar {
+  overflow-y: auto;
+}
+
+.conversation-plate {
+  @include media.zero-small {
+    height: 100%;
+    width: calc(100% - 32px);
+    position: absolute;
+  }
+
+  @include media.above-small {
+    position: relative;
+  }
+}
+
+.conversation-plate.underlay {
+  @include media.zero-small {
+    z-index: -1;
+  }
+}
+
+.conversation {
+  display: none;
+}
+
+.conversation.active {
+  display: block;
+}
+
