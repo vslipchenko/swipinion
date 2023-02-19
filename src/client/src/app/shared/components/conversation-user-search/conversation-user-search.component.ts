@@ -8,12 +8,27 @@ import {Store} from '@ngxs/store';
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {InputComponent} from '~app/shared/components/input/input.component';
+import {InputResetSuffixComponent} from '~app/shared/components/input-reset-suffix/input-reset-suffix.component';
+import {ProgressSpinnerModule} from '~app/shared/components/progress-spinner/progress-spinner.module';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @Component({
   selector: 'app-conversation-user-search',
   templateUrl: './conversation-user-search.component.html',
   styleUrls: ['./conversation-user-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgForOf,
+    AsyncPipe,
+    InputComponent,
+    InputResetSuffixComponent,
+    ProgressSpinnerModule,
+    ThumbnailComponent,
+  ],
 })
 export class ConversationUserSearchComponent implements Destroyable {
   public readonly destroy$ = new Subject<void>();

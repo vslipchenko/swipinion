@@ -21,7 +21,7 @@ import {getInterlocutorId} from '~app/utilities/user-messages';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {ConversationThumbnailComponent} from '~app/shared/components/conversation-thumbnail/conversation-thumbnail.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
-import {ConversationUserSearchModule} from '~app/shared/components/conversation-user-search/conversation-user-search.module';
+import {ConversationUserSearchComponent} from '~app/shared/components/conversation-user-search/conversation-user-search.component';
 import {ConversationComponent} from '~app/shared/components/conversation/conversation.component';
 
 @Component({
@@ -36,7 +36,7 @@ import {ConversationComponent} from '~app/shared/components/conversation/convers
     AccordionComponent,
     ConversationThumbnailComponent,
     IconButtonComponent,
-    ConversationUserSearchModule,
+    ConversationUserSearchComponent,
     ConversationComponent,
   ],
 })
