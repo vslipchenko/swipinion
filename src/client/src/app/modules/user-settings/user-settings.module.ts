@@ -11,7 +11,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
-import {RadioGroupModule} from '~app/shared/components/radio-group/radio-group.module';
+import {RadioGroupComponent} from '~app/shared/components/radio-group/radio-group.component';
 import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-button.component';
 
 @NgModule({
@@ -31,7 +31,7 @@ import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-butto
     ProgressBarComponent,
     InputComponent,
     InputHideSuffixComponent,
-    RadioGroupModule,
+    RadioGroupComponent,
     FlatButtonComponent,
   ],
 })
