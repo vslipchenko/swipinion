@@ -4,13 +4,14 @@
 
   <div class="container mx-auto d-flex f-column h-100">
     <div class="glass">
-      <div class="d-flex jc-between ai-center py-1-2 px-2">
-        <a class="d-flex ai-center" routerLink="/user/{{'someone'}}">
+      <div class="d-flex jc-between">
+        <a class="d-flex ai-center py-1-2 px-2" routerLink="/user/{{'someone'}}">
           <img class="thumbnail mr-1" src="https://i.imgur.com/8E4PsPL.jpeg" alt="">
           <span class="name">someone</span>
         </a>
 
-        <mat-icon>more_horiz</mat-icon>
+        <!--        <mat-icon>more_horiz</mat-icon>-->
+        <app-icon-button icon="more_horiz" extendClass="card-more-button h-100 br-0 px-1"></app-icon-button>
       </div>
 
       <app-card-stats class="d-flex bt-transparent" [stats]="stats"></app-card-stats>
