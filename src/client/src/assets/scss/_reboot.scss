@@ -25,7 +25,7 @@ html {
 body {
   margin: 0;
   line-height: 1.5;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: var.$font-family;
 }
 
 h1 {
