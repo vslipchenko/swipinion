@@ -22,7 +22,7 @@ $typography: mat.define-legacy-typography-config(
 //    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
 @include mat.legacy-core;
 @include mat.all-legacy-component-typographies($typography);
-
+// yet another great theme color - #051f2a
 $primary: mat.define-palette(mat.$green-palette, A200);
 $accent: mat.define-palette(mat.$pink-palette, A200);
 $theme: mat.define-dark-theme(
