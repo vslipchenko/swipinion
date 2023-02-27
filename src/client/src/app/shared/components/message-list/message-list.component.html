@@ -28,6 +28,6 @@
     <app-progress-spinner
       *ngIf="canLoadMore$ | async"
       (appInView)="spinnerInView($event, messages[messages.length - 1].id)"
-      class="d-flex jc-center ai-center h-100 conversations-spinner"></app-progress-spinner>
+      class="d-flex jc-center ai-center h-100"></app-progress-spinner>
   </ng-container>
 </div>

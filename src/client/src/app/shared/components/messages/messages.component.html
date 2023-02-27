@@ -15,7 +15,7 @@
   </ng-template>
 
   <ng-template #content>
-    <div class="content relative h-100">
+    <div class="content relative">
       <app-progress-spinner *ngIf="messagesDirective.loading$ | async; else messageList"
                             class="d-flex jc-center ai-center h-100"></app-progress-spinner>
 

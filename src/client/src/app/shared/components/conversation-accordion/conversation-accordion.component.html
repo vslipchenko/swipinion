@@ -18,7 +18,7 @@
   </ng-template>
 
   <ng-template #content>
-    <div class="content h-100">
+    <div class="content">
       <ng-container *ngIf="renderUi$ | async">
         <app-conversation-user-search *ngIf="newConversation"
                                       class="d-flex f-column h-100"></app-conversation-user-search>

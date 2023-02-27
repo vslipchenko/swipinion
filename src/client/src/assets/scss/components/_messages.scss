@@ -106,7 +106,8 @@ $conversation-thumbnail-size: 30px;
 
 .messages-page .mat-accordion,
 .messages-page .mat-expansion-panel-content,
-.messages-page .mat-expansion-panel-body {
+.messages-page .mat-expansion-panel-body,
+.messages-page .content { // Conversation content
   height: 100%;
 }
 
