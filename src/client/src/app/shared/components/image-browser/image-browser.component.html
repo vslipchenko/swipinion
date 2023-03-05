@@ -1,7 +1,7 @@
 <div [class]="extendClass">
-  <img *ngIf="imageSet" [src]="imageUrl.value || imagePreview" alt="" class="image d-block mx-auto" />
+  <img *ngIf="imageSet" [src]="imageUrl.value || imagePreview" alt="" class="image d-block mx-auto mb-2" />
 
-  <app-flat-button *ngIf="imageUrlSet" text="Remove" color="warn" class="d-block mb-3 mt-2"
+  <app-flat-button *ngIf="imageUrlSet" text="Remove" color="warn"
                    extendClass="w-100"
                    (clicked)="resetImageUrl()"></app-flat-button>
 
@@ -9,7 +9,6 @@
 
   <app-file-browser
     *ngIf="!imageUrl.value"
-    class="d-block mt-2"
     [control]="file"
     [browseText]="browseText"
     [accept]="['image/jpeg', 'image/png', 'image/gif']"

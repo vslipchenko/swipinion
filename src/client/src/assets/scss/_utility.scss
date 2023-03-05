@@ -228,6 +228,10 @@
   padding-top: var.$unit-2;
 }
 
+.pt-3 {
+  padding-top: var.$unit-3;
+}
+
 .pt-2-3 {
   @include media.zero-small {
     padding-top: var.$unit-2;
