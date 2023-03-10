@@ -19,7 +19,7 @@ export const opinionQueryTypeDefinitions = gql`
 // 2. He has not reacted to yet (based on user_opinions.id NOT IN FIND user_reactions.opinion_id WHERE user_reactions.user_id = AUTHED USER ID)
 // (OpinionsView.Individual)
 // 1. All opinions even to which he reacted to (fetch opinions where user_opinions.user_id = DESIRED USER ID)
-export const getGeneralOpinions = async (
+const getGeneralOpinions = async (
   _: unknown,
   {edgeId}: {edgeId: string},
   {accessToken}: {accessToken: string},
@@ -39,6 +39,6 @@ export const getGeneralOpinions = async (
 
 export const opinionQueryResolvers = {
   Query: {
-    getGeneralOpinions: getGeneralOpinions,
+    getGeneralOpinions,
   },
 };

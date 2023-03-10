@@ -8,6 +8,8 @@ export const opinionTypes = gql`
     file_url: String
     title: String
     description: String
+    agreed: String
+    disagreed: String
     tags: [String]!
   }
 `;

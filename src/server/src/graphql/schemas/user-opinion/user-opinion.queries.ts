@@ -9,7 +9,7 @@ export const userOpinionQueryTypeDefinitions = gql`
   }
 `;
 
-export const getOpinionsByUsername = async (
+const getOpinionsByUsername = async (
   _: unknown,
   {input}: {input: {username: string; edgeId: string}},
 ): Promise<{exists: boolean} | null | Array<unknown>> => {
