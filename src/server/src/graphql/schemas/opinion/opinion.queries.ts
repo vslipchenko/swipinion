@@ -5,7 +5,7 @@ import {
   queryGeneralOpinionsForAuthorizedUser,
   queryGeneralOpinionsForUnauthorizedUser,
 } from '../../../data/queries/opinion';
-import {QueryResult} from 'pg';
+import {QueryResult, QueryResultRow} from 'pg';
 import {bigintValidator} from '../../../validators/shared';
 
 export const opinionQueryTypeDefinitions = gql`
@@ -23,18 +23,24 @@ const getGeneralOpinions = async (
   _: unknown,
   {edgeId}: {edgeId: string},
   {accessToken}: {accessToken: string},
-): Promise<QueryResult | null> => {
+): Promise<Array<QueryResultRow> | null> => {
   const {error} = bigintValidator.validate(edgeId);
 
   if (error) return null;
 
   const {tokenData} = authenticationGuard(accessToken);
 
+  let result: QueryResult;
+
   if (tokenData) {
-    return await db.query(queryGeneralOpinionsForAuthorizedUser(tokenData.userId, edgeId));
+    result = await db.query(queryGeneralOpinionsForAuthorizedUser(tokenData.userId, edgeId));
+  } else {
+    result = await db.query(queryGeneralOpinionsForUnauthorizedUser(edgeId));
   }
 
-  return await db.query(queryGeneralOpinionsForUnauthorizedUser(edgeId));
+  if (!result.rowCount) return null;
+
+  return result.rows;
 };
 
 export const opinionQueryResolvers = {

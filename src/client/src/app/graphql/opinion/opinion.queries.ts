@@ -9,6 +9,8 @@ export const GET_GENERAL_OPINIONS = gql`
       file_url
       title
       description
+      agreed
+      disagreed
       tags
     }
   }
