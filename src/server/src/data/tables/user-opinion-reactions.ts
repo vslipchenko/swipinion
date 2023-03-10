@@ -3,7 +3,7 @@ import {Table} from '../../typings/data/data.interfaces';
 export const UserOpinionReactionsTable: Table = {
   name: 'user_opinion_reactions',
   query: `
-    CREATE TABLE IF NOT EXISTS user_reactions (
+    CREATE TABLE IF NOT EXISTS user_opinion_reactions (
       id BIGSERIAL PRIMARY KEY,
       user_id BIGINT NOT NULL REFERENCES users(id)
         ON DELETE CASCADE,
