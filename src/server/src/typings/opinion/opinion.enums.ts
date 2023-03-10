@@ -6,3 +6,8 @@ export enum OpinionType {
   // Gif
   // Audio
 }
+
+export enum OpinionReaction {
+  Agree = 1,
+  Disagree,
+}

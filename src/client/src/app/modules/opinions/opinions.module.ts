@@ -4,6 +4,8 @@ import {OpinionsComponent} from './opinions.component';
 import {RouterModule} from '@angular/router';
 import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {CardComponent} from '~app/shared/components/card/card.component';
+import {NgxsModule} from '@ngxs/store';
+import {OpinionsState} from '~app/modules/opinions/store/opinions.state';
 
 @NgModule({
   declarations: [OpinionsComponent],
@@ -17,6 +19,7 @@ import {CardComponent} from '~app/shared/components/card/card.component';
     ]),
     CardComponent,
     ProgressSpinnerComponent,
+    NgxsModule.forFeature([OpinionsState]),
   ],
 })
 export class OpinionsModule {}
