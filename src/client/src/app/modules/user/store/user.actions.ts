@@ -1,11 +1,11 @@
-import {FetchOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
+import {FetchUserOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {ResolvedUserData, UserProfile} from '~app/typings/user/user.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 
-export class FetchOpinions {
-  public static readonly type = '[User] FetchOpinions';
+export class FetchUserOpinions {
+  public static readonly type = '[User] FetchUserOpinions';
 
-  public constructor(public payload: FetchOpinionsPayload) {}
+  public constructor(public payload: FetchUserOpinionsPayload) {}
 }
 
 export class PrependUserOpinion {

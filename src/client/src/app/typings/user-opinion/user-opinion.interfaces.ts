@@ -26,7 +26,7 @@ export interface CreateOpinion {
   tags: Array<string>;
 }
 
-export interface FetchOpinionsPayload {
+export interface FetchUserOpinionsPayload {
   username: string;
   edgeId?: string;
   isProfilePath: boolean;

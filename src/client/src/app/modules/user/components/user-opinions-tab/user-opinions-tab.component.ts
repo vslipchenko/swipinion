@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
-import {FetchOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
+import {FetchUserOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchOpinions} from '~app/modules/user/store/user.actions';
+import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 
@@ -28,7 +28,7 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
     private readonly userNavbarService: UserNavbarService,
     private readonly actions$: Actions,
   ) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchOpinions)).subscribe(() => {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserOpinions)).subscribe(() => {
       this.loading$.next(false);
     });
   }
@@ -52,14 +52,14 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
   }
 
   public fetchUserOpinions(edgeId = ''): void {
-    const payload: FetchOpinionsPayload = {
+    const payload: FetchUserOpinionsPayload = {
       username: this.username,
       isProfilePath: this.isProfilePath,
     };
 
     if (edgeId) payload.edgeId = edgeId;
 
-    this.store.dispatch(new FetchOpinions(payload));
+    this.store.dispatch(new FetchUserOpinions(payload));
   }
 
   protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {

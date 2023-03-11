@@ -8,7 +8,7 @@ import {
 import {
   DeleteUserOpinion,
   EditUserProfile,
-  FetchOpinions,
+  FetchUserOpinions,
   FollowUser,
   PrependUserOpinion,
   SetUserSettings,
@@ -78,10 +78,10 @@ export class UserState {
     }));
   }
 
-  @Action(FetchOpinions)
+  @Action(FetchUserOpinions)
   private fetchUserOpinions(
     context: StateContext<UserStateModel>,
-    action: FetchOpinions,
+    action: FetchUserOpinions,
   ): Observable<MutationResult<GetOpinionsByUsernameQueryResult>> {
     return this.userOpinionService
       .getOpinionsByUsername({
