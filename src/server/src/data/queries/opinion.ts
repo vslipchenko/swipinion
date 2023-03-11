@@ -28,11 +28,11 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
     GROUP BY user_opinions.id
     ORDER BY user_opinions.id
     LIMIT $2
-  `,
+  `, // TODO This has to be filtered
   values: edgeId ? [userId, OPINION_FETCH_LIMIT, edgeId] : [userId, OPINION_FETCH_LIMIT],
 });
 
-export const queryGeneralOpinionsForUnauthorizedUser = (edgeId?: string): QueryConfig => ({
+export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
   text: `
      SELECT user_opinions.id, 
        user_opinions.user_id, 
@@ -41,18 +41,21 @@ export const queryGeneralOpinionsForUnauthorizedUser = (edgeId?: string): QueryC
        user_opinions.file_url, 
        user_opinions.description, 
        array_agg(tags.tag) AS tags,
-       (SELECT COUNT(*) FROM user_opinion_reactions WHERE opinion_id = user_opinions.id AND reaction = ${
-         OpinionReaction.Agree
-       }) AS agreed, -- Count how many users agreed
-       (SELECT COUNT(*) FROM user_opinion_reactions WHERE opinion_id = user_opinions.id AND reaction = ${
-         OpinionReaction.Disagree
-       }) AS disagreed -- Count how many users disagreed
+       reactions.agreed,
+	     reactions.disagreed
     FROM user_opinions
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id
-    ${edgeId ? 'WHERE user_opinions.id > $1' : ''}
-    GROUP BY user_opinions.id
-    ORDER BY user_opinions.id
-    LIMIT 1 -- No need to count more as there is auth guard that would prevent unauthorized user actions
-  `, // Consider to limit to 2, use second one as background in case of any offset effects on swipe
-  values: edgeId ? [edgeId] : [],
+    LEFT JOIN (
+       SELECT opinion_id, 
+         COUNT(CASE WHEN reaction = ${OpinionReaction.Agree} THEN 1 END) AS agreed,
+         COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed
+       FROM user_opinion_reactions 
+       GROUP BY opinion_id
+    ) reactions ON user_opinions.id = reactions.opinion_id
+    GROUP BY user_opinions.id,
+      reactions.agreed,
+      reactions.disagreed
+    ORDER BY user_opinions.id DESC -- Show fresh opinions each time
+    LIMIT 2 -- No need for more as there is auth guard that would prevent unauthorized user actions
+  `,
 });

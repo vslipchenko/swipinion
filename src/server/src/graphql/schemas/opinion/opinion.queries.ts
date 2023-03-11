@@ -35,7 +35,7 @@ const getGeneralOpinions = async (
   if (tokenData) {
     result = await db.query(queryGeneralOpinionsForAuthorizedUser(tokenData.userId, edgeId));
   } else {
-    result = await db.query(queryGeneralOpinionsForUnauthorizedUser(edgeId));
+    result = await db.query(queryGeneralOpinionsForUnauthorizedUser());
   }
 
   if (!result.rowCount) return null;
