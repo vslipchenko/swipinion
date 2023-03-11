@@ -22,13 +22,13 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
       AND user_opinion_reactions.user_id = $1 -- Dont show opinions user has reacted on (1)
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id -- Get associated tags
     WHERE 
-      ${edgeId ? 'user_opinions.id > $3 AND' : ''}
+      ${edgeId ? 'user_opinions.id < $3 AND' : ''} -- Move from New -> Old opinion direction
       user_opinions.user_id != $1 AND -- Dont show user's own opinions
       user_opinion_reactions.opinion_id IS NULL -- Dont show opinions user has reacted on (2)
     GROUP BY user_opinions.id
-    ORDER BY user_opinions.id
+    ORDER BY user_opinions.id DESC -- Strive to show fresh opinions
     LIMIT $2
-  `, // TODO This has to be filtered
+  `,
   values: edgeId ? [userId, OPINION_FETCH_LIMIT, edgeId] : [userId, OPINION_FETCH_LIMIT],
 });
 
