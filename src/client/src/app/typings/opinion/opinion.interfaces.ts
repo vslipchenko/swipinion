@@ -7,6 +7,8 @@ export interface Opinion {
   file_url: string;
   title: string;
   description: string;
+  agreed: string;
+  disagreed: string;
   tags: Array<string>;
 }
 

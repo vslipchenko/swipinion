@@ -1,10 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
 import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
-import {Store} from '@ngxs/store';
+import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchGeneralOpinions} from '~app/modules/opinions/store/opinions.actions';
+import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-opinions',
@@ -12,15 +14,25 @@ import {FetchGeneralOpinions} from '~app/modules/opinions/store/opinions.actions
   styleUrls: ['./opinions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionsComponent implements OnInit {
-  public readonly loading$ = new BehaviorSubject(false);
+export class OpinionsComponent implements OnInit, Destroyable {
+  @Select(OpinionsSelectors.nothingToShow)
+  public readonly nothingToShow$!: Observable<boolean>;
+
+  public readonly loading$ = new BehaviorSubject(true);
+  public readonly destroy$ = new Subject<void>();
+
   private readonly view: OpinionsView;
 
   public constructor(
     private readonly route: ActivatedRoute,
     private readonly opinionService: OpinionService,
     private readonly store: Store,
+    private readonly actions$: Actions,
   ) {
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchGeneralOpinions)).subscribe(() => {
+      this.loading$.next(false);
+    });
+
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;
   }
 
@@ -28,7 +40,15 @@ export class OpinionsComponent implements OnInit {
     this.fetchOpinions();
   }
 
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.loading$.complete();
+  }
+
   private fetchOpinions(edgeId?: string): void {
+    this.loading$.next(true);
+
     if (this.view === OpinionsView.General) this.store.dispatch(new FetchGeneralOpinions(edgeId));
   }
 }

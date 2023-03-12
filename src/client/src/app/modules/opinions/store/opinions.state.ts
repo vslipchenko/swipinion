@@ -5,9 +5,12 @@ import {FetchGeneralOpinions} from '~app/modules/opinions/store/opinions.actions
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {GetGeneralOpinionsQueryResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 
 export interface OpinionsStateModel {
   opinions: Array<Opinion>;
+  activeOpinion: Opinion; // Scrolled through and reached last most opinion
+  canLoadMore: boolean;
 }
 
 const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
@@ -16,6 +19,8 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
   name: OPINIONS_STATE,
   defaults: {
     opinions: [],
+    activeOpinion: {} as Opinion,
+    canLoadMore: false,
   },
 })
 @Injectable()
@@ -29,11 +34,18 @@ export class OpinionsState {
   ): Observable<ApolloQueryResult<GetGeneralOpinionsQueryResult>> {
     return this.opinionService.getGeneralOpinions(action.payload).pipe(
       tap(({data}) => {
-        if (!data.getGeneralOpinions) return;
+        const opinions = data.getGeneralOpinions
+          ? data.getGeneralOpinions.map((opinion) => ({
+              ...opinion,
+              tags: opinion.tags[0] ? opinion.tags : [],
+            }))
+          : [];
 
         context.setState((state) => ({
           ...state,
-          opinions: action.payload ? [...state.opinions, ...data.getGeneralOpinions] : data.getGeneralOpinions,
+          opinions: action.payload ? [...state.opinions, ...opinions] : opinions,
+          activeOpinion: opinions[0],
+          canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
         }));
       }),
     );
