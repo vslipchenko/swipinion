@@ -6,7 +6,7 @@ import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/
 import {CardComponent} from '~app/shared/components/card/card.component';
 import {NgxsModule} from '@ngxs/store';
 import {OpinionsState} from '~app/modules/opinions/store/opinions.state';
-import {EmptyOpinionsComponent} from '~app/shared/components/empty-opinions/empty-opinions.component';
+import {OpinionPlaceholderComponent} from '~app/shared/components/opinion-placeholder/opinion-placeholder.component';
 
 @NgModule({
   declarations: [OpinionsComponent],
@@ -21,7 +21,7 @@ import {EmptyOpinionsComponent} from '~app/shared/components/empty-opinions/empt
     CardComponent,
     ProgressSpinnerComponent,
     NgxsModule.forFeature([OpinionsState]),
-    EmptyOpinionsComponent,
+    OpinionPlaceholderComponent,
   ],
 })
 export class OpinionsModule {}

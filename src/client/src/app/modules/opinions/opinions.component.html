@@ -3,7 +3,7 @@
                       class="d-flex jc-center ai-center f-1 bg-dark bt-transparent"></app-progress-spinner>
 
 <ng-template #content>
-  <app-empty-opinions *ngIf="nothingToShow$ | async; else opinions"></app-empty-opinions>
+  <app-opinion-placeholder *ngIf="nothingToShow$ | async; else opinions"></app-opinion-placeholder>
 
   <ng-template #opinions>
     <app-card
