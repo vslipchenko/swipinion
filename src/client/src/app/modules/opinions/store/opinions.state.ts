@@ -44,7 +44,7 @@ export class OpinionsState {
         context.setState((state) => ({
           ...state,
           opinions: action.payload ? [...state.opinions, ...opinions] : opinions,
-          activeOpinion: opinions[0],
+          activeOpinion: action.payload ? state.activeOpinion : opinions[0], // Set active opinion on page enter
           canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
         }));
       }),
