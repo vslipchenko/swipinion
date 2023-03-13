@@ -5,6 +5,7 @@ export const GET_GENERAL_OPINIONS = gql`
     getGeneralOpinions(edgeId: $edgeId) {
       id
       user_id
+      username
       type
       file_url
       title

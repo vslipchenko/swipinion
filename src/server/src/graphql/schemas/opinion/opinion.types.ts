@@ -4,6 +4,7 @@ export const opinionTypes = gql`
   type Opinion {
     id: String
     user_id: String
+    username: String
     type: Int
     file_url: String
     title: String

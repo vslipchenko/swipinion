@@ -5,28 +5,36 @@ import {OpinionReaction} from '../../typings/opinion/opinion.enums';
 export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: string): QueryConfig => ({
   text: `
     SELECT user_opinions.id, 
-      user_opinions.user_id, 
-      user_opinions.type, 
-      user_opinions.title, 
-      user_opinions.file_url, 
-      user_opinions.description, 
-      array_agg(tags.tag) AS tags,
-      (SELECT COUNT(*) FROM user_opinion_reactions WHERE opinion_id = user_opinions.id AND reaction = ${
-        OpinionReaction.Agree
-      }) AS agreed, -- Count how many users agreed
-      (SELECT COUNT(*) FROM user_opinion_reactions WHERE opinion_id = user_opinions.id AND reaction = ${
-        OpinionReaction.Disagree
-      }) AS disagreed -- Count how many users disagreed
+       users.username,
+       user_opinions.user_id, 
+       user_opinions.type, 
+       user_opinions.title, 
+       user_opinions.file_url, 
+       user_opinions.description, 
+       array_agg(tags.tag) AS tags,
+       COALESCE(ur.agreed, 0) AS agreed,
+       COALESCE(ur.disagreed, 0) AS disagreed
     FROM user_opinions
-    LEFT JOIN user_opinion_reactions ON user_opinions.id = user_opinion_reactions.opinion_id 
-      AND user_opinion_reactions.user_id = $1 -- Dont show opinions user has reacted on (1)
-    LEFT JOIN tags ON user_opinions.id = tags.opinion_id -- Get associated tags
+    LEFT JOIN (
+      SELECT opinion_id,
+        COUNT(CASE WHEN reaction = ${OpinionReaction.Agree} THEN 1 END) AS agreed,
+        COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed
+      FROM user_opinion_reactions
+      GROUP BY opinion_id
+    ) AS ur ON user_opinions.id = ur.opinion_id
+    LEFT JOIN tags ON user_opinions.id = tags.opinion_id
+    LEFT JOIN users ON user_opinions.user_id = users.id
     WHERE 
-      ${edgeId ? 'user_opinions.id < $3 AND' : ''} -- Move from New -> Old opinion direction
-      user_opinions.user_id != $1 AND -- Dont show user's own opinions
-      user_opinion_reactions.opinion_id IS NULL -- Dont show opinions user has reacted on (2)
-    GROUP BY user_opinions.id
-    ORDER BY user_opinions.id DESC -- Strive to show fresh opinions
+      ${edgeId ? 'user_opinions.id < $3 AND' : ''}
+      user_opinions.user_id != $1 AND 
+      NOT EXISTS (
+          SELECT 1 
+          FROM user_opinion_reactions 
+          WHERE opinion_id = user_opinions.id 
+            AND user_id = $1
+      )
+    GROUP BY user_opinions.id, users.username, ur.agreed, ur.disagreed
+    ORDER BY user_opinions.id DESC
     LIMIT $2
   `,
   values: edgeId ? [userId, OPINION_FETCH_LIMIT, edgeId] : [userId, OPINION_FETCH_LIMIT],
