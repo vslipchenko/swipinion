@@ -6,6 +6,7 @@ import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {GetGeneralOpinionsQueryResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
+import {OpinionType} from '~app/typings/opinion/opinion.enums';
 
 export interface OpinionsStateModel {
   opinions: Array<Opinion>;
@@ -19,7 +20,19 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
   name: OPINIONS_STATE,
   defaults: {
     opinions: [],
-    activeOpinion: {} as Opinion,
+    activeOpinion: {
+      id: '',
+      user_id: '',
+      username: '',
+      type: OpinionType.Text,
+      title: '',
+      description: '',
+      file_url: '',
+      agreed: '',
+      disagreed: '',
+      comments: '',
+      tags: [],
+    },
     canLoadMore: false,
   },
 })

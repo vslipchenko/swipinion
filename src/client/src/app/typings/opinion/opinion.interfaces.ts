@@ -10,6 +10,7 @@ export interface Opinion {
   description: string;
   agreed: string;
   disagreed: string;
+  comments: string;
   tags: Array<string>;
 }
 

@@ -13,12 +13,14 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
        user_opinions.description, 
        array_agg(tags.tag) AS tags,
        COALESCE(reactions.agreed, 0) AS agreed,
-       COALESCE(reactions.disagreed, 0) AS disagreed
+       COALESCE(reactions.disagreed, 0) AS disagreed,
+       COALESCE(reactions.comments, 0) AS comments
     FROM user_opinions
     LEFT JOIN (
       SELECT opinion_id,
         COUNT(CASE WHEN reaction = ${OpinionReaction.Agree} THEN 1 END) AS agreed,
-        COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed
+        COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed,
+        COUNT(CASE WHEN comment IS NOT NULL THEN 1 END) AS comments
       FROM user_opinion_reactions
       GROUP BY opinion_id
     ) AS reactions ON user_opinions.id = reactions.opinion_id
@@ -33,7 +35,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
           WHERE opinion_id = user_opinions.id 
             AND user_id = $1
       )
-    GROUP BY user_opinions.id, users.username, reactions.agreed, reactions.disagreed
+    GROUP BY user_opinions.id, users.username, reactions.agreed, reactions.disagreed, reactions.comments
     ORDER BY user_opinions.id DESC
     LIMIT $2
   `,
@@ -42,27 +44,33 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
 
 export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
   text: `
-     SELECT user_opinions.id, 
+     SELECT user_opinions.id,
+       users.username,
        user_opinions.user_id, 
        user_opinions.type, 
        user_opinions.title, 
        user_opinions.file_url, 
        user_opinions.description, 
        array_agg(tags.tag) AS tags,
-       reactions.agreed,
-	     reactions.disagreed
+       COALESCE(reactions.agreed, 0) AS agreed,
+       COALESCE(reactions.disagreed, 0) AS disagreed,
+	     COALESCE(reactions.comments, 0) AS comments
     FROM user_opinions
-    LEFT JOIN tags ON user_opinions.id = tags.opinion_id
     LEFT JOIN (
        SELECT opinion_id, 
          COUNT(CASE WHEN reaction = ${OpinionReaction.Agree} THEN 1 END) AS agreed,
-         COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed
+         COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed,
+         COUNT(CASE WHEN comment IS NOT NULL THEN 1 END) AS comments
        FROM user_opinion_reactions 
        GROUP BY opinion_id
     ) reactions ON user_opinions.id = reactions.opinion_id
+    LEFT JOIN users ON user_opinions.user_id = users.id
+    LEFT JOIN tags ON user_opinions.id = tags.opinion_id
     GROUP BY user_opinions.id,
+      users.username,
       reactions.agreed,
-      reactions.disagreed
+      reactions.disagreed,
+      reactions.comments
     ORDER BY user_opinions.id DESC -- Show fresh opinions each time
     LIMIT 2 -- No need for more as there is auth guard that would prevent unauthorized user actions
   `,

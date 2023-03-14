@@ -12,6 +12,7 @@ export const GET_GENERAL_OPINIONS = gql`
       description
       agreed
       disagreed
+      comments
       tags
     }
   }

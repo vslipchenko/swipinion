@@ -11,6 +11,7 @@ export const opinionTypes = gql`
     description: String
     agreed: String
     disagreed: String
+    comments: String
     tags: [String]!
   }
 `;

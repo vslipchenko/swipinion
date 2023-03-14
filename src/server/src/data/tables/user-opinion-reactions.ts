@@ -10,7 +10,7 @@ export const UserOpinionReactionsTable: Table = {
       opinion_id BIGINT NOT NULL REFERENCES user_opinions(id)
         ON DELETE CASCADE,
       reaction SMALLINT NOT NULL,
-      comment VARCHAR (1000),
+      comment VARCHAR (1000) DEFAULT NULL,
       created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
     );
   `,
