@@ -12,8 +12,8 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
        user_opinions.file_url, 
        user_opinions.description, 
        array_agg(tags.tag) AS tags,
-       COALESCE(ur.agreed, 0) AS agreed,
-       COALESCE(ur.disagreed, 0) AS disagreed
+       COALESCE(reactions.agreed, 0) AS agreed,
+       COALESCE(reactions.disagreed, 0) AS disagreed
     FROM user_opinions
     LEFT JOIN (
       SELECT opinion_id,
@@ -21,7 +21,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
         COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed
       FROM user_opinion_reactions
       GROUP BY opinion_id
-    ) AS ur ON user_opinions.id = ur.opinion_id
+    ) AS reactions ON user_opinions.id = reactions.opinion_id
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id
     LEFT JOIN users ON user_opinions.user_id = users.id
     WHERE 
@@ -33,7 +33,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
           WHERE opinion_id = user_opinions.id 
             AND user_id = $1
       )
-    GROUP BY user_opinions.id, users.username, ur.agreed, ur.disagreed
+    GROUP BY user_opinions.id, users.username, reactions.agreed, reactions.disagreed
     ORDER BY user_opinions.id DESC
     LIMIT $2
   `,
