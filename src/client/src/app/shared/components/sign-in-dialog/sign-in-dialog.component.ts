@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {BehaviorSubject, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
@@ -11,12 +11,7 @@ import {
   MatLegacyDialogModule as MatDialogModule,
 } from '@angular/material/legacy-dialog';
 import {SignIn} from '~app/typings/authentication/authentication.interfaces';
-import {Store} from '@ngxs/store';
-import {Router} from '@angular/router';
 import {UserService} from '~app/services/user/user.service';
-import {ApolloQueryResult} from '@apollo/client/core';
-import {UserEssentialsQueryResult} from '~app/typings/user/user.interfaces';
-import {UpdateUserEssentials} from '~app/modules/app/store/app.actions';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
@@ -58,8 +53,6 @@ export class SignInDialogComponent implements OnInit, Destroyable {
     private readonly userService: UserService,
     private readonly authenticationService: AuthenticationService,
     private readonly snackbar: MatSnackBar, // private readonly router: Router,
-    private readonly router: Router,
-    private readonly store: Store,
   ) {}
 
   public ngOnInit(): void {
@@ -93,39 +86,25 @@ export class SignInDialogComponent implements OnInit, Destroyable {
       .signIn(credentials)
       .pipe(
         takeUntil(this.destroy$),
-        switchMap(({data}) => {
-          if (!data.signIn) {
-            this.showErrorSnackbar();
-            return of({data: {}} as ApolloQueryResult<UserEssentialsQueryResult>);
-          }
-
-          if (data.signIn.reason === SignInFailReason.Unconfirmed) {
-            this.confirm.emit(credentials);
-            return of({data: {}} as ApolloQueryResult<UserEssentialsQueryResult>);
-          }
-
-          if (data.signIn.reason === SignInFailReason.Blocked) {
-            this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
-            return of({data: {}} as ApolloQueryResult<UserEssentialsQueryResult>);
-          }
-
-          this.authenticationService.resetTokens(); // Clear active session
-
-          this.authenticationService.accessToken$.next(data.signIn.accessToken);
-          this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
-
-          return this.userService.getUserEssentials();
-        }),
         finalize(() => this.loading$.next(false)),
       )
       .subscribe(
         ({data}) => {
-          if (!data.userEssentials) return this.showErrorSnackbar();
+          if (!data.signIn) {
+            return this.showErrorSnackbar();
+          }
 
-          this.store.dispatch(new UpdateUserEssentials(data.userEssentials));
+          if (data.signIn.reason === SignInFailReason.Unconfirmed) {
+            return this.confirm.emit(credentials);
+          }
 
-          const userModule = this.router.url.startsWith('/user/');
-          if (userModule) return window.location.reload(); // Reload in order to actualize a user state; this fixes stale user state data
+          if (data.signIn.reason === SignInFailReason.Blocked) {
+            return this.snackbar.open('Account is blocked', 'OK', {panelClass: 'snackbar-error'});
+          }
+
+          this.authenticationService.resetTokens(); // Clear active session
+          // No reason for setting accessToken as page must reload
+          this.authenticationService.setRefreshToken(data.signIn.refreshToken, !this.rememberMe.value);
 
           this.authenticated.emit();
         },

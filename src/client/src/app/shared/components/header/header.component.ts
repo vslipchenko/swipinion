@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {distinctUntilChanged, filter, map, merge, Observable, of, Subject, take, takeUntil} from 'rxjs';
+import {distinctUntilChanged, filter, map, merge, of, Subject, take, takeUntil} from 'rxjs';
 import {AsyncPipe, Location, NgIf} from '@angular/common';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit, Destroyable {
   @Input() public showPasswordRecovery = of<void>();
 
   public readonly destroy$ = new Subject<void>();
-  public readonly authenticated$: Observable<boolean>;
+  public readonly authenticated: boolean = false;
 
   public constructor(
     private readonly dialog: MatDialog,
@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit, Destroyable {
     private readonly userStatusPingService: UserStatusPingService,
     private readonly store: Store,
   ) {
-    this.authenticated$ = this.authenticationService.authenticated$;
+    this.authenticated = this.authenticationService.authenticated;
   }
 
   public ngOnInit(): void {
@@ -104,10 +104,9 @@ export class HeaderComponent implements OnInit, Destroyable {
     });
 
     dialog.componentInstance.authenticated.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
-      dialog.close();
       if (this.isHomepageScope) this.resetLocation();
 
-      this.runUserStatusPolling();
+      window.location.reload(); // Reload in order to actualize a user state; this fixes stale user state data
     });
 
     this.listenDialogClose(dialog);

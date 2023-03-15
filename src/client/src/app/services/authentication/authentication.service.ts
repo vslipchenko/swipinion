@@ -5,7 +5,7 @@ import {
   SignIn,
   SignInQueryResult,
 } from '~app/typings/authentication/authentication.interfaces';
-import {BehaviorSubject, map, Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authentication.queries';
 
@@ -55,15 +55,15 @@ export class AuthenticationService {
     localStorage.removeItem('token');
   }
 
-  public get authenticated$(): Observable<boolean> {
-    return this.accessToken$.asObservable().pipe(map((token) => Boolean(token)));
-  }
-
   public logout(): void {
     this.resetTokens();
     // This will reset app's state & redirect to sign-in page if protected route is requested
     window.location.reload(); // Reset app's state
   }
+
+  // public get authenticated$(): Observable<boolean> {
+  //   return this.accessToken$.asObservable().pipe(map((token) => Boolean(token)));
+  // }
 
   public get authenticated(): boolean {
     return Boolean(this.accessToken$.value);
