@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
-import {CardStatsComponent} from '~app/shared/components/card-stats/card-stats.component';
 import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {RouterLink} from '@angular/router';
+import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
 
 @Component({
   selector: 'app-opinion-card',
@@ -11,7 +11,7 @@ import {RouterLink} from '@angular/router';
   styleUrls: ['./opinion-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [RouterLink, IconButtonComponent, CardStatsComponent, CardTagsComponent],
+  imports: [RouterLink, IconButtonComponent, OpinionStatsPanelComponent, CardTagsComponent],
 })
 export class OpinionCardComponent {
   @Input() public id = '';
@@ -24,6 +24,4 @@ export class OpinionCardComponent {
   @Input() public disagreed = '';
   @Input() public comments = '';
   @Input() public tags: Array<string> = [];
-
-  protected stats = [];
 }

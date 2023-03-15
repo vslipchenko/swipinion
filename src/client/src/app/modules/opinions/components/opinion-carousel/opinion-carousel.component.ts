@@ -12,5 +12,5 @@ import {NgForOf} from '@angular/common';
   imports: [NgForOf, OpinionCardComponent],
 })
 export class OpinionCarouselComponent {
-  @Input() protected data: Array<Opinion> = [];
+  @Input() public data: Array<Opinion> = [];
 }

@@ -175,7 +175,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   }
 
   private descriptionValidator(control: FormControl | AbstractControl): ValidationErrors | null {
-    if (this.addOpinionForm?.controls['type']?.value !== OpinionType.Text) return null;
+    if (this.addOpinionForm?.controls['file'].value?.size) return null;
 
     if (!control.value) return {required: true};
 

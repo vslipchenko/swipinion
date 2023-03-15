@@ -7,6 +7,7 @@ import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchGeneralOpinions} from '~app/modules/opinions/store/opinions.actions';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 
 @Component({
   selector: 'app-opinions',
@@ -17,6 +18,8 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 export class OpinionsComponent implements OnInit, Destroyable {
   @Select(OpinionsSelectors.nothingToShow)
   public readonly nothingToShow$!: Observable<boolean>;
+  @Select(OpinionsSelectors.opinions)
+  public readonly opinions$!: Observable<Array<Opinion>>;
 
   public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();

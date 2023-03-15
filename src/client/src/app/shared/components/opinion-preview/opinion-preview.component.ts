@@ -7,9 +7,9 @@ import {NgIf} from '@angular/common';
 import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
-import {CardStatsComponent} from '~app/shared/components/card-stats/card-stats.component';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 import {RouterLink} from '@angular/router';
+import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
 
 @Component({
   selector: 'app-opinion-preview',
@@ -23,7 +23,7 @@ import {RouterLink} from '@angular/router';
     CardTagsComponent,
     ButtonComponent,
     MenuItemsComponent,
-    CardStatsComponent,
+    OpinionStatsPanelComponent,
     MatMenuModule,
   ],
 })

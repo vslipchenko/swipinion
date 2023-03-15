@@ -1,4 +1,4 @@
-<div class="wrapper relative">
+<div class="card relative h-100">
   <div class="background background-blurred bg-dark absolute h-100 w-100"
        [style.background-image]="'url(' + fileUrl +  ')'"></div>
 
@@ -14,10 +14,11 @@
         <app-icon-button icon="more_horiz" extendClass="card-more-button h-100 br-0 px-1"></app-icon-button>
       </div>
 
-      <app-card-stats class="d-flex bt-transparent" [stats]="stats"></app-card-stats>
+      <app-opinion-stats-panel class="d-flex bt-transparent" [agreed]="agreed" [disagreed]="disagreed"
+                               [comments]="comments"></app-opinion-stats-panel>
     </div>
 
-    <div class="y-scrollbar transparent-scrollbar">
+    <div class="y-scrollbar transparent-scrollbar f-1 bg-light">
       <div class="d-flex">
         <img class="card-image w-100"
              [src]="fileUrl"
