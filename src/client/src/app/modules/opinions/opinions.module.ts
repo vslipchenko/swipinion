@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {OpinionsComponent} from './opinions.component';
 import {RouterModule} from '@angular/router';
 import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
-import {CardComponent} from '~app/shared/components/card/card.component';
 import {NgxsModule} from '@ngxs/store';
 import {OpinionsState} from '~app/modules/opinions/store/opinions.state';
 import {OpinionPlaceholderComponent} from '~app/shared/components/opinion-placeholder/opinion-placeholder.component';
@@ -19,7 +18,6 @@ import {OpinionCarouselComponent} from '~app/modules/opinions/components/opinion
         component: OpinionsComponent,
       },
     ]),
-    CardComponent,
     ProgressSpinnerComponent,
     NgxsModule.forFeature([OpinionsState]),
     OpinionPlaceholderComponent,

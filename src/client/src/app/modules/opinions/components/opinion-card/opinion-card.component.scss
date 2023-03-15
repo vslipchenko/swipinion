@@ -1,0 +1,79 @@
+@use 'variables' as var;
+@use 'media';
+
+.title {
+  word-break: break-word;
+}
+
+.wrapper {
+  overflow: hidden;
+}
+
+.glass {
+  background: rgba(var.$color-background-dark, 0.7);
+}
+
+.card-image {
+  background-color: var.$color-light;
+}
+
+.background {
+  z-index: -1;
+}
+
+.container {
+  max-width: 500px;
+}
+
+.content {
+  @include media.zero-large {
+    padding-bottom: var.$unit-7;
+  }
+
+  @include media.above-large {
+    padding-bottom: var.$unit-2;
+  }
+}
+
+.thumbnail {
+  width: 30px;
+  height: 30px;
+}
+
+.y-scrollbar {
+  overflow-y: auto;
+}
+
+@include media.above-large {
+  // Mozilla
+  @supports (scrollbar-width: thin) {
+    .transparent-scrollbar {
+      scrollbar-color: var.$color-background-dark rgba(var.$color-background-dark, 0.7);
+    }
+  }
+
+  .transparent-scrollbar::-webkit-scrollbar-thumb {
+    background: var.$color-background-dark;
+  }
+
+  .transparent-scrollbar::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: rgba(var.$color-background-dark, 0.7);
+  }
+}
+
+.actions {
+  @include media.zero-large {
+    display: none !important;
+  }
+}
+
+.action {
+  bottom: 4px;
+  opacity: 0.8;
+  max-width: 500px;
+
+  @include media.above-large {
+    display: none !important;
+  }
+}
