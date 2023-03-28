@@ -1,6 +1,9 @@
 <div class="card relative h-100">
-  <div class="background background-blurred bg-dark absolute h-100 w-100"
-       [style.background-image]="'url(' + fileUrl +  ')'"></div>
+  <div class="background-container bg-dark absolute h-100 w-100">
+    <div class="background w-100 h-100"
+         [style.background-image]="backgroundUrl"></div>
+    <div class="absolute w-100 h-100 backdrop t-0"></div>
+  </div>
 
   <div class="container mx-auto d-flex f-column h-100">
     <div class="glass">
@@ -18,14 +21,14 @@
                                [comments]="comments"></app-opinion-stats-panel>
     </div>
 
-    <div class="y-scrollbar transparent-scrollbar f-1 bg-light">
-      <div class="d-flex">
-        <img class="card-image w-100"
-             [src]="fileUrl"
-             alt="">
-      </div>
+    <div class="y-scrollbar transparent-scrollbar f-1" [class.glass]="!textContent" [class.bg-light]="textContent">
+      <!--      <div class="d-flex">-->
+      <img *ngIf="fileUrl" class="bg-light w-100"
+           [src]="fileUrl"
+           alt="">
+      <!--      </div>-->
 
-      <div class="content px-2 pt-2 bg-light c-dark">
+      <div *ngIf="textContent" class="content px-2 pt-2 c-dark">
         <h2 class="title">{{title}}</h2>
         <p>
           {{description}}
@@ -54,11 +57,11 @@
           <!--          1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original-->
           <!--          form, accompanied by English versions from the 1914 translation by H. Rackham.-->
         </p>
-        <app-card-tags [tags]="tags" class="d-block mt-1"></app-card-tags>
+        <app-card-tags *ngIf="tags.length" [tags]="tags" class="d-block mt-1"></app-card-tags>
       </div>
     </div>
 
-    <div class="actions d-flex jc-around p-1 glass">
+    <div class="actions d-flex jc-around p-1 glass" [class.bt-transparent]="!textContent">
       <app-icon-button icon="thumb_up"></app-icon-button>
       <app-icon-button svgIcon="like-n-comment"></app-icon-button>
       <app-icon-button icon="close"></app-icon-button>
@@ -66,7 +69,7 @@
       <app-icon-button icon="thumb_down"></app-icon-button>
     </div>
 
-    <div class="action w-100 d-flex jc-center fixed mb-h">
+    <div class="action w-100 d-flex jc-center fixed">
       <app-icon-button icon="close" extendClass="bg-dark"></app-icon-button>
     </div>
   </div>

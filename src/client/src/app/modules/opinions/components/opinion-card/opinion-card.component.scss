@@ -10,15 +10,26 @@
 }
 
 .glass {
-  background: rgba(var.$color-background-dark, 0.7);
+  background: rgba(var.$color-background-dark, 0.8);
 }
 
-.card-image {
-  background-color: var.$color-light;
+//.card-image {
+//  background-color: var.$color-light;
+//}
+
+.background-container {
+  z-index: -1;
 }
 
 .background {
-  z-index: -1;
+  opacity: 0.5;
+  //z-index: -1;
+}
+
+.backdrop {
+  backdrop-filter: blur(10px); // filter: blur() causes fuzzy image on borders
+  -webkit-backdrop-filter: blur(10px);
+  //z-index: -1;
 }
 
 .container {
@@ -69,8 +80,8 @@
 }
 
 .action {
-  bottom: 4px;
-  opacity: 0.8;
+  bottom: var.$unit;
+  //opacity: 0.8;
   max-width: 500px;
 
   @include media.above-large {

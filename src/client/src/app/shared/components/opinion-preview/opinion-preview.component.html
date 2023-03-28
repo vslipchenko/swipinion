@@ -1,7 +1,7 @@
 <div class="preview">
   <div class="d-flex relative frame">
     <div *ngIf="!title && !description" [style.background-image]="'url(' + fileUrl + ')'"
-         class="background-blurred w-100 h-100 absolute"></div>
+         class="background background-blurred w-100 h-100 absolute"></div>
     <img *ngIf="fileUrl" [src]="fileUrl" alt="">
     <div *ngIf="title || description" class="content p-2 relative">
       <p *ngIf="title" class="fw-medium mb-1">{{title}}</p>
