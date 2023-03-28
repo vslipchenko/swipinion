@@ -1,6 +1,6 @@
 <mat-form-field [appearance]="appearance" [color]="color" [class]="extendClass">
   <mat-label>{{label}}</mat-label>
-  <textarea matInput [formControl]="control"></textarea>
+  <textarea matInput [formControl]="control" [placeholder]="placeholder"></textarea>
   <mat-hint *ngIf="hint" [align]="hintAlign">
     <ng-container [ngTemplateOutlet]="hint"></ng-container>
   </mat-hint>

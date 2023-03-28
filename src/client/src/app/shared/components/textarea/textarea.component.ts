@@ -22,6 +22,7 @@ export class TextareaComponent {
   @Input() public label = '';
   @Input() public hint?: TemplateRef<unknown>;
   @Input() public hintAlign: 'start' | 'end' = 'start';
+  @Input() public placeholder = '';
 
   public resetValue(): void {
     this.control.setValue('');
