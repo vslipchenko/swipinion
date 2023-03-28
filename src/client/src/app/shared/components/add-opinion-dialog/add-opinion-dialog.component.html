@@ -3,24 +3,24 @@
   <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
   <mat-dialog-content class="primary-scrollbar">
-    <app-input
-      class="d-block"
-      extendClass="w-100"
-      appearance="outline"
-      label="Title"
-      [control]="title"
-      [errorMessage]="titleErrorMessage"
-      [hint]="titleHint"
-      hintAlign="end"
-    >
-      <ng-template #titleHint>
-        {{ title.value?.length || 0 }} / {{ titleMaxLength }}
-      </ng-template>
-    </app-input>
+    <!--    <app-input-->
+    <!--      class="d-block"-->
+    <!--      extendClass="w-100"-->
+    <!--      appearance="outline"-->
+    <!--      label="Title"-->
+    <!--      [control]="title"-->
+    <!--      [errorMessage]="titleErrorMessage"-->
+    <!--      [hint]="titleHint"-->
+    <!--      hintAlign="end"-->
+    <!--    >-->
+    <!--      <ng-template #titleHint>-->
+    <!--        {{ title.value?.length || 0 }} / {{ titleMaxLength }}-->
+    <!--      </ng-template>-->
+    <!--    </app-input>-->
 
     <app-textarea
       appearance="outline"
-      label="Description"
+      placeholder="Speak your opinion"
       class="d-block w-100"
       extendClass="w-100"
       [control]="description"
@@ -35,7 +35,7 @@
       appearance="outline"
       label="Tags"
       extendClass="d-block w-100"
-      placeholder="E.g. champinion, you-decide"
+      placeholder="Ex. champinion, opinionion"
       [regexp]="hashtagRegexp"
       [hint]="chipsHint"
       [control]="tags"
@@ -45,7 +45,7 @@
 
     <app-image-browser
       class="d-block pt-3"
-      browseText="Add accompanying media"
+      browseText="Add image"
       [file]="file"
       [errorMessage]="imageFileErrorMessage"
     ></app-image-browser>
