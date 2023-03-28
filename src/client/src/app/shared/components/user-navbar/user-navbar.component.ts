@@ -35,7 +35,7 @@ export class UserNavbarComponent implements OnInit, Destroyable {
       id: UserNavbarMenuItem.ShareOpinion,
       title: 'Add opinion',
       icon: 'post_add',
-      click: (): void => this.shareOpinion(),
+      click: (): void => this.addOpinion(),
     },
     {id: UserNavbarMenuItem.Profile, title: 'Profile', routerLink: '/profile', icon: 'person'},
     {id: UserNavbarMenuItem.Messages, title: 'Messages', routerLink: '/profile/messages', svgIcon: 'email-multiple'},
@@ -63,7 +63,7 @@ export class UserNavbarComponent implements OnInit, Destroyable {
     private readonly authenticationService: AuthenticationService,
     private readonly userNavbarService: UserNavbarService,
   ) {
-    this.userNavbarService.shareOpinion$.pipe(takeUntil(this.destroy$)).subscribe(() => this.shareOpinion());
+    this.userNavbarService.shareOpinion$.pipe(takeUntil(this.destroy$)).subscribe(() => this.addOpinion());
   }
 
   public ngOnInit(): void {
@@ -95,8 +95,8 @@ export class UserNavbarComponent implements OnInit, Destroyable {
     this.destroy$.complete();
   }
 
-  public shareOpinion(): void {
-    this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+  public addOpinion(): void {
+    this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'small-dialog']});
   }
 
   private defineIndicatorClass({hasUnreadMessage, hasUnreadNotification}: UserStatus): string {

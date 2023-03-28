@@ -80,7 +80,7 @@ export class ProfileActionBarComponent {
 
   public unfollow(pending = false): void {
     this.dialog.open(UnfollowUserDialogComponent, {
-      panelClass: ['dialog', 'extended-dialog'],
+      panelClass: ['dialog', 'small-dialog'],
       data: {
         title: pending ? 'Revoke follow request' : 'Unfollow user',
         body: pending ? 'Waiting for follow request to be accepted. Do you want to revoke follow of' : 'Unfollow',

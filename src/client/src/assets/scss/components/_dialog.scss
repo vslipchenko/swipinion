@@ -35,8 +35,8 @@
   }
 }
 
-.extended-dialog {
+.small-dialog {
   @include media.above-small {
-    min-width: 500px;
+    width: 500px;
   }
 }

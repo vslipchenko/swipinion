@@ -86,7 +86,7 @@ export class HeaderComponent implements OnInit, Destroyable {
   public signIn(changeLocation: boolean, data?: {email: string; password: string}): void {
     if (changeLocation) this.location.go('/sign-in');
 
-    const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'extended-dialog'], data});
+    const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'small-dialog'], data});
 
     dialog.componentInstance.signUp.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();
@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit, Destroyable {
   public signUp(changeLocation: boolean): void {
     if (changeLocation) this.location.go('/sign-up');
 
-    const dialog = this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    const dialog = this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'small-dialog']});
 
     dialog.componentInstance.signedUp.pipe(takeUntil(dialog.afterClosed())).subscribe((email) => {
       dialog.close();
@@ -128,7 +128,7 @@ export class HeaderComponent implements OnInit, Destroyable {
   private confirmEmail(email = '', data?: {email: string; password: string}): void {
     // if (changeLocation) this.location.go('/confirmation', `email=${encodeURI(email)}`);
 
-    const dialog = this.dialog.open(EmailConfirmationDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    const dialog = this.dialog.open(EmailConfirmationDialogComponent, {panelClass: ['dialog', 'small-dialog']});
 
     dialog.componentInstance.email = email;
     dialog.componentInstance.emailConfirmed.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
@@ -142,7 +142,7 @@ export class HeaderComponent implements OnInit, Destroyable {
   private recoverPassword(changeLocation: boolean): void {
     if (changeLocation) this.location.go('/recovery');
 
-    const dialog = this.dialog.open(RecoveryDialogComponent, {panelClass: ['dialog', 'extended-dialog']});
+    const dialog = this.dialog.open(RecoveryDialogComponent, {panelClass: ['dialog', 'small-dialog']});
 
     dialog.componentInstance.recovered.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       dialog.close();

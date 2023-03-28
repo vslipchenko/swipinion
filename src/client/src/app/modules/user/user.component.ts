@@ -68,7 +68,7 @@ export class UserComponent implements AfterViewInit, Destroyable {
 
   public openEditProfile(): void {
     this.dialog.open(EditProfileDialogComponent, {
-      panelClass: ['dialog', 'extended-dialog'],
+      panelClass: ['dialog', 'small-dialog'],
       data: this.profileSnapshot,
     });
   }
