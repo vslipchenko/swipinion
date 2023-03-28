@@ -33,7 +33,7 @@ export class UserNavbarComponent implements OnInit, Destroyable {
   public readonly navbarItems$ = new BehaviorSubject([
     {
       id: UserNavbarMenuItem.ShareOpinion,
-      title: 'Share opinion',
+      title: 'Add opinion',
       icon: 'post_add',
       click: (): void => this.shareOpinion(),
     },

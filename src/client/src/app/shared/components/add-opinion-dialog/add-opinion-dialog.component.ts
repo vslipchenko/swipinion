@@ -51,7 +51,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   public readonly hashtagRegexp = TAG_REGEXP;
   public readonly titleMaxLength = TITLE_MAX_LENGTH;
   public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
-  protected readonly disableShare$: Observable<boolean>;
+  protected readonly disableAddOpinion$: Observable<boolean>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
   public constructor(
@@ -61,7 +61,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     private readonly dialogRef: MatDialogRef<AddOpinionDialogComponent>,
     private readonly store: Store,
   ) {
-    this.disableShare$ = this.addOpinionForm.valueChanges.pipe(
+    this.disableAddOpinion$ = this.addOpinionForm.valueChanges.pipe(
       startWith(this.addOpinionForm.value),
       map(({description, file}) => this.loading$.value || (!description && !file?.size)),
     );
@@ -73,7 +73,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     this.loading$.complete();
   }
 
-  public share(): void {
+  public addOpinion(): void {
     this.addOpinionForm.markAllAsTouched();
     this.description.updateValueAndValidity();
 

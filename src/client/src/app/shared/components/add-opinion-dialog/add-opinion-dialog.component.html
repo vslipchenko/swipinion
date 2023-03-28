@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Share opinion</h2>
+<h2 mat-dialog-title>Add opinion</h2>
 <ng-container *ngIf="{loading: loading$ | async} as state">
   <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
@@ -40,7 +40,7 @@
       [hint]="chipsHint"
       [control]="tags"
     >
-      <ng-template #chipsHint> Tag can contain letters, numbers, dash as separator (35 characters at max)</ng-template>
+      <ng-template #chipsHint>Can contain letters, numbers, dash separators (35 characters max)</ng-template>
     </app-chips>
 
     <app-image-browser
@@ -57,7 +57,8 @@
     </app-progress-bar>
 
     <app-button mat-dialog-close text="Cancel"></app-button>
-    <app-button color="primary" text="Share" (clicked)="share()" [disabled]="$any(disableShare$ | async)"></app-button>
+    <app-button color="primary" text="Add" (clicked)="addOpinion()"
+                [disabled]="$any(disableAddOpinion$ | async)"></app-button>
   </mat-dialog-actions>
 </ng-container>
 
