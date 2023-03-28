@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
+import {BehaviorSubject, finalize, map, Observable, startWith, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {
@@ -51,6 +51,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   public readonly hashtagRegexp = TAG_REGEXP;
   public readonly titleMaxLength = TITLE_MAX_LENGTH;
   public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
+  protected readonly disableShare$: Observable<boolean>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
   public constructor(
@@ -59,7 +60,12 @@ export class AddOpinionDialogComponent implements Destroyable {
     private readonly snackbar: MatSnackBar,
     private readonly dialogRef: MatDialogRef<AddOpinionDialogComponent>,
     private readonly store: Store,
-  ) {}
+  ) {
+    this.disableShare$ = this.addOpinionForm.valueChanges.pipe(
+      startWith(this.addOpinionForm.value),
+      map(({description, file}) => this.loading$.value || (!description && !file?.size)),
+    );
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
@@ -155,9 +161,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   public descriptionErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
-    if ('maxlength' in errors) return `${this.descriptionMaxLength} characters at max`;
-
-    return 'Required field';
+    return `${this.descriptionMaxLength} characters at max`; // Assume 'maxlength'
   }
 
   public imageFileErrorMessage(errors: ValidationErrors | null): string | void {
@@ -170,14 +174,6 @@ export class AddOpinionDialogComponent implements Destroyable {
     if (!control.value) return null;
 
     if ((control.value as File).size / 1024 ** 2 > MAX_IMAGE_SIZE_MB) return {size: true};
-
-    return null;
-  }
-
-  private descriptionValidator(control: FormControl | AbstractControl): ValidationErrors | null {
-    if (this.addOpinionForm?.controls['file'].value?.size) return null;
-
-    if (!control.value) return {required: true};
 
     return null;
   }
@@ -221,10 +217,7 @@ export class AddOpinionDialogComponent implements Destroyable {
       // fileUrl: new FormControl(null, this.imageValidator.bind(this)),
       file: new FormControl(null, this.fileSizeValidator.bind(this)),
       title: new FormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
-      description: new FormControl(null, [
-        Validators.maxLength(this.descriptionMaxLength),
-        this.descriptionValidator.bind(this),
-      ]),
+      description: new FormControl(null, Validators.maxLength(this.descriptionMaxLength)),
       tags: new FormControl([], Validators.maxLength(MAX_TAG_COUNT)),
     });
   }

@@ -57,7 +57,7 @@
     </app-progress-bar>
 
     <app-button mat-dialog-close text="Cancel"></app-button>
-    <app-button color="primary" text="Share" (clicked)="share()" [disabled]="state.loading || false"></app-button>
+    <app-button color="primary" text="Share" (clicked)="share()" [disabled]="$any(disableShare$ | async)"></app-button>
   </mat-dialog-actions>
 </ng-container>
 
