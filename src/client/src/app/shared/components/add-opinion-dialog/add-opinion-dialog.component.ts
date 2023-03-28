@@ -63,7 +63,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   ) {
     this.disableAddOpinion$ = this.addOpinionForm.valueChanges.pipe(
       startWith(this.addOpinionForm.value),
-      map(({description, file}) => this.loading$.value || (!description && !file?.size)),
+      map(({description, file}) => this.loading$.value || (!description?.trim() && !file?.size)),
     );
   }
 
