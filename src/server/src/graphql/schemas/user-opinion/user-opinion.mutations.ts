@@ -24,6 +24,8 @@ const createOpinion = async (
   {input}: {input: CreateOpinion},
   {accessToken}: {accessToken: string},
 ): Promise<string | ApolloError | null> => {
+  if (!input.fileUrl && !input.description) return null; // Check whether any content provided
+
   const {error} = createOpinionValidator.validate(input);
 
   if (error) return null;
