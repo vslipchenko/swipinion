@@ -7,7 +7,7 @@ export const userStatusTypes = gql`
   }
 
   type UnreadMessage {
-    id: String
-    sender_id: String
+    id: ID
+    sender_id: ID
   }
 `;

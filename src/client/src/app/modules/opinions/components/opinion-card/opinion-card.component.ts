@@ -17,7 +17,6 @@ import {NgIf} from '@angular/common';
 export class OpinionCardComponent implements OnInit {
   @Input() public id = '';
   @Input() public username = '';
-  @Input() public title = '';
   @Input() public type = OpinionType.Text;
   @Input() public fileUrl = '';
   @Input() public description = '';
@@ -29,7 +28,7 @@ export class OpinionCardComponent implements OnInit {
   protected backgroundUrl = '';
 
   public ngOnInit(): void {
-    if (this.title || this.description || this.tags.length) this.textContent = true;
+    if (this.description || this.tags.length) this.textContent = true;
 
     if (this.fileUrl) this.backgroundUrl = `url('${this.fileUrl}')`;
   }

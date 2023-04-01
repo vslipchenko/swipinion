@@ -11,10 +11,11 @@ import {
 import {CreateOpinion} from '../../../typings/user-opinion/user-opinion.interfaces';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
 import {bigintValidator} from '../../../validators/shared';
+import {OpinionType} from '../../../typings/opinion/opinion.enums';
 
 export const userOpinionMutationTypeDefinitions = gql`
   type Mutation {
-    createOpinion(input: CreateOpinion!): ID
+    createOpinion(input: CreateOpinion!): CreateOpinionResult
     deleteOpinion(opinionId: String!): Success
   }
 `;
@@ -23,7 +24,7 @@ const createOpinion = async (
   _: unknown,
   {input}: {input: CreateOpinion},
   {accessToken}: {accessToken: string},
-): Promise<string | ApolloError | null> => {
+): Promise<{id: string; type: OpinionType} | ApolloError | null> => {
   if (!input.fileUrl && !input.description) return null; // Check whether any content provided
 
   const {error} = createOpinionValidator.validate(input);
@@ -34,21 +35,33 @@ const createOpinion = async (
 
   if (authenticationError) return authenticationError;
 
+  let type = OpinionType.Text;
+
+  switch (true) {
+    case Boolean(input.description && input.fileUrl):
+      type = OpinionType.TextImage;
+      break;
+    case Boolean(input.fileUrl):
+      type = OpinionType.Image;
+      break;
+    // else assume Boolean(input.description) is true and opinionType = OpinionType.Text
+  }
+
   let query;
 
   if (input.tags.length) {
-    query = queryOpinionCreateWithTags({...input, userId: tokenData.userId});
+    query = queryOpinionCreateWithTags({...input, type, userId: tokenData.userId});
 
     query.text = query.text.replace('{{values}}', concatenateTagValues(input.tags));
   } else {
-    query = queryOpinionCreate({...input, userId: tokenData.userId});
+    query = queryOpinionCreate({...input, type, userId: tokenData.userId});
   }
 
   const result = await db.query(query);
 
   if (!result.rowCount) return null;
 
-  return result.rows[0].id;
+  return {id: result.rows[0].id, type};
 };
 
 const deleteOpinion = async (

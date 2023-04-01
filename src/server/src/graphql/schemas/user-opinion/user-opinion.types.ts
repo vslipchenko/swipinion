@@ -2,11 +2,15 @@ import {gql} from 'apollo-server-core';
 
 export const userOpinionTypes = gql`
   type UserOpinion {
-    id: String
+    id: ID
     type: Int
     file_url: String
-    title: String
     description: String
     tags: [String]!
+  }
+
+  type CreateOpinionResult {
+    id: ID
+    type: Int
   }
 `;

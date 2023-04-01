@@ -2,7 +2,7 @@ import {gql} from 'apollo-server-core';
 
 export const userSearchTypes = gql`
   type UserEssentials {
-    id: String
+    id: ID
     username: String
     thumbnail: String
   }

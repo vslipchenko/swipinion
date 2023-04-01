@@ -1,6 +1,7 @@
 import {QueryConfig} from 'pg';
 import {CreateOpinion} from '../../typings/user-opinion/user-opinion.interfaces';
 import {USER_OPINION_FETCH_LIMIT} from '../../constants/opinions';
+import {OpinionType} from '../../typings/opinion/opinion.enums';
 
 export const concatenateTagValues = (values: Array<string>): string => {
   return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join();
@@ -10,14 +11,13 @@ export const queryOpinionCreateWithTags = ({
   userId,
   type,
   fileUrl,
-  title,
   description,
-}: CreateOpinion & {userId: string}): QueryConfig => ({
+}: CreateOpinion & {type: OpinionType; userId: string}): QueryConfig => ({
   text: `
     WITH opinion AS (
       INSERT INTO user_opinions
-      (user_id, type, file_url, title, description)
-      VALUES ($1,$2,$3,$4,$5)
+      (user_id, type, file_url, description)
+      VALUES ($1, $2, $3, $4)
       RETURNING id
     )
     INSERT INTO tags
@@ -25,23 +25,22 @@ export const queryOpinionCreateWithTags = ({
     VALUES {{values}}
     RETURNING (SELECT id FROM opinion)
   `,
-  values: [userId, type, fileUrl, title, description],
+  values: [userId, type, fileUrl, description],
 });
 
 export const queryOpinionCreate = ({
   userId,
   type,
   fileUrl,
-  title,
   description,
-}: CreateOpinion & {userId: string}): QueryConfig => ({
+}: CreateOpinion & {type: OpinionType; userId: string}): QueryConfig => ({
   text: `
     INSERT INTO user_opinions
-    (user_id, type, file_url, title, description)
-    VALUES ($1, $2, $3, $4, $5)
+    (user_id, type, file_url, description)
+    VALUES ($1, $2, $3, $4)
     RETURNING id
   `,
-  values: [userId, type, fileUrl, title, description],
+  values: [userId, type, fileUrl, description],
 });
 
 export const queryOpinionDelete = (userId: string, opinionId: string): QueryConfig => ({
@@ -56,8 +55,7 @@ export const queryOpinionsByUsername = (username: string, edgeId: string): Query
   text: `
     SELECT user_opinions.id, 
         user_opinions.type, 
-        user_opinions.file_url, 
-        user_opinions.title, 
+        user_opinions.file_url,
         user_opinions.description, 
         array_agg(tags.tag) as tags
     FROM user_opinions

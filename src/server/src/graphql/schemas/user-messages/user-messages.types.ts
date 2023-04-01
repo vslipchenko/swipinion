@@ -2,9 +2,9 @@ import {gql} from 'apollo-server-core';
 
 export const userMessagesTypes = gql`
   type Message {
-    id: String
-    sender_id: String
-    recipient_id: String
+    id: ID
+    sender_id: ID
+    recipient_id: ID
     username: String
     thumbnail: String
     teaser: String
@@ -13,28 +13,28 @@ export const userMessagesTypes = gql`
   }
 
   type SavedMessage {
-    id: String
+    id: ID
     body: String
     created_at: Float
   }
 
   type ConversationMessage {
-    id: String
-    sender_id: String
-    recipient_id: String
+    id: ID
+    sender_id: ID
+    recipient_id: ID
     body: String
     read: Boolean
     created_at: Float
   }
 
   type InterlocutorConversationMessage {
-    id: String
+    id: ID
     body: String
     created_at: Float
   }
 
   type SentConversationMessage {
-    id: String
+    id: ID
     created_at: Float
   }
 
@@ -49,7 +49,7 @@ export const userMessagesTypes = gql`
   }
 
   type SendUserSavedMessage {
-    id: String!
+    id: ID!
     created_at: Float!
   }
 `;

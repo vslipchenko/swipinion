@@ -20,7 +20,6 @@
 
     <ng-template #opinionList>
       <app-opinion-preview *ngFor="let opinion of opinions" [username]="username" [id]="opinion.id"
-                           [title]="opinion.title"
                            [description]="opinion.description" [fileUrl]="opinion.file_url"
                            [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
 

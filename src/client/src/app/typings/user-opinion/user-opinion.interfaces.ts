@@ -5,13 +5,12 @@ export interface UserOpinion {
   id: string;
   type: OpinionType;
   file_url: string;
-  title: string;
   description: string;
   tags: Array<string>;
 }
 
 export interface CreateOpinionMutationResult {
-  createOpinion: string;
+  createOpinion: {id: string; type: OpinionType};
 }
 
 export interface DeleteOpinionMutationResult {
@@ -19,10 +18,8 @@ export interface DeleteOpinionMutationResult {
 }
 
 export interface CreateOpinion {
-  type: OpinionType;
   fileUrl?: string;
-  title: string;
-  description: string;
+  description?: string;
   tags: Array<string>;
 }
 

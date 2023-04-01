@@ -30,7 +30,6 @@ import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-p
 export class OpinionPreviewComponent {
   @Input() public id = '';
   @Input() public type: OpinionType = OpinionType.Text;
-  @Input() public title = '';
   @Input() public description = '';
   @Input() public fileUrl = '';
   @Input() public tags: Array<string> = [];

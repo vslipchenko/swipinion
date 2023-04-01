@@ -2,12 +2,11 @@ import {gql} from 'apollo-server-core';
 
 export const opinionTypes = gql`
   type Opinion {
-    id: String
-    user_id: String
+    id: ID
+    user_id: ID
     username: String
     type: Int
     file_url: String
-    title: String
     description: String
     agreed: String
     disagreed: String

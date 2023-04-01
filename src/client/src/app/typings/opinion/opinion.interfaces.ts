@@ -6,7 +6,7 @@ export interface Opinion {
   username: string;
   type: OpinionType;
   file_url: string;
-  title: string;
+  // title: string;
   description: string;
   agreed: string;
   disagreed: string;

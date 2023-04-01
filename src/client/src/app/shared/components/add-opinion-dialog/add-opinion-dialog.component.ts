@@ -2,23 +2,15 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BehaviorSubject, finalize, map, Observable, startWith, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {
-  DESCRIPTION_MAX_LENGTH,
-  MAX_IMAGE_SIZE_MB,
-  MAX_TAG_COUNT,
-  TAG_REGEXP,
-  TITLE_MAX_LENGTH,
-} from '~app/constants/validation';
+import {DESCRIPTION_MAX_LENGTH, MAX_IMAGE_SIZE_MB, MAX_TAG_COUNT, TAG_REGEXP} from '~app/constants/validation';
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {MatLegacyDialogModule, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {MutationResult} from 'apollo-angular';
-import {CreateOpinionMutationResult, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
+import {UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
-import {OpinionType} from '~app/typings/opinion/opinion.enums';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
@@ -49,7 +41,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   public readonly loading$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
   public readonly hashtagRegexp = TAG_REGEXP;
-  public readonly titleMaxLength = TITLE_MAX_LENGTH;
+  // public readonly titleMaxLength = TITLE_MAX_LENGTH;
   public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
   protected readonly disableAddOpinion$: Observable<boolean>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
@@ -79,12 +71,12 @@ export class AddOpinionDialogComponent implements Destroyable {
 
     if (!this.addOpinionForm.valid) return;
 
-    const {file, title, description, tags} = this.addOpinionForm.value;
-    const type = file?.size ? OpinionType.Image : OpinionType.Text;
+    const {file, description, tags} = this.addOpinionForm.value;
 
     this.loading$.next(true);
 
-    if (type === OpinionType.Image && file) {
+    if (file?.size) {
+      // Add Image/TextImage opinion
       let thumbnail: string;
 
       this.imageService
@@ -97,10 +89,8 @@ export class AddOpinionDialogComponent implements Destroyable {
             thumbnail = isGif ? result.data.image.url : result.data.thumb.url;
 
             return this.userOpinionService.createOpinion({
-              type,
               fileUrl: thumbnail,
-              title,
-              description,
+              description: description?.trim() || null,
               tags,
             });
           }),
@@ -109,14 +99,12 @@ export class AddOpinionDialogComponent implements Destroyable {
             this.loading$.next(false);
           }),
         )
-        .subscribe((result) => {
-          if (!result.data?.createOpinion) return this.errorSnackbar();
+        .subscribe(({data}) => {
+          if (!data?.createOpinion) return this.errorSnackbar();
 
-          this.opinionShared(result, {
-            id: result.data.createOpinion,
-            type,
+          this.opinionAdded({
+            ...data.createOpinion,
             file_url: thumbnail,
-            title,
             description,
             tags,
           });
@@ -124,11 +112,9 @@ export class AddOpinionDialogComponent implements Destroyable {
 
       return;
     }
-
+    // Add text opinion
     this.userOpinionService
       .createOpinion({
-        type,
-        title,
         description,
         tags,
       })
@@ -138,24 +124,16 @@ export class AddOpinionDialogComponent implements Destroyable {
           this.loading$.next(false);
         }),
       )
-      .subscribe((result) => {
-        if (!result.data?.createOpinion) return this.errorSnackbar();
+      .subscribe(({data}) => {
+        if (!data?.createOpinion) return this.errorSnackbar();
 
-        this.opinionShared(result, {
-          id: result.data.createOpinion,
-          type,
+        this.opinionAdded({
+          ...data.createOpinion,
           file_url: '',
-          title,
           description,
           tags,
         });
       }, this.errorSnackbar.bind(this));
-  }
-
-  public titleErrorMessage(errors: ValidationErrors | null): string | void {
-    if (!errors) return;
-
-    return `${TITLE_MAX_LENGTH} characters at max`;
   }
 
   public descriptionErrorMessage(errors: ValidationErrors | null): string | void {
@@ -178,11 +156,9 @@ export class AddOpinionDialogComponent implements Destroyable {
     return null;
   }
 
-  private opinionShared({data}: MutationResult<CreateOpinionMutationResult>, opinion: UserOpinion): void {
-    if (!data?.createOpinion) return this.errorSnackbar();
-
+  private opinionAdded(opinion: UserOpinion): void {
     this.snackbar.openFromComponent(OpinionSuccessSnackbarComponent, {
-      data: data.createOpinion,
+      data: opinion.id,
       panelClass: 'snackbar-success',
     });
 
@@ -216,7 +192,7 @@ export class AddOpinionDialogComponent implements Destroyable {
       // type: new FormControl(OpinionType.Text),
       // fileUrl: new FormControl(null, this.imageValidator.bind(this)),
       file: new FormControl(null, this.fileSizeValidator.bind(this)),
-      title: new FormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
+      // title: new FormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
       description: new FormControl(null, Validators.maxLength(this.descriptionMaxLength)),
       tags: new FormControl([], Validators.maxLength(MAX_TAG_COUNT)),
     });
