@@ -60,17 +60,5 @@
         <app-card-tags *ngIf="tags.length" [tags]="tags" class="d-block mt-1"></app-card-tags>
       </div>
     </div>
-
-    <div class="actions d-flex jc-around p-1 glass" [class.bt-transparent]="!textContent">
-      <app-icon-button icon="thumb_up"></app-icon-button>
-      <app-icon-button svgIcon="like-n-comment"></app-icon-button>
-      <app-icon-button icon="close"></app-icon-button>
-      <app-icon-button svgIcon="dislike-n-comment"></app-icon-button>
-      <app-icon-button icon="thumb_down"></app-icon-button>
-    </div>
-
-    <div class="action w-100 d-flex jc-center fixed">
-      <app-icon-button icon="close" extendClass="bg-dark"></app-icon-button>
-    </div>
   </div>
 </div>

@@ -5,4 +5,8 @@ export class OpinionsSelectors {
   public static nothingToShow = createSelector([OpinionsState], (state: OpinionsStateModel) => {
     return !state.canLoadMore && (!state.opinions.length || state.activeOpinion === state.opinions.at(-1));
   });
+
+  public static opinions = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.opinions;
+  });
 }

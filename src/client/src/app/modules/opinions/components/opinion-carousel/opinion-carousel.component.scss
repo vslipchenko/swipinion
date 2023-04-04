@@ -1,0 +1,21 @@
+@use 'variables' as var;
+@use 'media';
+
+.actions {
+  max-width: var.$opinion-card-max-width;
+  height: var.$opinion-actions-height;
+
+  @include media.zero-large {
+    display: none !important;
+  }
+}
+
+.action {
+  //bottom: var.$unit;
+  //opacity: 0.8;
+  //max-width: 500px;
+
+  @include media.above-large {
+    display: none !important;
+  }
+}

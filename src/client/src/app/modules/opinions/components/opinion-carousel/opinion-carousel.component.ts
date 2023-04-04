@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OpinionCardComponent} from '~app/modules/opinions/components/opinion-card/opinion-card.component';
 import {NgForOf} from '@angular/common';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -9,7 +10,7 @@ import {NgForOf} from '@angular/common';
   styleUrls: ['./opinion-carousel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgForOf, OpinionCardComponent],
+  imports: [NgForOf, OpinionCardComponent, IconButtonComponent],
 })
 export class OpinionCarouselComponent {
   @Input() public data: Array<Opinion> = [];

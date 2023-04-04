@@ -1,6 +1,6 @@
 <app-opinion-card
   *ngFor="let item of data"
-  class="h-100"
+  class="h-100 w-100 absolute"
   [id]="item.id"
   [type]="item.type"
   [username]="item.username"
@@ -11,3 +11,16 @@
   [comments]="item.comments"
   [tags]="item.tags"
 ></app-opinion-card>
+
+<div class="actions d-flex ai-center jc-around p-1 glass w-100" [class.bt-transparent]="'!textContent'">
+  <!-- TODO class.bt-transparent logic. Possible solution is to track active opinion's properties -->
+  <app-icon-button icon="thumb_up"></app-icon-button>
+  <app-icon-button svgIcon="like-n-comment"></app-icon-button>
+  <app-icon-button icon="close"></app-icon-button>
+  <app-icon-button svgIcon="dislike-n-comment"></app-icon-button>
+  <app-icon-button icon="thumb_down"></app-icon-button>
+</div>
+
+<!--<div class="action w-100 d-flex jc-center fixed">-->
+<app-icon-button icon="close" class="action mb-1" extendClass="bg-dark"></app-icon-button>
+<!--</div>-->

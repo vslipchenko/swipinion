@@ -9,9 +9,9 @@
   overflow: hidden;
 }
 
-.glass {
-  background: rgba(var.$color-background-dark, 0.8);
-}
+//.glass {
+//  background: rgba(var.$color-background-dark, 0.8);
+//}
 
 //.card-image {
 //  background-color: var.$color-light;
@@ -33,7 +33,11 @@
 }
 
 .container {
-  max-width: 500px;
+  max-width: var.$opinion-card-max-width;
+
+  @include media.above-large {
+    max-height: calc(100% - #{var.$opinion-actions-height}); // Leave some space for actions bar
+  }
 }
 
 .content {
@@ -73,18 +77,18 @@
   }
 }
 
-.actions {
-  @include media.zero-large {
-    display: none !important;
-  }
-}
-
-.action {
-  bottom: var.$unit;
-  //opacity: 0.8;
-  max-width: 500px;
-
-  @include media.above-large {
-    display: none !important;
-  }
-}
+//.actions {
+//  @include media.zero-large {
+//    display: none !important;
+//  }
+//}
+//
+//.action {
+//  bottom: var.$unit;
+//  //opacity: 0.8;
+//  max-width: 500px;
+//
+//  @include media.above-large {
+//    display: none !important;
+//  }
+//}
