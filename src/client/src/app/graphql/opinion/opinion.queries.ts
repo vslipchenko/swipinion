@@ -8,7 +8,7 @@ export const GET_GENERAL_OPINIONS = gql`
       username
       type
       file_url
-      description
+      body
       agreed
       disagreed
       comments

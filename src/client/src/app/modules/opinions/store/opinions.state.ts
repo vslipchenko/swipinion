@@ -25,7 +25,7 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
       user_id: '',
       username: '',
       type: OpinionType.Text,
-      description: '',
+      body: '',
       file_url: '',
       agreed: '',
       disagreed: '',

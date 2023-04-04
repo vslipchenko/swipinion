@@ -3,7 +3,7 @@ import {gql} from 'apollo-server-core';
 export const userOpinionInputs = gql`
   input CreateOpinion {
     fileUrl: String
-    description: String
+    body: String
     tags: [String]!
   }
 

@@ -1,5 +1,5 @@
 export interface CreateOpinion {
   fileUrl: string;
-  description: string;
+  body: string;
   tags: Array<string>;
 }

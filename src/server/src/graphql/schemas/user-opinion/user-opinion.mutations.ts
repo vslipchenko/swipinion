@@ -25,7 +25,7 @@ const createOpinion = async (
   {input}: {input: CreateOpinion},
   {accessToken}: {accessToken: string},
 ): Promise<{id: string; type: OpinionType} | ApolloError | null> => {
-  if (!input.fileUrl && !input.description) return null; // Check whether any content provided
+  if (!input.fileUrl && !input.body) return null; // Check whether any content provided
 
   const {error} = createOpinionValidator.validate(input);
 
@@ -38,7 +38,7 @@ const createOpinion = async (
   let type = OpinionType.Text;
 
   switch (true) {
-    case Boolean(input.description && input.fileUrl):
+    case Boolean(input.body && input.fileUrl):
       type = OpinionType.TextImage;
       break;
     case Boolean(input.fileUrl):

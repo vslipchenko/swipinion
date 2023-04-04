@@ -5,7 +5,7 @@ export interface UserOpinion {
   id: string;
   type: OpinionType;
   file_url: string;
-  description: string;
+  body: string;
   tags: Array<string>;
 }
 
@@ -19,7 +19,7 @@ export interface DeleteOpinionMutationResult {
 
 export interface CreateOpinion {
   fileUrl?: string;
-  description?: string;
+  body?: string;
   tags: Array<string>;
 }
 

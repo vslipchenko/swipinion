@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {BehaviorSubject, finalize, map, Observable, startWith, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {DESCRIPTION_MAX_LENGTH, MAX_IMAGE_SIZE_MB, MAX_TAG_COUNT, TAG_REGEXP} from '~app/constants/validation';
+import {MAX_IMAGE_SIZE_MB, MAX_TAG_COUNT, OPINION_BODY_MAX_LENGTH, TAG_REGEXP} from '~app/constants/validation';
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
@@ -42,7 +42,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   public readonly destroy$ = new Subject<void>();
   public readonly hashtagRegexp = TAG_REGEXP;
   // public readonly titleMaxLength = TITLE_MAX_LENGTH;
-  public readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
+  public readonly bodyMaxLength = OPINION_BODY_MAX_LENGTH;
   protected readonly disableAddOpinion$: Observable<boolean>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
 
@@ -55,7 +55,7 @@ export class AddOpinionDialogComponent implements Destroyable {
   ) {
     this.disableAddOpinion$ = this.addOpinionForm.valueChanges.pipe(
       startWith(this.addOpinionForm.value),
-      map(({description, file}) => this.loading$.value || (!description?.trim() && !file?.size)),
+      map(({body, file}) => this.loading$.value || (!body?.trim() && !file?.size)),
     );
   }
 
@@ -67,11 +67,10 @@ export class AddOpinionDialogComponent implements Destroyable {
 
   public addOpinion(): void {
     this.addOpinionForm.markAllAsTouched();
-    this.description.updateValueAndValidity();
 
     if (!this.addOpinionForm.valid) return;
 
-    const {file, description, tags} = this.addOpinionForm.value;
+    const {file, body, tags} = this.addOpinionForm.value;
 
     this.loading$.next(true);
 
@@ -90,7 +89,7 @@ export class AddOpinionDialogComponent implements Destroyable {
 
             return this.userOpinionService.createOpinion({
               fileUrl: thumbnail,
-              description: description?.trim() || null,
+              body: body?.trim() || null,
               tags,
             });
           }),
@@ -105,7 +104,7 @@ export class AddOpinionDialogComponent implements Destroyable {
           this.opinionAdded({
             ...data.createOpinion,
             file_url: thumbnail,
-            description,
+            body,
             tags,
           });
         }, this.errorSnackbar.bind(this));
@@ -115,7 +114,7 @@ export class AddOpinionDialogComponent implements Destroyable {
     // Add text opinion
     this.userOpinionService
       .createOpinion({
-        description,
+        body,
         tags,
       })
       .pipe(
@@ -130,16 +129,16 @@ export class AddOpinionDialogComponent implements Destroyable {
         this.opinionAdded({
           ...data.createOpinion,
           file_url: '',
-          description,
+          body,
           tags,
         });
       }, this.errorSnackbar.bind(this));
   }
 
-  public descriptionErrorMessage(errors: ValidationErrors | null): string | void {
+  public bodyErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
-    return `${this.descriptionMaxLength} characters at max`; // Assume 'maxlength'
+    return `${this.bodyMaxLength} characters at max`; // Assume 'maxlength'
   }
 
   public imageFileErrorMessage(errors: ValidationErrors | null): string | void {
@@ -179,8 +178,8 @@ export class AddOpinionDialogComponent implements Destroyable {
     return this.addOpinionForm.controls['file'] as FormControl;
   }
 
-  public get description(): FormControl {
-    return this.addOpinionForm.controls['description'] as FormControl;
+  public get body(): FormControl {
+    return this.addOpinionForm.controls['body'] as FormControl;
   }
 
   public get tags(): FormControl {
@@ -193,7 +192,7 @@ export class AddOpinionDialogComponent implements Destroyable {
       // fileUrl: new FormControl(null, this.imageValidator.bind(this)),
       file: new FormControl(null, this.fileSizeValidator.bind(this)),
       // title: new FormControl(null, Validators.maxLength(TITLE_MAX_LENGTH)),
-      description: new FormControl(null, Validators.maxLength(this.descriptionMaxLength)),
+      body: new FormControl(null, Validators.maxLength(this.bodyMaxLength)),
       tags: new FormControl([], Validators.maxLength(MAX_TAG_COUNT)),
     });
   }

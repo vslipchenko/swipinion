@@ -1,10 +1,10 @@
 <div class="preview">
   <div class="d-flex relative frame">
-    <div *ngIf="!description" [style.background-image]="'url(' + fileUrl + ')'"
+    <div *ngIf="!body" [style.background-image]="'url(' + fileUrl + ')'"
          class="background background-blurred w-100 h-100 absolute"></div>
     <img *ngIf="fileUrl" [src]="fileUrl" alt="">
-    <div *ngIf="description" class="content p-2 relative">
-      <p>{{description}}</p>
+    <div *ngIf="body" class="content p-2 relative">
+      <p>{{body}}</p>
       <div class="dimmer absolute w-100"></div>
     </div>
   </div>

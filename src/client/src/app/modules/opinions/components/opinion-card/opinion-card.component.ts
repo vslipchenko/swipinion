@@ -19,7 +19,7 @@ export class OpinionCardComponent implements OnInit {
   @Input() public username = '';
   @Input() public type = OpinionType.Text;
   @Input() public fileUrl = '';
-  @Input() public description = '';
+  @Input() public body = '';
   @Input() public agreed = '';
   @Input() public disagreed = '';
   @Input() public comments = '';
@@ -28,7 +28,7 @@ export class OpinionCardComponent implements OnInit {
   protected backgroundUrl = '';
 
   public ngOnInit(): void {
-    if (this.description || this.tags.length) this.textContent = true;
+    if (this.body || this.tags.length) this.textContent = true;
 
     if (this.fileUrl) this.backgroundUrl = `url('${this.fileUrl}')`;
   }

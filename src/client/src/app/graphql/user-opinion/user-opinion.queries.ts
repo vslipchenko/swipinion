@@ -6,7 +6,7 @@ export const GET_OPINIONS_BY_USERNAME = gql`
       id
       type
       file_url
-      description
+      body
       tags
     }
   }

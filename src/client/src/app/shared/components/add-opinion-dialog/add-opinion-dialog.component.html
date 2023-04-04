@@ -23,12 +23,12 @@
       placeholder="Speak your opinion"
       class="d-block w-100"
       extendClass="w-100"
-      [control]="description"
+      [control]="body"
       hintAlign="end"
       [hint]="descriptionHint"
-      [errorMessage]="descriptionErrorMessage.bind(this)"
+      [errorMessage]="bodyErrorMessage.bind(this)"
     >
-      <ng-template #descriptionHint>{{ description.value?.length || 0 }} / {{ descriptionMaxLength }}</ng-template>
+      <ng-template #descriptionHint>{{ body.value?.length || 0 }} / {{ bodyMaxLength }}</ng-template>
     </app-textarea>
 
     <app-chips

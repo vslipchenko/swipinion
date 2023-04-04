@@ -11,12 +11,12 @@ export const queryOpinionCreateWithTags = ({
   userId,
   type,
   fileUrl,
-  description,
+  body,
 }: CreateOpinion & {type: OpinionType; userId: string}): QueryConfig => ({
   text: `
     WITH opinion AS (
       INSERT INTO user_opinions
-      (user_id, type, file_url, description)
+      (user_id, type, file_url, body)
       VALUES ($1, $2, $3, $4)
       RETURNING id
     )
@@ -25,22 +25,22 @@ export const queryOpinionCreateWithTags = ({
     VALUES {{values}}
     RETURNING (SELECT id FROM opinion)
   `,
-  values: [userId, type, fileUrl, description],
+  values: [userId, type, fileUrl, body],
 });
 
 export const queryOpinionCreate = ({
   userId,
   type,
   fileUrl,
-  description,
+  body,
 }: CreateOpinion & {type: OpinionType; userId: string}): QueryConfig => ({
   text: `
     INSERT INTO user_opinions
-    (user_id, type, file_url, description)
+    (user_id, type, file_url, body)
     VALUES ($1, $2, $3, $4)
     RETURNING id
   `,
-  values: [userId, type, fileUrl, description],
+  values: [userId, type, fileUrl, body],
 });
 
 export const queryOpinionDelete = (userId: string, opinionId: string): QueryConfig => ({
@@ -56,7 +56,7 @@ export const queryOpinionsByUsername = (username: string, edgeId: string): Query
     SELECT user_opinions.id, 
         user_opinions.type, 
         user_opinions.file_url,
-        user_opinions.description, 
+        user_opinions.body, 
         array_agg(tags.tag) as tags
     FROM user_opinions
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id

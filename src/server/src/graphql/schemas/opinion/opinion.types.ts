@@ -7,7 +7,7 @@ export const opinionTypes = gql`
     username: String
     type: Int
     file_url: String
-    description: String
+    body: String
     agreed: String
     disagreed: String
     comments: String

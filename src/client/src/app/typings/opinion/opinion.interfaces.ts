@@ -7,7 +7,7 @@ export interface Opinion {
   type: OpinionType;
   file_url: string;
   // title: string;
-  description: string;
+  body: string;
   agreed: string;
   disagreed: string;
   comments: string;
