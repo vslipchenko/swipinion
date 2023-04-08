@@ -97,7 +97,7 @@
   word-wrap: break-word;
   font-size: 100px; // Opinion background text font size
 
-  @include media.zero-small { // Despite the fact that card is 500px width user probably won't be able to see any background contents because of horizontal padding and text align center
+  @media (max-width: calc(#{var.$opinion-card-max-width} + #{var.$unit-4})) { // Despite the fact that card is 500px width user probably won't be able to see any background contents because of horizontal padding and text align center; var.$unit-4 is equivalent of px-2
     display: none;
   }
 }
