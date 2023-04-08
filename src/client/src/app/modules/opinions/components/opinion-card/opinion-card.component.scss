@@ -92,3 +92,12 @@
 //    display: none !important;
 //  }
 //}
+
+.text-background {
+  word-wrap: break-word;
+  font-size: 100px; // Opinion background text font size
+
+  @include media.zero-small { // Despite the fact that card is 500px width user probably won't be able to see any background contents because of horizontal padding and text align center
+    display: none;
+  }
+}

@@ -2,6 +2,9 @@
   <div class="background-container bg-dark absolute h-100 w-100">
     <div class="background w-100 h-100"
          [style.background-image]="backgroundUrl"></div>
+    <div *ngIf="textBackground"
+         [appBackgroundTextFiller]="body"
+         class="absolute w-100 h-100 t-0 c-dark text-background t-center px-2"></div>
     <div class="absolute w-100 h-100 backdrop t-0"></div>
   </div>
 
@@ -21,7 +24,8 @@
                                [comments]="comments"></app-opinion-stats-panel>
     </div>
 
-    <div class="y-scrollbar transparent-scrollbar f-1" [class.glass]="!textContent" [class.bg-light]="textContent">
+    <div appSwipe class="y-scrollbar transparent-scrollbar f-1" [class.glass]="!textContent"
+         [class.bg-light]="textContent">
       <!--      <div class="d-flex">-->
       <img *ngIf="fileUrl" class="bg-light w-100"
            [src]="fileUrl"
