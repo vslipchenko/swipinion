@@ -4,6 +4,7 @@
 .actions {
   max-width: var.$opinion-card-max-width;
   height: var.$opinion-actions-height;
+  z-index: 0;
 
   @include media.zero-large {
     display: none !important;

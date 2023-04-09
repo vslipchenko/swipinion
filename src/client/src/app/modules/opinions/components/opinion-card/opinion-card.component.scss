@@ -17,10 +17,6 @@
 //  background-color: var.$color-light;
 //}
 
-.background-container {
-  z-index: -1;
-}
-
 .background {
   opacity: 0.5;
   //z-index: -1;
@@ -33,6 +29,7 @@
 }
 
 .container {
+  z-index: 0;
   max-width: var.$opinion-card-max-width;
 
   @include media.above-large {

@@ -1,5 +1,5 @@
 <div class="card relative h-100">
-  <div class="background-container bg-dark absolute h-100 w-100">
+  <div class="bg-dark absolute h-100 w-100">
     <div class="background w-100 h-100"
          [style.background-image]="backgroundUrl"></div>
     <div *ngIf="textBackground"
@@ -8,7 +8,7 @@
     <div class="absolute w-100 h-100 backdrop t-0"></div>
   </div>
 
-  <div class="container mx-auto d-flex f-column h-100">
+  <div class="container mx-auto d-flex f-column h-100 relative">
     <div class="glass">
       <div class="d-flex jc-between">
         <a class="d-flex ai-center py-1-2 px-2" routerLink="/user/{{username}}">
