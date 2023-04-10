@@ -27,9 +27,9 @@ export class BackgroundTextFillerDirective implements AfterViewInit, Destroyable
   }
 
   private fillWithText(): void {
-    const elementStyles = window.getComputedStyle(this.elementRef.nativeElement);
-
-    if (elementStyles.display === 'none') return; // prevents unnecessary recalculation on screens with narrow width (most mobiles)
+    // const elementStyles = window.getComputedStyle(this.elementRef.nativeElement);
+    //
+    // if (elementStyles.display === 'none') return; // prevents unnecessary recalculation on screens with narrow width (most mobiles)
 
     this.elementRef.nativeElement.textContent = this.text;
 

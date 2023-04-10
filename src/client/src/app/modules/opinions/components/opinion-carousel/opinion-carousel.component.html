@@ -12,15 +12,14 @@
   [tags]="item.tags"
 ></app-opinion-card>
 
-<div class="actions d-flex ai-center jc-around p-1 glass w-100" [class.bt-transparent]="'!textContent'">
-  <!-- TODO class.bt-transparent logic. Possible solution is to track active opinion's properties -->
-  <app-icon-button icon="thumb_up"></app-icon-button>
-  <app-icon-button svgIcon="like-n-comment"></app-icon-button>
-  <app-icon-button icon="close"></app-icon-button>
-  <app-icon-button svgIcon="dislike-n-comment"></app-icon-button>
-  <app-icon-button icon="thumb_down"></app-icon-button>
+<div class="actions d-flex ai-center jc-around pb-1-2 w-100">
+  <app-icon-button class="smaller-icon" svgIcon="like-n-comment" extendClass="bg-dark"></app-icon-button>
+  <app-icon-button class="smaller-icon" icon="thumb_up" extendClass="bg-dark"></app-icon-button>
+  <app-icon-button icon="close" extendClass="bg-dark"></app-icon-button>
+  <app-icon-button class="smaller-icon" icon="thumb_down" extendClass="bg-dark"></app-icon-button>
+  <app-icon-button class="smaller-icon" svgIcon="dislike-n-comment" extendClass="bg-dark"></app-icon-button>
 </div>
 
-<!--<div class="action w-100 d-flex jc-center fixed">-->
-<app-icon-button icon="close" class="action mb-1" extendClass="bg-dark"></app-icon-button>
-<!--</div>-->
+
+<!--<app-icon-button icon="close" class="action mb-1" extendClass="bg-dark"></app-icon-button>-->
+

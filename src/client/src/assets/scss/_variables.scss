@@ -41,6 +41,7 @@ $unit-2: $unit * 2;
 $unit-3: $unit * 3;
 $unit-4: $unit * 4;
 $unit-7: $unit * 7;
+$unit-8: $unit * 8;
 
 /* responsive breakpoints */
 $breakpoint-small: 568px; // < portrait phones, > landscape phones
@@ -63,5 +64,5 @@ $profile-image-size: 150px;
 $scrollbar-width: 7px;
 
 /* opinions */
-$opinion-actions-height: 60px;
+//$opinion-actions-height: 60px;
 $opinion-card-max-width: 500px;
