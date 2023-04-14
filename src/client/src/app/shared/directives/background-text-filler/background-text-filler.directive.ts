@@ -30,10 +30,9 @@ export class BackgroundTextFillerDirective implements AfterViewInit, Destroyable
     // const elementStyles = window.getComputedStyle(this.elementRef.nativeElement);
     //
     // if (elementStyles.display === 'none') return; // prevents unnecessary recalculation on screens with narrow width (most mobiles)
-
     this.elementRef.nativeElement.textContent = this.text;
 
-    while (this.elementRef.nativeElement.scrollHeight <= this.elementRef.nativeElement.clientHeight * 2.5) {
+    while (this.elementRef.nativeElement.scrollHeight < this.elementRef.nativeElement.clientHeight * 2.5) {
       // 2.5 is an optimal coefficient here to generate content that would fill container fully
       this.elementRef.nativeElement.textContent += ` ${this.elementRef.nativeElement.textContent}`; // Using incremental content add reduces count of cycle runs improving performance
     }
