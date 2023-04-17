@@ -22,7 +22,7 @@ export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable
   public readonly destroy$ = new Subject<void>();
   // Canvas Properties
   private readonly fontSize = 100;
-  private readonly lineHeight = this.fontSize;
+  private readonly lineHeight = this.fontSize; // In canvas line height is considered to be equal to fontSize by default
   private readonly textAlign = 'center';
   private fontColor = '';
   private fontFamily = '';
@@ -30,8 +30,6 @@ export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable
   private context!: CanvasRenderingContext2D;
 
   private words: Array<string> = [];
-
-  public constructor(private readonly elementRef: ElementRef) {}
 
   public ngAfterViewInit(): void {
     this.words = this.text.split(' ');
@@ -86,7 +84,7 @@ export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable
       newLine = true;
       // Render line of text: width / 2 - center aligned
       this.context.fillText(textLine, width / 2, textHeight, this.canvas.width);
-
+      // Increase overall text height
       textHeight += this.lineHeight;
     }
   }
