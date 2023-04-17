@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, debounceTime, fromEvent, Observable, Subject, takeUntil} from 'rxjs';
 import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchGeneralOpinions} from '~app/modules/opinions/store/opinions.actions';
+import {FetchGeneralOpinions, SetContainerSizes} from '~app/modules/opinions/store/opinions.actions';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
@@ -15,7 +15,7 @@ import {Opinion} from '~app/typings/opinion/opinion.interfaces';
   styleUrls: ['./opinions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionsComponent implements OnInit, Destroyable {
+export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
   @Select(OpinionsSelectors.nothingToShow)
   public readonly nothingToShow$!: Observable<boolean>;
   @Select(OpinionsSelectors.opinions)
@@ -31,6 +31,7 @@ export class OpinionsComponent implements OnInit, Destroyable {
     private readonly opinionService: OpinionService,
     private readonly store: Store,
     private readonly actions$: Actions,
+    private readonly elementRef: ElementRef,
   ) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchGeneralOpinions)).subscribe(() => {
       this.loading$.next(false);
@@ -43,10 +44,27 @@ export class OpinionsComponent implements OnInit, Destroyable {
     this.fetchOpinions();
   }
 
+  public ngAfterViewInit(): void {
+    fromEvent(window, 'resize')
+      .pipe(takeUntil(this.destroy$), debounceTime(200))
+      .subscribe(() => this.setContainerSizes());
+
+    this.setContainerSizes();
+  }
+
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     this.loading$.complete();
+  }
+
+  private setContainerSizes(): void {
+    this.store.dispatch(
+      new SetContainerSizes({
+        width: this.elementRef.nativeElement.clientWidth,
+        height: this.elementRef.nativeElement.clientHeight,
+      }),
+    );
   }
 
   private fetchOpinions(edgeId?: string): void {

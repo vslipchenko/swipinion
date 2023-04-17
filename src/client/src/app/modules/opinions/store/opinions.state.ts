@@ -1,16 +1,18 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {FetchGeneralOpinions} from '~app/modules/opinions/store/opinions.actions';
+import {FetchGeneralOpinions, SetContainerSizes} from '~app/modules/opinions/store/opinions.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {GetGeneralOpinionsQueryResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces';
 
 export interface OpinionsStateModel {
   opinions: Array<Opinion>;
   activeOpinion: Opinion; // Scrolled through and reached last most opinion
+  containerSizes: OpinionsContainerSizes;
   canLoadMore: boolean;
 }
 
@@ -32,6 +34,7 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
       comments: '',
       tags: [],
     },
+    containerSizes: {width: 0, height: 0},
     canLoadMore: false,
   },
 })
@@ -61,5 +64,13 @@ export class OpinionsState {
         }));
       }),
     );
+  }
+
+  @Action(SetContainerSizes)
+  private setContainerSizes(context: StateContext<OpinionsStateModel>, action: SetContainerSizes): void {
+    context.setState((state) => ({
+      ...state,
+      containerSizes: action.payload,
+    }));
   }
 }

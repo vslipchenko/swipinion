@@ -22,12 +22,6 @@
   //z-index: -1;
 }
 
-.backdrop {
-  backdrop-filter: blur(10px); // filter: blur() causes fuzzy image on borders
-  -webkit-backdrop-filter: blur(10px);
-  //z-index: -1;
-}
-
 .container {
   z-index: 0;
   max-width: var.$opinion-card-max-width;
@@ -79,12 +73,3 @@
 //    display: none !important;
 //  }
 //}
-
-.text-background {
-  word-wrap: break-word;
-  font-size: 100px; // Opinion background text font size
-
-  //@media (max-width: calc(#{var.$opinion-card-max-width} + #{var.$unit-4})) { // Despite the fact that card is 500px width user probably won't be able to see any background contents because of horizontal padding and text align center; var.$unit-4 is equivalent of px-2
-  //  display: none;
-  //}
-}

@@ -274,6 +274,10 @@
   }
 }
 
+.pb-3 {
+  padding-bottom: var.$unit-3;
+}
+
 .pb-7-8 {
   @include media.zero-small {
     padding-bottom: var.$unit-7;

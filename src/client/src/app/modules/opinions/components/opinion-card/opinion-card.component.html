@@ -2,10 +2,8 @@
   <div class="bg-dark absolute h-100 w-100">
     <div class="background w-100 h-100"
          [style.background-image]="backgroundUrl"></div>
-    <div *ngIf="textBackground"
-         [appBackgroundTextFiller]="body"
-         class="absolute w-100 h-100 t-0 c-dark text-background t-center px-2"></div>
-    <div class="absolute w-100 h-100 backdrop t-0"></div>
+    <app-text-background-filler class="absolute t-0 w-100 h-100 background-blurred c-dark" [text]="body"
+    ></app-text-background-filler>
   </div>
 
   <div class="container mx-auto d-flex f-column h-100 relative">

@@ -7,6 +7,7 @@ import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-p
 import {NgIf} from '@angular/common';
 import {SwipeDirective} from '~app/shared/directives/swipe/swipe.directive';
 import {BackgroundTextFillerDirective} from '~app/shared/directives/background-text-filler/background-text-filler.directive';
+import {TextBackgroundFillerComponent} from '~app/modules/opinions/components/text-background-filler/text-background-filler.component';
 
 @Component({
   selector: 'app-opinion-card',
@@ -22,6 +23,7 @@ import {BackgroundTextFillerDirective} from '~app/shared/directives/background-t
     CardTagsComponent,
     SwipeDirective,
     BackgroundTextFillerDirective,
+    TextBackgroundFillerComponent,
   ],
 })
 export class OpinionCardComponent implements OnInit {

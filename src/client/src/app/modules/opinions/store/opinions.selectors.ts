@@ -9,4 +9,8 @@ export class OpinionsSelectors {
   public static opinions = createSelector([OpinionsState], (state: OpinionsStateModel) => {
     return state.opinions;
   });
+
+  public static containerSizes = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.containerSizes;
+  });
 }
