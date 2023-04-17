@@ -6,7 +6,6 @@ import {RouterLink} from '@angular/router';
 import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
 import {NgIf} from '@angular/common';
 import {SwipeDirective} from '~app/shared/directives/swipe/swipe.directive';
-import {BackgroundTextFillerDirective} from '~app/shared/directives/background-text-filler/background-text-filler.directive';
 import {TextBackgroundFillerComponent} from '~app/modules/opinions/components/text-background-filler/text-background-filler.component';
 
 @Component({
@@ -22,7 +21,6 @@ import {TextBackgroundFillerComponent} from '~app/modules/opinions/components/te
     OpinionStatsPanelComponent,
     CardTagsComponent,
     SwipeDirective,
-    BackgroundTextFillerDirective,
     TextBackgroundFillerComponent,
   ],
 })
