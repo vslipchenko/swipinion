@@ -2,7 +2,8 @@
   <div class="bg-dark absolute h-100 w-100">
     <div class="background w-100 h-100"
          [style.background-image]="backgroundUrl"></div>
-    <app-text-background-filler class="absolute t-0 w-100 h-100 background-blurred c-dark" [text]="body"
+    <app-text-background-filler *ngIf="textBackground" class="absolute t-0 w-100 h-100 background-blurred c-dark"
+                                [text]="body"
     ></app-text-background-filler>
   </div>
 
