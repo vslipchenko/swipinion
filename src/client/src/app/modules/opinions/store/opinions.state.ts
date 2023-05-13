@@ -1,7 +1,11 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {FetchGeneralOpinions, SetContainerSizes} from '~app/modules/opinions/store/opinions.actions';
+import {
+  FetchGeneralOpinions,
+  RemoveTopMostOpinion,
+  SetContainerSizes,
+} from '~app/modules/opinions/store/opinions.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {GetGeneralOpinionsQueryResult, Opinion} from '~app/typings/opinion/opinion.interfaces';
@@ -59,7 +63,7 @@ export class OpinionsState {
         context.setState((state) => ({
           ...state,
           opinions: action.payload ? [...state.opinions, ...opinions] : opinions,
-          activeOpinion: action.payload ? state.activeOpinion : opinions[0], // Set active opinion on page enter
+          activeOpinion: action.payload ? state.activeOpinion : opinions[opinions.length - 1], // Set active opinion on page enter
           canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
         }));
       }),
@@ -72,5 +76,18 @@ export class OpinionsState {
       ...state,
       containerSizes: action.payload,
     }));
+  }
+
+  @Action(RemoveTopMostOpinion)
+  private removeTopMostOpinion(context: StateContext<OpinionsStateModel>): void {
+    context.setState((state) => {
+      const nextOpinions = state.opinions.slice(0, state.opinions.length - 1);
+
+      return {
+        ...state,
+        opinions: nextOpinions,
+        activeOpinion: nextOpinions[nextOpinions.length - 1],
+      };
+    });
   }
 }

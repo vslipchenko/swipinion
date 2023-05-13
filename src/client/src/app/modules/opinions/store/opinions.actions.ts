@@ -11,3 +11,7 @@ export class SetContainerSizes {
 
   public constructor(public payload: OpinionsContainerSizes) {}
 }
+
+export class RemoveTopMostOpinion {
+  public static readonly type = '[Opinions] RemoveTopMostOpinion';
+}

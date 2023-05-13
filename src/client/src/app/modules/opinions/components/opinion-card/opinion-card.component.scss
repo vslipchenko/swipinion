@@ -22,9 +22,17 @@
   //z-index: -1;
 }
 
-.container {
+.card-container {
   z-index: 0;
   max-width: var.$opinion-card-max-width;
+}
+
+.swipe-left {
+  box-shadow: 15px 0 25px 5px var.$color-primary;
+}
+
+.swipe-right {
+  box-shadow: -15px 0 25px 5px var.$color-accent;
 }
 
 //.content {

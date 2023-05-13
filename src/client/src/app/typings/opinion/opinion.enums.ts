@@ -11,3 +11,8 @@ export enum OpinionsView {
   General = 1,
   Individual,
 }
+
+export enum OpinionCardOffset {
+  Left = 'left',
+  Right = 'right',
+}
