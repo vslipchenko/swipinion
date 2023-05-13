@@ -17,3 +17,8 @@ export enum OpinionCardSlideDirection {
   Right = 'right',
   Top = 'top',
 }
+
+export enum OpinionReaction {
+  Agree = 1,
+  Disagree,
+}

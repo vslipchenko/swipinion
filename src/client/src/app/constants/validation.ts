@@ -24,4 +24,5 @@ export const BIO_MAX_LENGTH = 300;
 export const MAX_TAG_COUNT = 10;
 // export const TITLE_MAX_LENGTH = 100;
 export const OPINION_BODY_MAX_LENGTH = 3000;
+export const OPINION_COMMENT_MAX_LENGTH = 3000;
 export const IMAGE_EXTENSION = /^(jpg)|(jpeg)|(jfif)|(pjp)|(pjpeg)|(gif)|(png)$/;
