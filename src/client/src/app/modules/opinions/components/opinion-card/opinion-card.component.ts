@@ -1,28 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
-import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {OpinionType} from '~app/typings/opinion/opinion.enums';
-import {RouterLink} from '@angular/router';
-import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
-import {NgIf} from '@angular/common';
-import {SwipeDirective} from '~app/shared/directives/swipe/swipe.directive';
-import {TextBackgroundFillerComponent} from '~app/modules/opinions/components/text-background-filler/text-background-filler.component';
 
 @Component({
   selector: 'app-opinion-card',
   templateUrl: './opinion-card.component.html',
   styleUrls: ['./opinion-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    NgIf,
-    RouterLink,
-    IconButtonComponent,
-    OpinionStatsPanelComponent,
-    CardTagsComponent,
-    SwipeDirective,
-    TextBackgroundFillerComponent,
-  ],
 })
 export class OpinionCardComponent implements OnInit {
   @Input() public id = '';

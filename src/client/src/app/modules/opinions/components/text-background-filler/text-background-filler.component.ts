@@ -10,7 +10,6 @@ import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces'
   templateUrl: './text-background-filler.component.html',
   styleUrls: ['./text-background-filler.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
 export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable {
   @Select(OpinionsSelectors.containerSizes) public containerSizes!: Observable<OpinionsContainerSizes>;

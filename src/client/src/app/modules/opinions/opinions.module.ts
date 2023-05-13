@@ -7,9 +7,26 @@ import {NgxsModule} from '@ngxs/store';
 import {OpinionsState} from '~app/modules/opinions/store/opinions.state';
 import {OpinionPlaceholderComponent} from '~app/shared/components/opinion-placeholder/opinion-placeholder.component';
 import {OpinionCarouselComponent} from '~app/modules/opinions/components/opinion-carousel/opinion-carousel.component';
+import {CommentDialogComponent} from './components/comment-dialog/comment-dialog.component';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {OpinionCardComponent} from '~app/modules/opinions/components/opinion-card/opinion-card.component';
+import {TextBackgroundFillerComponent} from '~app/modules/opinions/components/text-background-filler/text-background-filler.component';
+import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
+import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
+import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
+import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
+import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
+import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
+import {ButtonComponent} from '~app/shared/components/button/button.component';
 
 @NgModule({
-  declarations: [OpinionsComponent],
+  declarations: [
+    OpinionsComponent,
+    OpinionCardComponent,
+    OpinionCarouselComponent,
+    TextBackgroundFillerComponent,
+    CommentDialogComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -21,7 +38,14 @@ import {OpinionCarouselComponent} from '~app/modules/opinions/components/opinion
     ProgressSpinnerComponent,
     NgxsModule.forFeature([OpinionsState]),
     OpinionPlaceholderComponent,
-    OpinionCarouselComponent,
+    MatDialogModule,
+    IconButtonComponent,
+    AuthClickDirective,
+    OpinionStatsPanelComponent,
+    CardTagsComponent,
+    TextareaComponent,
+    ProgressBarComponent,
+    ButtonComponent,
   ],
 })
 export class OpinionsModule {}

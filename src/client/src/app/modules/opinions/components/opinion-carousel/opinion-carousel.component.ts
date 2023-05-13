@@ -1,26 +1,23 @@
 import {ChangeDetectionStrategy, Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/core';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OpinionCardComponent} from '~app/modules/opinions/components/opinion-card/opinion-card.component';
-import {NgForOf} from '@angular/common';
-import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {
   OPINION_CARD_HORIZONTAL_ANIMATION_DURATION,
   OPINION_CARD_MAX_WIDTH,
   OPINION_CARD_VERTICAL_ANIMATION_DURATION,
 } from '~app/constants/opinions';
-import {OpinionCardSlideDirection} from '~app/typings/opinion/opinion.enums';
+import {OpinionCardSlideDirection, OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
 import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
-import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
 import {AuthClickConfiguration} from '~app/typings/auth-click/auth-click.types';
+import {CommentDialogComponent} from '~app/modules/opinions/components/comment-dialog/comment-dialog.component';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-opinion-carousel',
   templateUrl: './opinion-carousel.component.html',
   styleUrls: ['./opinion-carousel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgForOf, OpinionCardComponent, IconButtonComponent, AuthClickDirective],
 })
 export class OpinionCarouselComponent {
   @Input() public data: Array<Opinion> = [];
@@ -32,7 +29,7 @@ export class OpinionCarouselComponent {
     method: this.skip.bind(this),
   };
 
-  public constructor(private readonly store: Store) {}
+  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
 
   protected agree(): void {
     this.swipeHorizontally(OpinionCardSlideDirection.Left);
@@ -42,9 +39,13 @@ export class OpinionCarouselComponent {
     this.swipeHorizontally(OpinionCardSlideDirection.Right);
   }
 
-  protected agreeAndComment(): void {}
+  protected agreeAndComment(): void {
+    this.openCommentDialog(OpinionReaction.Agree);
+  }
 
-  protected disagreeAndComment(): void {}
+  protected disagreeAndComment(): void {
+    this.openCommentDialog(OpinionReaction.Disagree);
+  }
 
   protected skip(): void {
     this.swipeHorizontally(OpinionCardSlideDirection.Top);
@@ -86,5 +87,12 @@ export class OpinionCarouselComponent {
     };
 
     slide();
+  }
+
+  private openCommentDialog(reaction: OpinionReaction): void {
+    this.dialog.open(CommentDialogComponent, {
+      panelClass: ['dialog', 'small-dialog'],
+      data: {reaction},
+    });
   }
 }
