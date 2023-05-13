@@ -17,7 +17,7 @@
                    [appAuthClick]="agreeAndComment.bind(this)"></app-icon-button>
   <app-icon-button class="smaller-icon" icon="thumb_up" extendClass="bg-dark"
                    [appAuthClick]="agree.bind(this)"></app-icon-button>
-  <app-icon-button icon="close" extendClass="bg-dark" [appAuthClick]="skip.bind(this)"></app-icon-button>
+  <app-icon-button icon="close" extendClass="bg-dark" [appAuthClick]="skipAuthClickConfiguration"></app-icon-button>
   <app-icon-button class="smaller-icon" icon="thumb_down" extendClass="bg-dark"
                    [appAuthClick]="disagree.bind(this)"></app-icon-button>
   <app-icon-button class="smaller-icon" svgIcon="dislike-n-comment" extendClass="bg-dark"

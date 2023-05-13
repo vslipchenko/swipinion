@@ -12,6 +12,7 @@ import {OpinionCardSlideDirection} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
 import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
 import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
+import {AuthClickConfiguration} from '~app/typings/auth-click/auth-click.types';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -25,6 +26,11 @@ export class OpinionCarouselComponent {
   @Input() public data: Array<Opinion> = [];
 
   @ViewChildren(OpinionCardComponent, {read: ElementRef}) private readonly cards!: QueryList<ElementRef>;
+
+  protected skipAuthClickConfiguration: AuthClickConfiguration = {
+    allowUnauthenticatedClickCount: 1,
+    method: this.skip.bind(this),
+  };
 
   public constructor(private readonly store: Store) {}
 
