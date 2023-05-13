@@ -3,8 +3,12 @@ import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OpinionCardComponent} from '~app/modules/opinions/components/opinion-card/opinion-card.component';
 import {NgForOf} from '@angular/common';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
-import {OPINION_CARD_MAX_WIDTH, OPINION_CARD_SWIPE_ANIMATION_DURATION} from '~app/constants/opinions';
-import {OpinionCardOffset} from '~app/typings/opinion/opinion.enums';
+import {
+  OPINION_CARD_HORIZONTAL_ANIMATION_DURATION,
+  OPINION_CARD_MAX_WIDTH,
+  OPINION_CARD_VERTICAL_ANIMATION_DURATION,
+} from '~app/constants/opinions';
+import {OpinionCardSlideDirection} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
 import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
 
@@ -24,20 +28,27 @@ export class OpinionCarouselComponent {
   public constructor(private readonly store: Store) {}
 
   protected agree(): void {
-    this.swipeHorizontally(OpinionCardOffset.Left);
+    this.swipeHorizontally(OpinionCardSlideDirection.Left);
   }
 
   protected disagree(): void {
-    this.swipeHorizontally(OpinionCardOffset.Right);
+    this.swipeHorizontally(OpinionCardSlideDirection.Right);
   }
 
-  private swipeHorizontally(direction: OpinionCardOffset): void {
+  protected skip(): void {
+    this.swipeHorizontally(OpinionCardSlideDirection.Top);
+  }
+
+  private swipeHorizontally(direction: OpinionCardSlideDirection): void {
     // Carousel's width is equal to the window's inner width
     const windowWidth = window.innerWidth;
     // card-container element resides in opinion-card.component
     const element = this.cards.last.nativeElement.querySelector('.card-container');
     const offset = windowWidth <= OPINION_CARD_MAX_WIDTH ? -windowWidth / 2 : -OPINION_CARD_MAX_WIDTH / 2; // Offset is equal to card's half width
-    const duration = OPINION_CARD_SWIPE_ANIMATION_DURATION;
+    const duration =
+      direction === OpinionCardSlideDirection.Top // Skip animation happens a little faster
+        ? OPINION_CARD_VERTICAL_ANIMATION_DURATION
+        : OPINION_CARD_HORIZONTAL_ANIMATION_DURATION;
     // Record the start time
     const startTime = performance.now();
 

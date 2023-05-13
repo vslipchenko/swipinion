@@ -12,7 +12,8 @@ export enum OpinionsView {
   Individual,
 }
 
-export enum OpinionCardOffset {
+export enum OpinionCardSlideDirection {
   Left = 'left',
   Right = 'right',
+  Top = 'top',
 }
