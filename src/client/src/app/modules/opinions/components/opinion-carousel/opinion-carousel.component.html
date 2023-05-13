@@ -13,12 +13,14 @@
 ></app-opinion-card>
 
 <div class="actions d-flex ai-center jc-around pb-1-2 w-100">
-  <!-- TODO Add auth guards for onclick events -->
-  <app-icon-button class="smaller-icon" svgIcon="like-n-comment" extendClass="bg-dark"></app-icon-button>
-  <app-icon-button class="smaller-icon" icon="thumb_up" extendClass="bg-dark" (clicked)="agree()"></app-icon-button>
-  <app-icon-button icon="close" extendClass="bg-dark" (clicked)="skip()"></app-icon-button>
+  <app-icon-button class="smaller-icon" svgIcon="like-n-comment" extendClass="bg-dark"
+                   [appAuthClick]="agreeAndComment.bind(this)"></app-icon-button>
+  <app-icon-button class="smaller-icon" icon="thumb_up" extendClass="bg-dark"
+                   [appAuthClick]="agree.bind(this)"></app-icon-button>
+  <app-icon-button icon="close" extendClass="bg-dark" [appAuthClick]="skip.bind(this)"></app-icon-button>
   <app-icon-button class="smaller-icon" icon="thumb_down" extendClass="bg-dark"
-                   (clicked)="disagree()"></app-icon-button>
-  <app-icon-button class="smaller-icon" svgIcon="dislike-n-comment" extendClass="bg-dark"></app-icon-button>
+                   [appAuthClick]="disagree.bind(this)"></app-icon-button>
+  <app-icon-button class="smaller-icon" svgIcon="dislike-n-comment" extendClass="bg-dark"
+                   [appAuthClick]="disagreeAndComment.bind(this)"></app-icon-button>
 </div>
 

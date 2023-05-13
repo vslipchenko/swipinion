@@ -11,6 +11,7 @@ import {
 import {OpinionCardSlideDirection} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
 import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
+import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.directive';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -18,7 +19,7 @@ import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions
   styleUrls: ['./opinion-carousel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgForOf, OpinionCardComponent, IconButtonComponent],
+  imports: [NgForOf, OpinionCardComponent, IconButtonComponent, AuthClickDirective],
 })
 export class OpinionCarouselComponent {
   @Input() public data: Array<Opinion> = [];
@@ -34,6 +35,10 @@ export class OpinionCarouselComponent {
   protected disagree(): void {
     this.swipeHorizontally(OpinionCardSlideDirection.Right);
   }
+
+  protected agreeAndComment(): void {}
+
+  protected disagreeAndComment(): void {}
 
   protected skip(): void {
     this.swipeHorizontally(OpinionCardSlideDirection.Top);
