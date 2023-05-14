@@ -6,6 +6,8 @@ import {FormControl, ValidationErrors} from '@angular/forms';
 import {OPINION_COMMENT_MAX_LENGTH} from '~app/constants/validation';
 import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {ThemePalette} from '@angular/material/core';
+import {Store} from '@ngxs/store';
+import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 
 @Component({
   selector: 'app-comment-dialog',
@@ -21,7 +23,10 @@ export class CommentDialogComponent implements Destroyable {
   protected readonly commentButtonColor: ThemePalette;
   protected readonly commentControl = new FormControl('');
 
-  public constructor(@Inject(MAT_DIALOG_DATA) private readonly data: {reaction: OpinionReaction}) {
+  public constructor(
+    @Inject(MAT_DIALOG_DATA) private readonly data: {reaction: OpinionReaction},
+    private readonly store: Store,
+  ) {
     if (data.reaction === OpinionReaction.Agree) {
       this.title = 'Agree';
       this.commentButtonColor = 'primary';
@@ -43,5 +48,7 @@ export class CommentDialogComponent implements Destroyable {
     return `${OPINION_COMMENT_MAX_LENGTH} characters at max`;
   }
 
-  protected comment(): void {}
+  protected comment(): void {
+    const opinionId = this.store.selectSnapshot(OpinionsSelectors.activeOpinion).id;
+  }
 }

@@ -1,7 +1,8 @@
 import {QueryConfig} from 'pg';
 import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
 import {OpinionReaction} from '../../typings/opinion/opinion.enums';
-
+import {CommentOpinion} from '../../typings/opinion/opinion.interfaces';
+// TODO update query taking into account user privacy settings (not all opinions should be available for view)
 export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: string): QueryConfig => ({
   text: `
     SELECT user_opinions.id, 
@@ -40,7 +41,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
   `,
   values: edgeId ? [userId, OPINION_FETCH_LIMIT, edgeId] : [userId, OPINION_FETCH_LIMIT],
 });
-
+// TODO update query taking into account user privacy settings (not all opinions should be available for view)
 export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
   text: `
      SELECT user_opinions.id,
@@ -72,4 +73,11 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
     ORDER BY user_opinions.id DESC -- Show fresh opinions each time
     LIMIT 2 -- No need for more as there is auth guard that would prevent unauthorized user actions
   `,
+});
+
+export const queryCommentOpinion = ({opinionId, reaction, comment}: CommentOpinion): QueryConfig => ({
+  text: `
+  
+  `,
+  values: [opinionId, reaction, comment],
 });
