@@ -7,6 +7,7 @@ import {
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEXP,
+  USER_MESSAGE_MAX_LENGTH,
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
   USERNAME_REGEXP,
@@ -24,4 +25,4 @@ export const languageValidator = Joi.string().valid(...getStringEnumValues(Langu
 export const fileUrlValidator = Joi.string().max(FILE_URL_MAX_LENGTH).allow(null);
 export const unixTimestampValidator = Joi.date().timestamp('unix');
 export const booleanValidator = Joi.boolean();
-export const messageBodyValidator = Joi.string().trim().min(1).max(3000);
+export const messageBodyValidator = Joi.string().trim().min(1).max(USER_MESSAGE_MAX_LENGTH);

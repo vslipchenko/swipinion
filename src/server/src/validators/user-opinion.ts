@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import {CreateOpinion} from '../typings/user-opinion/user-opinion.interfaces';
-import {FILE_URL_MAX_LENGTH, MAX_TAG_COUNT, TAG_REGEXP} from '../constants/validation';
+import {FILE_URL_MAX_LENGTH, MAX_TAG_COUNT, OPINION_BODY_MAX_LENGTH, TAG_REGEXP} from '../constants/validation';
 import {bigintValidator, usernameValidator} from './shared';
 
 export const createOpinionValidator = Joi.object<CreateOpinion>({
@@ -10,7 +10,7 @@ export const createOpinionValidator = Joi.object<CreateOpinion>({
     .max(FILE_URL_MAX_LENGTH)
     .allow(null),
   // title: Joi.string().max(100).allow(null),
-  body: Joi.string().trim().max(3000).allow(null),
+  body: Joi.string().trim().max(OPINION_BODY_MAX_LENGTH).allow(null),
   tags: Joi.array().items(Joi.string().pattern(TAG_REGEXP)).max(MAX_TAG_COUNT),
 });
 
