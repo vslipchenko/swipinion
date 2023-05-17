@@ -19,6 +19,7 @@ import {ChangePassword} from '~app/typings/user/user.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserSettingsComponent implements Destroyable {
+  // TODO consider adding Change username functionality
   @Select(UserSettingsSelectors.settings) public settings$!: Observable<UserSettings>;
 
   public readonly privacyForm = new FormGroup({
