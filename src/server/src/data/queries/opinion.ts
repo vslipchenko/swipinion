@@ -2,6 +2,7 @@ import {QueryConfig} from 'pg';
 import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
 import {OpinionReaction} from '../../typings/opinion/opinion.enums';
 import {CommentOpinion} from '../../typings/opinion/opinion.interfaces';
+import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
 // TODO update query taking into account user privacy settings (not all opinions should be available for view)
 export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: string): QueryConfig => ({
   text: `
@@ -65,6 +66,10 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
     ) reactions ON user_opinions.id = reactions.opinion_id
     LEFT JOIN users ON user_opinions.user_id = users.id
     LEFT JOIN tags ON user_opinions.id = tags.opinion_id
+    LEFT JOIN
+      user_settings ON user_opinions.user_id = user_settings.user_id
+    WHERE
+      user_settings.view_opinions = ${PrivacyCommonSettings.Everyone} -- No need to check followers as user is unauthorized
     GROUP BY user_opinions.id,
       users.username,
       reactions.agreed,
