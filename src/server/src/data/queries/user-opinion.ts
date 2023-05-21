@@ -1,7 +1,7 @@
 import {QueryConfig} from 'pg';
 import {CreateOpinion} from '../../typings/user-opinion/user-opinion.interfaces';
-import {USER_OPINION_FETCH_LIMIT} from '../../constants/opinions';
 import {OpinionType} from '../../typings/opinion/opinion.enums';
+import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
 
 export const concatenateTagValues = (values: Array<string>): string => {
   return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join();
@@ -51,21 +51,56 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
   values: [userId, opinionId],
 });
 
-export const queryOpinionsByUsername = (username: string, edgeId: string): QueryConfig => ({
+export const queryOpinionsByUsername = ({
+  parametersPlaceholderMap,
+  values,
+}: {
+  parametersPlaceholderMap: {edgeId: string | null; followerId: string | null};
+  values: Array<unknown>;
+}): QueryConfig => ({
   text: `
-    SELECT user_opinions.id, 
-        user_opinions.type, 
-        user_opinions.file_url,
-        user_opinions.body, 
-        array_agg(tags.tag) as tags
-    FROM user_opinions
-    LEFT JOIN tags ON user_opinions.id = tags.opinion_id
-      WHERE user_opinions.user_id = (SELECT id FROM users WHERE username = $1) ${
-        edgeId ? 'AND user_opinions.id < $3' : ''
-      }
-      GROUP BY user_opinions.id
-      ORDER BY user_opinions.id DESC
-      LIMIT $2
+    SELECT
+      uo.id,
+      uo.type,
+      uo.file_url,
+      uo.body,
+      array_agg(t.tag) AS tags
+    FROM
+      user_opinions AS uo
+    LEFT JOIN
+      tags AS t ON uo.id = t.opinion_id
+    WHERE
+      ${parametersPlaceholderMap.edgeId ? 'uo.id < ' + parametersPlaceholderMap.edgeId + ' AND' : ''}
+      EXISTS (
+        SELECT
+          1
+        FROM
+          users AS u
+        LEFT JOIN
+          user_settings AS us ON u.id = us.user_id
+        LEFT JOIN
+          user_followers AS uf ON u.id = uf.user_id
+        WHERE
+          u.username = $1
+          AND (
+            (us.view_opinions = ${PrivacyCommonSettings.Everyone})
+            ${
+              parametersPlaceholderMap.followerId
+                ? 'OR (us.view_opinions = ' +
+                  PrivacyCommonSettings.FollowersOnly +
+                  ' AND uf.follower_id = ' +
+                  parametersPlaceholderMap.followerId +
+                  ' AND uf.pending = FALSE)'
+                : ''
+            }
+          )
+          AND u.id = uo.user_id
+      )
+    GROUP BY
+      uo.id
+    ORDER BY
+      uo.id DESC
+    LIMIT $2
   `,
-  values: edgeId ? [username, USER_OPINION_FETCH_LIMIT, edgeId] : [username, USER_OPINION_FETCH_LIMIT],
+  values,
 });
