@@ -3,7 +3,7 @@ import {OPINION_FETCH_LIMIT} from '../../constants/opinions';
 import {OpinionReaction} from '../../typings/opinion/opinion.enums';
 import {CommentOpinion} from '../../typings/opinion/opinion.interfaces';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
-// TODO update query taking into account user privacy settings (not all opinions should be available for view)
+
 export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: string): QueryConfig => ({
   text: `
     SELECT user_opinions.id, 
