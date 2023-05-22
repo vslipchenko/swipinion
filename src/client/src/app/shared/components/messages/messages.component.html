@@ -1,5 +1,6 @@
 <app-accordion [hideToggle]="true" [panelTitle]="title"
                [panelDescription]="description"
+               panelClass="bt-transparent bl-transparent br-transparent"
                [content]="content" (afterExpand)="messagesDirective.initializeMessages()">
   <ng-template #title>
       <span class="relative d-flex mr-1">

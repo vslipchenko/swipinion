@@ -2,6 +2,7 @@
                [panelTitle]="title"
                [panelDescription]="description"
                [content]="content" titleClass="conversation-title mw-0"
+               panelClass="bt-transparent bl-transparent br-transparent"
                [headerClass]="(unread$ | async) ? 'primary-indicator' : ''">
   <ng-template #title>
     <app-conversation-thumbnail *ngIf="renderUi$ | async"
