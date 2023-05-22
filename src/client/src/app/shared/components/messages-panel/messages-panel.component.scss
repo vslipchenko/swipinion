@@ -37,3 +37,12 @@
     flex: 0.5;
   }
 }
+
+// TODO consider moving to utilities
+.pe-auto {
+  pointer-events: auto;
+}
+
+.pe-none {
+  pointer-events: none;
+}
