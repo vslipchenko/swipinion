@@ -45,6 +45,7 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
 
   @Input() public conversation!: ActiveConversation;
   @Input() public collapsable = false;
+  @Input() public outline = false;
   @Output() public navigateProfile = new EventEmitter<void>();
   @Output() public afterExpand = new EventEmitter<void>();
   @Output() public afterClose = new EventEmitter<void>();

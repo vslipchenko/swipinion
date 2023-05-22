@@ -3,6 +3,7 @@
   <app-conversation-accordion *ngIf="conversation$ | async as conversation"
                               [conversation]="conversation"
                               [collapsable]="true"
+                              [outline]="true"
                               (navigateProfile)="collapseMessagesAccordion(messages)"
                               class="d-block f-1-h mt-auto mw-0 pe-auto"></app-conversation-accordion>
 
