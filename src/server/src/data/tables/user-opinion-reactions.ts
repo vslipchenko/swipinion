@@ -11,7 +11,8 @@ export const UserOpinionReactionsTable: Table = {
         ON DELETE CASCADE,
       reaction SMALLINT NOT NULL,
       comment VARCHAR (1000) DEFAULT NULL,
-      created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+      UNIQUE (user_id, opinion_id)
     );
   `,
 };
