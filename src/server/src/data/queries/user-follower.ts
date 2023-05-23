@@ -7,7 +7,7 @@ export const queryFollowUser = (userId: string, followerId: string): QueryConfig
     WITH record AS (
       INSERT INTO user_followers
       (user_id, follower_id, pending)
-      VALUES ($1, $2, (SELECT EXISTS (SELECT FROM user_settings WHERE user_id = $1 AND follow = ${FollowSettings.ByApprove})))
+      VALUES ($1, $2, (SELECT EXISTS (SELECT 1 FROM user_settings WHERE user_id = $1 AND follow = ${FollowSettings.ByApprove})))
       RETURNING id, pending
     )
     INSERT INTO user_notifications

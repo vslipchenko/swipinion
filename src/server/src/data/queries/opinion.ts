@@ -95,29 +95,27 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
   `,
 });
 
-export const queryCommentOpinion = ({opinionId, reaction, comment}: CommentOpinion): QueryConfig => ({
+export const queryCommentOpinion = ({
+  opinionId,
+  reaction,
+  comment,
+  userId,
+}: CommentOpinion & {userId: string}): QueryConfig => ({
   text: `
-    INSERT INTO user_opinion_reactions 
-    (opinion_id, user_id, reaction, comment) 
-    VALUES (
-      5, 
-      (
-        SELECT user_followers.follower_id
-        FROM user_followers
-        LEFT JOIN user_followers
-          ON user_settings.user_id = user_followers.user_id
-        WHERE user_followers.follower_id = $2 AND user_followers.user_id = (SELECT user_id FROM user_opinions WHERE id = 5)
-          AND (
-            user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
-            OR user_settings.message = ${PrivacyCommonSettings.FollowersOnly} -- If messaging is allowed only for followers; check whether sender has accepted following
-              AND user_followers.follower_id = $1                               
-              AND user_followers.pending IS FALSE
-          )
-      ), 
-      200, 
-      1, 
-      'kek'
-    )
+    INSERT INTO user_opinion_reactions (opinion_id, user_id, reaction, comment)
+    SELECT
+      $1,
+      CASE
+        WHEN us.view_opinions = ${PrivacyCommonSettings.Everyone} THEN $2
+        WHEN us.view_opinions = ${PrivacyCommonSettings.FollowersOnly} AND uf.follower_id = $2 AND NOT uf.pending THEN $2
+        ELSE NULL
+      END,
+      $3,
+      $4
+    FROM user_opinions AS uo
+    JOIN user_settings AS us ON uo.user_id = us.user_id
+    LEFT JOIN user_followers AS uf ON uo.user_id = uf.user_id
+    WHERE uo.id = $1 AND uo.user_id != $2 -- Disallow commenting own opinions
   `,
-  values: [opinionId, reaction, comment],
+  values: [opinionId, userId, reaction, comment],
 });
