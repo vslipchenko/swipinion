@@ -52,7 +52,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
         )
       )
     GROUP BY user_opinions.id, users.username, reactions.agreed, reactions.disagreed, reactions.comments
-    ORDER BY user_opinions.id DESC
+    ORDER BY user_opinions.id ASC
     LIMIT $2
   `,
   values: edgeId ? [userId, OPINION_FETCH_LIMIT, edgeId] : [userId, OPINION_FETCH_LIMIT],
@@ -90,14 +90,34 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
       reactions.agreed,
       reactions.disagreed,
       reactions.comments
-    ORDER BY user_opinions.id DESC -- Show fresh opinions each time
+    ORDER BY user_opinions.id ASC -- Show fresh opinions each time
     LIMIT 2 -- No need for more as there is auth guard that would prevent unauthorized user actions
   `,
 });
 
 export const queryCommentOpinion = ({opinionId, reaction, comment}: CommentOpinion): QueryConfig => ({
   text: `
-  
+    INSERT INTO user_opinion_reactions 
+    (opinion_id, user_id, reaction, comment) 
+    VALUES (
+      5, 
+      (
+        SELECT user_followers.follower_id
+        FROM user_followers
+        LEFT JOIN user_followers
+          ON user_settings.user_id = user_followers.user_id
+        WHERE user_followers.follower_id = $2 AND user_followers.user_id = (SELECT user_id FROM user_opinions WHERE id = 5)
+          AND (
+            user_settings.message = ${PrivacyCommonSettings.Everyone}     -- Check whether messaging is allowed to everyone
+            OR user_settings.message = ${PrivacyCommonSettings.FollowersOnly} -- If messaging is allowed only for followers; check whether sender has accepted following
+              AND user_followers.follower_id = $1                               
+              AND user_followers.pending IS FALSE
+          )
+      ), 
+      200, 
+      1, 
+      'kek'
+    )
   `,
   values: [opinionId, reaction, comment],
 });
