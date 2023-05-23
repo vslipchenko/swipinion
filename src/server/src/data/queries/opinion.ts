@@ -107,7 +107,7 @@ export const queryCommentOpinion = ({
       $1,
       CASE
         WHEN us.view_opinions = ${PrivacyCommonSettings.Everyone} THEN $2
-        WHEN us.view_opinions = ${PrivacyCommonSettings.FollowersOnly} AND uf.follower_id = $2 AND NOT uf.pending THEN $2
+        WHEN us.view_opinions = ${PrivacyCommonSettings.FollowersOnly} AND uf.follower_id = $2 AND uf.pending = FALSE THEN $2
         ELSE NULL
       END,
       $3,

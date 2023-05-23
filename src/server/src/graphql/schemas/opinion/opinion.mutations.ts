@@ -21,11 +21,11 @@ const commentOpinion = async (
 
   if (error) return null;
 
-  const {error: authenticationError} = authenticationGuard(accessToken);
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryCommentOpinion(input));
+  const result = await db.query(queryCommentOpinion({...input, userId: tokenData.userId}));
 
   return {success: Boolean(result.rowCount)};
 };
