@@ -12,6 +12,7 @@ import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions
 import {AuthClickConfiguration} from '~app/typings/auth-click/auth-click.types';
 import {CommentDialogComponent} from '~app/modules/opinions/components/comment-dialog/comment-dialog.component';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -90,9 +91,16 @@ export class OpinionCarouselComponent {
   }
 
   private openCommentDialog(reaction: OpinionReaction): void {
-    this.dialog.open(CommentDialogComponent, {
+    const dialog = this.dialog.open(CommentDialogComponent, {
       panelClass: ['dialog', 'small-dialog'],
       data: {reaction},
+    });
+
+    dialog.componentInstance.reacted.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
+      this.swipeHorizontally(
+        reaction === OpinionReaction.Agree ? OpinionCardSlideDirection.Left : OpinionCardSlideDirection.Right,
+      );
+      dialog.close();
     });
   }
 }
