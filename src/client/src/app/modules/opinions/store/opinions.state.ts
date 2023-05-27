@@ -1,8 +1,9 @@
 import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {Observable, tap} from 'rxjs';
+import {map, Observable, tap, throwError} from 'rxjs';
 import {
   FetchGeneralOpinions,
+  ReactToUserOpinion,
   RemoveTopMostOpinion,
   SetContainerSizes,
 } from '~app/modules/opinions/store/opinions.actions';
@@ -89,5 +90,16 @@ export class OpinionsState {
         activeOpinion: nextOpinions[nextOpinions.length - 1],
       };
     });
+  }
+
+  @Action(ReactToUserOpinion)
+  private reactToUserOpinion(_: StateContext<OpinionsStateModel>, action: ReactToUserOpinion): Observable<unknown> {
+    return this.opinionService.reactToOpinion(action.payload).pipe(
+      map((result) => {
+        if (!result.data?.reactToOpinion?.success) return throwError('');
+
+        return result;
+      }),
+    );
   }
 }

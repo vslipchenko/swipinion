@@ -3,9 +3,12 @@ import {Apollo, MutationResult} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {GET_GENERAL_OPINIONS} from '~app/graphql/opinion/opinion.queries';
-import {CommentOpinion, GetGeneralOpinionsQueryResult} from '~app/typings/opinion/opinion.interfaces';
-import {COMMENT_OPINION} from '~app/graphql/opinion/opinion.mutations';
-import {SuccessResponse} from '~app/typings/response/response.interfaces';
+import {
+  GetGeneralOpinionsQueryResult,
+  ReactToOpinion,
+  ReactToOpinionMutationResult,
+} from '~app/typings/opinion/opinion.interfaces';
+import {REACT_TO_OPINION} from '~app/graphql/opinion/opinion.mutations';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +24,9 @@ export class OpinionService {
     });
   }
 
-  public commentOpinion(input: CommentOpinion): Observable<MutationResult<SuccessResponse>> {
-    return this.apollo.mutate<SuccessResponse>({
-      mutation: COMMENT_OPINION,
+  public reactToOpinion(input: ReactToOpinion): Observable<MutationResult<ReactToOpinionMutationResult>> {
+    return this.apollo.mutate<ReactToOpinionMutationResult>({
+      mutation: REACT_TO_OPINION,
       variables: {input},
     });
   }

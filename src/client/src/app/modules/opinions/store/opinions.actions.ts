@@ -1,4 +1,5 @@
 import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces';
+import {ReactToOpinion} from '~app/typings/opinion/opinion.interfaces';
 
 export class FetchGeneralOpinions {
   public static readonly type = '[Opinions] FetchGeneralOpinions';
@@ -14,4 +15,10 @@ export class SetContainerSizes {
 
 export class RemoveTopMostOpinion {
   public static readonly type = '[Opinions] RemoveTopMostOpinion';
+}
+
+export class ReactToUserOpinion {
+  public static readonly type = '[Opinions] ReactToUserOpinion';
+
+  public constructor(public payload: ReactToOpinion) {}
 }

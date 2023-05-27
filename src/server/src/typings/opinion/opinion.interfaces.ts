@@ -1,7 +1,7 @@
 import {OpinionReaction} from './opinion.enums';
 
-export interface CommentOpinion {
+export interface ReactToOpinion {
   opinionId: string;
   reaction: OpinionReaction;
-  comment: string;
+  comment: string | null;
 }

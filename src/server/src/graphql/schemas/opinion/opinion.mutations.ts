@@ -2,22 +2,22 @@ import {ApolloError, gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {SuccessResponse} from '../../../typings/response/response.interfaces';
-import {CommentOpinion} from '../../../typings/opinion/opinion.interfaces';
-import {commentOpinionValidator} from '../../../validators/opinion';
-import {queryCommentOpinion} from '../../../data/queries/opinion';
+import {ReactToOpinion} from '../../../typings/opinion/opinion.interfaces';
+import {reactToOpinionValidator} from '../../../validators/opinion';
+import {queryReactToOpinion} from '../../../data/queries/opinion';
 
 export const opinionMutationTypeDefinitions = gql`
   type Mutation {
-    commentOpinion(input: CommentOpinion!): Success
+    reactToOpinion(input: ReactToOpinion!): Success
   }
 `;
 
-const commentOpinion = async (
+const reactToOpinion = async (
   _: unknown,
-  {input}: {input: CommentOpinion},
+  {input}: {input: ReactToOpinion},
   {accessToken}: {accessToken: string},
 ): Promise<SuccessResponse | ApolloError | null> => {
-  const {error} = commentOpinionValidator.validate(input);
+  const {error} = reactToOpinionValidator.validate(input);
 
   if (error) return null;
 
@@ -25,13 +25,13 @@ const commentOpinion = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryCommentOpinion({...input, userId: tokenData.userId}));
+  const result = await db.query(queryReactToOpinion({...input, userId: tokenData.userId}));
 
   return {success: Boolean(result.rowCount)};
 };
 
 export const opinionMutationResolvers = {
   Mutation: {
-    commentOpinion,
+    reactToOpinion: reactToOpinion,
   },
 };

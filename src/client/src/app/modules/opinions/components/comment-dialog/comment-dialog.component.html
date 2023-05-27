@@ -25,6 +25,6 @@
 
     <app-button mat-dialog-close text="Cancel"></app-button>
     <app-button [color]="commentButtonColor" text="Comment" (clicked)="comment()"
-                [disabled]="state.loading || commentControl.pristine"></app-button>
+                [disabled]="state.loading || !commentControl.value"></app-button>
   </mat-dialog-actions>
 </ng-container>

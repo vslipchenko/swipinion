@@ -1,9 +1,9 @@
 import {gql} from 'apollo-server-core';
 
 export const opinionInputs = gql`
-  input CommentOpinion {
+  input ReactToOpinion {
     opinionId: String!
     reaction: Int!
-    comment: String!
+    comment: String
   }
 `;

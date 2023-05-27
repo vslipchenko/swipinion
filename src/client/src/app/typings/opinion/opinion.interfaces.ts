@@ -1,4 +1,5 @@
 import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
+import {SuccessResponse} from '~app/typings/response/response.interfaces';
 
 export interface Opinion {
   id: string;
@@ -18,8 +19,12 @@ export interface GetGeneralOpinionsQueryResult {
   getGeneralOpinions: Array<Opinion>;
 }
 
-export interface CommentOpinion {
+export interface ReactToOpinion {
   opinionId: string;
   reaction: OpinionReaction;
-  comment: string;
+  comment: string | null;
+}
+
+export interface ReactToOpinionMutationResult {
+  reactToOpinion: SuccessResponse;
 }

@@ -1,8 +1,8 @@
 import {gql} from 'apollo-angular';
 
-export const COMMENT_OPINION = gql`
-  mutation ($input: CommentOpinion!) {
-    commentOpinion(input: $input) {
+export const REACT_TO_OPINION = gql`
+  mutation ($input: ReactToOpinion!) {
+    reactToOpinion(input: $input) {
       success
     }
   }
