@@ -9,9 +9,9 @@ export interface Opinion {
   file_url: string;
   // title: string;
   body: string;
-  agreed: string;
-  disagreed: string;
-  comments: string;
+  agreed: number;
+  disagreed: number;
+  comments: number;
   tags: Array<string>;
 }
 

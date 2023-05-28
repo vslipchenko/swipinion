@@ -3,7 +3,8 @@ import {OpinionsState, OpinionsStateModel} from '~app/modules/opinions/store/opi
 
 export class OpinionsSelectors {
   public static nothingToShow = createSelector([OpinionsState], (state: OpinionsStateModel) => {
-    return !state.activeOpinion && !state.canLoadMore;
+    // Where state.opinions[state.opinions.length - 1] is considered activeOpinion
+    return !state.opinions[state.opinions.length - 1] && !state.canLoadMore;
   });
 
   public static opinions = createSelector([OpinionsState], (state: OpinionsStateModel) => {
@@ -15,6 +16,7 @@ export class OpinionsSelectors {
   });
 
   public static activeOpinion = createSelector([OpinionsState], (state: OpinionsStateModel) => {
-    return state.activeOpinion;
+    // Where state.opinions[state.opinions.length - 1] is considered activeOpinion
+    return state.opinions[state.opinions.length - 1];
   });
 }

@@ -8,9 +8,9 @@ export const opinionTypes = gql`
     type: Int
     file_url: String
     body: String
-    agreed: String
-    disagreed: String
-    comments: String
+    agreed: Float
+    disagreed: Float
+    comments: Float
     tags: [String]!
   }
 `;

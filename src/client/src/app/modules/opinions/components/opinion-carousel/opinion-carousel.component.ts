@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/core';
-import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OpinionCardComponent} from '~app/modules/opinions/components/opinion-card/opinion-card.component';
 import {
   OPINION_CARD_HORIZONTAL_ANIMATION_DURATION,
@@ -8,11 +7,13 @@ import {
 } from '~app/constants/opinions';
 import {OpinionCardSlideDirection, OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
-import {RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
+import {ReactToUserOpinion, RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
 import {AuthClickConfiguration} from '~app/typings/auth-click/auth-click.types';
 import {CommentDialogComponent} from '~app/modules/opinions/components/comment-dialog/comment-dialog.component';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {takeUntil} from 'rxjs';
+import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
+import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -21,7 +22,7 @@ import {takeUntil} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpinionCarouselComponent {
-  @Input() public data: Array<Opinion> = [];
+  @Input() public data: Array<CarouselOpinion> = [];
 
   @ViewChildren(OpinionCardComponent, {read: ElementRef}) private readonly cards!: QueryList<ElementRef>;
 
@@ -33,10 +34,12 @@ export class OpinionCarouselComponent {
   public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
 
   protected agree(): void {
+    this.reactToOpinion(OpinionReaction.Agree);
     this.swipeHorizontally(OpinionCardSlideDirection.Left);
   }
 
   protected disagree(): void {
+    this.reactToOpinion(OpinionReaction.Disagree);
     this.swipeHorizontally(OpinionCardSlideDirection.Right);
   }
 
@@ -50,6 +53,18 @@ export class OpinionCarouselComponent {
 
   protected skip(): void {
     this.swipeHorizontally(OpinionCardSlideDirection.Top);
+  }
+
+  private reactToOpinion(reaction: OpinionReaction): void {
+    const opinionId = this.store.selectSnapshot(OpinionsSelectors.activeOpinion).id;
+
+    this.store.dispatch(
+      new ReactToUserOpinion({
+        opinionId,
+        reaction,
+        comment: null,
+      }),
+    );
   }
 
   private swipeHorizontally(direction: OpinionCardSlideDirection): void {

@@ -5,19 +5,21 @@
 <!--            class="f-1"></app-button>-->
 
 <app-button [text]="agreed"
+            [color]="agreedWith ? 'primary' : undefined"
             icon="thumb_up"
             [extendClass]="'d-flex jc-center card-stat-button fs-regular-small w-100 br-0 ' + buttonClass"
             iconClass="mr-h"
             class="f-1"></app-button>
 
 <app-button [text]="disagreed"
+            [color]="disagreedWith ? 'accent' : undefined"
             icon="thumb_down"
             [extendClass]="'d-flex jc-center card-stat-button fs-regular-small w-100 br-0 ' + buttonClass"
             iconClass="mr-h"
             class="f-1"></app-button>
 
 <app-button [text]="comments"
-            svgIcon="comment-outline"
+            [svgIcon]="commented ? 'comment' : 'comment-outline'"
             [extendClass]="'d-flex jc-center card-stat-button fs-regular-small w-100 br-0 ' + buttonClass"
             iconClass="mr-h"
             class="f-1"></app-button>

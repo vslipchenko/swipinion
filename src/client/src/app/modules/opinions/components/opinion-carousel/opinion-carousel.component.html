@@ -6,9 +6,12 @@
   [username]="item.username"
   [fileUrl]="item.file_url"
   [body]="item.body"
-  [agreed]="item.agreed"
-  [disagreed]="item.disagreed"
-  [comments]="item.comments"
+  [agreed]="item.formattedAgreed"
+  [disagreed]="item.formattedDisagreed"
+  [comments]="item.formattedComments"
+  [agreedWith]="item.agreedWith"
+  [disagreedWith]="item.disagreedWith"
+  [commented]="item.commented"
   [tags]="item.tags"
 ></app-opinion-card>
 
