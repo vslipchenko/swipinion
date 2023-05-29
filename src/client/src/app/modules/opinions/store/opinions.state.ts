@@ -6,6 +6,7 @@ import {
   ReactToUserOpinion,
   RemoveTopMostOpinion,
   SetContainerSizes,
+  ToggleReactionInProgress,
 } from '~app/modules/opinions/store/opinions.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ApolloQueryResult} from '@apollo/client/core';
@@ -21,6 +22,7 @@ export interface OpinionsStateModel {
   opinionReaction: {opinionId: string; reaction: OpinionReaction; commented: boolean};
   //activeOpinion: CarouselOpinion; // Scrolled through and reached last most opinion
   containerSizes: OpinionsContainerSizes;
+  reactionInProgress: boolean;
   canLoadMore: boolean;
 }
 
@@ -48,6 +50,7 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
     // },
     opinionReaction: {opinionId: '', reaction: OpinionReaction.Agree, commented: false},
     containerSizes: {width: 0, height: 0},
+    reactionInProgress: false, // Fixes issue with duplicate id entry if quick spamming reactions
     canLoadMore: false,
   },
 })
@@ -143,5 +146,13 @@ export class OpinionsState {
           return result;
         }),
       );
+  }
+
+  @Action(ToggleReactionInProgress)
+  private toggleAnimationState(context: StateContext<OpinionsStateModel>, action: ToggleReactionInProgress): void {
+    context.setState((state) => ({
+      ...state,
+      reactionInProgress: action.payload,
+    }));
   }
 }

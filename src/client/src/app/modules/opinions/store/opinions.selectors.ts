@@ -23,4 +23,8 @@ export class OpinionsSelectors {
   public static opinionReaction = createSelector([OpinionsState], (state: OpinionsStateModel) => {
     return state.opinionReaction;
   });
+
+  public static reactionInProgress = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.reactionInProgress;
+  });
 }

@@ -7,7 +7,11 @@ import {
 } from '~app/constants/opinions';
 import {OpinionCardSlideDirection, OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
-import {ReactToUserOpinion, RemoveTopMostOpinion} from '~app/modules/opinions/store/opinions.actions';
+import {
+  ReactToUserOpinion,
+  RemoveTopMostOpinion,
+  ToggleReactionInProgress,
+} from '~app/modules/opinions/store/opinions.actions';
 import {AuthClickConfiguration} from '~app/typings/auth-click/auth-click.types';
 import {CommentDialogComponent} from '~app/modules/opinions/components/comment-dialog/comment-dialog.component';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
@@ -34,24 +38,38 @@ export class OpinionCarouselComponent {
   public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
 
   protected agree(): void {
+    // Ghost-locking
+    if (this.reactionInProgress) return;
+
+    this.store.dispatch(new ToggleReactionInProgress(true));
     this.reactToOpinion(OpinionReaction.Agree);
     this.swipeHorizontally(OpinionCardSlideDirection.Left);
   }
 
   protected disagree(): void {
+    if (this.reactionInProgress) return;
+
+    this.store.dispatch(new ToggleReactionInProgress(true));
     this.reactToOpinion(OpinionReaction.Disagree);
     this.swipeHorizontally(OpinionCardSlideDirection.Right);
   }
 
   protected agreeAndComment(): void {
+    if (this.reactionInProgress) return;
+
     this.openCommentDialog(OpinionReaction.Agree);
   }
 
   protected disagreeAndComment(): void {
+    if (this.reactionInProgress) return;
+
     this.openCommentDialog(OpinionReaction.Disagree);
   }
 
   protected skip(): void {
+    if (this.reactionInProgress) return;
+
+    this.store.dispatch(new ToggleReactionInProgress(true));
     this.swipeHorizontally(OpinionCardSlideDirection.Top);
   }
 
@@ -99,7 +117,8 @@ export class OpinionCarouselComponent {
         requestAnimationFrame(slide);
       } else {
         // Remove element from DOM on animation complete
-        this.store.dispatch(new RemoveTopMostOpinion());
+        // & notify animation has ended
+        this.slideAnimationFinished();
       }
     };
 
@@ -113,10 +132,22 @@ export class OpinionCarouselComponent {
     });
 
     dialog.componentInstance.reacted.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
+      this.store.dispatch(new ToggleReactionInProgress(true));
+
       this.swipeHorizontally(
         reaction === OpinionReaction.Agree ? OpinionCardSlideDirection.Left : OpinionCardSlideDirection.Right,
       );
       dialog.close();
     });
+  }
+
+  private slideAnimationFinished(): void {
+    this.store.dispatch(new RemoveTopMostOpinion());
+    this.store.dispatch(new ToggleReactionInProgress(false));
+  }
+
+  // Helps to prevent user actions while processing current (ongoing) reaction
+  private get reactionInProgress(): boolean {
+    return this.store.selectSnapshot(OpinionsSelectors.reactionInProgress);
   }
 }

@@ -22,3 +22,9 @@ export class ReactToUserOpinion {
 
   public constructor(public payload: ReactToOpinion & {optimisticStatisticUpdate: boolean}) {}
 }
+
+export class ToggleReactionInProgress {
+  public static readonly type = '[Opinions] ToggleReactionInProgress';
+
+  public constructor(public payload: boolean) {}
+}
