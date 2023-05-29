@@ -18,6 +18,7 @@ import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
 
 export interface OpinionsStateModel {
   opinions: Array<CarouselOpinion>;
+  opinionReaction: {opinionId: string; reaction: OpinionReaction; commented: boolean};
   //activeOpinion: CarouselOpinion; // Scrolled through and reached last most opinion
   containerSizes: OpinionsContainerSizes;
   canLoadMore: boolean;
@@ -45,6 +46,7 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
     //   commented: false,
     //   tags: [],
     // },
+    opinionReaction: {opinionId: '', reaction: OpinionReaction.Agree, commented: false},
     containerSizes: {width: 0, height: 0},
     canLoadMore: false,
   },
@@ -109,35 +111,37 @@ export class OpinionsState {
     context: StateContext<OpinionsStateModel>,
     action: ReactToUserOpinion,
   ): Observable<unknown> {
-    return this.opinionService.reactToOpinion(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.reactToOpinion?.success) return throwError('');
+    const {opinionId, reaction, comment, optimisticStatisticUpdate} = action.payload;
 
-        context.setState((state) => {
-          const activeOpinion = {...state.opinions[state.opinions.length - 1]};
+    const updateOpinionStatistic = (): void => {
+      context.setState((state) => {
+        return {
+          ...state,
+          opinionReaction: {
+            opinionId: action.payload.opinionId,
+            reaction: action.payload.reaction,
+            commented: Boolean(action.payload.comment),
+          },
+        };
+      });
+    };
 
-          if (action.payload.reaction === OpinionReaction.Agree) {
-            activeOpinion.formattedAgreed = formatStatisticNumber(activeOpinion.agreed + 1);
-            activeOpinion.agreedWith = true;
-          } else {
-            // Assume disagreed
-            activeOpinion.formattedDisagreed = formatStatisticNumber(activeOpinion.disagreed + 1);
-            activeOpinion.disagreedWith = true;
-          }
+    if (optimisticStatisticUpdate) updateOpinionStatistic(); // Used for reactions without comments (optimistic UI updated statistic reflection)
 
-          if (action.payload.comment) {
-            activeOpinion.formattedComments = formatStatisticNumber(activeOpinion.comments + 1);
-            activeOpinion.commented = true;
-          }
+    return this.opinionService
+      .reactToOpinion({
+        opinionId,
+        reaction,
+        comment,
+      })
+      .pipe(
+        map((result) => {
+          if (!result.data?.reactToOpinion?.success) return throwError('');
 
-          return {
-            ...state,
-            opinions: [...state.opinions.slice(0, state.opinions.length - 1), activeOpinion],
-          };
-        });
+          if (!optimisticStatisticUpdate) updateOpinionStatistic(); // Used for reactions with comments (non-optimistic/post factum UI)
 
-        return result;
-      }),
-    );
+          return result;
+        }),
+      );
   }
 }

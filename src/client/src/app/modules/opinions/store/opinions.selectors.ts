@@ -19,4 +19,8 @@ export class OpinionsSelectors {
     // Where state.opinions[state.opinions.length - 1] is considered activeOpinion
     return state.opinions[state.opinions.length - 1];
   });
+
+  public static opinionReaction = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.opinionReaction;
+  });
 }

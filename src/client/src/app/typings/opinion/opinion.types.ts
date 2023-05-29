@@ -4,7 +4,4 @@ export type CarouselOpinion = Opinion & {
   formattedAgreed: string;
   formattedDisagreed: string;
   formattedComments: string;
-  agreedWith: boolean;
-  disagreedWith: boolean;
-  commented: boolean; // Whether current user left a comment under opinion
 };

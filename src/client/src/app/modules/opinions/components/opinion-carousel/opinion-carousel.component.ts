@@ -63,6 +63,7 @@ export class OpinionCarouselComponent {
         opinionId,
         reaction,
         comment: null,
+        optimisticStatisticUpdate: true,
       }),
     );
   }

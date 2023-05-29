@@ -80,6 +80,7 @@ export class CommentDialogComponent implements Destroyable {
         opinionId,
         reaction: this.data.reaction,
         comment: this.commentControl.value || null,
+        optimisticStatisticUpdate: false,
       }),
     );
   }

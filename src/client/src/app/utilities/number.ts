@@ -60,3 +60,12 @@ export const formatStatisticNumber = (value: number): string => {
 
   return formattedStatistic;
 };
+
+console.log(
+  formatStatisticNumber(999), // expected 999
+  formatStatisticNumber(1000), // expected 1k
+  formatStatisticNumber(1001), // expected 1k
+  formatStatisticNumber(1099), // expected 1k
+  formatStatisticNumber(1100), // expected 1,1k
+  formatStatisticNumber(1999), // expected 1,9k
+);

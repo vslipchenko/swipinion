@@ -20,5 +20,5 @@ export class RemoveTopMostOpinion {
 export class ReactToUserOpinion {
   public static readonly type = '[Opinions] ReactToUserOpinion';
 
-  public constructor(public payload: ReactToOpinion) {}
+  public constructor(public payload: ReactToOpinion & {optimisticStatisticUpdate: boolean}) {}
 }

@@ -1,5 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
+import {Subject, takeUntil} from 'rxjs';
+import {Store} from '@ngxs/store';
+import {Destroyable} from '~app/typings/component/component.interfaces';
 
 @Component({
   selector: 'app-opinion-card',
@@ -7,7 +11,7 @@ import {OpinionType} from '~app/typings/opinion/opinion.enums';
   styleUrls: ['./opinion-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionCardComponent implements OnInit {
+export class OpinionCardComponent implements OnInit, Destroyable {
   @Input() public id = '';
   @Input() public username = '';
   @Input() public type = OpinionType.Text;
@@ -16,14 +20,35 @@ export class OpinionCardComponent implements OnInit {
   @Input() public agreed = '';
   @Input() public disagreed = '';
   @Input() public comments = '';
-  @Input() public agreedWith = false;
-  @Input() public disagreedWith = false;
-  @Input() public commented = false;
   @Input() public tags: Array<string> = [];
+
+  public readonly destroy$ = new Subject<void>();
 
   protected textContent = false;
   protected textBackground = false;
   protected backgroundUrl = '';
+  protected updateStatistic = new Subject<{
+    reaction: OpinionReaction;
+    commented: boolean;
+    agreed: number;
+    disagreed: number;
+    comments: number;
+  }>();
+
+  // private readonly activeOpinion$!: Observable<CarouselOpinion>;
+
+  public constructor(private readonly store: Store) {
+    this.store
+      .select(OpinionsSelectors.opinionReaction)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (this.id !== value.opinionId) return;
+
+        const {agreed, disagreed, comments} = this.store.selectSnapshot(OpinionsSelectors.activeOpinion);
+
+        this.updateStatistic.next({reaction: value.reaction, commented: value.commented, agreed, disagreed, comments});
+      });
+  }
 
   public ngOnInit(): void {
     if (this.body || this.tags.length) this.textContent = true;
@@ -34,5 +59,10 @@ export class OpinionCardComponent implements OnInit {
       // assume OpinionType = Text
       this.textBackground = true;
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
