@@ -1,11 +1,35 @@
-@use 'media';
+@use 'variables' as var;
 
-.image {
-  @include media.zero-small {
-    height: 50px;
+.dot {
+  height: 5vh; // Make use of responsive units
+  width: 5vh;
+  border-radius: 50%;
+  transition: margin-top .5s;
+  background-color: var.$color-primary;
+  animation: colorAnimation 1.2s infinite alternate;
+}
+
+.dot:hover {
+  margin-top: -#{var.$unit-2};
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+@keyframes colorAnimation {
+  70% {
+    background-color: var.$color-primary;
   }
-
-  @include media.above-small {
-    height: 70px;
+  100% {
+    background-color: var.$color-accent;
   }
 }
