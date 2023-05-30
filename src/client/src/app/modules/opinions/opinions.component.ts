@@ -4,7 +4,11 @@ import {BehaviorSubject, debounceTime, fromEvent, Observable, Subject, takeUntil
 import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
-import {FetchGeneralOpinions, SetContainerSizes} from '~app/modules/opinions/store/opinions.actions';
+import {
+  FetchGeneralOpinions,
+  SetContainerSizes,
+  TogglePrefetchInProgress,
+} from '~app/modules/opinions/store/opinions.actions';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
@@ -35,6 +39,8 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
   ) {
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchGeneralOpinions)).subscribe(() => {
       this.loading$.next(false);
+      // Should do no harm when opinions fetched the first time in ngOnInit
+      this.store.dispatch(new TogglePrefetchInProgress(false));
     });
 
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;
@@ -58,6 +64,22 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
     this.loading$.complete();
   }
 
+  protected prefetchOpinions(): void {
+    this.store.dispatch(new TogglePrefetchInProgress(true));
+
+    const canLoadMore = this.store.selectSnapshot(OpinionsSelectors.canLoadMore);
+    // TODO fix flickering loading spinner overlay when prefetching
+    if (canLoadMore) {
+      // Load old ones
+      const edgeId = this.store.selectSnapshot(OpinionsSelectors.edgeOpinionId);
+
+      this.fetchOpinions(edgeId);
+    } else {
+      // Try to prefetch new ones
+      this.fetchOpinions();
+    }
+  }
+
   private setContainerSizes(): void {
     this.store.dispatch(
       new SetContainerSizes({
@@ -71,5 +93,6 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
     this.loading$.next(true);
 
     if (this.view === OpinionsView.General) this.store.dispatch(new FetchGeneralOpinions(edgeId));
+    // TODO implement logic for individual (user opinions) view
   }
 }

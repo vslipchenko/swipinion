@@ -1,9 +1,19 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Input, QueryList, ViewChildren} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import {OpinionCardComponent} from '~app/modules/opinions/components/opinion-card/opinion-card.component';
 import {
   OPINION_CARD_HORIZONTAL_ANIMATION_DURATION,
   OPINION_CARD_MAX_WIDTH,
   OPINION_CARD_VERTICAL_ANIMATION_DURATION,
+  OPINION_LIMIT_BEFORE_PREFETCH,
 } from '~app/constants/opinions';
 import {OpinionCardSlideDirection, OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {Store} from '@ngxs/store';
@@ -27,6 +37,7 @@ import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors'
 })
 export class OpinionCarouselComponent {
   @Input() public data: Array<CarouselOpinion> = [];
+  @Output() public prefetchOpinions = new EventEmitter<void>();
 
   @ViewChildren(OpinionCardComponent, {read: ElementRef}) private readonly cards!: QueryList<ElementRef>;
 
@@ -144,6 +155,12 @@ export class OpinionCarouselComponent {
   private slideAnimationFinished(): void {
     this.store.dispatch(new RemoveTopMostOpinion());
     this.store.dispatch(new ToggleReactionInProgress(false));
+
+    if (this.data.length <= OPINION_LIMIT_BEFORE_PREFETCH) {
+      const prefetchInProgress = this.store.selectSnapshot(OpinionsSelectors.prefetchInProgress);
+
+      if (!prefetchInProgress) this.prefetchOpinions.next();
+    }
   }
 
   // Helps to prevent user actions while processing current (ongoing) reaction

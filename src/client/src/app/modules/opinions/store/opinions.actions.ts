@@ -28,3 +28,9 @@ export class ToggleReactionInProgress {
 
   public constructor(public payload: boolean) {}
 }
+
+export class TogglePrefetchInProgress {
+  public static readonly type = '[Opinions] TogglePrefetchInProgress';
+
+  public constructor(public payload: boolean) {}
+}

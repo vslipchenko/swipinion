@@ -1,4 +1,4 @@
-import {Action, State, StateContext, StateToken} from '@ngxs/store';
+import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {map, Observable, tap, throwError} from 'rxjs';
 import {
@@ -6,6 +6,7 @@ import {
   ReactToUserOpinion,
   RemoveTopMostOpinion,
   SetContainerSizes,
+  TogglePrefetchInProgress,
   ToggleReactionInProgress,
 } from '~app/modules/opinions/store/opinions.actions';
 import {OpinionService} from '~app/services/opinion/opinion.service';
@@ -16,6 +17,7 @@ import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces'
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {formatStatisticNumber} from '~app/utilities/number';
 import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
+import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 
 export interface OpinionsStateModel {
   opinions: Array<CarouselOpinion>;
@@ -23,6 +25,7 @@ export interface OpinionsStateModel {
   //activeOpinion: CarouselOpinion; // Scrolled through and reached last most opinion
   containerSizes: OpinionsContainerSizes;
   reactionInProgress: boolean;
+  prefetchInProgress: boolean;
   canLoadMore: boolean;
 }
 
@@ -51,12 +54,13 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
     opinionReaction: {opinionId: '', reaction: OpinionReaction.Agree, commented: false},
     containerSizes: {width: 0, height: 0},
     reactionInProgress: false, // Fixes issue with duplicate id entry if quick spamming reactions
+    prefetchInProgress: false,
     canLoadMore: false,
   },
 })
 @Injectable()
 export class OpinionsState {
-  public constructor(private readonly opinionService: OpinionService) {}
+  public constructor(private readonly opinionService: OpinionService, private readonly store: Store) {}
 
   @Action(FetchGeneralOpinions)
   private fetchGeneralOpinions(
@@ -66,24 +70,36 @@ export class OpinionsState {
     return this.opinionService.getGeneralOpinions(action.payload).pipe(
       tap(({data}) => {
         const opinions = data.getGeneralOpinions
-          ? data.getGeneralOpinions.map((opinion) => ({
+          ? data.getGeneralOpinions.reverse().map((opinion) => ({
               ...opinion,
               tags: opinion.tags[0] ? opinion.tags : [],
               formattedAgreed: formatStatisticNumber(opinion.agreed),
               formattedDisagreed: formatStatisticNumber(opinion.disagreed),
               formattedComments: formatStatisticNumber(opinion.comments),
-              agreedWith: false,
-              disagreedWith: false,
-              commented: false,
             }))
           : [];
 
-        context.setState((state) => ({
-          ...state,
-          opinions: action.payload ? [...state.opinions, ...opinions] : opinions,
-          //activeOpinion: action.payload ? state.activeOpinion : opinions[opinions.length - 1], // Set active opinion on page enter
-          canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
-        }));
+        const updateState = (): void => {
+          context.setState((state) => ({
+            ...state,
+            opinions: state.opinions.length ? [...opinions, ...state.opinions] : opinions,
+            //activeOpinion: action.payload ? state.activeOpinion : opinions[opinions.length - 1], // Set active opinion on page enter
+            canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
+          }));
+        };
+
+        if (opinions.length) {
+          // Check for opinions.length to avoid useless subscription
+          const {reactionInProgress} = context.getState();
+
+          if (reactionInProgress) {
+            // Wait until animation is completed to avoid UI re-rendering amidst animation
+            this.store.selectOnce(OpinionsSelectors.reactionInProgress).subscribe(updateState); // Assume reactionInProgress is false once emits
+            return;
+          }
+        }
+
+        updateState();
       }),
     );
   }
@@ -153,6 +169,14 @@ export class OpinionsState {
     context.setState((state) => ({
       ...state,
       reactionInProgress: action.payload,
+    }));
+  }
+
+  @Action(TogglePrefetchInProgress)
+  private togglePrefetchInProgress(context: StateContext<OpinionsStateModel>, action: TogglePrefetchInProgress): void {
+    context.setState((state) => ({
+      ...state,
+      prefetchInProgress: action.payload,
     }));
   }
 }

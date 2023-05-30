@@ -11,6 +11,14 @@ export class OpinionsSelectors {
     return state.opinions;
   });
 
+  public static canLoadMore = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.canLoadMore;
+  });
+
+  public static edgeOpinionId = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.opinions[0]?.id;
+  });
+
   public static containerSizes = createSelector([OpinionsState], (state: OpinionsStateModel) => {
     return state.containerSizes;
   });
@@ -26,5 +34,9 @@ export class OpinionsSelectors {
 
   public static reactionInProgress = createSelector([OpinionsState], (state: OpinionsStateModel) => {
     return state.reactionInProgress;
+  });
+
+  public static prefetchInProgress = createSelector([OpinionsState], (state: OpinionsStateModel) => {
+    return state.prefetchInProgress;
   });
 }

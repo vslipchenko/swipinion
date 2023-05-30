@@ -52,7 +52,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
         )
       )
     GROUP BY user_opinions.id, users.username, reactions.agreed, reactions.disagreed, reactions.comments
-    ORDER BY user_opinions.id ASC
+    ORDER BY user_opinions.id DESC
     LIMIT $2
   `,
   values: edgeId ? [userId, OPINION_FETCH_LIMIT, edgeId] : [userId, OPINION_FETCH_LIMIT],
@@ -90,7 +90,7 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
       reactions.agreed,
       reactions.disagreed,
       reactions.comments
-    ORDER BY user_opinions.id ASC -- Show fresh opinions each time
+    ORDER BY user_opinions.id DESC -- Show fresh opinions each time
     LIMIT 2 -- No need for more as there is auth guard that would prevent unauthorized user actions
   `,
 });
