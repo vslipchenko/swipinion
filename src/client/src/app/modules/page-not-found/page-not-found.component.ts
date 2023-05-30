@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding} from '@angular/core';
 import {ShowMessagesService} from '~app/services/show-messages/show-messages.service';
 import {NavigationEnd, Router} from '@angular/router';
 import {Destroyable} from '~app/typings/component/component.interfaces';
@@ -11,6 +11,8 @@ import {Subject, takeUntil} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageNotFoundComponent implements Destroyable {
+  @HostBinding('class') private readonly class = 'relative h-100';
+
   public readonly destroy$ = new Subject<void>();
 
   public constructor(private readonly showMessagesService: ShowMessagesService, private readonly router: Router) {
