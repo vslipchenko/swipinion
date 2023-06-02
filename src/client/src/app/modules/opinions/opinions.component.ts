@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, debounceTime, fromEvent, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable, Subject, takeUntil} from 'rxjs';
 import {OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
@@ -28,6 +28,8 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly loading$ = new BehaviorSubject(true);
   public readonly destroy$ = new Subject<void>();
 
+  protected readonly showLoading$!: Observable<boolean>;
+
   private readonly view: OpinionsView;
 
   public constructor(
@@ -37,6 +39,21 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
     private readonly actions$: Actions,
     private readonly elementRef: ElementRef,
   ) {
+    this.showLoading$ = combineLatest(
+      this.loading$,
+      this.opinions$,
+      this.store.select(OpinionsSelectors.prefetchInProgress),
+    ).pipe(
+      takeUntil(this.destroy$),
+      map(([loading, opinions, prefetchInProgress]) => {
+        if (opinions.length) return false; // If there is opinions left don't show loading spinner
+
+        if (prefetchInProgress) return true; // If prefetch query is still in progress - show loading spinner
+
+        return loading; // Otherwise show loading spinner based on its current value
+      }),
+    );
+
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchGeneralOpinions)).subscribe(() => {
       this.loading$.next(false);
       // Should do no harm when opinions fetched the first time in ngOnInit

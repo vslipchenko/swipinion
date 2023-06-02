@@ -1,5 +1,5 @@
 <!--backgroundThumbnail="https://upload.wikimedia.org/wikipedia/commons/0/0f/Eiffel_Tower_Vertical.JPG"-->
-<app-progress-spinner *ngIf="loading$ | async; else content"
+<app-progress-spinner *ngIf="showLoading$ | async; else content"
                       class="d-flex jc-center ai-center f-1 bg-dark bt-transparent"></app-progress-spinner>
 
 <ng-template #content>
