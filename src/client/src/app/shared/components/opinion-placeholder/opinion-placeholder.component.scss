@@ -1,10 +1,10 @@
 @use 'variables' as var;
 
 .dot {
-  height: 5vh; // Make use of responsive units
-  width: 5vh;
+  height: 4vh; // Make use of responsive units
+  width: 4vh;
   border-radius: 50%;
-  transition: margin-top .5s;
+  transition: margin-top .3s;
   background-color: var.$color-primary;
   animation: colorAnimation 1.2s infinite alternate;
 }

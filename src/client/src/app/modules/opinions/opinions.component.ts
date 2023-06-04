@@ -26,6 +26,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
   public readonly opinions$!: Observable<Array<Opinion>>;
 
   public readonly loading$ = new BehaviorSubject(true);
+  public readonly polling$ = new BehaviorSubject(false);
   public readonly destroy$ = new Subject<void>();
 
   protected readonly showLoading$!: Observable<boolean>;
@@ -56,6 +57,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
 
     this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchGeneralOpinions)).subscribe(() => {
       this.loading$.next(false);
+      this.polling$.next(false);
       // Should do no harm when opinions fetched the first time in ngOnInit
       this.store.dispatch(new TogglePrefetchInProgress(false));
     });
@@ -90,11 +92,17 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       // Load old ones
       const edgeId = this.store.selectSnapshot(OpinionsSelectors.edgeOpinionId);
 
-      this.fetchOpinions(edgeId);
+      this.fetchOpinions({edgeId});
     } else {
       // Try to prefetch new ones
       this.fetchOpinions();
     }
+  }
+
+  protected pollNewContent(): void {
+    if (this.polling$.value) return; // Polling in progress - skip polling
+
+    this.fetchOpinions({polling: true});
   }
 
   private setContainerSizes(): void {
@@ -106,8 +114,8 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
     );
   }
 
-  private fetchOpinions(edgeId?: string): void {
-    this.loading$.next(true);
+  private fetchOpinions({edgeId, polling}: {edgeId?: string; polling?: boolean} = {}): void {
+    polling ? this.polling$.next(true) : this.loading$.next(true);
 
     if (this.view === OpinionsView.General) this.store.dispatch(new FetchGeneralOpinions(edgeId));
     // TODO implement logic for individual (user opinions) view
