@@ -35,6 +35,8 @@ const followUser = async (
 
   if (authenticationError) return authenticationError;
 
+  if (userId === tokenData.userId) return null; // Disallow self-follow
+
   const result = await db.query(queryFollowUser(userId, tokenData.userId));
 
   if (!result.rowCount) return null;
