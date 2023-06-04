@@ -18,6 +18,8 @@ import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.comp
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
+import {MatLegacyMenuModule} from '@angular/material/legacy-menu';
+import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     TextareaComponent,
     ProgressBarComponent,
     ButtonComponent,
+    MatLegacyMenuModule,
+    MenuItemsComponent,
   ],
 })
 export class OpinionsModule {}

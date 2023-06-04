@@ -28,3 +28,7 @@ export interface ReactToOpinion {
 export interface ReactToOpinionMutationResult {
   reactToOpinion: SuccessResponse;
 }
+
+export interface AddOpinionToFavoritesMutationResult {
+  addOpinionToFavorites: SuccessResponse;
+}

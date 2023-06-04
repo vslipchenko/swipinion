@@ -7,3 +7,11 @@ export const REACT_TO_OPINION = gql`
     }
   }
 `;
+
+export const ADD_OPINION_TO_FAVORITES = gql`
+  mutation ($opinionId: String!) {
+    addOpinionToFavorites(opinionId: $opinionId) {
+      success
+    }
+  }
+`;

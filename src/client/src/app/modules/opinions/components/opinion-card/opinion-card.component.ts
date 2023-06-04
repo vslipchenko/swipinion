@@ -4,6 +4,9 @@ import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors'
 import {Subject, takeUntil} from 'rxjs';
 import {Store} from '@ngxs/store';
 import {Destroyable} from '~app/typings/component/component.interfaces';
+import {OpinionMenuItem} from '~app/typings/menu/menu.enums';
+import {MenuItem} from '~app/typings/menu/menu.interfaces';
+import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
 
 @Component({
   selector: 'app-opinion-card',
@@ -35,6 +38,15 @@ export class OpinionCardComponent implements OnInit, Destroyable {
     comments: number;
   }>();
 
+  protected readonly opinionMenuItems = [
+    {
+      id: OpinionMenuItem.AddToFavorites,
+      title: 'Add to Favorites',
+      icon: 'star',
+      click: (): void => this.addToFavorites(),
+    },
+  ] as Array<MenuItem>;
+
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
 
   public constructor(private readonly store: Store) {
@@ -64,5 +76,9 @@ export class OpinionCardComponent implements OnInit, Destroyable {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  protected addToFavorites(): void {
+    this.store.dispatch(new AddOpinionToFavorites(this.id));
   }
 }

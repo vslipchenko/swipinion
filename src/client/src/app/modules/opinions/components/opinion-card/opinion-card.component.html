@@ -16,7 +16,14 @@
         </a>
 
         <!--        <mat-icon>more_horiz</mat-icon>-->
-        <app-icon-button icon="more_horiz" extendClass="card-more-button h-100 br-0 px-1"></app-icon-button>
+        <span>
+          <app-icon-button
+            *ngIf="menuItems.menu"
+            [matMenuTriggerFor]="menuItems.menu"
+            icon="more_horiz" extendClass="card-more-button h-100 br-0 px-1"></app-icon-button>
+
+          <app-menu-items #menuItems [items]="opinionMenuItems"></app-menu-items>
+        </span>
       </div>
 
       <app-opinion-stats-panel class="d-flex bt-transparent" [agreed]="agreed" [disagreed]="disagreed"

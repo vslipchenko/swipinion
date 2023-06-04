@@ -6,3 +6,7 @@ export enum UserNavbarMenuItem {
   Settings,
   Logout,
 }
+
+export enum OpinionMenuItem {
+  AddToFavorites,
+}
