@@ -1,6 +1,6 @@
 import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {map, Observable, tap, throwError} from 'rxjs';
+import {map, Observable, tap} from 'rxjs';
 import {UserNotificationsService} from '~app/services/user-notifications/user-notifications.service';
 import {
   AcceptFollowRequest,
@@ -110,8 +110,8 @@ export class UserNotificationsState {
     action: AcceptFollowRequest,
   ): Observable<unknown> {
     return this.followerService.acceptFollowRequest(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.acceptFollowRequest?.success) return throwError('');
+      tap((result) => {
+        if (!result.data?.acceptFollowRequest.success) throw new Error();
 
         context.setState((state) => ({
           ...state,
@@ -119,8 +119,6 @@ export class UserNotificationsState {
             (notification) => notification.follower_record_id !== action.payload,
           ),
         }));
-
-        return result;
       }),
     );
   }
@@ -131,8 +129,8 @@ export class UserNotificationsState {
     action: DeclineFollowRequest,
   ): Observable<unknown> {
     return this.followerService.declineFollowRequest(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.declineFollowRequest?.success) return throwError('');
+      tap((result) => {
+        if (!result.data?.declineFollowRequest?.success) throw new Error();
 
         context.setState((state) => ({
           ...state,
@@ -140,8 +138,6 @@ export class UserNotificationsState {
             (notification) => notification.follower_record_id !== action.payload,
           ),
         }));
-
-        return result;
       }),
     );
   }
@@ -152,15 +148,13 @@ export class UserNotificationsState {
     action: DeleteNotification,
   ): Observable<unknown> {
     return this.userNotificationsService.deleteNotification(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.deleteNotification?.success) return throwError('');
+      tap((result) => {
+        if (!result.data?.deleteNotification.success) throw new Error();
 
         context.setState((state) => ({
           ...state,
           notifications: state.notifications.filter((notification) => notification.id !== action.payload),
         }));
-
-        return result;
       }),
     );
   }

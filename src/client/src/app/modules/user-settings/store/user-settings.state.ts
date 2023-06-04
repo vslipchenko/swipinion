@@ -2,7 +2,7 @@ import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {GetUserSettingsQueryResult, UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
-import {map, Observable, tap, throwError} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {FetchProfileSettings, UpdateProfileSettings} from '~app/modules/user-settings/store/user-settings.actions';
 import {UserSettingsService} from '~app/services/user-settings/user-settings.service';
@@ -55,8 +55,8 @@ export class UserSettingsState {
     action: UpdateProfileSettings,
   ): Observable<unknown> {
     return this.userSettingsService.updateUserSettings(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.updateUserSettings?.success) return throwError('');
+      tap((result) => {
+        if (!result.data?.updateUserSettings.success) throw new Error();
 
         context.setState((state) => ({
           ...state,
@@ -65,8 +65,6 @@ export class UserSettingsState {
             ...action.payload,
           },
         }));
-
-        return result;
       }),
     );
   }

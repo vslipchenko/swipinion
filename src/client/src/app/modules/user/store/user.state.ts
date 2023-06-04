@@ -16,7 +16,7 @@ import {
   UpdateResolvedUserData,
 } from '~app/modules/user/store/user.actions';
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
-import {map, Observable, tap, throwError} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {USER_OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
@@ -168,15 +168,13 @@ export class UserState {
   @Action(UnfollowUser)
   private unfollowUser(context: StateContext<UserStateModel>, action: UnfollowUser): Observable<unknown> {
     return this.followerService.unfollowUser(action.payload).pipe(
-      map((result) => {
-        if (!result.data?.unfollowUser?.success) return throwError('');
+      tap((result) => {
+        if (!result.data?.unfollowUser.success) throw new Error();
 
         context.setState((state) => ({
           ...state,
           following: false,
         }));
-
-        return result;
       }),
     );
   }

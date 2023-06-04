@@ -1,7 +1,8 @@
 import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
-import {map, Observable, tap, throwError} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {
+  AddOpinionToFavorites,
   FetchGeneralOpinions,
   ReactToUserOpinion,
   RemoveTopMostOpinion,
@@ -154,12 +155,10 @@ export class OpinionsState {
         comment,
       })
       .pipe(
-        map((result) => {
-          if (!result.data?.reactToOpinion?.success) return throwError('');
+        tap((result) => {
+          if (!result.data?.reactToOpinion.success) throw new Error();
 
           if (!optimisticStatisticUpdate) updateOpinionStatistic(); // Used for reactions with comments (non-optimistic/post factum UI)
-
-          return result;
         }),
       );
   }
@@ -178,5 +177,17 @@ export class OpinionsState {
       ...state,
       prefetchInProgress: action.payload,
     }));
+  }
+
+  @Action(AddOpinionToFavorites)
+  private addOpinionToFavorites(
+    _: StateContext<OpinionsStateModel>,
+    action: AddOpinionToFavorites,
+  ): Observable<unknown> {
+    return this.opinionService.addOpinionToFavorites(action.payload).pipe(
+      tap(({data}) => {
+        if (!data?.addOpinionToFavorites.success) throw new Error();
+      }),
+    );
   }
 }
