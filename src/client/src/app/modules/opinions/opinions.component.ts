@@ -1,10 +1,11 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable, Subject, takeUntil} from 'rxjs';
-import {OpinionsView} from '~app/typings/opinion/opinion.enums';
+import {AddOpinionToFavoritesFailReason, OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
+  AddOpinionToFavorites,
   FetchGeneralOpinions,
   SetContainerSizes,
   TogglePrefetchInProgress,
@@ -12,6 +13,8 @@ import {
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {Opinion} from '~app/typings/opinion/opinion.interfaces';
+import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opinion-fail-snackbar/opinion-fail-snackbar.component';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 
 @Component({
   selector: 'app-opinions',
@@ -39,6 +42,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
     private readonly store: Store,
     private readonly actions$: Actions,
     private readonly elementRef: ElementRef,
+    private readonly snackbar: MatSnackBar,
   ) {
     this.showLoading$ = combineLatest(
       this.loading$,
@@ -60,6 +64,28 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       this.polling$.next(false);
       // Should do no harm when opinions fetched the first time in ngOnInit
       this.store.dispatch(new TogglePrefetchInProgress(false));
+    });
+    // Has to be handled here as it is not subject for frequent page UI changes
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(AddOpinionToFavorites)).subscribe((completion) => {
+      if (completion.result.error?.message === AddOpinionToFavoritesFailReason.UniqueViolation) {
+        // Show Opinion is already added to Favorites error
+        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is already added to Favorites`,
+          panelClass: 'snackbar-error',
+        });
+      } else if (completion.result.error) {
+        // Show generic error
+        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+          data: `Something went wrong adding <span class="fw-medium">${completion.action.payload.username}</span>'s opinion to Favorites`,
+          panelClass: 'snackbar-error',
+        });
+      } else {
+        // Assume success
+        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is successfully added to Favorites`,
+          panelClass: 'snackbar-success',
+        });
+      }
     });
 
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;

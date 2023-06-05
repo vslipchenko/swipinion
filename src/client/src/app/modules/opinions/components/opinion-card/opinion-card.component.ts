@@ -1,14 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Subject, takeUntil} from 'rxjs';
-import {Actions, ofActionCompleted, Store} from '@ngxs/store';
+import {Store} from '@ngxs/store';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionMenuItem} from '~app/typings/menu/menu.enums';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
-import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opinion-fail-snackbar/opinion-fail-snackbar.component';
 
 @Component({
   selector: 'app-opinion-card',
@@ -51,27 +49,7 @@ export class OpinionCardComponent implements OnInit, Destroyable {
 
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
 
-  public constructor(
-    private readonly store: Store,
-    private readonly actions$: Actions,
-    private readonly snackbar: MatSnackBar,
-  ) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(AddOpinionToFavorites)).subscribe((completion) => {
-      if (completion.result.error?.message === AddOpinionToFavoritesFailReason.UniqueViolation) {
-        // Show Opinion is already added to Favorites error
-        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was already added to Favorites`,
-          panelClass: 'snackbar-error',
-        });
-      } else if (completion.result.error) {
-        // Show generic error
-        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `Something went wrong adding <span class="fw-medium">${completion.action.payload.username}</span>'s opinion to Favorites`,
-          panelClass: 'snackbar-error',
-        });
-      }
-    });
-
+  public constructor(private readonly store: Store) {
     this.store
       .select(OpinionsSelectors.opinionReaction)
       .pipe(takeUntil(this.destroy$))
