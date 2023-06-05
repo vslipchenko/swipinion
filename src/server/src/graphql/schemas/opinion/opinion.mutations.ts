@@ -6,6 +6,7 @@ import {ReactToOpinion} from '../../../typings/opinion/opinion.interfaces';
 import {reactToOpinionValidator} from '../../../validators/opinion';
 import {queryAddOpinionToFavorites, queryReactToOpinion} from '../../../data/queries/opinion';
 import {bigintValidator} from '../../../validators/shared';
+import {PostgresErrorCode} from '../../../typings/postgres/postgres.enums';
 
 export const opinionMutationTypeDefinitions = gql`
   type Mutation {
@@ -45,9 +46,16 @@ const addOpinionToFavorites = async (
 
   if (authenticationError) return authenticationError;
 
-  const result = await db.query(queryAddOpinionToFavorites(opinionId, tokenData.userId));
+  try {
+    await db.query(queryAddOpinionToFavorites(opinionId, tokenData.userId));
+    // Assume query completed successfully
+    return {success: true};
+  } catch (error: any) {
+    // Handle duplicate error when trying to add the same opinion to favorites again
+    if (error.code === PostgresErrorCode.UniqueViolation) return {success: false};
 
-  return {success: Boolean(result.rowCount)};
+    return null; // Other error (is not handled on the frontend)
+  }
 };
 
 export const opinionMutationResolvers = {

@@ -22,3 +22,8 @@ export enum OpinionReaction {
   Agree = 1,
   Disagree,
 }
+
+export enum AddOpinionToFavoritesFailReason {
+  UniqueViolation = '1',
+  Other = '2'
+}

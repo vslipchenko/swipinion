@@ -38,5 +38,5 @@ export class TogglePrefetchInProgress {
 export class AddOpinionToFavorites {
   public static readonly type = '[Opinions] AddOpinionToFavorites';
 
-  public constructor(public payload: string) {}
+  public constructor(public payload: {opinionId: string; username: string}) {}
 }
