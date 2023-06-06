@@ -1,12 +1,13 @@
 import {gql} from 'apollo-server-core';
 import {db} from '../../../data';
-import {authenticationGuard} from '../../../utilities/guard';
+import {authenticationGuard, expiredAccessTokenError} from '../../../utilities/guard';
 import {
   queryGeneralOpinionsForAuthorizedUser,
   queryGeneralOpinionsForUnauthorizedUser,
 } from '../../../data/queries/opinion';
 import {QueryResult, QueryResultRow} from 'pg';
 import {bigintValidator} from '../../../validators/shared';
+import {ApolloError} from 'apollo-server-fastify';
 
 export const opinionQueryTypeDefinitions = gql`
   type Query {
@@ -23,12 +24,14 @@ const getGeneralOpinions = async (
   _: unknown,
   {edgeId}: {edgeId: string},
   {accessToken}: {accessToken: string},
-): Promise<Array<QueryResultRow> | null> => {
+): Promise<Array<QueryResultRow> | ApolloError | null> => {
   const {error} = bigintValidator.validate(edgeId);
 
   if (error) return null;
 
-  const {tokenData} = authenticationGuard(accessToken);
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+  // This fixes issues for authed users with expired token when they might receive opinions returned by queryGeneralOpinionsForUnauthorizedUser
+  if (expiredAccessTokenError(authenticationError)) return authenticationError;
 
   let result: QueryResult;
 

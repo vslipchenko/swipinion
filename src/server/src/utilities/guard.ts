@@ -33,3 +33,6 @@ export const authenticationGuard = (accessToken: string): AuthenticationGuardRes
     } as AuthenticationGuardResult;
   }
 };
+
+export const expiredAccessTokenError = (error: ApolloError | undefined): boolean =>
+  error?.extensions.code === AuthenticationErrorCode.ExpiredAccessToken;
