@@ -40,6 +40,7 @@ export class OpinionCardComponent implements OnInit, Destroyable {
 
   protected readonly opinionMenuItems = [
     {
+      // TODO wrap in Auth Guard
       id: OpinionMenuItem.AddToFavorites,
       title: 'Add to Favorites',
       icon: 'star',
@@ -54,7 +55,9 @@ export class OpinionCardComponent implements OnInit, Destroyable {
       .select(OpinionsSelectors.opinionReaction)
       .pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        if (this.id !== value.opinionId) return;
+        if (this.id !== value.opinionId) return; // Ignore if not active opinion
+
+        if (value.reaction === OpinionReaction.Skip) return; // Skip does not impact opinion's statistic
 
         const {agreed, disagreed, comments} = this.store.selectSnapshot(OpinionsSelectors.activeOpinion);
 

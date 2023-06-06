@@ -21,9 +21,10 @@ export enum OpinionCardSlideDirection {
 export enum OpinionReaction {
   Agree = 1,
   Disagree,
+  Skip,
 }
 
 export enum AddOpinionToFavoritesFailReason {
   UniqueViolation = '1',
-  Other = '2'
+  Other = '2',
 }

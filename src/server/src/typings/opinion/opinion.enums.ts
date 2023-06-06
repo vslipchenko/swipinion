@@ -11,4 +11,5 @@ export enum OpinionType {
 export enum OpinionReaction {
   Agree = 1,
   Disagree,
+  Skip,
 }

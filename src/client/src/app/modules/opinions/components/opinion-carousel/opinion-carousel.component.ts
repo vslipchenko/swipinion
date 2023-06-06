@@ -28,6 +28,7 @@ import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {takeUntil} from 'rxjs';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -46,10 +47,14 @@ export class OpinionCarouselComponent {
     method: this.skip.bind(this),
   };
 
-  public constructor(private readonly store: Store, private readonly dialog: MatDialog) {}
+  public constructor(
+    private readonly store: Store,
+    private readonly dialog: MatDialog,
+    private readonly authenticationService: AuthenticationService,
+  ) {}
 
   protected agree(): void {
-    // Ghost-locking
+    // Ghost-locking UI
     if (this.reactionInProgress) return;
 
     this.store.dispatch(new ToggleReactionInProgress(true));
@@ -58,6 +63,7 @@ export class OpinionCarouselComponent {
   }
 
   protected disagree(): void {
+    // Ghost-locking UI
     if (this.reactionInProgress) return;
 
     this.store.dispatch(new ToggleReactionInProgress(true));
@@ -82,6 +88,8 @@ export class OpinionCarouselComponent {
 
     this.store.dispatch(new ToggleReactionInProgress(true));
     this.swipeHorizontally(OpinionCardSlideDirection.Top);
+    // First most skip is not a subject for auth guarding, therefore auth condition has to be checked manually
+    if (this.authenticationService.authenticated) this.reactToOpinion(OpinionReaction.Skip);
   }
 
   private reactToOpinion(reaction: OpinionReaction): void {
@@ -155,6 +163,8 @@ export class OpinionCarouselComponent {
   private slideAnimationFinished(): void {
     this.store.dispatch(new RemoveTopMostOpinion());
     this.store.dispatch(new ToggleReactionInProgress(false));
+
+    if (!this.authenticationService.authenticated) return; // Skip prefetch step for unauthenticated users
 
     if (this.data.length <= OPINION_LIMIT_BEFORE_PREFETCH) {
       const prefetchInProgress = this.store.selectSnapshot(OpinionsSelectors.prefetchInProgress);
