@@ -19,6 +19,7 @@ import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {formatStatisticNumber} from '~app/utilities/number';
 import {AddOpinionToFavoritesFailReason, OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
+import {differenceBy} from 'lodash-es';
 
 export interface OpinionsStateModel {
   opinions: Array<CarouselOpinion>;
@@ -52,7 +53,7 @@ const OPINIONS_STATE = new StateToken<OpinionsStateModel>('opinions');
     //   commented: false,
     //   tags: [],
     // },
-    opinionReaction: {opinionId: '', reaction: OpinionReaction.Agree, commented: false},
+    opinionReaction: {opinionId: '', reaction: OpinionReaction.Skip, commented: false},
     containerSizes: {width: 0, height: 0},
     reactionInProgress: false, // Fixes issue with duplicate id entry if quick spamming reactions
     prefetchInProgress: false,
@@ -70,8 +71,9 @@ export class OpinionsState {
   ): Observable<ApolloQueryResult<GetGeneralOpinionsQueryResult>> {
     return this.opinionService.getGeneralOpinions(action.payload).pipe(
       tap(({data}) => {
-        const opinions = data.getGeneralOpinions
-          ? data.getGeneralOpinions.reverse().map((opinion) => ({
+        let opinions = data.getGeneralOpinions?.length
+          ? // Reverse data to show cards in order from the highest id to the smallest id
+            data.getGeneralOpinions.reverse().map((opinion) => ({
               ...opinion,
               tags: opinion.tags[0] ? opinion.tags : [],
               formattedAgreed: formatStatisticNumber(opinion.agreed),
@@ -81,12 +83,49 @@ export class OpinionsState {
           : [];
 
         const updateState = (): void => {
-          context.setState((state) => ({
-            ...state,
-            opinions: state.opinions.length ? [...opinions, ...state.opinions] : opinions,
-            //activeOpinion: action.payload ? state.activeOpinion : opinions[opinions.length - 1], // Set active opinion on page enter
-            canLoadMore: opinions.length === OPINION_FETCH_LIMIT,
-          }));
+          context.setState((state) => {
+            const canLoadMore = opinions.length === OPINION_FETCH_LIMIT;
+
+            if (state.opinions.length) {
+              if (opinions.length) {
+                // const mergedOpinions = [...opinions, ...state.opinions];
+
+                if (state.canLoadMore) {
+                  // Assume nextOpinions does not have duplicates (assign as is)
+                  // Prepended opinions are distinct from state.opinions
+                  opinions = [...opinions, ...state.opinions];
+                } else {
+                  // Check for duplicates and remove in a case if some opinions already on the UI (state.opinions.length)
+                  // It happens when there is no more opinions to load (canLoadMore = false)
+                  // And remaining few have not received any user reaction, so the server returns same opinions that remained on the UI
+                  // (as there is no way for it to know what opinions are currently on the UI)
+                  // duplicating existing opinions
+
+                  // Filter to get only distinct opinions
+                  const distinctOpinions = differenceBy(state.opinions, opinions, 'id');
+
+                  if (distinctOpinions.length) {
+                    opinions = [...distinctOpinions, ...state.opinions];
+                  } else {
+                    // Assume state.opinions have not changed assigning same reference
+                    opinions = state.opinions;
+                  }
+                }
+              } else {
+                // Assume state.opinions have not changed
+                return {
+                  ...state,
+                  canLoadMore,
+                };
+              }
+            }
+
+            return {
+              ...state,
+              opinions,
+              canLoadMore,
+            };
+          });
         };
 
         if (opinions.length) {
