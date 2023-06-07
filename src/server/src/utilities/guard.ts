@@ -33,6 +33,7 @@ export const authenticationGuard = (accessToken: string): AuthenticationGuardRes
     } as AuthenticationGuardResult;
   }
 };
-
+// If condition is true and error gets returned it should result in another access token refresh query with
+// another try to fulfill failed request following after (see authentication.interceptor.ts)
 export const expiredAccessTokenError = (error: ApolloError | undefined): boolean =>
   error?.extensions.code === AuthenticationErrorCode.ExpiredAccessToken;
