@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Injector, Input, OnInit} from '@angular/core';
 import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Subject, takeUntil} from 'rxjs';
@@ -7,6 +7,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionMenuItem} from '~app/typings/menu/menu.enums';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
+import {authClickGuard} from '~app/utilities/guard';
 
 @Component({
   selector: 'app-opinion-card',
@@ -44,13 +45,13 @@ export class OpinionCardComponent implements OnInit, Destroyable {
       id: OpinionMenuItem.AddToFavorites,
       title: 'Add to Favorites',
       icon: 'star',
-      click: (): void => this.addToFavorites(),
+      click: authClickGuard(this.addToFavorites.bind(this), this.injector),
     },
   ] as Array<MenuItem>;
 
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
 
-  public constructor(private readonly store: Store) {
+  public constructor(private readonly store: Store, private readonly injector: Injector) {
     this.store
       .select(OpinionsSelectors.opinionReaction)
       .pipe(takeUntil(this.destroy$))

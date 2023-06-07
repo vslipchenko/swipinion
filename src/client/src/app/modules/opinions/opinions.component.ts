@@ -82,7 +82,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       } else {
         // Assume success
         this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is successfully added to Favorites`,
+          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully added to Favorites`,
           panelClass: 'snackbar-success',
         });
       }
