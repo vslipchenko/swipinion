@@ -3,7 +3,6 @@ import {db} from '../../../data';
 import {queryUserSettings} from '../../../data/queries/user-settings';
 import {authenticationGuard} from '../../../utilities/guard';
 import {bigintValidator} from '../../../validators/shared';
-import {AccessTokenData} from '../../../typings/authentication/authentication.interfaces';
 import {QueryResultRow} from 'pg';
 
 export const userSettingsQueryTypeDefinitions = gql`
@@ -17,21 +16,19 @@ const userSettings = async (
   {userId}: {userId: string},
   {accessToken}: {accessToken: string},
 ): Promise<QueryResultRow | ApolloError | null> => {
-  let tokenData = {} as AccessTokenData;
-
   if (userId) {
     const {error} = bigintValidator.validate(userId);
 
     if (error) return null;
   } else {
-    const {error, tokenData: data} = authenticationGuard(accessToken);
-
-    tokenData = data;
+    const {error, tokenData} = authenticationGuard(accessToken);
 
     if (error) return error;
+
+    userId = tokenData.userId;
   }
 
-  const result = await db.query(queryUserSettings(tokenData.userId ?? userId));
+  const result = await db.query(queryUserSettings(userId));
 
   if (!result.rowCount) return null;
 
