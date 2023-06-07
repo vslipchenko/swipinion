@@ -6,7 +6,7 @@ import {
   queryUserProfileDataById,
   queryUserProfileDataByUsername,
 } from '../../../data/queries/user';
-import {authenticationGuard} from '../../../utilities/guard';
+import {authenticationGuard, expiredAccessTokenError} from '../../../utilities/guard';
 import {QueryResultRow} from 'pg';
 
 export const profileQueryTypeDefinitions = gql`
@@ -33,6 +33,8 @@ const userProfile = async (
     if (error) return null;
 
     const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+    // To avoid issues for users with expired token being recognized as unauthenticated user
+    if (expiredAccessTokenError(authenticationError)) return authenticationError;
 
     const result = await db.query(
       authenticationError
