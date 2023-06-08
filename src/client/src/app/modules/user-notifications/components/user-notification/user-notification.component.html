@@ -1,11 +1,8 @@
 <div class="notification d-flex p-2 jc-between ai-center">
   <div class="d-flex ai-center">
     <div class="mr-1">
-      <img *ngIf="notification.thumbnail" [src]="notification.thumbnail" alt=""
-           routerLink="/user/{{notification.username}}" class="pointer">
-
-      <div *ngIf="!notification.thumbnail" class="thumbnail pointer"
-           routerLink="/user/{{notification.username}}"></div>
+      <app-thumbnail [thumbnailLink]="'/user/' + notification.username" [thumbnail]="notification.thumbnail"
+                     class="d-block thumbnail-large"></app-thumbnail>
     </div>
 
     <div>

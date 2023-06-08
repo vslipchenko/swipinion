@@ -13,6 +13,7 @@ import {IconButtonComponent} from '~app/shared/components/icon-button/icon-butto
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
 import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @NgModule({
   declarations: [UserNotificationsComponent, UserNotificationComponent],
@@ -33,6 +34,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     MenuItemsComponent,
     ProgressSpinnerComponent,
     InViewDirective,
+    ThumbnailComponent,
   ],
 })
 export class UserNotificationsModule {}

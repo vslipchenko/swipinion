@@ -32,11 +32,6 @@
   background-color: var.$color-accent;
 }
 
-.thumbnail {
-  width: 25px;
-  height: 25px;
-}
-
 .username {
   @include media.zero-small {
     max-width: 70px;

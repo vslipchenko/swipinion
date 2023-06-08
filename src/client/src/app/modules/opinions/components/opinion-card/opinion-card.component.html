@@ -11,7 +11,8 @@
     <div class="glass">
       <div class="d-flex jc-between">
         <a class="d-flex ai-center py-1-2 px-2" routerLink="/user/{{username}}">
-          <img class="thumbnail mr-1" src="https://i.ibb.co/bHsNr4b/82317.jpg" alt="">
+          <app-thumbnail [thumbnail]="thumbnail" class="thumbnail-medium mr-1"></app-thumbnail>
+
           <span class="name">{{username}}</span>
         </a>
 

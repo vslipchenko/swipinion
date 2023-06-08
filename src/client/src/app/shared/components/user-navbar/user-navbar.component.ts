@@ -14,6 +14,7 @@ import {UserNavbarMenuItem} from '~app/typings/menu/menu.enums';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @Component({
   selector: 'app-user-navbar',
@@ -21,7 +22,7 @@ import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.c
   styleUrls: ['./user-navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatMenuModule, MenuItemsComponent],
+  imports: [NgIf, AsyncPipe, MatMenuModule, MenuItemsComponent, ThumbnailComponent],
 })
 export class UserNavbarComponent implements OnInit, Destroyable {
   @Select(AppSelectors.userEssentials)

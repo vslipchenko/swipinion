@@ -1,9 +1,9 @@
 <mat-icon *ngIf="icon; else image"
-          class="d-flex jc-center ai-center" [class]="iconClass"
+          class="d-flex jc-center ai-center h-100 w-100" [class]="iconClass"
 >{{icon}}</mat-icon>
 
 <ng-template #image>
-  <a *ngIf="thumbnailLink; else thumbnailContent" [routerLink]="thumbnailLink" class="d-flex">
+  <a *ngIf="thumbnailLink; else thumbnailContent" [routerLink]="thumbnailLink" class="d-flex h-100">
     <ng-container [ngTemplateOutlet]="thumbnailContent"></ng-container>
   </a>
 

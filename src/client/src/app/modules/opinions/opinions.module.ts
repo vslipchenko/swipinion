@@ -20,7 +20,8 @@ import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MatLegacyMenuModule} from '@angular/material/legacy-menu';
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
-import { OpinionFailSnackbarComponent } from './components/opinion-fail-snackbar/opinion-fail-snackbar.component';
+import {OpinionFailSnackbarComponent} from './components/opinion-fail-snackbar/opinion-fail-snackbar.component';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { OpinionFailSnackbarComponent } from './components/opinion-fail-snackbar
     ButtonComponent,
     MatLegacyMenuModule,
     MenuItemsComponent,
+    ThumbnailComponent,
   ],
 })
 export class OpinionsModule {}

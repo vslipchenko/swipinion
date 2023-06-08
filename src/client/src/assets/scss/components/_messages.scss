@@ -1,8 +1,6 @@
 @use 'variables' as var;
 @use 'media';
 
-$message-thumbnail-size: 40px;
-$conversation-thumbnail-size: 30px;
 // .messages styles are general type of styles that is used both by messages panel and user page
 .messages .mat-expansion-panel {
   box-shadow: none;
@@ -126,17 +124,8 @@ $conversation-thumbnail-size: 30px;
   flex-basis: auto !important; // Fixes full width issue for Saved Messages
 }
 
-.conversation-thumbnail {
-  width: $conversation-thumbnail-size;
-  min-width: $conversation-thumbnail-size;
-  height: $conversation-thumbnail-size;
-}
-
-.message-thumbnail,
-.saved-messages-icon {
-  width: $message-thumbnail-size;
-  min-width: $message-thumbnail-size;
-  height: $message-thumbnail-size;
+.message-thumbnail {
+  min-width: var.$thumbnail-large-size;
 }
 
 .primary-indicator::before {

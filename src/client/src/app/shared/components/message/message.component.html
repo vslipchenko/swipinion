@@ -1,7 +1,7 @@
 <div class="d-flex ai-center p-2 message pointer relative" [class.primary-indicator]="unread"
      (click)="clicked.emit(senderId)">
-  <app-thumbnail iconClass="saved-messages-icon mr-2" thumbnailClass="message-thumbnail mr-2" [icon]="icon"
-                 [thumbnail]="thumbnail"></app-thumbnail>
+  <app-thumbnail iconClass="saved-messages-icon" thumbnailClass="message-thumbnail" [icon]="icon"
+                 [thumbnail]="thumbnail" class="thumbnail-large mr-2"></app-thumbnail>
 
   <div class="w-100 mw-0">
     <div class="d-flex jc-between ai-center">

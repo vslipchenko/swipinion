@@ -27,6 +27,7 @@ import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.d
 import {ImageBrowserComponent} from '~app/shared/components/image-browser/image-browser.component';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
+import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     ImageBrowserComponent,
     TextareaComponent,
     InViewDirective,
+    ThumbnailComponent,
   ],
   exports: [],
 })
