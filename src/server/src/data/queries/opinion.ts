@@ -8,6 +8,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
   text: `
     SELECT user_opinions.id, 
        users.username,
+       users.thumbnail,
        user_opinions.user_id, 
        user_opinions.type,
        user_opinions.file_url, 
@@ -51,7 +52,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
           )
         )
       )
-    GROUP BY user_opinions.id, users.username, reactions.agreed, reactions.disagreed, reactions.comments
+    GROUP BY user_opinions.id, users.username, users.thumbnail, reactions.agreed, reactions.disagreed, reactions.comments
     ORDER BY user_opinions.id DESC
     LIMIT $2
   `,
@@ -62,6 +63,7 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
   text: `
      SELECT user_opinions.id,
        users.username,
+       users.thumbnail,
        user_opinions.user_id, 
        user_opinions.type,
        user_opinions.file_url, 
@@ -87,6 +89,7 @@ export const queryGeneralOpinionsForUnauthorizedUser = (): QueryConfig => ({
       user_settings.view_opinions = ${PrivacyCommonSettings.Everyone} -- No need to check followers as user is unauthorized
     GROUP BY user_opinions.id,
       users.username,
+      users.thumbnail,
       reactions.agreed,
       reactions.disagreed,
       reactions.comments

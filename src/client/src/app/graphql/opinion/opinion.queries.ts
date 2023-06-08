@@ -6,6 +6,7 @@ export const GET_GENERAL_OPINIONS = gql`
       id
       user_id
       username
+      thumbnail
       type
       file_url
       body

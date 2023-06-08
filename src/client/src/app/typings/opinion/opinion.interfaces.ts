@@ -5,6 +5,7 @@ export interface Opinion {
   id: string;
   user_id: string;
   username: string;
+  thumbnail: string;
   type: OpinionType;
   file_url: string;
   // title: string;

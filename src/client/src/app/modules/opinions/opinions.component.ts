@@ -12,9 +12,9 @@ import {
 } from '~app/modules/opinions/store/opinions.actions';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {Opinion} from '~app/typings/opinion/opinion.interfaces';
 import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opinion-fail-snackbar/opinion-fail-snackbar.component';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 
 @Component({
   selector: 'app-opinions',
@@ -26,7 +26,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
   @Select(OpinionsSelectors.nothingToShow)
   public readonly nothingToShow$!: Observable<boolean>;
   @Select(OpinionsSelectors.opinions)
-  public readonly opinions$!: Observable<Array<Opinion>>;
+  public readonly opinions$!: Observable<Array<CarouselOpinion>>;
 
   public readonly loading$ = new BehaviorSubject(true);
   public readonly polling$ = new BehaviorSubject(false);

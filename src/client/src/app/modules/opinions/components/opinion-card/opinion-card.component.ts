@@ -18,6 +18,7 @@ import {authClickGuard} from '~app/utilities/guard';
 export class OpinionCardComponent implements OnInit, Destroyable {
   @Input() public id = '';
   @Input() public username = '';
+  @Input() public thumbnail = '';
   @Input() public type = OpinionType.Text;
   @Input() public fileUrl = '';
   @Input() public body = '';
