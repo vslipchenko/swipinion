@@ -88,21 +88,16 @@ export class ConversationComponent implements OnInit, Destroyable {
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserConversation, FetchUserSavedMessages))
-      .subscribe(() => {
-        this.loading$.next(false);
-        this.updating$.next(false);
-      });
+      .pipe(
+        takeUntil(this.destroy$),
+        ofActionCompleted(FetchUserConversation, FetchUserSavedMessages, SendUserMessage, SendUserSavedMessage),
+      )
+      .subscribe(({action}) => {
+        if (action instanceof FetchUserConversation || action instanceof FetchUserSavedMessages)
+          return this.fetchActionsCompleted();
 
-    this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionCompleted(SendUserMessage, SendUserSavedMessage))
-      .subscribe(() => {
-        this.textarea.resetValue();
-        this.textarea.control.enable();
-
-        // this.disableSendButton = false;
-
-        this.updating$.next(false);
+        if (action instanceof SendUserMessage || action instanceof SendUserSavedMessage)
+          return this.sendActionsCompleted();
       });
   }
 
@@ -267,6 +262,20 @@ export class ConversationComponent implements OnInit, Destroyable {
       this.unreadMessagesSubscription.unsubscribe();
       this.messageStatusCheckSubscription.unsubscribe();
     });
+  }
+
+  private fetchActionsCompleted(): void {
+    this.loading$.next(false);
+    this.updating$.next(false);
+  }
+
+  private sendActionsCompleted(): void {
+    this.textarea.resetValue();
+    this.textarea.control.enable();
+
+    // this.disableSendButton = false;
+
+    this.updating$.next(false);
   }
 
   private get conversationIsRelevant(): {relevant?: boolean; hasNewMessage?: boolean; initialized?: boolean} {
