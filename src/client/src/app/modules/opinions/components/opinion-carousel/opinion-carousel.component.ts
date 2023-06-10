@@ -59,7 +59,7 @@ export class OpinionCarouselComponent {
 
     this.store.dispatch(new ToggleReactionInProgress(true));
     this.reactToOpinion(OpinionReaction.Agree);
-    this.swipeHorizontally(OpinionCardSlideDirection.Left);
+    this.swipeCard(OpinionCardSlideDirection.Left);
   }
 
   protected disagree(): void {
@@ -68,7 +68,7 @@ export class OpinionCarouselComponent {
 
     this.store.dispatch(new ToggleReactionInProgress(true));
     this.reactToOpinion(OpinionReaction.Disagree);
-    this.swipeHorizontally(OpinionCardSlideDirection.Right);
+    this.swipeCard(OpinionCardSlideDirection.Right);
   }
 
   protected agreeAndComment(): void {
@@ -87,17 +87,18 @@ export class OpinionCarouselComponent {
     if (this.reactionInProgress) return;
 
     this.store.dispatch(new ToggleReactionInProgress(true));
-    this.swipeHorizontally(OpinionCardSlideDirection.Top);
+    this.swipeCard(OpinionCardSlideDirection.Top);
     // First most skip is not a subject for auth guarding, therefore auth condition has to be checked manually
     if (this.authenticationService.authenticated) this.reactToOpinion(OpinionReaction.Skip);
   }
 
   private reactToOpinion(reaction: OpinionReaction): void {
-    const opinionId = this.store.selectSnapshot(OpinionsSelectors.activeOpinion).id;
+    const {id, username} = this.store.selectSnapshot(OpinionsSelectors.activeOpinion);
 
     this.store.dispatch(
       new ReactToUserOpinion({
-        opinionId,
+        opinionId: id,
+        username,
         reaction,
         comment: null,
         optimisticStatisticUpdate: true,
@@ -105,7 +106,7 @@ export class OpinionCarouselComponent {
     );
   }
 
-  private swipeHorizontally(direction: OpinionCardSlideDirection): void {
+  private swipeCard(direction: OpinionCardSlideDirection): void {
     // Carousel's width is equal to the window's inner width
     const windowWidth = window.innerWidth;
     // card-container element resides in opinion-card.component
@@ -153,7 +154,7 @@ export class OpinionCarouselComponent {
     dialog.componentInstance.reacted.pipe(takeUntil(dialog.afterClosed())).subscribe(() => {
       this.store.dispatch(new ToggleReactionInProgress(true));
 
-      this.swipeHorizontally(
+      this.swipeCard(
         reaction === OpinionReaction.Agree ? OpinionCardSlideDirection.Left : OpinionCardSlideDirection.Right,
       );
       dialog.close();

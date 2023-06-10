@@ -1,12 +1,13 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable, Subject, takeUntil} from 'rxjs';
-import {AddOpinionToFavoritesFailReason, OpinionsView} from '~app/typings/opinion/opinion.enums';
+import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
   AddOpinionToFavorites,
   FetchGeneralOpinions,
+  ReactToUserOpinion,
   SetContainerSizes,
   TogglePrefetchInProgress,
 } from '~app/modules/opinions/store/opinions.actions';
@@ -86,6 +87,21 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
           panelClass: 'snackbar-success',
         });
       }
+    });
+
+    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(ReactToUserOpinion)).subscribe((completion) => {
+      // TODO optimize subscriptions using completion.action instanceof ReactToUserOpinion
+      if (!completion.result.error) return; // Assume success
+
+      if (completion.action.payload.reaction === OpinionReaction.Skip) return; // Do not report error if reaction is Skip as user does not count it as a reaction
+
+      // Handle error for regular reactions and reactions with comment
+      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+        data: `Something went wrong reacting to <span class="fw-medium">${
+          completion.action.payload.username
+        }</span>'s opinion ${completion.action.payload.comment ? 'with comment' : ''}`,
+        panelClass: 'snackbar-error',
+      });
     });
 
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;

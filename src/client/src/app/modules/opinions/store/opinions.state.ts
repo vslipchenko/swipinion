@@ -177,9 +177,9 @@ export class OpinionsState {
         return {
           ...state,
           opinionReaction: {
-            opinionId: action.payload.opinionId,
-            reaction: action.payload.reaction,
-            commented: Boolean(action.payload.comment),
+            opinionId,
+            reaction,
+            commented: Boolean(comment),
           },
         };
       });

@@ -16,7 +16,6 @@ import {AuthClickDirective} from '~app/shared/directives/auth-click/auth-click.d
 import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
 import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
-import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {MatLegacyMenuModule} from '@angular/material/legacy-menu';
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
@@ -49,7 +48,6 @@ import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.com
     OpinionStatsPanelComponent,
     CardTagsComponent,
     TextareaComponent,
-    ProgressBarComponent,
     ButtonComponent,
     MatLegacyMenuModule,
     MenuItemsComponent,

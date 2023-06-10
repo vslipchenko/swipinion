@@ -20,7 +20,7 @@ export class RemoveTopMostOpinion {
 export class ReactToUserOpinion {
   public static readonly type = '[Opinions] ReactToUserOpinion';
 
-  public constructor(public payload: ReactToOpinion & {optimisticStatisticUpdate: boolean}) {}
+  public constructor(public payload: ReactToOpinion & {username: string; optimisticStatisticUpdate: boolean}) {}
 }
 
 export class ToggleReactionInProgress {
