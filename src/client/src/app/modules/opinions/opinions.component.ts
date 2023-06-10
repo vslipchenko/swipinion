@@ -70,7 +70,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       if (completion.result.error?.message === AddOpinionToFavoritesFailReason.UniqueViolation) {
         // Show Opinion is already added to Favorites error
         this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is already added to Favorites`,
+          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is already in Favorites`,
           panelClass: 'snackbar-error',
         });
       } else if (completion.result.error) {
