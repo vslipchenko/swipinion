@@ -70,7 +70,7 @@
       class="absolute t-0 dialog-progress-bar">
     </app-progress-bar>
 
-    <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
+    <app-button mat-dialog-close text="Close" (clicked)="cancel.emit()"></app-button>
     <app-button *ngIf="(recoverStage$ | async) === recoveryStage.Email" color="primary" text="Next"
                 (clicked)="recover()"></app-button>
     <app-button *ngIf="(recoverStage$ | async) === recoveryStage.Code" color="primary" text="Next"

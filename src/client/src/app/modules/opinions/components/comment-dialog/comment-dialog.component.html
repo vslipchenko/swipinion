@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>React with {{reaction}} comment</h2>
+<h2 mat-dialog-title>React with comment</h2>
 <ng-container *ngIf="{loading: loading$ | async} as state">
   <div *ngIf="state.loading" class="dialog-loading-veil"></div>
 
@@ -23,8 +23,8 @@
       class="absolute t-0 dialog-progress-bar">
     </app-progress-bar>
 
-    <app-button mat-dialog-close text="Cancel"></app-button>
-    <app-button [color]="commentButtonColor" text="React" (clicked)="comment()"
+    <app-button mat-dialog-close text="Close"></app-button>
+    <app-button [color]="commentButtonColor" [text]="reaction" (clicked)="comment()"
                 [disabled]="state.loading || !commentControl.value"></app-button>
   </mat-dialog-actions>
 </ng-container>

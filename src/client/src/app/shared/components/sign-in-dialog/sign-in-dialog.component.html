@@ -42,7 +42,7 @@
       class="absolute t-0 dialog-progress-bar">
     </app-progress-bar>
 
-    <app-button mat-dialog-close text="Cancel" (clicked)="cancel.emit()"></app-button>
+    <app-button mat-dialog-close text="Close" (clicked)="cancel.emit()"></app-button>
     <app-button color="primary" text="Sign in" (clicked)="signIn()" [disabled]="state.loading || false"></app-button>
   </mat-dialog-actions>
 </ng-container>

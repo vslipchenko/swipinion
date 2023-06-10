@@ -26,7 +26,7 @@ export class CommentDialogComponent implements Destroyable {
   public readonly destroy$ = new Subject<void>();
   protected readonly loading$ = new BehaviorSubject(false);
 
-  protected readonly reaction: 'agree' | 'disagree' = 'agree';
+  protected readonly reaction: 'Agree' | 'Disagree' = 'Agree';
   protected readonly commentButtonColor: ThemePalette;
   protected readonly commentControl = new FormControl('', Validators.maxLength(OPINION_COMMENT_MAX_LENGTH));
 
@@ -38,10 +38,10 @@ export class CommentDialogComponent implements Destroyable {
     private readonly actions$: Actions,
   ) {
     if (data.reaction === OpinionReaction.Agree) {
-      this.reaction = 'agree';
+      this.reaction = 'Agree';
       this.commentButtonColor = 'primary';
     } else {
-      this.reaction = 'disagree';
+      this.reaction = 'Disagree';
       this.commentButtonColor = 'accent';
     }
 
