@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable, Subject, takeUntil} from 'rxjs';
 import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
-import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
+import {ActionCompletion, Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
   AddOpinionToFavorites,
   FetchGeneralOpinions,
@@ -60,49 +60,16 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       }),
     );
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchGeneralOpinions)).subscribe(() => {
-      this.loading$.next(false);
-      this.polling$.next(false);
-      // Should do no harm when opinions fetched the first time in ngOnInit
-      this.store.dispatch(new TogglePrefetchInProgress(false));
-    });
-    // Has to be handled here as it is not subject for frequent page UI changes
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(AddOpinionToFavorites)).subscribe((completion) => {
-      if (completion.result.error?.message === AddOpinionToFavoritesFailReason.UniqueViolation) {
-        // Show Opinion is already added to Favorites error
-        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is already in Favorites`,
-          panelClass: 'snackbar-error',
-        });
-      } else if (completion.result.error) {
-        // Show generic error
-        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `Something went wrong adding <span class="fw-medium">${completion.action.payload.username}</span>'s opinion to Favorites`,
-          panelClass: 'snackbar-error',
-        });
-      } else {
-        // Assume success
-        this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-          data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully added to Favorites`,
-          panelClass: 'snackbar-success',
-        });
-      }
-    });
-
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(ReactToUserOpinion)).subscribe((completion) => {
-      // TODO optimize subscriptions using completion.action instanceof ReactToUserOpinion
-      if (!completion.result.error) return; // Assume success
-
-      if (completion.action.payload.reaction === OpinionReaction.Skip) return; // Do not report error if reaction is Skip as user does not count it as a reaction
-
-      // Handle error for regular reactions and reactions with comment
-      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-        data: `Something went wrong reacting to <span class="fw-medium">${
-          completion.action.payload.username
-        }</span>'s opinion ${completion.action.payload.comment ? 'with comment' : ''}`,
-        panelClass: 'snackbar-error',
+    this.actions$
+      .pipe(
+        takeUntil(this.destroy$),
+        ofActionCompleted(FetchGeneralOpinions, AddOpinionToFavorites, ReactToUserOpinion),
+      )
+      .subscribe((completion) => {
+        if (completion.action instanceof FetchGeneralOpinions) return this.fetchGeneralOpinionsCompleted();
+        if (completion.action instanceof AddOpinionToFavorites) return this.addOpinionToFavoritesCompleted(completion);
+        if (completion.action instanceof ReactToUserOpinion) return this.reactToUserOpinionCompleted(completion);
       });
-    });
 
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;
   }
@@ -161,5 +128,48 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
 
     if (this.view === OpinionsView.General) this.store.dispatch(new FetchGeneralOpinions(edgeId));
     // TODO implement logic for individual (user opinions) view
+  }
+
+  private fetchGeneralOpinionsCompleted(): void {
+    this.loading$.next(false);
+    this.polling$.next(false);
+    // Should do no harm when opinions fetched the first time in ngOnInit
+    this.store.dispatch(new TogglePrefetchInProgress(false));
+  }
+
+  private addOpinionToFavoritesCompleted(completion: ActionCompletion<AddOpinionToFavorites>): void {
+    if (completion.result.error?.message === AddOpinionToFavoritesFailReason.UniqueViolation) {
+      // Show Opinion is already added to Favorites error
+      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+        data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is already in Favorites`,
+        panelClass: 'snackbar-error',
+      });
+    } else if (completion.result.error) {
+      // Show generic error
+      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+        data: `Something went wrong adding <span class="fw-medium">${completion.action.payload.username}</span>'s opinion to Favorites`,
+        panelClass: 'snackbar-error',
+      });
+    } else {
+      // Assume success
+      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+        data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully added to Favorites`,
+        panelClass: 'snackbar-success',
+      });
+    }
+  }
+
+  private reactToUserOpinionCompleted(completion: ActionCompletion<ReactToUserOpinion>): void {
+    if (!completion.result.error) return; // Assume success
+
+    if (completion.action.payload.reaction === OpinionReaction.Skip) return; // Do not report error if reaction is Skip as user does not count it as a reaction
+
+    // Handle error for regular reactions and reactions with comment
+    this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+      data: `Something went wrong reacting to <span class="fw-medium">${
+        completion.action.payload.username
+      }</span>'s opinion ${completion.action.payload.comment ? 'with comment' : ''}`,
+      panelClass: 'snackbar-error',
+    });
   }
 }
