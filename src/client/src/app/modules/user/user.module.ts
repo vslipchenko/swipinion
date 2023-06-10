@@ -28,6 +28,7 @@ import {ImageBrowserComponent} from '~app/shared/components/image-browser/image-
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
+import {UserImageComponent} from '~app/shared/components/user-image/user-image.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.com
     TextareaComponent,
     InViewDirective,
     ThumbnailComponent,
+    UserImageComponent,
   ],
   exports: [],
 })

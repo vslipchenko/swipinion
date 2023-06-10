@@ -1,10 +1,6 @@
 @use 'variables' as var;
 @use 'media';
 
-$user-profile-image-size-default: 250px;
-$user-profile-image-size-small: 128px;
-$user-profile-image-radius: 20px;
-
 :host {
   min-height: 0;
   flex: 1;
@@ -29,18 +25,18 @@ $user-profile-image-radius: 20px;
 
   @include media.zero-large {
     //display: none;
-    height: calc($user-profile-image-size-small / 1.5);
+    height: calc(#{var.$user-profile-image-size-small} / 1.5);
   }
 
   @include media.above-large {
-    height: $user-profile-image-size-default;
-    border-radius: 0 $user-profile-image-radius $user-profile-image-radius 0;
+    height: var.$user-profile-image-size-default;
+    border-radius: 0 var.$user-profile-image-radius var.$user-profile-image-radius 0;
   }
 }
 
 .user-block {
   @include media.above-large {
-    max-width: $user-profile-image-size-default;
+    max-width: var.$user-profile-image-size-default;
   }
 }
 
@@ -54,23 +50,9 @@ $user-profile-image-radius: 20px;
   }
 }
 
-.image {
-  z-index: 1;
-  object-fit: cover;
-  border-radius: $user-profile-image-radius;
-  //background: var.$color-accent;
-  //background: linear-gradient(90deg, var.$color-primary 0%, var.$color-accent 100%);
-  background: var.$color-light;
-
+.user-image {
   @include media.zero-large {
     margin-top: var.$unit-2;
-    height: $user-profile-image-size-small;
-    width: $user-profile-image-size-small;
-  }
-
-  @include media.above-large {
-    height: $user-profile-image-size-default;
-    width: $user-profile-image-size-default;
   }
 }
 
