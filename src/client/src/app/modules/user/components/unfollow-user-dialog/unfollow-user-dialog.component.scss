@@ -1,27 +1,3 @@
-@use 'variables' as var;
-@use 'media';
-
 :host {
   position: relative;
-}
-
-$user-profile-image-size-default: 250px;
-$user-profile-image-size-small: 128px;
-$user-profile-image-radius: 20px;
-
-.image {
-  z-index: 1;
-  object-fit: cover;
-  border-radius: $user-profile-image-radius;
-  background: var.$color-light;
-
-  @include media.zero-large {
-    height: $user-profile-image-size-small;
-    width: $user-profile-image-size-small;
-  }
-
-  @include media.above-large {
-    height: $user-profile-image-size-default;
-    width: $user-profile-image-size-default;
-  }
 }

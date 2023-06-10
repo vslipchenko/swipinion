@@ -4,13 +4,7 @@
 
   <mat-dialog-content class="primary-scrollbar">
     <div class="t-center">
-      <img
-        *ngIf="profile.thumbnail"
-        class="image d-block mx-auto mb-2"
-        [src]="profile.thumbnail"
-        alt="">
-
-      <div *ngIf="!profile.thumbnail" class="image mx-auto mb-2"></div>
+      <app-user-image [image]="profile.thumbnail" extendClass="mx-auto mb-2"></app-user-image>
 
       {{data.body}}
       <p class="mb-1"><span class="fw-medium">@{{profile.username}}</span> ?</p>
