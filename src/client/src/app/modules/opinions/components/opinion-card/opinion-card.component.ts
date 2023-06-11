@@ -8,6 +8,7 @@ import {OpinionMenuItem} from '~app/typings/menu/menu.enums';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
 import {authClickGuard} from '~app/utilities/guard';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-opinion-card',
@@ -42,17 +43,26 @@ export class OpinionCardComponent implements OnInit, Destroyable {
 
   protected readonly opinionMenuItems = [
     {
-      // TODO wrap in Auth Guard
       id: OpinionMenuItem.AddToFavorites,
       title: 'Add to Favorites',
-      icon: 'star',
+      icon: 'star_outlined',
       click: authClickGuard(this.addToFavorites.bind(this), this.injector),
+    },
+    {
+      id: OpinionMenuItem.AddToFavorites,
+      title: 'Copy link',
+      icon: 'content_copy',
+      click: this.copyLink.bind(this),
     },
   ] as Array<MenuItem>;
 
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
 
-  public constructor(private readonly store: Store, private readonly injector: Injector) {
+  public constructor(
+    private readonly store: Store,
+    private readonly injector: Injector,
+    private readonly clipboard: Clipboard,
+  ) {
     this.store
       .select(OpinionsSelectors.opinionReaction)
       .pipe(takeUntil(this.destroy$))
@@ -85,5 +95,9 @@ export class OpinionCardComponent implements OnInit, Destroyable {
 
   protected addToFavorites(): void {
     this.store.dispatch(new AddOpinionToFavorites({opinionId: this.id, username: this.username}));
+  }
+
+  private copyLink(): void {
+    this.clipboard.copy(`${window.location.href}opinion/${this.username}/${this.id}`);
   }
 }
