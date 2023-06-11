@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {BehaviorSubject, debounceTime, finalize, Subject, Subscription, switchMap, takeUntil, tap} from 'rxjs';
+import {BehaviorSubject, debounceTime, filter, finalize, Subject, Subscription, switchMap, takeUntil, tap} from 'rxjs';
 import {UserSearchService} from '~app/services/user-search/user-search.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
 import {UserEssentials} from '~app/typings/user-search/user-search.interfaces';
@@ -13,6 +13,7 @@ import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputResetSuffixComponent} from '~app/shared/components/input-reset-suffix/input-reset-suffix.component';
 import {ProgressSpinnerComponent} from '~app/shared/components/progress-spinner/progress-spinner.component';
 import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
+import {USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from '~app/constants/validation';
 
 @Component({
   selector: 'app-conversation-user-search',
@@ -81,11 +82,12 @@ export class ConversationUserSearchComponent implements Destroyable {
     this.userSearchSubscription = this.searchControl.valueChanges
       .pipe(
         takeUntil(this.destroy$),
+        filter((value) => value.length >= USERNAME_MIN_LENGTH && value.length <= USERNAME_MAX_LENGTH), // Start search only if username length is valid
         tap(() => {
           this.loading$.next(true);
         }),
         finalize(() => this.loading$.next(false)),
-        debounceTime(750),
+        debounceTime(1000),
         switchMap((value) => this.userSearchService.searchUser(value as string)),
       )
       .subscribe(({data}) => {
