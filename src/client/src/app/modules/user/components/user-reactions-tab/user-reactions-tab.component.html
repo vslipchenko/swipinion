@@ -1,7 +1,12 @@
 <app-content-placeholder icon="thumbs_up_down"
                          class="d-block mt-2-3">
-  <!-- TODO develop version for external user profile -->
-  <app-button text="Start reacting" class="mt-1 d-flex jc-center"
-              routerLink="/"></app-button>
-  <p class="mt-h t-center">to opinions of others!</p>
+  <ng-container *ngIf="profile; else notProfile">
+    <app-button text="Start reacting" class="mt-1 d-flex jc-center"
+                routerLink="/"></app-button>
+    <p class="mt-h t-center">to opinions of others!</p>
+  </ng-container>
+
+  <ng-template #notProfile>
+    <p class="mt-2 t-center">There are no reactions yet</p>
+  </ng-template>
 </app-content-placeholder>

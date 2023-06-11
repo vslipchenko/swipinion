@@ -1,4 +1,6 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Store} from '@ngxs/store';
+import {UserSelectors} from '~app/modules/user/store/user.selectors';
 
 @Component({
   selector: 'app-user-reactions-tab',
@@ -6,8 +8,8 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./user-reactions-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserReactionsTabComponent implements OnInit {
-  constructor() {}
+export class UserReactionsTabComponent {
+  protected readonly profile = this.store.selectSnapshot(UserSelectors.isProfilePath);
 
-  ngOnInit(): void {}
+  public constructor(private readonly store: Store) {}
 }

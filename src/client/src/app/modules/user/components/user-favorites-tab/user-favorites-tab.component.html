@@ -1,7 +1,13 @@
 <app-content-placeholder icon="star"
                          class="d-block mt-2-3">
   <!-- TODO develop version for external user profile -->
-  <app-button text="Encounter opinions" class="mt-1 d-flex jc-center"
-              routerLink="/"></app-button>
-  <p class="mt-h t-center">and collect your favorites!</p>
+  <ng-container *ngIf="profile; else notProfile">
+    <app-button text="Encounter opinions" class="mt-1 d-flex jc-center"
+                routerLink="/"></app-button>
+    <p class="mt-h t-center">and collect your favorites!</p>
+  </ng-container>
+
+  <ng-template #notProfile>
+    <p class="mt-2 t-center">There are no favorites yet</p>
+  </ng-template>
 </app-content-placeholder>
