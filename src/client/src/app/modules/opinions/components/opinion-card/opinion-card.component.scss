@@ -25,14 +25,15 @@
 .card-container {
   z-index: 0;
   max-width: var.$opinion-card-max-width;
+  transition: box-shadow 0.2s;
 }
 
 .swipe-left {
-  box-shadow: 15px 0 25px 5px var.$color-primary;
+  box-shadow: 20px 0 25px 5px var.$color-primary;
 }
 
 .swipe-right {
-  box-shadow: -15px 0 25px 5px var.$color-accent;
+  box-shadow: -20px 0 25px 5px var.$color-accent;
 }
 
 //.content {
