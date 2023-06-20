@@ -29,6 +29,7 @@ import {takeUntil} from 'rxjs';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {halfWidthRelativeToViewport} from '~app/utilities/viewport';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -107,11 +108,9 @@ export class OpinionCarouselComponent {
   }
 
   private swipeCard(direction: OpinionCardSlideDirection): void {
-    // Carousel's width is equal to the window's inner width
-    const windowWidth = window.innerWidth;
     // card-container element resides in opinion-card.component
     const element = this.cards.last.nativeElement.querySelector('.card-container');
-    const offset = windowWidth <= OPINION_CARD_MAX_WIDTH ? -windowWidth / 2 : -OPINION_CARD_MAX_WIDTH / 2; // Offset is equal to card's half width
+    const offset = -halfWidthRelativeToViewport(OPINION_CARD_MAX_WIDTH); // Offset is equal to card's half width if viewport width > OPINION_CARD_MAX_WIDTH; otherwise OPINION_CARD_MAX_WIDTH / 2
     const duration =
       direction === OpinionCardSlideDirection.Top // Skip animation happens a little faster
         ? OPINION_CARD_VERTICAL_ANIMATION_DURATION
