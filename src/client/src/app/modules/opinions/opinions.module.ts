@@ -21,6 +21,7 @@ import {MatLegacyMenuModule} from '@angular/material/legacy-menu';
 import {MenuItemsComponent} from '~app/shared/components/menu-items/menu-items.component';
 import {OpinionFailSnackbarComponent} from './components/opinion-fail-snackbar/opinion-fail-snackbar.component';
 import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
+import {SwipeDirective} from '~app/shared/directives/swipe/swipe.directive';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.com
     MatDialogModule,
     IconButtonComponent,
     AuthClickDirective,
+    SwipeDirective,
     OpinionStatsPanelComponent,
     CardTagsComponent,
     TextareaComponent,
