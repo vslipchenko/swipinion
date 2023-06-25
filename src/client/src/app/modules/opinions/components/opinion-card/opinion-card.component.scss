@@ -36,6 +36,16 @@
   box-shadow: -15px 0 30px 0 var.$color-accent;
 }
 
+.reset-swipe {
+  animation: reset-swipe 0.2s;
+}
+
+@keyframes reset-swipe {
+  100% {
+    transform: translateX(0);
+  }
+}
+
 //.content {
 //  padding-bottom: var.$unit-7;
 //}

@@ -38,6 +38,11 @@ export class SwipeDirective implements OnDestroy {
     this.element.removeEventListener('touchstart', this.touchStart.bind(this));
     this.element.removeEventListener('touchmove', this.touchMove.bind(this));
     this.element.removeEventListener('touchend', this.touchEnd.bind(this));
+    // There is still a chance of event listener hanging in memory in a case if reset swipe animation didn't complete, need to call this one to be safe
+    this.removeAnimationEndEventListener();
+
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private touchStart(event: TouchEvent): void {
@@ -131,17 +136,29 @@ export class SwipeDirective implements OnDestroy {
             : OpinionReaction.Disagree,
       });
       // Manually remove attached events to prevent ongoing swipe animation interruption
-      this.ngOnDestroy();
+      if (this.authenticationService.authenticated) this.ngOnDestroy(); // If not authenticated, prevent destroy logic as swipe gesture does nothing in this case and card should remain swipeable
     } else {
-      this.element.parentElement!.style.transition = `transform 0.2s`;
-      this.element.parentElement!.style.transform = `translateX(0px)`;
-
-      setTimeout(() => (this.element.parentElement!.style.transition = ''), 210);
-
-      this.element.style.overflow = 'auto';
-      this.element.style.opacity = '1';
-      (this.element.previousElementSibling as HTMLDivElement).style.opacity = '1';
-      this.element.parentElement!.classList.remove('swipe-left', 'swipe-right');
+      this.resetSwipe();
     }
+  }
+
+  private resetSwipe(): void {
+    this.element.parentElement!.addEventListener('animationend', this.resetSwipeAnimationEnded.bind(this));
+    this.element.parentElement!.classList.add('reset-swipe');
+
+    this.element.style.overflow = 'auto';
+    this.element.style.opacity = '1';
+    (this.element.previousElementSibling as HTMLDivElement).style.opacity = '1';
+    this.element.parentElement!.classList.remove('swipe-left', 'swipe-right');
+  }
+
+  private resetSwipeAnimationEnded(): void {
+    this.removeAnimationEndEventListener();
+    this.element.parentElement!.style.transform = 'translateX(0px)'; // Fix value; prevents card from jumping to the previous X position
+    this.element.parentElement!.classList.remove('reset-swipe');
+  }
+
+  private removeAnimationEndEventListener(): void {
+    this.element.parentElement!.removeEventListener('animationend', this.resetSwipeAnimationEnded.bind(this));
   }
 }
