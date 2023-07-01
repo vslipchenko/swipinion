@@ -64,13 +64,14 @@ export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable
 
     let i = 0; // Word index counter
     let newLine = true; // Required to avoid whitespaces for each first word in a line;
-    let textHeight = this.lineHeight;
+    let textHeight = 0;
 
     while (textHeight < this.canvas.height) {
       // Generate new lines until canvas height overflow
       let textLine = '';
 
       while (this.context.measureText(textLine).width < this.canvas.width) {
+        // Fill current line with text
         // Generate text line until canvas width overflow
         if (!this.words[i]) i = 0; // In a case if single word/char is provided reset counter to fill with only that specific word/char
 
@@ -81,10 +82,10 @@ export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable
       }
 
       newLine = true;
+      // Increase overall text height as line has been filled
+      textHeight += this.lineHeight;
       // Render line of text: width / 2 - center aligned
       this.context.fillText(textLine, width / 2, textHeight, this.canvas.width);
-      // Increase overall text height
-      textHeight += this.lineHeight;
     }
   }
 }
