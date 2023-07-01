@@ -33,7 +33,6 @@ import {AuthenticationService} from '~app/services/authentication/authentication
 import {halfWidthRelativeToViewport} from '~app/utilities/viewport';
 import {ReactionService} from '~app/services/reaction/reaction.service';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {HeaderService} from '~app/services/header/header.service';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -59,12 +58,8 @@ export class OpinionCarouselComponent implements Destroyable {
     private readonly dialog: MatDialog,
     private readonly authenticationService: AuthenticationService,
     private readonly reactionService: ReactionService,
-    private readonly headerService: HeaderService,
   ) {
-    this.reactionService.react$.pipe(takeUntil(this.destroy$)).subscribe(({reaction, slideDirection}) => {
-      // Auth guard
-      if (!this.authenticationService.authenticated) return this.headerService.signIn$.next();
-
+    this.reactionService.swipeReaction$.pipe(takeUntil(this.destroy$)).subscribe(({reaction, slideDirection}) => {
       this.react(reaction, slideDirection, true);
     });
   }

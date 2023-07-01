@@ -3,6 +3,8 @@ import {OPINION_CARD_MAX_WIDTH} from '~app/constants/opinions';
 import {OpinionCardSlideDirection, OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {halfWidthRelativeToViewport} from '~app/utilities/viewport';
 import {ReactionService} from '~app/services/reaction/reaction.service';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {HeaderService} from '~app/services/header/header.service';
 
 @Directive({
   selector: '[appSwipe]',
@@ -28,7 +30,12 @@ export class SwipeDirective implements OnDestroy {
   // Used to determine horizontal/vertical swipe takes place based on one's coordinate gain/growth rate
   private readonly directionDifferentiationCoefficient = 2;
 
-  public constructor(private readonly elementRef: ElementRef, private readonly reactionService: ReactionService) {
+  public constructor(
+    private readonly elementRef: ElementRef,
+    private readonly reactionService: ReactionService,
+    private readonly authenticationService: AuthenticationService,
+    private readonly headerService: HeaderService,
+  ) {
     this.element.addEventListener('touchstart', this.touchStart.bind(this), false);
     this.element.addEventListener('touchmove', this.touchMove.bind(this), false);
     this.element.addEventListener('touchend', this.touchEnd.bind(this), false);
@@ -40,9 +47,6 @@ export class SwipeDirective implements OnDestroy {
     this.element.removeEventListener('touchend', this.touchEnd.bind(this));
     // There is still a chance of event listener hanging in memory in a case if reset swipe animation didn't complete, need to call this one to be safe
     this.removeAnimationEndEventListener();
-
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private touchStart(event: TouchEvent): void {
@@ -73,9 +77,9 @@ export class SwipeDirective implements OnDestroy {
     const absoluteDeltaX = Math.abs(deltaX);
 
     if (this.horizontalLock || absoluteDeltaX > deltaY * this.directionDifferentiationCoefficient) {
-      if (this.verticalLock) return; // Prevents x axis swiping when vertical scrolling takes place
+      if (this.verticalLock) return; // Prevents x-axis swiping when vertical scrolling takes place
 
-      // Disable vertical scrolling; Prevents from vertical swiping when moving along x axis
+      // Disable vertical scrolling; Prevents from vertical swiping when moving along x-axis
       this.element.style.overflow = 'hidden';
 
       // Add box-shadow swipe effect (classList.add ignores adding duplicate class)
@@ -122,21 +126,28 @@ export class SwipeDirective implements OnDestroy {
 
     const absoluteDeltaX = Math.abs(deltaX);
 
+    // Determine if a user interaction can be counted as swipe
     const swipeDetected =
       absoluteDeltaX >= half ||
       (swipeDuration < this.swipeDurationThreshold && absoluteDeltaX >= this.swipeDistanceThreshold);
 
-    // Determine if it was a left or right swipe
     if (swipeDetected) {
-      this.reactionService.react$.next({
-        slideDirection: this.swipeDirectionTrend,
-        reaction:
-          this.swipeDirectionTrend === OpinionCardSlideDirection.Left
-            ? OpinionReaction.Agree
-            : OpinionReaction.Disagree,
-      });
-      // Manually remove attached events to prevent ongoing swipe animation interruption
-      if (this.authenticationService.authenticated) this.ngOnDestroy(); // If not authenticated, prevent destroy logic as swipe gesture does nothing in this case and card should remain swipeable
+      if (this.authenticationService.authenticated) {
+        this.ngOnDestroy(); // Manually remove attached events to prevent ongoing swipe animation interruption
+        // Trigger further reaction logic
+        this.reactionService.swipeReaction$.next({
+          slideDirection: this.swipeDirectionTrend,
+          reaction:
+            this.swipeDirectionTrend === OpinionCardSlideDirection.Left
+              ? OpinionReaction.Agree
+              : OpinionReaction.Disagree,
+        });
+      } else {
+        // If not authenticated reset swipe and show sign-in dialog
+        this.resetSwipe();
+
+        this.headerService.signIn$.next();
+      }
     } else {
       this.resetSwipe();
     }

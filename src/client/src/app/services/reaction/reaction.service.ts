@@ -8,7 +8,10 @@ import {Store} from '@ngxs/store';
   providedIn: 'root',
 })
 export class ReactionService {
-  public readonly react$ = new Subject<{reaction: OpinionReaction; slideDirection: OpinionCardSlideDirection}>();
+  public readonly swipeReaction$ = new Subject<{
+    reaction: OpinionReaction;
+    slideDirection: OpinionCardSlideDirection;
+  }>();
 
   public constructor(private readonly store: Store) {}
 
