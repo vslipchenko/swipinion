@@ -22,7 +22,7 @@ export class UserNotificationComponent {
   ];
 
   public defaultOptions: Array<MenuItem> = [
-    {title: 'Delete', icon: 'delete', color: 'warn', click: (): void => this.delete.emit()},
+    {title: 'Delete notification', icon: 'delete', color: 'warn', click: (): void => this.delete.emit()},
   ];
 
   public getOptions(type: NotificationType): Array<MenuItem> {

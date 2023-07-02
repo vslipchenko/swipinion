@@ -7,6 +7,7 @@ export enum UserNavbarMenuItem {
   Logout,
 }
 
-export enum OpinionMenuItem {
-  AddToFavorites,
-}
+// export enum OpinionMenuItem {
+//   AddToFavorites,
+//   CopyLink,
+// }

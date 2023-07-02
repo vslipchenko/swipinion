@@ -4,11 +4,10 @@ import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors'
 import {Subject, takeUntil} from 'rxjs';
 import {Store} from '@ngxs/store';
 import {Destroyable} from '~app/typings/component/component.interfaces';
-import {OpinionMenuItem} from '~app/typings/menu/menu.enums';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
 import {authClickGuard} from '~app/utilities/guard';
-import {Clipboard} from '@angular/cdk/clipboard';
+import {copyOpinionLink} from '~app/utilities/opinion';
 
 @Component({
   selector: 'app-opinion-card',
@@ -43,26 +42,24 @@ export class OpinionCardComponent implements OnInit, Destroyable {
 
   protected readonly opinionMenuItems = [
     {
-      id: OpinionMenuItem.AddToFavorites,
+      // id: OpinionMenuItem.AddToFavorites,
       title: 'Add to Favorites',
       icon: 'star_outlined',
       click: authClickGuard(this.addToFavorites.bind(this), this.injector),
     },
     {
-      id: OpinionMenuItem.AddToFavorites,
+      // id: OpinionMenuItem.CopyLink,
       title: 'Copy link',
       icon: 'content_copy',
-      click: this.copyLink.bind(this),
+      click: (): void => {
+        copyOpinionLink(this.injector, this.id);
+      },
     },
   ] as Array<MenuItem>;
 
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
 
-  public constructor(
-    private readonly store: Store,
-    private readonly injector: Injector,
-    private readonly clipboard: Clipboard,
-  ) {
+  public constructor(private readonly store: Store, private readonly injector: Injector) {
     this.store
       .select(OpinionsSelectors.opinionReaction)
       .pipe(takeUntil(this.destroy$))
@@ -95,9 +92,5 @@ export class OpinionCardComponent implements OnInit, Destroyable {
 
   protected addToFavorites(): void {
     this.store.dispatch(new AddOpinionToFavorites({opinionId: this.id, username: this.username}));
-  }
-
-  private copyLink(): void {
-    this.clipboard.copy(`${window.location.href}opinion/${this.username}/${this.id}`);
   }
 }

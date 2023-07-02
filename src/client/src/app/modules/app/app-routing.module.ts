@@ -13,6 +13,7 @@ import {ProfileSettingsResolver} from '~app/resolvers/profile-settings/profile-s
 import {UserNotificationsModule} from '~app/modules/user-notifications/user-notifications.module';
 import {UserMessagesModule} from '~app/modules/user-messages/user-messages.module';
 import {OpinionsViewResolver} from '~app/resolvers/opinions-view/opinions-view.resolver';
+import {USE_HASH_LOCATION_STRATEGY} from '~app/constants/app';
 
 const opinionsModule: Route = {
   pathMatch: 'full',
@@ -115,7 +116,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true})],
+  imports: [RouterModule.forRoot(routes, {useHash: USE_HASH_LOCATION_STRATEGY})],
   exports: [RouterModule],
   providers: [{provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy}],
 })
