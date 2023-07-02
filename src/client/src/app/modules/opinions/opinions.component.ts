@@ -67,8 +67,10 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       )
       .subscribe((completion) => {
         if (completion.action instanceof FetchGeneralOpinions) return this.fetchGeneralOpinionsCompleted();
-        if (completion.action instanceof AddOpinionToFavorites) return this.addOpinionToFavoritesCompleted(completion);
-        if (completion.action instanceof ReactToUserOpinion) return this.reactToUserOpinionCompleted(completion);
+        if (completion.action instanceof AddOpinionToFavorites)
+          return this.addOpinionToFavoritesCompleted(completion as ActionCompletion<AddOpinionToFavorites>);
+        if (completion.action instanceof ReactToUserOpinion)
+          return this.reactToUserOpinionCompleted(completion as ActionCompletion<ReactToUserOpinion>);
       });
 
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;
