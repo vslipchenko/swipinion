@@ -44,7 +44,7 @@ const routes: Routes = [
     ...opinionsModule,
   },
   {
-    path: 'opinion/:username/:id',
+    path: 'opinion/:id',
     ...opinionsModule,
   },
   {
