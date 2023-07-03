@@ -5,7 +5,7 @@ export const untilDestroyed = (): (<T>() => MonoTypeOperatorFunction<T>) => {
   const destroyed$ = new Subject<void>();
 
   inject(DestroyRef).onDestroy((): void => {
-    destroyed$.next(void 0);
+    destroyed$.next();
     destroyed$.complete();
   });
 
