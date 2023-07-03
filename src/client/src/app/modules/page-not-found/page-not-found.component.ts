@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, Component, HostBinding} from '@angular/core';
 import {ShowMessagesService} from '~app/services/show-messages/show-messages.service';
 import {NavigationEnd, Router} from '@angular/router';
-import {Destroyable} from '~app/typings/component/component.interfaces';
-import {Subject, takeUntil} from 'rxjs';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-page-not-found',
@@ -10,21 +9,16 @@ import {Subject, takeUntil} from 'rxjs';
   styleUrls: ['./page-not-found.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageNotFoundComponent implements Destroyable {
+export class PageNotFoundComponent {
   @HostBinding('class') private readonly class = 'relative h-100';
 
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly showMessagesService: ShowMessagesService, private readonly router: Router) {
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+    this.router.events.pipe(this.untilDestroyed()).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
       this.showMessagesService.hide();
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

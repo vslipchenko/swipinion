@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Actions, ofActionCompleted, ofActionErrored, Select, Store} from '@ngxs/store';
 import {
   AcceptFollowRequest,
@@ -10,7 +10,7 @@ import {
 import {UserNotificationsSelectors} from '~app/modules/user-notifications/store/user-notifications.selectors';
 import {UINotification} from '~app/typings/user-notifications/user-notifications.interfaces';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 
 @Component({
@@ -19,12 +19,12 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
   styleUrls: ['./user-notifications.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserNotificationsComponent implements OnInit, Destroyable {
+export class UserNotificationsComponent implements OnInit {
   @Select(UserNotificationsSelectors.notifications) public notifications$!: Observable<Array<UINotification>>;
   @Select(UserNotificationsSelectors.canLoadMore) public canLoadMore$!: Observable<boolean>;
 
   public readonly loading$ = new BehaviorSubject(true);
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly store: Store,
@@ -39,7 +39,7 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
 
     this.actions$
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         ofActionCompleted(FetchUserNotifications, AcceptFollowRequest, DeclineFollowRequest, DeleteNotification),
       )
       .subscribe(() => {
@@ -47,7 +47,7 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
       });
 
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionErrored(AcceptFollowRequest, DeclineFollowRequest, DeleteNotification))
+      .pipe(this.untilDestroyed(), ofActionErrored(AcceptFollowRequest, DeclineFollowRequest, DeleteNotification))
       .subscribe(() => {
         this.snackbar.open('Something went wrong. Please try again later', 'OK', {
           panelClass: 'snackbar-error',
@@ -65,8 +65,6 @@ export class UserNotificationsComponent implements OnInit, Destroyable {
       checkNotification: true, // Reset flag while navigating away
     };
 
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 

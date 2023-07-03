@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {BehaviorSubject, finalize} from 'rxjs';
+import {untilDestroyed} from '~app/utilities/operator';
 import {EMAIL_REGEXP, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {SignInFailReason} from '~app/typings/authentication/authentication.enums';
@@ -36,7 +36,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class SignInDialogComponent implements OnInit, Destroyable {
+export class SignInDialogComponent implements OnInit {
   @Output() public readonly authenticated = new EventEmitter();
   @Output() public readonly recover = new EventEmitter();
   @Output() public readonly signUp = new EventEmitter();
@@ -44,9 +44,9 @@ export class SignInDialogComponent implements OnInit, Destroyable {
   @Output() public readonly cancel = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
   public readonly rememberMe = new FormControl(false);
   private readonly signInForm = this.signInFormGroup;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) private readonly data: SignIn,
@@ -60,8 +60,6 @@ export class SignInDialogComponent implements OnInit, Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
@@ -85,7 +83,7 @@ export class SignInDialogComponent implements OnInit, Destroyable {
     this.authenticationService
       .signIn(credentials)
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => this.loading$.next(false)),
       )
       .subscribe(

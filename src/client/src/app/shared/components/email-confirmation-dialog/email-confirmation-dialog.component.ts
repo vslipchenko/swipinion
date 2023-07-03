@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
-import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
+import {untilDestroyed} from '~app/utilities/operator';
+import {BehaviorSubject, finalize} from 'rxjs';
 import {CODE_REGEXP, EMAIL_REGEXP} from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {UserService} from '~app/services/user/user.service';
@@ -19,20 +19,18 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
   standalone: true,
   imports: [NgIf, AsyncPipe, MatDialogModule, InputComponent, ProgressBarComponent, ButtonComponent],
 })
-export class EmailConfirmationDialogComponent implements Destroyable {
+export class EmailConfirmationDialogComponent {
   @Output() public readonly emailConfirmed = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
   public email = '';
   public readonly code = new FormControl('', Validators.required);
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly snackbar: MatSnackBar, private readonly userService: UserService) {}
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
@@ -57,7 +55,7 @@ export class EmailConfirmationDialogComponent implements Destroyable {
     this.userService
       .confirmEmail({email: this.email, code: this.code.value as string})
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => this.loading$.next(false)),
       )
       .subscribe(

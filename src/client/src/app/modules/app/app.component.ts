@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ICONS, ICONS_PATH} from '~app/constants/icons';
-import {Subject, takeUntil} from 'rxjs';
+import {Subject} from 'rxjs';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {HeaderService} from '~app/services/header/header.service';
 import {ShowMessagesService} from '~app/services/show-messages/show-messages.service';
 import {Store} from '@ngxs/store';
@@ -16,9 +16,9 @@ import {AuthenticationService} from '~app/services/authentication/authentication
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements Destroyable {
+export class AppComponent {
   public readonly recover$ = new Subject<void>();
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     public readonly authenticationService: AuthenticationService,
@@ -32,7 +32,7 @@ export class AppComponent implements Destroyable {
   ) {
     this.registerIcons();
 
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+    this.router.events.pipe(this.untilDestroyed()).subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
       switch (true) {
@@ -63,11 +63,6 @@ export class AppComponent implements Destroyable {
           this.showMessagesService.hide();
       }
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private registerIcons(): void {

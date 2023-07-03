@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {BehaviorSubject, finalize, map, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize, map, Observable, Subject} from 'rxjs';
 import {
   EMAIL_REGEXP,
   PASSWORD_MAX_LENGTH,
@@ -12,7 +12,7 @@ import {
   USERNAME_REGEXP,
 } from '~app/constants/validation';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {InputComponent} from '~app/shared/components/input/input.component';
@@ -36,24 +36,24 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class SignUpDialogComponent implements Destroyable {
+export class SignUpDialogComponent {
   @Output() public readonly signedUp = new EventEmitter<string>();
   @Output() public readonly cancel = new EventEmitter();
 
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
   public readonly renderUsername$ = new Subject<void>();
   public readonly renderEmail$ = new Subject<void>();
   private readonly signUpForm = this.signUpFormGroup;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly userService: UserService, private readonly snackbar: MatSnackBar) {
-    this.username.statusChanges.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+    this.username.statusChanges.pipe(this.untilDestroyed()).subscribe((status) => {
       if (status !== 'INVALID') return;
 
       this.renderUsername$.next();
     });
 
-    this.email.statusChanges.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+    this.email.statusChanges.pipe(this.untilDestroyed()).subscribe((status) => {
       if (status !== 'INVALID') return;
 
       this.renderEmail$.next();
@@ -61,8 +61,6 @@ export class SignUpDialogComponent implements Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
     this.renderUsername$.complete();
     this.renderEmail$.complete();
@@ -151,7 +149,7 @@ export class SignUpDialogComponent implements Destroyable {
     this.userService
       .create({...this.signUpForm.value, language: 'en'}) // TODO replace with generic language value
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => this.loading$.next(false)),
       )
       .subscribe(

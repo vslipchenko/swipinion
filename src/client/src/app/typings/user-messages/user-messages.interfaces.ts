@@ -118,7 +118,7 @@ export interface MessageDialogData {
 }
 
 export interface ActiveConversation {
-  edgeId: string;
+  edgeId?: string;
   userId1: string;
   userId2: string;
   username: string;

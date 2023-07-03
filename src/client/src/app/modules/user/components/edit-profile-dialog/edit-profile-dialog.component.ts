@@ -1,11 +1,14 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
-import {BehaviorSubject, finalize, Subject, switchMap, takeUntil, throwError} from 'rxjs';
+import {BehaviorSubject, finalize, switchMap, throwError} from 'rxjs';
 import {isValidHttpUrl} from '~app/utilities/url';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import {UserService} from '~app/services/user/user.service';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {ImageService} from '~app/services/image/image.service';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {Store} from '@ngxs/store';
@@ -21,11 +24,11 @@ import {EditUserProfile} from '~app/modules/user/store/user.actions';
   styleUrls: ['./edit-profile-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditProfileDialogComponent implements Destroyable {
+export class EditProfileDialogComponent {
   public readonly editProfileForm = this.editProfileFormGroup;
 
-  public readonly destroy$ = new Subject<void>();
   public readonly loading$ = new BehaviorSubject(false);
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) private readonly data: ResolvedUserData,
@@ -41,8 +44,6 @@ export class EditProfileDialogComponent implements Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
@@ -88,7 +89,7 @@ export class EditProfileDialogComponent implements Destroyable {
               bio: this.bio.value || null,
             });
           }),
-          takeUntil(this.destroy$),
+          this.untilDestroyed(),
           finalize(() => this.loading$.next(false)),
         )
         .subscribe(
@@ -101,22 +102,10 @@ export class EditProfileDialogComponent implements Destroyable {
     this.userService
       .editProfile({thumbnail: this.imageUrl.value, bio: this.bio.value || null})
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => this.loading$.next(false)),
       )
       .subscribe(this.handleSuccessfulResponse.bind(this), () => this.showErrorSnackbar());
-  }
-
-  public get imageUrl(): FormControl {
-    return this.editProfileForm.controls['imageUrl'] as FormControl;
-  }
-
-  public get bio(): FormControl {
-    return this.editProfileForm.controls['bio'] as FormControl;
-  }
-
-  public get file(): FormControl {
-    return this.editProfileForm.controls['file'] as FormControl;
   }
 
   private handleSuccessfulResponse({data}: MutationResult<EditProfileMutationResult>, thumbnail?: string): void {
@@ -170,6 +159,18 @@ export class EditProfileDialogComponent implements Destroyable {
     if ((control.value as File).size / 1024 ** 2 > MAX_IMAGE_SIZE_MB) return {size: true};
 
     return null;
+  }
+
+  public get imageUrl(): FormControl {
+    return this.editProfileForm.controls['imageUrl'] as FormControl;
+  }
+
+  public get bio(): FormControl {
+    return this.editProfileForm.controls['bio'] as FormControl;
+  }
+
+  public get file(): FormControl {
+    return this.editProfileForm.controls['file'] as FormControl;
   }
 
   private get editProfileFormGroup(): FormGroup {

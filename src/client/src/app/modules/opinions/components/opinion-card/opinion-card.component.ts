@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, Injector, Input, OnInit} from '@angular/core';
 import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
-import {Subject, takeUntil} from 'rxjs';
+import {Subject} from 'rxjs';
 import {Store} from '@ngxs/store';
-import {Destroyable} from '~app/typings/component/component.interfaces';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
 import {authClickGuard} from '~app/utilities/guard';
 import {copyOpinionLink} from '~app/utilities/opinion';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-opinion-card',
@@ -15,7 +15,7 @@ import {copyOpinionLink} from '~app/utilities/opinion';
   styleUrls: ['./opinion-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionCardComponent implements OnInit, Destroyable {
+export class OpinionCardComponent implements OnInit {
   @Input() public id = '';
   @Input() public username = '';
   @Input() public thumbnail = '';
@@ -26,8 +26,6 @@ export class OpinionCardComponent implements OnInit, Destroyable {
   @Input() public disagreed = '';
   @Input() public comments = '';
   @Input() public tags: Array<string> = [];
-
-  public readonly destroy$ = new Subject<void>();
 
   protected textContent = false;
   protected textBackground = false;
@@ -58,11 +56,12 @@ export class OpinionCardComponent implements OnInit, Destroyable {
   ] as Array<MenuItem>;
 
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly store: Store, private readonly injector: Injector) {
     this.store
       .select(OpinionsSelectors.opinionReaction)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(this.untilDestroyed())
       .subscribe((value) => {
         if (this.id !== value.opinionId) return; // Ignore if not active opinion
 
@@ -83,11 +82,6 @@ export class OpinionCardComponent implements OnInit, Destroyable {
       // assume OpinionType = Text
       this.textBackground = true;
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   protected addToFavorites(): void {

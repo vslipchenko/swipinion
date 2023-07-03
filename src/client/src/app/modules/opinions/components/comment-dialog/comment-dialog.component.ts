@@ -3,8 +3,6 @@ import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
-import {Subject} from 'rxjs';
-import {Destroyable} from '~app/typings/component/component.interfaces';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {OPINION_COMMENT_MAX_LENGTH} from '~app/constants/validation';
 import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
@@ -19,10 +17,8 @@ import {ReactToUserOpinion} from '~app/modules/opinions/store/opinions.actions';
   styleUrls: ['./comment-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentDialogComponent implements Destroyable {
+export class CommentDialogComponent {
   @Output() public readonly reacted = new EventEmitter();
-
-  public readonly destroy$ = new Subject<void>();
 
   protected readonly reaction: 'Agree' | 'Disagree' = 'Agree';
   protected readonly commentButtonColor: ThemePalette;
@@ -40,11 +36,6 @@ export class CommentDialogComponent implements Destroyable {
       this.reaction = 'Disagree';
       this.commentButtonColor = 'accent';
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   protected commentErrorMessage(errors: ValidationErrors | null): string | void {

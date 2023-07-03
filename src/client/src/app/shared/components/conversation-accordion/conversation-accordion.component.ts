@@ -14,15 +14,15 @@ import {ActiveConversation, UnreadMessage} from '~app/typings/user-messages/user
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 import {Select, Store} from '@ngxs/store';
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
-import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {Destroyable} from '~app/typings/component/component.interfaces';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {ConversationThumbnailComponent} from '~app/shared/components/conversation-thumbnail/conversation-thumbnail.component';
 import {IconButtonComponent} from '~app/shared/components/icon-button/icon-button.component';
 import {ConversationUserSearchComponent} from '~app/shared/components/conversation-user-search/conversation-user-search.component';
 import {ConversationComponent} from '~app/shared/components/conversation/conversation.component';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-conversation-accordion',
@@ -40,7 +40,7 @@ import {ConversationComponent} from '~app/shared/components/conversation/convers
     ConversationComponent,
   ],
 })
-export class ConversationAccordionComponent implements AfterViewInit, OnChanges, Destroyable {
+export class ConversationAccordionComponent implements AfterViewInit, OnChanges {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   @Input() public conversation!: ActiveConversation;
@@ -52,9 +52,10 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
 
   @ViewChild(AccordionComponent, {static: true}) protected readonly accordion!: AccordionComponent;
 
-  public readonly destroy$ = new Subject<void>();
   protected readonly renderUi$ = new BehaviorSubject(true);
   protected readonly unread$ = new BehaviorSubject(false);
+
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly store: Store) {}
 
@@ -82,8 +83,6 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
   public ngOnDestroy(): void {
     this.afterClose.emit();
 
-    this.destroy$.next();
-    this.destroy$.complete();
     this.resetActiveConversation();
   }
 
@@ -110,7 +109,7 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges,
 
     if (!this.userConversation) return;
 
-    this.unreadMessages$.pipe(takeUntil(this.destroy$)).subscribe((messages) => {
+    this.unreadMessages$.pipe(this.untilDestroyed()).subscribe((messages) => {
       const interlocutorId = getInterlocutorId(
         this.conversation.userId1,
         this.conversation.userId2,

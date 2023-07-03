@@ -1,11 +1,14 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
-import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {UnfollowUser} from '~app/modules/user/store/user.actions';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
-import {Destroyable} from '~app/typings/component/component.interfaces';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {untilDestroyed} from '~app/utilities/operator';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 
 @Component({
@@ -14,10 +17,10 @@ import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-b
   styleUrls: ['./unfollow-user-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UnfollowUserDialogComponent implements Destroyable {
-  public readonly destroy$ = new Subject<void>();
+export class UnfollowUserDialogComponent {
   public readonly loading$ = new BehaviorSubject(false);
   public readonly profile: ResolvedUserData;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public readonly data: {title: string; body: string; action: string},
@@ -28,19 +31,17 @@ export class UnfollowUserDialogComponent implements Destroyable {
   ) {
     this.profile = this.store.selectSnapshot(UserSelectors.resolvedUserData);
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionSuccessful(UnfollowUser)).subscribe(() => {
+    this.actions$.pipe(this.untilDestroyed(), ofActionSuccessful(UnfollowUser)).subscribe(() => {
       this.dialog.close();
     });
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(UnfollowUser)).subscribe(() => {
+    this.actions$.pipe(this.untilDestroyed(), ofActionErrored(UnfollowUser)).subscribe(() => {
       this.loading$.next(false);
       this.snackbar.open('Something went wrong. Please try again later', 'OK');
     });
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 

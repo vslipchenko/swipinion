@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {BehaviorSubject, debounceTime, filter, finalize, Subject, Subscription, switchMap, takeUntil, tap} from 'rxjs';
+import {BehaviorSubject, debounceTime, filter, finalize, Subscription, switchMap, tap} from 'rxjs';
 import {UserSearchService} from '~app/services/user-search/user-search.service';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {UserEssentials} from '~app/typings/user-search/user-search.interfaces';
 import {Store} from '@ngxs/store';
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
@@ -31,22 +31,20 @@ import {USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from '~app/constants/validatio
     ThumbnailComponent,
   ],
 })
-export class ConversationUserSearchComponent implements Destroyable {
-  public readonly destroy$ = new Subject<void>();
+export class ConversationUserSearchComponent {
   protected readonly searchControl = new FormControl();
   protected readonly loading$ = new BehaviorSubject(false);
 
   protected userEssentials: Array<UserEssentials> = [];
 
   private userSearchSubscription!: Subscription;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly store: Store, private readonly userSearchService: UserSearchService) {
     this.listenToControlValueChanges();
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
@@ -81,7 +79,7 @@ export class ConversationUserSearchComponent implements Destroyable {
   private listenToControlValueChanges(): void {
     this.userSearchSubscription = this.searchControl.valueChanges
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         filter((value) => value.length >= USERNAME_MIN_LENGTH && value.length <= USERNAME_MAX_LENGTH), // Start search only if username length is valid
         tap(() => {
           this.loading$.next(true);

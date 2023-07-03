@@ -13,20 +13,8 @@ import {
   SendUserSavedMessage,
 } from '~app/modules/app/store/app.actions';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {Destroyable} from '~app/typings/component/component.interfaces';
-import {
-  BehaviorSubject,
-  map,
-  Observable,
-  of,
-  skip,
-  skipWhile,
-  startWith,
-  Subject,
-  Subscription,
-  takeUntil,
-  timer,
-} from 'rxjs';
+import {untilDestroyed} from '~app/utilities/operator';
+import {BehaviorSubject, map, Observable, of, skip, skipWhile, startWith, Subscription, timer} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
 import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
@@ -56,7 +44,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     InViewDirective,
   ],
 })
-export class ConversationComponent implements OnInit, Destroyable {
+export class ConversationComponent implements OnInit {
   @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   @Input() public username = '';
@@ -80,16 +68,16 @@ export class ConversationComponent implements OnInit, Destroyable {
   public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
   public readonly updating$ = new BehaviorSubject(false);
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
   protected definedUsername = '';
   protected unreadMessagesSubscription!: Subscription;
   protected messageStatusCheckSubscription!: Subscription;
   private messageStatusCheckTimestamp = 0;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
     this.actions$
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         ofActionCompleted(FetchUserConversation, FetchUserSavedMessages, SendUserMessage, SendUserSavedMessage),
       )
       .subscribe(({action}) => {
@@ -130,8 +118,6 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.updating$.complete();
     this.loading$.complete();
   }
@@ -186,7 +172,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   private listenToUnreadMessagesChanges(): void {
     this.unreadMessagesSubscription = this.unreadMessages$
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         skipWhile(() => !this.conversationInitialized || this.updating$.getValue()), // Ignore if conversation is not initializer or while messages processing is in progress;
       )
       .subscribe((messages) => {
@@ -204,7 +190,7 @@ export class ConversationComponent implements OnInit, Destroyable {
   private runMessageStatusCheck(): void {
     this.messageStatusCheckSubscription = timer(0, USER_STATUS_POLLING_INTERVAL)
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         skipWhile(() => {
           // Run status check only if enough time passed between current and previous check; Needed due to a possible accordion toggle api call overhead
           const time = new Date().getTime();
@@ -252,13 +238,13 @@ export class ConversationComponent implements OnInit, Destroyable {
   }
 
   private listenToAccordionStateChange(): void {
-    this.accordionExpanded.pipe(takeUntil(this.destroy$), skip(1), startWith(void 0)).subscribe(() => {
+    this.accordionExpanded.pipe(this.untilDestroyed(), skip(1), startWith(void 0)).subscribe(() => {
       // skip(1) has to be used in order to avoid duplicate emit on accordion open; startWith is used in order to always execute subscription callback on component init (e.g. when conversation is changed via switching between conversations)
       this.runMessageStatusCheck();
       this.listenToUnreadMessagesChanges(); // Emits immediately on subscription;
     });
 
-    this.accordionCollapsed.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.accordionCollapsed.pipe(this.untilDestroyed()).subscribe(() => {
       this.unreadMessagesSubscription.unsubscribe();
       this.messageStatusCheckSubscription.unsubscribe();
     });

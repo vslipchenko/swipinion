@@ -1,8 +1,8 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Select} from '@ngxs/store';
-import {Observable, Subject, takeUntil} from 'rxjs';
+import {Observable} from 'rxjs';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces';
 
 @Component({
@@ -11,14 +11,14 @@ import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces'
   styleUrls: ['./text-background-filler.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable {
+export class TextBackgroundFillerComponent implements AfterViewInit {
   @Select(OpinionsSelectors.containerSizes) public containerSizes!: Observable<OpinionsContainerSizes>;
 
   @Input() public text = '';
 
   @ViewChild('canvas', {static: true}) private readonly canvasElement!: ElementRef<HTMLCanvasElement>;
 
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
   // Canvas Properties
   private readonly fontSize = 100;
   private readonly lineHeight = this.fontSize; // In canvas line height is considered to be equal to fontSize by default
@@ -34,12 +34,7 @@ export class TextBackgroundFillerComponent implements AfterViewInit, Destroyable
     this.words = this.text.split(' ');
     this.setupCanvas();
     // Rerender canvas on viewport resize
-    this.containerSizes.pipe(takeUntil(this.destroy$)).subscribe(this.renderTextBackground.bind(this));
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.containerSizes.pipe(this.untilDestroyed()).subscribe(this.renderTextBackground.bind(this));
   }
 
   private setupCanvas(): void {

@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {Destroyable} from '~app/typings/component/component.interfaces';
 import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
@@ -11,6 +10,7 @@ import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/
 import {UserSettingsSelectors} from '~app/modules/user-settings/store/user-settings.selectors';
 import {UpdateProfileSettings} from '~app/modules/user-settings/store/user-settings.actions';
 import {ChangePassword} from '~app/typings/user/user.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-user-settings',
@@ -18,7 +18,7 @@ import {ChangePassword} from '~app/typings/user/user.interfaces';
   styleUrls: ['./user-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserSettingsComponent implements Destroyable {
+export class UserSettingsComponent {
   // TODO consider adding Change username functionality
   @Select(UserSettingsSelectors.settings) public settings$!: Observable<UserSettings>;
 
@@ -46,7 +46,6 @@ export class UserSettingsComponent implements Destroyable {
   ];
 
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
   public readonly cancelPasswordChange$ = new Subject<void>();
   public readonly cancelPrivacy$ = new Subject<void>();
 
@@ -61,6 +60,8 @@ export class UserSettingsComponent implements Destroyable {
     ]),
   });
 
+  private readonly untilDestroyed = untilDestroyed();
+
   public constructor(
     private readonly store: Store,
     private readonly userService: UserService,
@@ -73,7 +74,7 @@ export class UserSettingsComponent implements Destroyable {
     // Set initial values;
     this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionSuccessful(UpdateProfileSettings)).subscribe(() => {
+    this.actions$.pipe(this.untilDestroyed(), ofActionSuccessful(UpdateProfileSettings)).subscribe(() => {
       this.loading$.next(false);
       this.privacyForm.markAsPristine();
       this.snackbar.open('Privacy settings successfully updated', 'OK', {
@@ -81,16 +82,13 @@ export class UserSettingsComponent implements Destroyable {
       });
     });
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionErrored(UpdateProfileSettings)).subscribe(() => {
+    this.actions$.pipe(this.untilDestroyed(), ofActionErrored(UpdateProfileSettings)).subscribe(() => {
       this.loading$.next(false);
       this.showErrorSnackbar();
     });
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-
     this.cancelPasswordChange$.complete();
     this.cancelPrivacy$.complete();
     this.loading$.complete();
@@ -135,7 +133,7 @@ export class UserSettingsComponent implements Destroyable {
     this.userService
       .changePassword(this.changePasswordForm.value as ChangePassword)
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         takeUntil(this.cancelPasswordChange$),
         finalize(() => this.loading$.next(false)),
       )

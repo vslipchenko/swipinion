@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
-import {Subject, takeUntil, timer} from 'rxjs';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {timer} from 'rxjs';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-opinion-placeholder',
@@ -9,10 +9,10 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class OpinionPlaceholderComponent implements Destroyable {
+export class OpinionPlaceholderComponent {
   @Output() public pollNewContent = new EventEmitter<void>();
 
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   private readonly POLL_START_DUE = 3000;
   private readonly POLL_INTERVAL = 6000;
@@ -21,14 +21,9 @@ export class OpinionPlaceholderComponent implements Destroyable {
     this.startPolling();
   }
 
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   private startPolling(): void {
     timer(this.POLL_START_DUE, this.POLL_INTERVAL)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(this.untilDestroyed())
       .subscribe(() => {
         this.pollNewContent.emit();
       });

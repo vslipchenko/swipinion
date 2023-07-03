@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {FetchUserOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-user-opinions-tab',
@@ -13,7 +13,7 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
   styleUrls: ['./user-opinions-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserOpinionsTabComponent implements OnInit, Destroyable {
+export class UserOpinionsTabComponent implements OnInit {
   @Input() public username = '';
   @Input() public isProfilePath = false;
 
@@ -21,14 +21,14 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
 
   public opinions$!: Observable<Array<UserOpinion>>;
   public readonly loading$ = new BehaviorSubject(true);
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly store: Store,
     private readonly userNavbarService: UserNavbarService,
     private readonly actions$: Actions,
   ) {
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserOpinions)).subscribe(() => {
+    this.actions$.pipe(this.untilDestroyed(), ofActionCompleted(FetchUserOpinions)).subscribe(() => {
       this.loading$.next(false);
     });
   }
@@ -42,8 +42,6 @@ export class UserOpinionsTabComponent implements OnInit, Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 

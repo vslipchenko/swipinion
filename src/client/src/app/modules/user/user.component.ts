@@ -1,10 +1,10 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
-import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, fromEvent, Observable} from 'rxjs';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {EditProfileDialogComponent} from '~app/modules/user/components/edit-profile-dialog/edit-profile-dialog.component';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserContentTabIndex, UserRole} from '~app/typings/user/user.enums';
@@ -18,7 +18,7 @@ import {MessageAccordionService} from '~app/services/message-accordion/message-a
   styleUrls: ['./user.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserComponent implements AfterViewInit, Destroyable {
+export class UserComponent implements AfterViewInit {
   @Select(UserSelectors.resolvedUserData)
   public readonly profile$!: Observable<ResolvedUserData>;
   @Select(AppSelectors.userRole)
@@ -30,7 +30,6 @@ export class UserComponent implements AfterViewInit, Destroyable {
 
   public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
   public readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
   public readonly username: string = '';
   public readonly isProfilePath: boolean = false;
@@ -43,6 +42,8 @@ export class UserComponent implements AfterViewInit, Destroyable {
     },
     {text: 'Favorites', icon: 'star'},
   ];
+
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly store: Store,
@@ -59,8 +60,6 @@ export class UserComponent implements AfterViewInit, Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.showBottomBar$.complete();
 
     this.messagesPanelService.liftUpConversationAccordion$.next(false);
@@ -79,7 +78,7 @@ export class UserComponent implements AfterViewInit, Destroyable {
 
   private trackScrollProgress(): void {
     fromEvent(this.wrapper.nativeElement, 'scroll')
-      .pipe(takeUntil(this.destroy$))
+      .pipe(this.untilDestroyed())
       .subscribe((event) => {
         const userBlockScrolledThrough =
           (event.target as HTMLDivElement).scrollTop > this.userBlock.nativeElement.clientHeight;

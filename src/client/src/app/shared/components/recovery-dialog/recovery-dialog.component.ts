@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
-import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize} from 'rxjs';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {
   CODE_REGEXP,
@@ -19,6 +18,7 @@ import {InputComponent} from '~app/shared/components/input/input.component';
 import {InputHideSuffixComponent} from '~app/shared/components/input-hide-suffix/input-hide-suffix.component';
 import {ProgressBarComponent} from '~app/shared/components/progress-bar/progress-bar.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-recovery-dialog',
@@ -36,7 +36,7 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class RecoveryDialogComponent implements Destroyable {
+export class RecoveryDialogComponent {
   @Output() public readonly recovered = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
@@ -52,17 +52,16 @@ export class RecoveryDialogComponent implements Destroyable {
   public readonly recoverStage$ = new BehaviorSubject(RecoveryStage.Email);
   public readonly recoveryStage = RecoveryStage;
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
+
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly snackbar: MatSnackBar, private readonly userService: UserService) {
     this.password.valueChanges
-      .pipe(takeUntil(this.destroy$))
+      .pipe(this.untilDestroyed())
       .subscribe(() => this.repeatPassword.updateValueAndValidity());
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
@@ -105,7 +104,7 @@ export class RecoveryDialogComponent implements Destroyable {
     this.userService
       .recoverPassword({email: this.email.value as string, language: 'en' as Language})
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => {
           this.loading$.next(false);
         }),
@@ -136,7 +135,7 @@ export class RecoveryDialogComponent implements Destroyable {
     this.userService
       .checkRecoveryCodeExistenceByEmail({email: this.email.value as string, code: this.code.value as string})
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => {
           this.loading$.next(false);
         }),
@@ -169,7 +168,7 @@ export class RecoveryDialogComponent implements Destroyable {
         code: this.code.value as string,
       })
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => {
           this.loading$.next(false);
         }),

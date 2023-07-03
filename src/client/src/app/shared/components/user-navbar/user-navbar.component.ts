@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {BehaviorSubject, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {UserProfile} from '~app/typings/user/user.interfaces';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {UserStatus} from '~app/typings/user-status/user-status.interfaces';
 import {UserNavbarMenuItem} from '~app/typings/menu/menu.enums';
 import {AsyncPipe, NgIf} from '@angular/common';
@@ -24,12 +24,10 @@ import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.com
   standalone: true,
   imports: [NgIf, AsyncPipe, MatMenuModule, MenuItemsComponent, ThumbnailComponent],
 })
-export class UserNavbarComponent implements OnInit, Destroyable {
+export class UserNavbarComponent implements OnInit {
   @Select(AppSelectors.userEssentials)
   public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
   @Select(AppSelectors.userStatus) public readonly status$!: Observable<UserStatus>; // TODO provide typing
-
-  public readonly destroy$ = new Subject<void>();
 
   public readonly navbarItems$ = new BehaviorSubject([
     {
@@ -58,17 +56,19 @@ export class UserNavbarComponent implements OnInit, Destroyable {
   ] as Array<MenuItem>);
   public indicatorClass = '';
 
+  private readonly untilDestroyed = untilDestroyed();
+
   public constructor(
     private readonly store: Store,
     private readonly dialog: MatDialog,
     private readonly authenticationService: AuthenticationService,
     private readonly userNavbarService: UserNavbarService,
   ) {
-    this.userNavbarService.shareOpinion$.pipe(takeUntil(this.destroy$)).subscribe(() => this.addOpinion());
+    this.userNavbarService.shareOpinion$.pipe(this.untilDestroyed()).subscribe(() => this.addOpinion());
   }
 
   public ngOnInit(): void {
-    this.status$.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+    this.status$.pipe(this.untilDestroyed()).subscribe((status) => {
       this.indicatorClass = this.defineIndicatorClass(status);
 
       this.navbarItems$.next(
@@ -89,11 +89,6 @@ export class UserNavbarComponent implements OnInit, Destroyable {
         }),
       );
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public addOpinion(): void {

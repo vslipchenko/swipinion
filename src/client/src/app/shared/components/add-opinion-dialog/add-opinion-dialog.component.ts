@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {BehaviorSubject, finalize, map, Observable, startWith, Subject, switchMap, takeUntil, throwError} from 'rxjs';
+import {BehaviorSubject, finalize, map, Observable, startWith, switchMap, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {MAX_IMAGE_SIZE_MB, MAX_TAG_COUNT, OPINION_BODY_MAX_LENGTH, TAG_REGEXP} from '~app/constants/validation';
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {ImageService} from '~app/services/image/image.service';
@@ -37,14 +37,14 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class AddOpinionDialogComponent implements Destroyable {
+export class AddOpinionDialogComponent {
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
   public readonly hashtagRegexp = TAG_REGEXP;
   // public readonly titleMaxLength = TITLE_MAX_LENGTH;
   public readonly bodyMaxLength = OPINION_BODY_MAX_LENGTH;
   protected readonly disableAddOpinion$: Observable<boolean>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly userOpinionService: UserOpinionService,
@@ -60,8 +60,6 @@ export class AddOpinionDialogComponent implements Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
@@ -93,7 +91,7 @@ export class AddOpinionDialogComponent implements Destroyable {
               tags,
             });
           }),
-          takeUntil(this.destroy$),
+          this.untilDestroyed(),
           finalize(() => {
             this.loading$.next(false);
           }),
@@ -118,7 +116,7 @@ export class AddOpinionDialogComponent implements Destroyable {
         tags,
       })
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         finalize(() => {
           this.loading$.next(false);
         }),

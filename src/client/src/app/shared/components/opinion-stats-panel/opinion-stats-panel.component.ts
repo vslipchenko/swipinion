@@ -1,9 +1,9 @@
 import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
 import {NgForOf} from '@angular/common';
-import {Subject, takeUntil} from 'rxjs';
+import {Subject} from 'rxjs';
 import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {formatStatisticNumber} from '~app/utilities/number';
 
 @Component({
@@ -14,7 +14,7 @@ import {formatStatisticNumber} from '~app/utilities/number';
   standalone: true,
   imports: [NgForOf, ButtonComponent],
 })
-export class OpinionStatsPanelComponent implements AfterViewInit, Destroyable {
+export class OpinionStatsPanelComponent implements AfterViewInit {
   @Input() public agreed = '';
   @Input() public disagreed = '';
   @Input() public comments = '';
@@ -27,18 +27,18 @@ export class OpinionStatsPanelComponent implements AfterViewInit, Destroyable {
     comments: number;
   }>;
 
-  public readonly destroy$ = new Subject<void>();
-
   protected agreedWith = false;
   protected disagreedWith = false;
   protected commented = false;
+
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly changeDetector: ChangeDetectorRef) {}
 
   public ngAfterViewInit(): void {
     if (this.updateStatistic)
       this.updateStatistic
-        .pipe(takeUntil(this.destroy$))
+        .pipe(this.untilDestroyed())
         .subscribe(({reaction, commented, agreed, disagreed, comments}) => {
           if (reaction === OpinionReaction.Agree) {
             this.agreedWith = true;
@@ -56,10 +56,5 @@ export class OpinionStatsPanelComponent implements AfterViewInit, Destroyable {
 
           this.changeDetector.detectChanges();
         });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

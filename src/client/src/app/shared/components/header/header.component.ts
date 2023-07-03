@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {distinctUntilChanged, filter, map, merge, of, Subject, take, takeUntil} from 'rxjs';
+import {distinctUntilChanged, filter, map, merge, of, take, takeUntil} from 'rxjs';
 import {AsyncPipe, Location, NgIf} from '@angular/common';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {NavigationEnd, Router, RouterLink} from '@angular/router';
 import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
@@ -26,13 +26,13 @@ import {FlatButtonComponent} from '~app/shared/components/flat-button/flat-butto
   standalone: true,
   imports: [AsyncPipe, NgIf, RouterLink, UserNavbarComponent, ButtonComponent, FlatButtonComponent],
 })
-export class HeaderComponent implements OnInit, Destroyable {
+export class HeaderComponent implements OnInit {
   @Input() public showSignIn = of<void>();
   @Input() public showSignUp = of<void>();
   @Input() public showPasswordRecovery = of<void>();
 
-  public readonly destroy$ = new Subject<void>();
   public readonly authenticated: boolean = false;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly dialog: MatDialog,
@@ -46,22 +46,22 @@ export class HeaderComponent implements OnInit, Destroyable {
   }
 
   public ngOnInit(): void {
-    this.showSignIn.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.showSignIn.pipe(this.untilDestroyed()).subscribe(() => {
       this.signIn(false);
     });
 
-    this.showSignUp.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.showSignUp.pipe(this.untilDestroyed()).subscribe(() => {
       this.signUp(false);
     });
 
-    this.showPasswordRecovery.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.showPasswordRecovery.pipe(this.untilDestroyed()).subscribe(() => {
       this.recoverPassword(false);
     });
 
     if (this.authenticationService.authenticated) {
       this.router.events
         .pipe(
-          takeUntil(this.destroy$),
+          this.untilDestroyed(),
           filter((event) => event instanceof NavigationEnd),
           take(1),
         )
@@ -76,11 +76,6 @@ export class HeaderComponent implements OnInit, Destroyable {
           this.runUserStatusPolling();
         });
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public signIn(changeLocation: boolean, data?: {email: string; password: string}): void {
@@ -172,7 +167,7 @@ export class HeaderComponent implements OnInit, Destroyable {
 
     this.userStatusPingService.runStatusPing$
       .pipe(
-        takeUntil(this.destroy$),
+        this.untilDestroyed(),
         map(() => this.userStatusPingService.pingOptions),
         distinctUntilChanged((previous, current) => {
           return (

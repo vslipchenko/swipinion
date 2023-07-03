@@ -26,13 +26,13 @@ import {
 import {AuthClickConfiguration} from '~app/typings/auth-click/auth-click.types';
 import {CommentDialogComponent} from '~app/modules/opinions/components/comment-dialog/comment-dialog.component';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
-import {Subject, takeUntil} from 'rxjs';
+import {takeUntil} from 'rxjs';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {halfWidthRelativeToViewport} from '~app/utilities/viewport';
 import {ReactionService} from '~app/services/reaction/reaction.service';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-opinion-carousel',
@@ -40,18 +40,18 @@ import {Destroyable} from '~app/typings/component/component.interfaces';
   styleUrls: ['./opinion-carousel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionCarouselComponent implements Destroyable {
+export class OpinionCarouselComponent {
   @Input() public data: Array<CarouselOpinion> = [];
   @Output() public prefetchOpinions = new EventEmitter<void>();
 
   @ViewChildren(OpinionCardComponent, {read: ElementRef}) private readonly cards!: QueryList<ElementRef>;
 
-  public readonly destroy$ = new Subject<void>();
-
   protected skipAuthClickConfiguration: AuthClickConfiguration = {
     allowUnauthenticatedClickCount: 1,
     method: this.skip.bind(this),
   };
+
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly store: Store,
@@ -59,14 +59,9 @@ export class OpinionCarouselComponent implements Destroyable {
     private readonly authenticationService: AuthenticationService,
     private readonly reactionService: ReactionService,
   ) {
-    this.reactionService.swipeReaction$.pipe(takeUntil(this.destroy$)).subscribe(({reaction, slideDirection}) => {
+    this.reactionService.swipeReaction$.pipe(this.untilDestroyed()).subscribe(({reaction, slideDirection}) => {
       this.react(reaction, slideDirection, true);
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   protected agree(): void {

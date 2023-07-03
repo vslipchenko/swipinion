@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable} from 'rxjs';
 import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ActionCompletion, Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
@@ -12,10 +12,10 @@ import {
   TogglePrefetchInProgress,
 } from '~app/modules/opinions/store/opinions.actions';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
-import {Destroyable} from '~app/typings/component/component.interfaces';
 import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opinion-fail-snackbar/opinion-fail-snackbar.component';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
+import {untilDestroyed} from '~app/utilities/operator';
 
 @Component({
   selector: 'app-opinions',
@@ -23,7 +23,7 @@ import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
   styleUrls: ['./opinions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
+export class OpinionsComponent implements OnInit, AfterViewInit {
   @Select(OpinionsSelectors.nothingToShow)
   public readonly nothingToShow$!: Observable<boolean>;
   @Select(OpinionsSelectors.opinions)
@@ -31,11 +31,11 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
 
   public readonly loading$ = new BehaviorSubject(true);
   public readonly polling$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
 
   protected readonly showLoading$!: Observable<boolean>;
 
   private readonly view: OpinionsView;
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -50,7 +50,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
       this.opinions$,
       this.store.select(OpinionsSelectors.prefetchInProgress),
     ).pipe(
-      takeUntil(this.destroy$),
+      this.untilDestroyed(),
       map(([loading, opinions, prefetchInProgress]) => {
         if (opinions.length) return false; // If there is opinions left don't show loading spinner
 
@@ -61,10 +61,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
     );
 
     this.actions$
-      .pipe(
-        takeUntil(this.destroy$),
-        ofActionCompleted(FetchGeneralOpinions, AddOpinionToFavorites, ReactToUserOpinion),
-      )
+      .pipe(this.untilDestroyed(), ofActionCompleted(FetchGeneralOpinions, AddOpinionToFavorites, ReactToUserOpinion))
       .subscribe((completion) => {
         if (completion.action instanceof FetchGeneralOpinions) return this.fetchGeneralOpinionsCompleted();
         if (completion.action instanceof AddOpinionToFavorites)
@@ -82,15 +79,13 @@ export class OpinionsComponent implements OnInit, AfterViewInit, Destroyable {
 
   public ngAfterViewInit(): void {
     fromEvent(window, 'resize')
-      .pipe(takeUntil(this.destroy$), debounceTime(200))
+      .pipe(this.untilDestroyed(), debounceTime(200))
       .subscribe(() => this.setContainerSizes());
 
     this.setContainerSizes();
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 

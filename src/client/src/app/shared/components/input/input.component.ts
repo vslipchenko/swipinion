@@ -6,8 +6,8 @@ import {
   LegacyFloatLabelType as FloatLabelType,
   MatLegacyFormFieldAppearance as MatFormFieldAppearance,
 } from '@angular/material/legacy-form-field';
-import {Observable, Subject, takeUntil} from 'rxjs';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {Observable} from 'rxjs';
+import {untilDestroyed} from '~app/utilities/operator';
 import {NgIf, NgTemplateOutlet} from '@angular/common';
 import {MatLegacyInputModule} from '@angular/material/legacy-input';
 
@@ -19,7 +19,7 @@ import {MatLegacyInputModule} from '@angular/material/legacy-input';
   standalone: true,
   imports: [MatLegacyInputModule, ReactiveFormsModule, NgIf, NgTemplateOutlet],
 })
-export class InputComponent implements OnInit, Destroyable {
+export class InputComponent implements OnInit {
   @Input() public type: InputType = 'text';
   @Input() public control = new FormControl();
   @Input() public errorMessage?: (errors: ValidationErrors | null) => string | void;
@@ -41,21 +41,16 @@ export class InputComponent implements OnInit, Destroyable {
   @Input() public maxlength?: string | number;
 
   public hide = true;
-  public readonly destroy$ = new Subject<void>();
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly changeDetector: ChangeDetectorRef) {}
 
   public ngOnInit(): void {
     if (this.render) {
-      this.render.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.render.pipe(this.untilDestroyed()).subscribe(() => {
         this.changeDetector.detectChanges();
       });
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public toggleVisibility(): void {

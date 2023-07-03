@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {Destroyable} from '~app/typings/component/component.interfaces';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-statistics-action',
@@ -8,13 +7,10 @@ import {BehaviorSubject, Subject} from 'rxjs';
   styleUrls: ['./statistics-action.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatisticsActionComponent implements Destroyable {
+export class StatisticsActionComponent {
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly destroy$ = new Subject<void>();
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 }

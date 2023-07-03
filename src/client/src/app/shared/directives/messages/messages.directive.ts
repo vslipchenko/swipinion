@@ -1,8 +1,8 @@
 import {Directive, OnInit} from '@angular/core';
-import {BehaviorSubject, Subject, take, takeUntil} from 'rxjs';
+import {BehaviorSubject, take} from 'rxjs';
 import {Actions, ofActionCompleted, Store} from '@ngxs/store';
 import {FetchUserMessages, UserStatusUpdatedBeforeMessagesInitialFetch} from '~app/modules/app/store/app.actions';
-import {Destroyable} from '~app/typings/component/component.interfaces';
+import {untilDestroyed} from '~app/utilities/operator';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserStatusPingService} from '~app/services/user-status-ping/user-status-ping.service';
 
@@ -10,9 +10,9 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
   selector: '[appMessages]',
   standalone: true,
 })
-export class MessagesDirective implements OnInit, Destroyable {
-  public readonly destroy$ = new Subject<void>();
+export class MessagesDirective implements OnInit {
   public readonly loading$ = new BehaviorSubject(false);
+  private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
     private readonly store: Store,
@@ -23,12 +23,12 @@ export class MessagesDirective implements OnInit, Destroyable {
   public ngOnInit(): void {
     if (this.messagesInitialized) return;
 
-    this.actions$.pipe(takeUntil(this.destroy$), ofActionCompleted(FetchUserMessages), take(1)).subscribe(() => {
+    this.actions$.pipe(this.untilDestroyed(), ofActionCompleted(FetchUserMessages), take(1)).subscribe(() => {
       this.loading$.next(false);
     });
 
     this.actions$
-      .pipe(takeUntil(this.destroy$), ofActionCompleted(UserStatusUpdatedBeforeMessagesInitialFetch), take(1))
+      .pipe(this.untilDestroyed(), ofActionCompleted(UserStatusUpdatedBeforeMessagesInitialFetch), take(1))
       .subscribe(() => {
         this.setDispatchActionAfterStatusChecked(false);
 
@@ -37,8 +37,6 @@ export class MessagesDirective implements OnInit, Destroyable {
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.loading$.complete();
   }
 
