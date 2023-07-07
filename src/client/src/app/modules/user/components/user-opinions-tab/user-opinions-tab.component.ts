@@ -17,7 +17,7 @@ export class UserOpinionsTabComponent implements OnInit {
   @Input() public username = '';
   @Input() public isProfilePath = false;
 
-  @Select(UserSelectors.canLoadMore) public readonly canLoadMore$!: Observable<Array<UserOpinion>>;
+  @Select(UserSelectors.canLoadMoreOpinions) public readonly canLoadMoreOpinions$!: Observable<boolean>;
 
   public opinions$!: Observable<Array<UserOpinion>>;
   public readonly loading$ = new BehaviorSubject(true);
@@ -34,9 +34,7 @@ export class UserOpinionsTabComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.opinions$ = this.store.select(
-      this.isProfilePath ? UserSelectors.profileOpinionsSlice : UserSelectors.userOpinionsSlice,
-    );
+    this.opinions$ = this.store.select(this.isProfilePath ? UserSelectors.profileOpinions : UserSelectors.userOpinions);
 
     this.fetchUserOpinions();
   }
@@ -49,7 +47,15 @@ export class UserOpinionsTabComponent implements OnInit {
     this.userNavbarService.shareOpinion$.next();
   }
 
-  public fetchUserOpinions(edgeId = ''): void {
+  protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {
+    if (!inView) return;
+
+    const edgeId = opinions[opinions.length - 1].id;
+
+    this.fetchUserOpinions(edgeId);
+  }
+
+  private fetchUserOpinions(edgeId = ''): void {
     const payload: FetchUserOpinionsPayload = {
       username: this.username,
       isProfilePath: this.isProfilePath,
@@ -58,13 +64,5 @@ export class UserOpinionsTabComponent implements OnInit {
     if (edgeId) payload.edgeId = edgeId;
 
     this.store.dispatch(new FetchUserOpinions(payload));
-  }
-
-  protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {
-    if (!inView) return;
-
-    const edgeId = opinions[opinions.length - 1].id;
-
-    this.fetchUserOpinions(edgeId);
   }
 }

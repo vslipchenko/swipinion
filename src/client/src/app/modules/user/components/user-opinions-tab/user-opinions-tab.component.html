@@ -1,5 +1,5 @@
 <app-progress-spinner *ngIf="loading$ | async; else content"
-                      class="d-flex jc-center ai-center spinner"></app-progress-spinner>
+                      class="d-flex jc-center ai-center spinner mt-3"></app-progress-spinner>
 
 <ng-template #content>
   <ng-container *ngIf="opinions$ | async as opinions">
@@ -24,7 +24,7 @@
                            [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
 
       <app-progress-spinner
-        *ngIf="canLoadMore$ | async"
+        *ngIf="canLoadMoreOpinions$ | async"
         (appInView)="spinnerInView($event, opinions)"
         class="d-flex jc-center ai-center list-spinner"></app-progress-spinner>
     </ng-template>
