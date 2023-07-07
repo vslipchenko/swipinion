@@ -16,6 +16,7 @@ import {userMessagesResolvers, userMessagesTypeDefinitions} from './schemas/user
 import {userStatusResolvers, userStatusTypeDefinitions} from './schemas/user-status/user-status.schema';
 import {userSearchResolvers, userSearchTypeDefinitions} from './schemas/user-search/user-search.schema';
 import {opinionResolvers, opinionTypeDefinitions} from './schemas/opinion/opinion.schema';
+import {userFavoritesResolvers, userFavoritesTypeDefinitions} from './schemas/user-favorites/user-favorites.schema';
 
 export const schema = makeExecutableSchema({
   typeDefs: [
@@ -32,6 +33,7 @@ export const schema = makeExecutableSchema({
     userStatusTypeDefinitions,
     userSearchTypeDefinitions,
     opinionTypeDefinitions,
+    userFavoritesTypeDefinitions,
   ],
   resolvers: merge(
     {},
@@ -47,5 +49,6 @@ export const schema = makeExecutableSchema({
     ...userStatusResolvers,
     ...userSearchResolvers,
     ...opinionResolvers,
+    ...userFavoritesResolvers,
   ),
 });
