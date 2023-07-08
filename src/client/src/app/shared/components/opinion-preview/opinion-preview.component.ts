@@ -34,7 +34,6 @@ export class OpinionPreviewComponent {
   @Input() public body = '';
   @Input() public fileUrl = '';
   @Input() public tags: Array<string> = [];
-  @Input() public username = '';
 
   public readonly stats = [
     {icon: 'thumb_up', value: '12'},
