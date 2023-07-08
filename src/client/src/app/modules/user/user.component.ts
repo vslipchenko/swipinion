@@ -52,7 +52,7 @@ export class UserComponent implements AfterViewInit {
     private readonly messagesPanelService: MessageAccordionService,
   ) {
     const profileSnapshot = this.profileSnapshot;
-    this.username = profileSnapshot.username;
+    this.userId = profileSnapshot.id;
     this.isProfilePath = profileSnapshot.isProfilePath;
   }
 
