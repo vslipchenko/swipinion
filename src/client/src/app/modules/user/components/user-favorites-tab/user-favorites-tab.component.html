@@ -1,13 +1,30 @@
-<app-content-placeholder icon="star"
-                         class="d-block mt-2-3">
-  <!-- TODO develop version for external user profile -->
-  <ng-container *ngIf="profile; else notProfile">
-    <app-button text="Explore opinions" class="mt-1 d-flex jc-center"
-                routerLink="/"></app-button>
-    <p class="mt-h t-center">and collect your favorites!</p>
-  </ng-container>
+<app-progress-spinner *ngIf="loading$ | async; else content"
+                      class="d-flex jc-center ai-center spinner mt-3"></app-progress-spinner>
 
-  <ng-template #notProfile>
-    <p class="mt-2 t-center">There are no favorites yet</p>
-  </ng-template>
-</app-content-placeholder>
+<ng-template #content>
+  <ng-container *ngIf="favorites$ | async as favorites">
+    <app-content-placeholder *ngIf="!favorites.length; else favoritesList" icon="star"
+                             class="d-block mt-2-3">
+      <ng-container *ngIf="profile; else notProfile">
+        <app-button text="Explore opinions" class="mt-1 d-flex jc-center"
+                    routerLink="/"></app-button>
+        <p class="mt-h t-center">and collect your favorites!</p>
+      </ng-container>
+
+      <ng-template #notProfile>
+        <p class="mt-2 t-center">There are no favorites yet</p>
+      </ng-template>
+    </app-content-placeholder>
+
+    <ng-template #favoritesList>
+      <app-opinion-preview *ngFor="let favorite of favorites" [username]="favorite.username" [id]="favorite.id"
+                           [body]="favorite.body" [fileUrl]="favorite.file_url"
+                           [tags]="favorite.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
+
+      <app-progress-spinner
+        *ngIf="canLoadMoreFavorites$ | async"
+        (appInView)="spinnerInView($event, favorites)"
+        class="d-flex jc-center ai-center list-spinner"></app-progress-spinner>
+    </ng-template>
+  </ng-container>
+</ng-template>
