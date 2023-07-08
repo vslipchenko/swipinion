@@ -31,6 +31,7 @@ export class UserComponent implements AfterViewInit {
   public readonly userRole = UserRole;
   public readonly showBottomBar$ = new BehaviorSubject(false);
   public readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
+  public readonly userId: string = '';
   public readonly username: string = '';
   public readonly isProfilePath: boolean = false;
   public readonly userContentTabIndex = UserContentTabIndex;
