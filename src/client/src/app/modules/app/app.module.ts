@@ -82,7 +82,7 @@ function authenticationFactory(
       switchMap(({data}) => {
         authenticationService.accessToken$.next(data.refreshAccessToken.accessToken);
 
-        return userService.getUserEssentials();
+        return userService.getUserEssentials(); // It is not crucial to query 'bio' field (little bit of overhead), but I believe it is better to fetch it here to avoid extra query if user profile page is accessed (not a big deal)
       }),
       tap(({data}) => {
         if (!data.userEssentials) return;
