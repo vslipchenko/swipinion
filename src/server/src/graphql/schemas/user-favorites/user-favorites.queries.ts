@@ -2,19 +2,19 @@ import {gql} from 'apollo-server-core';
 import {authenticationGuard} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {USER_OPINION_FETCH_LIMIT} from '../../../constants/opinions';
-import {queryFavoritesByUsername} from '../../../data/queries/user-favorites';
+import {queryFavoritesByUserId} from '../../../data/queries/user-favorites';
 import {getUserRecordsValidator} from '../../../validators/shared';
-import {createQueryPayload} from '../../../utilities/query';
+import {composeQueryPayload} from '../../../utilities/query';
 
 export const userFavoritesQueryTypeDefinitions = gql`
   type Query {
-    getFavoritesByUsername(input: GetFavorites!): [Opinion!]
+    getFavoritesByUserId(input: GetUserFavorites!): [Opinion!]
   }
 `;
 
-const getFavoritesByUsername = async (
+const getFavoritesByUserId = async (
   _: unknown,
-  {input}: {input: {username: string; edgeId: string}},
+  {input}: {input: {userId: string; edgeId: string}},
   {accessToken}: {accessToken: string},
 ): Promise<{exists: boolean} | null | Array<unknown>> => {
   const {error} = getUserRecordsValidator.validate(input);
@@ -23,14 +23,14 @@ const getFavoritesByUsername = async (
 
   const {tokenData} = authenticationGuard(accessToken);
 
-  const queryPayload = createQueryPayload({
-    $1: input.username,
+  const queryPayload = composeQueryPayload({
+    $1: input.userId,
     $2: USER_OPINION_FETCH_LIMIT,
     edgeId: input.edgeId,
     followerId: tokenData?.userId,
   });
 
-  const result = await db.query(queryFavoritesByUsername(queryPayload));
+  const result = await db.query(queryFavoritesByUserId(queryPayload));
 
   if (!result.rowCount) return null;
 
@@ -39,6 +39,6 @@ const getFavoritesByUsername = async (
 
 export const userFavoritesQueryResolvers = {
   Query: {
-    getFavoritesByUsername,
+    getFavoritesByUserId,
   },
 };
