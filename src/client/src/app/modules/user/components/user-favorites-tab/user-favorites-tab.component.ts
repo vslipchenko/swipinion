@@ -14,7 +14,7 @@ import {FetchUserFavoritesPayload} from '~app/typings/user-favorites/user-favori
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserFavoritesTabComponent implements OnInit {
-  @Input() public username = '';
+  @Input() public userId = '';
   @Input() public isProfilePath = false;
 
   @Select(UserSelectors.canLoadMoreFavorites) public readonly canLoadMoreFavorites$!: Observable<boolean>;
@@ -34,6 +34,8 @@ export class UserFavoritesTabComponent implements OnInit {
     this.favorites$ = this.store.select(
       this.isProfilePath ? UserSelectors.profileFavorites : UserSelectors.userFavorites,
     );
+
+    this.fetchUserFavorites();
   }
 
   protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {
@@ -46,7 +48,7 @@ export class UserFavoritesTabComponent implements OnInit {
 
   private fetchUserFavorites(edgeId = ''): void {
     const payload: FetchUserFavoritesPayload = {
-      username: this.username,
+      userId: this.userId,
       isProfilePath: this.isProfilePath,
     };
 
