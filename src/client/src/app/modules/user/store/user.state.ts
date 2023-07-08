@@ -2,12 +2,13 @@ import {Action, State, StateContext, StateToken} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
   DeleteOpinionMutationResult,
-  GetOpinionsByUsernameQueryResult,
+  GetOpinionsByUserIdQueryResult,
   UserOpinion,
 } from '~app/typings/user-opinion/user-opinion.interfaces';
 import {
   DeleteUserOpinion,
   EditUserProfile,
+  FetchUserFavorites,
   FetchUserOpinions,
   FollowUser,
   PrependUserOpinion,
@@ -18,11 +19,12 @@ import {
 import {UserOpinionService} from '~app/services/user-opinion/user-opinion.service';
 import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
-import {USER_OPINION_FETCH_LIMIT} from '~app/constants/opinions';
+import {USER_FAVORITES_FETCH_LIMIT, USER_OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
 import {FollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
+import {UserFavoritesService} from '~app/services/user-favorites/user-favorites.service';
 
 export interface UserStateModel {
   id: string; // Resolved user id
@@ -30,7 +32,7 @@ export interface UserStateModel {
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
   settings: UserSettings;
-  userOpinions: Array<UserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing and paves path for caching
+  userOpinions: Array<UserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing (adding new opinion viewing other user profile may result in opinion being added to other user opinions) and paves path for caching
   profileOpinions: Array<UserOpinion>; // Authed user opinions
   userFavorites: Array<unknown>; // Resolved user reactions
   profileFavorites: Array<unknown>; // Authed user reactions
@@ -76,6 +78,7 @@ export class UserState {
   public constructor(
     private readonly userOpinionService: UserOpinionService,
     private readonly followerService: FollowerService,
+    private readonly userFavoritesService: UserFavoritesService,
   ) {}
 
   @Action(UpdateResolvedUserData)
@@ -90,16 +93,16 @@ export class UserState {
   private fetchUserOpinions(
     context: StateContext<UserStateModel>,
     action: FetchUserOpinions,
-  ): Observable<MutationResult<GetOpinionsByUsernameQueryResult>> {
+  ): Observable<MutationResult<GetOpinionsByUserIdQueryResult>> {
     return this.userOpinionService
-      .getOpinionsByUsername({
-        username: action.payload.username,
+      .getOpinionsByUserId({
+        userId: action.payload.userId,
         edgeId: action.payload.edgeId,
       })
       .pipe(
         tap(({data}) => {
-          const opinions = data?.getOpinionsByUsername
-            ? data.getOpinionsByUsername.map((opinion) => {
+          const opinions = data?.getOpinionsByUserId
+            ? data.getOpinionsByUserId.map((opinion) => {
                 return {
                   ...opinion,
                   tags: opinion.tags[0] ? opinion.tags : [],
@@ -204,5 +207,34 @@ export class UserState {
         ...action.payload,
       },
     }));
+  }
+
+  @Action(FetchUserFavorites)
+  private fetchUserFavorites(context: StateContext<UserStateModel>, action: FetchUserFavorites): Observable<unknown> {
+    return this.userFavoritesService
+      .getUserFavorites({
+        userId: action.payload.userId,
+        edgeId: action.payload.edgeId,
+      })
+      .pipe(
+        tap((result) => {
+          if (!result.data.getFavoritesByUserId) return;
+
+          const favorites = result.data.getFavoritesByUserId;
+
+          context.setState((state) => {
+            const nextState = {
+              ...state,
+              canLoadMoreFavorites: favorites.length === USER_FAVORITES_FETCH_LIMIT,
+            };
+
+            const stateKey = action.payload.isProfilePath ? 'profileFavorites' : 'userFavorites';
+
+            nextState[stateKey] = action.payload.edgeId ? [...state[stateKey], ...favorites] : favorites;
+
+            return nextState;
+          });
+        }),
+      );
   }
 }

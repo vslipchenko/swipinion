@@ -2,6 +2,7 @@ import {QueryConfig} from 'pg';
 import {CreateOpinion} from '../../typings/user-opinion/user-opinion.interfaces';
 import {OpinionType} from '../../typings/opinion/opinion.enums';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
+import {QueryPayload} from '../../typings/query/query.types';
 
 export const concatenateTagValues = (values: Array<string>): string => {
   return values.map((value) => `('${value}', (SELECT id FROM opinion))`).join();
@@ -51,13 +52,10 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
   values: [userId, opinionId],
 });
 
-export const queryOpinionsByUsername = ({
-  parametersPlaceholderMap,
+export const queryOpinionsByUserId = ({
+  parameters,
   values,
-}: {
-  parametersPlaceholderMap: {edgeId: string | null; followerId: string | null};
-  values: Array<unknown>;
-}): QueryConfig => ({
+}: QueryPayload<{edgeId: string; followerId: string}>): QueryConfig => ({
   text: `
     SELECT
       uo.id,
@@ -70,31 +68,29 @@ export const queryOpinionsByUsername = ({
     LEFT JOIN
       tags AS t ON uo.id = t.opinion_id
     WHERE
-      ${parametersPlaceholderMap.edgeId ? 'uo.id < ' + parametersPlaceholderMap.edgeId + ' AND' : ''}
+      ${parameters.edgeId ? 'uo.id < ' + parameters.edgeId + ' AND' : ''}
       EXISTS (
         SELECT
           1
         FROM
-          users AS u
+          user_settings AS us
         LEFT JOIN
-          user_settings AS us ON u.id = us.user_id
-        LEFT JOIN
-          user_followers AS uf ON u.id = uf.user_id
+          user_followers AS uf ON us.user_id = uf.user_id
         WHERE
-          u.username = $1
+          us.user_id = $1
           AND (
             (us.view_opinions = ${PrivacyCommonSettings.Everyone})
             ${
-              parametersPlaceholderMap.followerId
+              parameters.followerId
                 ? 'OR (us.view_opinions = ' +
                   PrivacyCommonSettings.FollowersOnly +
                   ' AND uf.follower_id = ' +
-                  parametersPlaceholderMap.followerId +
+                  parameters.followerId +
                   ' AND uf.pending = FALSE)'
                 : ''
             }
           )
-          AND u.id = uo.user_id
+          AND uo.user_id = $1
       )
     GROUP BY
       uo.id

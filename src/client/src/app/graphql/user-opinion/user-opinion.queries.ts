@@ -1,8 +1,8 @@
 import {gql} from 'apollo-angular';
 
-export const GET_OPINIONS_BY_USERNAME = gql`
+export const GET_OPINIONS_BY_USER_ID = gql`
   query ($input: GetOpinions!) {
-    getOpinionsByUsername(input: $input) {
+    getOpinionsByUserId(input: $input) {
       id
       type
       file_url

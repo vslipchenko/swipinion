@@ -27,6 +27,6 @@ export const unixTimestampValidator = Joi.date().timestamp('unix');
 export const booleanValidator = Joi.boolean();
 export const messageBodyValidator = Joi.string().trim().min(1).max(USER_MESSAGE_MAX_LENGTH);
 export const getUserRecordsValidator = Joi.object<unknown>({
-  username: usernameValidator,
+  userId: bigintValidator,
   edgeId: bigintValidator,
 });

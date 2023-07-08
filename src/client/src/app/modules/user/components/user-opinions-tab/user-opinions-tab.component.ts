@@ -14,7 +14,7 @@ import {untilDestroyed} from '~app/utilities/operator';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserOpinionsTabComponent implements OnInit {
-  @Input() public username = '';
+  @Input() public userId = '';
   @Input() public isProfilePath = false;
 
   @Select(UserSelectors.canLoadMoreOpinions) public readonly canLoadMoreOpinions$!: Observable<boolean>;
@@ -57,7 +57,7 @@ export class UserOpinionsTabComponent implements OnInit {
 
   private fetchUserOpinions(edgeId = ''): void {
     const payload: FetchUserOpinionsPayload = {
-      username: this.username,
+      userId: this.userId,
       isProfilePath: this.isProfilePath,
     };
 

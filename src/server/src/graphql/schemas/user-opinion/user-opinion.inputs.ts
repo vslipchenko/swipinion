@@ -8,7 +8,7 @@ export const userOpinionInputs = gql`
   }
 
   input GetOpinions {
-    username: String!
+    userId: String!
     edgeId: String
   }
 `;

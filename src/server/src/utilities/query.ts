@@ -1,6 +1,6 @@
 import {QueryPayload, QueryPayloadParameters, QueryPayloadValues, RawQueryPayload} from '../typings/query/query.types';
 
-export const createQueryPayload = <T>(
+export const composeQueryPayload = <T>(
   payload: RawQueryPayload<T>,
   invalidValues: Array<undefined> = [undefined], // Filter out 'undefined' values by default (values have to be primitives and not references)
 ): QueryPayload<T> => {

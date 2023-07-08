@@ -24,16 +24,16 @@ export interface CreateOpinion {
 }
 
 export interface FetchUserOpinionsPayload {
-  username: string;
+  userId: string;
   edgeId?: string;
   isProfilePath: boolean;
 }
 
-export interface GetOpinionsByUsernameQueryResult {
-  getOpinionsByUsername: Array<UserOpinion>;
+export interface GetOpinionsByUserIdQueryResult {
+  getOpinionsByUserId: Array<UserOpinion>;
 }
 
 export interface GetOpinions {
-  username: string;
+  userId: string;
   edgeId?: string;
 }

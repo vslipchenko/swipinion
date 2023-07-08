@@ -1,20 +1,20 @@
 import {gql} from 'apollo-server-core';
 import {db} from '../../../data';
-import {queryOpinionsByUsername} from '../../../data/queries/user-opinion';
+import {queryOpinionsByUserId} from '../../../data/queries/user-opinion';
 import {authenticationGuard} from '../../../utilities/guard';
-import {compact} from 'lodash';
 import {USER_OPINION_FETCH_LIMIT} from '../../../constants/opinions';
 import {getUserRecordsValidator} from '../../../validators/shared';
+import {composeQueryPayload} from '../../../utilities/query';
 
 export const userOpinionQueryTypeDefinitions = gql`
   type Query {
-    getOpinionsByUsername(input: GetOpinions!): [UserOpinion!]
+    getOpinionsByUserId(input: GetOpinions!): [UserOpinion!]
   }
 `;
 
-const getOpinionsByUsername = async (
+const getOpinionsByUserId = async (
   _: unknown,
-  {input}: {input: {username: string; edgeId: string}},
+  {input}: {input: {userId: string; edgeId: string}},
   {accessToken}: {accessToken: string},
 ): Promise<{exists: boolean} | null | Array<unknown>> => {
   const {error} = getUserRecordsValidator.validate(input);
@@ -22,19 +22,15 @@ const getOpinionsByUsername = async (
   if (error) return null;
 
   const {tokenData} = authenticationGuard(accessToken);
-  // Compose array of truthy values
-  const values = compact([input.username, USER_OPINION_FETCH_LIMIT, input.edgeId, tokenData?.userId]);
 
-  const queryPayload = {
-    parametersPlaceholderMap: {
-      // Assign proper placeholder indexes
-      edgeId: input.edgeId ? '$3' : null,
-      followerId: tokenData?.userId ? (input.edgeId ? '$4' : '$3') : null,
-    },
-    values,
-  };
+  const queryPayload = composeQueryPayload({
+    $1: input.userId,
+    $2: USER_OPINION_FETCH_LIMIT,
+    edgeId: input.edgeId,
+    followerId: tokenData?.userId,
+  });
 
-  const result = await db.query(queryOpinionsByUsername(queryPayload));
+  const result = await db.query(queryOpinionsByUserId(queryPayload));
 
   if (!result.rowCount) return null;
 
@@ -43,6 +39,6 @@ const getOpinionsByUsername = async (
 
 export const userOpinionQueryResolvers = {
   Query: {
-    getOpinionsByUsername,
+    getOpinionsByUserId,
   },
 };

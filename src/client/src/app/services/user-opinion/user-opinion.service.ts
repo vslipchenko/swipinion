@@ -7,9 +7,9 @@ import {
   CreateOpinionMutationResult,
   DeleteOpinionMutationResult,
   GetOpinions,
-  GetOpinionsByUsernameQueryResult,
+  GetOpinionsByUserIdQueryResult,
 } from '~app/typings/user-opinion/user-opinion.interfaces';
-import {GET_OPINIONS_BY_USERNAME} from '~app/graphql/user-opinion/user-opinion.queries';
+import {GET_OPINIONS_BY_USER_ID} from '~app/graphql/user-opinion/user-opinion.queries';
 import {ApolloQueryResult} from '@apollo/client/core';
 
 @Injectable({
@@ -32,9 +32,9 @@ export class UserOpinionService {
     });
   }
 
-  public getOpinionsByUsername(input: GetOpinions): Observable<ApolloQueryResult<GetOpinionsByUsernameQueryResult>> {
-    return this.apollo.query<GetOpinionsByUsernameQueryResult>({
-      query: GET_OPINIONS_BY_USERNAME,
+  public getOpinionsByUserId(input: GetOpinions): Observable<ApolloQueryResult<GetOpinionsByUserIdQueryResult>> {
+    return this.apollo.query<GetOpinionsByUserIdQueryResult>({
+      query: GET_OPINIONS_BY_USER_ID,
       variables: {input},
       fetchPolicy: 'no-cache', // TODO add and fix caching of the profile opinions
     });
