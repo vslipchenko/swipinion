@@ -23,16 +23,32 @@ export class UserSelectors {
     };
   });
 
-  public static profileOpinionsSlice = createSelector([UserState], (state: UserStateModel) => {
+  public static profileOpinions = createSelector([UserState], (state: UserStateModel) => {
     return state.profileOpinions;
   });
 
-  public static userOpinionsSlice = createSelector([UserState], (state: UserStateModel) => {
+  public static userOpinions = createSelector([UserState], (state: UserStateModel) => {
     return state.userOpinions;
   });
 
-  public static canLoadMore = createSelector([UserState], (state: UserStateModel) => {
-    return state.canLoadMore;
+  public static profileFavorites = createSelector([UserState], (state: UserStateModel) => {
+    return state.profileFavorites;
+  });
+
+  public static userFavorites = createSelector([UserState], (state: UserStateModel) => {
+    return state.userFavorites;
+  });
+
+  public static canLoadMoreOpinions = createSelector([UserState], (state: UserStateModel) => {
+    return state.canLoadMoreOpinions;
+  });
+
+  public static canLoadMoreReactions = createSelector([UserState], (state: UserStateModel) => {
+    return state.canLoadMoreReactions;
+  });
+
+  public static canLoadMoreFavorites = createSelector([UserState], (state: UserStateModel) => {
+    return state.canLoadMoreFavorites;
   });
 
   public static settings = createSelector([UserState], (state: UserStateModel) => {

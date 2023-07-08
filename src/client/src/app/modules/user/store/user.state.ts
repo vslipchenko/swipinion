@@ -30,12 +30,16 @@ export interface UserStateModel {
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
   settings: UserSettings;
-  userOpinions: Array<UserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing
+  userOpinions: Array<UserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing and paves path for caching
   profileOpinions: Array<UserOpinion>; // Authed user opinions
+  userFavorites: Array<unknown>; // Resolved user reactions
+  profileFavorites: Array<unknown>; // Authed user reactions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
   following: boolean; // Whether authed user follows resolved
   pending: boolean; // Pending following
-  canLoadMore: boolean;
+  canLoadMoreOpinions: boolean;
+  canLoadMoreReactions: boolean;
+  canLoadMoreFavorites: boolean;
 }
 
 const USER_STATE = new StateToken<UserStateModel>('user');
@@ -57,10 +61,14 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     },
     userOpinions: [],
     profileOpinions: [],
+    userFavorites: [],
+    profileFavorites: [],
     isProfilePath: false,
     following: false,
     pending: false,
-    canLoadMore: false,
+    canLoadMoreOpinions: false,
+    canLoadMoreReactions: false,
+    canLoadMoreFavorites: false,
   },
 })
 @Injectable()
@@ -102,7 +110,7 @@ export class UserState {
           context.setState((state) => {
             const nextState = {
               ...state,
-              canLoadMore: opinions.length === USER_OPINION_FETCH_LIMIT,
+              canLoadMoreOpinions: opinions.length === USER_OPINION_FETCH_LIMIT,
             };
             const stateKey = action.payload.isProfilePath ? 'profileOpinions' : 'userOpinions';
 

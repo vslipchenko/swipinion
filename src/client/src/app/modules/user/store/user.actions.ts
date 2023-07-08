@@ -1,11 +1,18 @@
 import {FetchUserOpinionsPayload, UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {ResolvedUserData, UserProfile} from '~app/typings/user/user.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {FetchUserFavoritesPayload} from '~app/typings/user-favorites/user-favorites.intefaces';
 
 export class FetchUserOpinions {
   public static readonly type = '[User] FetchUserOpinions';
 
   public constructor(public payload: FetchUserOpinionsPayload) {}
+}
+
+export class FetchUserFavorites {
+  public static readonly type = '[User] FetchUserFavorites';
+
+  public constructor(public payload: FetchUserFavoritesPayload) {}
 }
 
 export class PrependUserOpinion {

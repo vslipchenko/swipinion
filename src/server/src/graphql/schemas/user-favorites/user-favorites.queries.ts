@@ -24,8 +24,8 @@ const getFavoritesByUsername = async (
   const {tokenData} = authenticationGuard(accessToken);
 
   const queryPayload = createQueryPayload({
-    _1: input.username,
-    _2: USER_OPINION_FETCH_LIMIT,
+    $1: input.username,
+    $2: USER_OPINION_FETCH_LIMIT,
     edgeId: input.edgeId,
     followerId: tokenData?.userId,
   });
