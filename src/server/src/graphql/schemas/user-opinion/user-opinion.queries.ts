@@ -1,10 +1,10 @@
 import {gql} from 'apollo-server-core';
 import {db} from '../../../data';
 import {queryOpinionsByUsername} from '../../../data/queries/user-opinion';
-import {getOpinionsByUsernameValidator} from '../../../validators/user-opinion';
 import {authenticationGuard} from '../../../utilities/guard';
 import {compact} from 'lodash';
 import {USER_OPINION_FETCH_LIMIT} from '../../../constants/opinions';
+import {getUserRecordsValidator} from '../../../validators/shared';
 
 export const userOpinionQueryTypeDefinitions = gql`
   type Query {
@@ -17,7 +17,7 @@ const getOpinionsByUsername = async (
   {input}: {input: {username: string; edgeId: string}},
   {accessToken}: {accessToken: string},
 ): Promise<{exists: boolean} | null | Array<unknown>> => {
-  const {error} = getOpinionsByUsernameValidator.validate(input);
+  const {error} = getUserRecordsValidator.validate(input);
 
   if (error) return null;
 
