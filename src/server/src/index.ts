@@ -38,7 +38,7 @@ const bootstrapApplication = async (): Promise<void> => {
 
       if (authorizationHeader) {
         // E.g. Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        return {accessToken: authorizationHeader.split(' ')[1]};
+        return {accessToken: authorizationHeader.split(/\s+/)[1]};
       }
     },
   });

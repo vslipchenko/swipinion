@@ -31,7 +31,7 @@ export class TextBackgroundFillerComponent implements AfterViewInit {
   private words: Array<string> = [];
 
   public ngAfterViewInit(): void {
-    this.words = this.text.split(' ');
+    this.words = this.text.split(/\s+/);
     this.setupCanvas();
     // Rerender canvas on viewport resize
     this.containerSizes.pipe(this.untilDestroyed()).subscribe(this.renderTextBackground.bind(this));
