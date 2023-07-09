@@ -52,24 +52,24 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
   values: [userId, opinionId],
 });
 
-export const queryOpinionsByUserId = ({
-  parameters,
-  values,
-}: QueryPayload<{edgeId: string; followerId: string}>): QueryConfig => ({
-  text: `
-    SELECT
-      uo.id,
-      uo.type,
-      uo.file_url,
-      uo.body,
-      array_agg(t.tag) AS tags
-    FROM
-      user_opinions AS uo
-    LEFT JOIN
-      tags AS t ON uo.id = t.opinion_id
-    WHERE
-      ${parameters.edgeId ? 'uo.id < ' + parameters.edgeId + ' AND' : ''}
-      EXISTS (
+export const queryOpinionsByUserId = (
+  {parameters, values}: QueryPayload<{edgeId: string; followerId: string}>,
+  requestingOwnData: boolean,
+): QueryConfig => {
+  const olderOpinionsCondition = parameters.edgeId ? 'AND uo.id < ' + parameters.edgeId : '';
+  const followsOtherUserCondition = parameters.followerId
+    ? `
+        OR (
+          us.view_opinions = ${PrivacyCommonSettings.FollowersOnly}
+          AND uf.follower_id = ${parameters.followerId}
+          AND uf.pending = FALSE
+        )
+      `
+    : '';
+  const allowedByPrivacySettingsCondition = requestingOwnData
+    ? ''
+    : `
+       AND EXISTS (
         SELECT
           1
         FROM
@@ -80,23 +80,34 @@ export const queryOpinionsByUserId = ({
           us.user_id = $1
           AND (
             (us.view_opinions = ${PrivacyCommonSettings.Everyone})
-            ${
-              parameters.followerId
-                ? 'OR (us.view_opinions = ' +
-                  PrivacyCommonSettings.FollowersOnly +
-                  ' AND uf.follower_id = ' +
-                  parameters.followerId +
-                  ' AND uf.pending = FALSE)'
-                : ''
-            }
+            ${followsOtherUserCondition}
           )
           AND uo.user_id = $1
       )
-    GROUP BY
-      uo.id
-    ORDER BY
-      uo.id DESC
-    LIMIT $2
+    `;
+
+  return {
+    text: `
+      SELECT
+        uo.id,
+        uo.type,
+        uo.file_url,
+        uo.body,
+        array_agg(t.tag) AS tags
+      FROM
+        user_opinions AS uo
+      LEFT JOIN
+        tags AS t ON uo.id = t.opinion_id
+      WHERE
+        uo.user_id = $1
+        ${olderOpinionsCondition}
+        ${allowedByPrivacySettingsCondition}
+      GROUP BY
+        uo.id
+      ORDER BY
+        uo.id DESC
+      LIMIT $2
   `,
-  values,
-});
+    values,
+  };
+};

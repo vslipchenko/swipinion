@@ -23,14 +23,18 @@ const getOpinionsByUserId = async (
 
   const {tokenData} = authenticationGuard(accessToken);
 
+  const getFollowerId = (): string | undefined => {
+    if (tokenData?.userId && tokenData.userId !== input.userId) return tokenData.userId;
+  };
+
   const queryPayload = composeQueryPayload({
     $1: input.userId,
     $2: USER_OPINION_FETCH_LIMIT,
     edgeId: input.edgeId,
-    followerId: tokenData?.userId,
+    followerId: getFollowerId(),
   });
 
-  const result = await db.query(queryOpinionsByUserId(queryPayload));
+  const result = await db.query(queryOpinionsByUserId(queryPayload, tokenData?.userId === input.userId)); // Assume input.userId equal to a bigint here as it has passed validation
 
   if (!result.rowCount) return null;
 
