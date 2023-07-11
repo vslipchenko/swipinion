@@ -67,9 +67,33 @@ Visitor:
 -Should take into account opinion's owner view_opinions privacy setting
 
 ---
-Navigating to Opinion Page
+Navigating to Opinion Page in different scenarios
 ---
+Clicking open/copying opinion link from User Opinions tab should:
+Open opinion page that acts as general opinions page (/) but will load new cards from user opinions pool
+Link will be different too. Possible link formats (they should be consistent):
+/opinion/:opinionId/:scope where scope in this case may be equal to 'user'
+OR
+/opinion/:opinionId?scope=user
 
+Clicking open/copying opinion link from User Reactions tab should:
+Open opinion page that acts as general opinions page (/) but will load new cards from user reactions pool
+Link will be different too. Possible link formats (they should be consistent):
+/opinion/:opinionId/:scope where scope in this case may be equal to 'reactions'
+OR
+/opinion/:opinionId?scope=reactions
+
+Clicking open/copying opinion link from User Favorites tab should:
+Open opinion page that acts as general opinions page (/) but will load new cards from user favorites pool
+Link will be different too. Possible link formats (they should be consistent):
+/opinion/:opinionId/:scope where scope in this case may be equal to 'favorites'
+OR
+/opinion/:opinionId?scope=favorites
+
+Copying opinion link from general opinions page should:
+Open opinion page that acts as general opinions page (/) but will load new cards from all opinions pool
+Possible link formats (they should be consistent):
+/opinion/:opinionId
 
 
 
