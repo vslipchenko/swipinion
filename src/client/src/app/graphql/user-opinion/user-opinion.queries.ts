@@ -8,6 +8,11 @@ export const GET_OPINIONS_BY_USER_ID = gql`
       file_url
       body
       tags
+      reaction
+      commented
+      agreed
+      disagreed
+      comments
     }
   }
 `;

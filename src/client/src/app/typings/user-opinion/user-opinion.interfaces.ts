@@ -1,5 +1,5 @@
 import {SuccessResponse} from '~app/typings/response/response.interfaces';
-import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 
 export interface UserOpinion {
   id: string;
@@ -7,6 +7,11 @@ export interface UserOpinion {
   file_url: string;
   body: string;
   tags: Array<string>;
+  reaction: OpinionReaction;
+  commented: boolean;
+  agreed: number;
+  disagreed: number;
+  comments: number;
 }
 
 export interface CreateOpinionMutationResult {
