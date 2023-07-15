@@ -3,7 +3,6 @@ import {Injectable} from '@angular/core';
 import {
   DeleteOpinionMutationResult,
   GetOpinionsByUserIdQueryResult,
-  UserOpinion,
 } from '~app/typings/user-opinion/user-opinion.interfaces';
 import {
   DeleteUserOpinion,
@@ -25,6 +24,8 @@ import {FollowUserMutationResult} from '~app/typings/follower/follower.interface
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {UserFavoritesService} from '~app/services/user-favorites/user-favorites.service';
+import {formatStatisticNumber} from '~app/utilities/number';
+import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
 
 export interface UserStateModel {
   id: string; // Resolved user id
@@ -32,8 +33,8 @@ export interface UserStateModel {
   bio: string; // Resolved user bio
   thumbnail: string; // Resolved user thumbnail; TODO might be a room for a small improvement; can be excluded from query as it might be present for the /profile route
   settings: UserSettings;
-  userOpinions: Array<UserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing (adding new opinion viewing other user profile may result in opinion being added to other user opinions) and paves path for caching
-  profileOpinions: Array<UserOpinion>; // Authed user opinions
+  userOpinions: Array<UIUserOpinion>; // Resolved user opinions; Used 2 separated properties in order to prevent values mixing (adding new opinion viewing other user profile may result in opinion being added to other user opinions) and paves path for caching
+  profileOpinions: Array<UIUserOpinion>; // Authed user opinions
   userFavorites: Array<unknown>; // Resolved user reactions
   profileFavorites: Array<unknown>; // Authed user reactions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
@@ -106,6 +107,9 @@ export class UserState {
                 return {
                   ...opinion,
                   tags: opinion.tags[0] ? opinion.tags : [],
+                  formattedAgreed: formatStatisticNumber(opinion.agreed),
+                  formattedDisagreed: formatStatisticNumber(opinion.disagreed),
+                  formattedComments: formatStatisticNumber(opinion.comments),
                 };
               })
             : [];
@@ -129,7 +133,15 @@ export class UserState {
   private prependUserOpinion(context: StateContext<UserStateModel>, action: PrependUserOpinion): void {
     context.setState((state) => ({
       ...state,
-      profileOpinions: [action.payload, ...state.profileOpinions],
+      profileOpinions: [
+        {
+          ...action.payload,
+          formattedAgreed: '0',
+          formattedDisagreed: '0',
+          formattedComments: '0',
+        },
+        ...state.profileOpinions,
+      ],
     }));
   }
 

@@ -33,3 +33,9 @@ export interface ReactToOpinionMutationResult {
 export interface AddOpinionToFavoritesMutationResult {
   addOpinionToFavorites: SuccessResponse;
 }
+
+export interface OpinionStatistic {
+  formattedAgreed: string;
+  formattedDisagreed: string;
+  formattedComments: string;
+}

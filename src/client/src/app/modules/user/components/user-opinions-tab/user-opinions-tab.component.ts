@@ -6,6 +6,7 @@ import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 import {untilDestroyed} from '~app/utilities/operator';
+import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
 
 @Component({
   selector: 'app-user-opinions-tab',
@@ -19,7 +20,7 @@ export class UserOpinionsTabComponent implements OnInit {
 
   @Select(UserSelectors.canLoadMoreOpinions) public readonly canLoadMoreOpinions$!: Observable<boolean>;
 
-  public opinions$!: Observable<Array<UserOpinion>>;
+  public opinions$!: Observable<Array<UIUserOpinion>>;
   public readonly loading$ = new BehaviorSubject(true);
   private readonly untilDestroyed = untilDestroyed();
 

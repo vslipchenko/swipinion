@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Injector, Input} from '@angular/core
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {Store} from '@ngxs/store';
 import {DeleteUserOpinion} from '~app/modules/user/store/user.actions';
-import {OpinionType} from '~app/typings/opinion/opinion.enums';
+import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 import {NgIf} from '@angular/common';
 import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
 import {ButtonComponent} from '~app/shared/components/button/button.component';
@@ -33,6 +33,11 @@ export class OpinionPreviewComponent {
   @Input() public type: OpinionType = OpinionType.Text;
   @Input() public body = '';
   @Input() public fileUrl = '';
+  @Input() public agreed = '';
+  @Input() public disagreed = '';
+  @Input() public comments = '';
+  @Input() public reaction: OpinionReaction | null = null;
+  @Input() public commented = false;
   @Input() public tags: Array<string> = [];
 
   public readonly stats = [

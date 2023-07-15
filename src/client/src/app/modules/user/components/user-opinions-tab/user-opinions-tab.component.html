@@ -21,7 +21,11 @@
     <ng-template #opinionList>
       <app-opinion-preview *ngFor="let opinion of opinions" [id]="opinion.id"
                            [body]="opinion.body" [fileUrl]="opinion.file_url"
-                           [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
+                           [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"
+                           [agreed]="opinion.formattedAgreed"
+                           [disagreed]="opinion.formattedDisagreed"
+                           [comments]="opinion.formattedComments"
+      ></app-opinion-preview>
 
       <app-progress-spinner
         *ngIf="canLoadMoreOpinions$ | async"
