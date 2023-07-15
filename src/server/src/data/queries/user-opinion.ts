@@ -1,6 +1,6 @@
 import {QueryConfig} from 'pg';
 import {CreateOpinion} from '../../typings/user-opinion/user-opinion.interfaces';
-import {OpinionType} from '../../typings/opinion/opinion.enums';
+import {OpinionReaction, OpinionType} from '../../typings/opinion/opinion.enums';
 import {PrivacyCommonSettings} from '../../typings/user-settings/user-settings.enums';
 import {QueryPayload} from '../../typings/query/query.types';
 
@@ -54,9 +54,25 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
 
 export const queryOpinionsByUserId = (
   {parameters, values}: QueryPayload<{edgeId: string; followerId: string}>,
+  // requestingOwnData used to differentiate whether user is requesting own or other user's data,
+  // but parameters.followerId rather used for checking requester authed or not because requestingOwnData,
+  // can be falsy but this does not mean user is not authed
   requestingOwnData: boolean,
 ): QueryConfig => {
+  const selectFields = `
+    uo.id,
+    uo.type,
+    uo.file_url,
+    uo.body,
+    rs.agreed,
+    rs.disagreed,
+    rs.comments,
+    ${parameters.followerId ? 'r.reaction, r.commented,' : ''}
+    array_agg(t.tag) AS tags
+  `;
+
   const olderOpinionsCondition = parameters.edgeId ? 'AND uo.id < ' + parameters.edgeId : '';
+
   const followsOtherUserCondition = parameters.followerId
     ? `
         OR (
@@ -66,10 +82,11 @@ export const queryOpinionsByUserId = (
         )
       `
     : '';
+
   const allowedByPrivacySettingsCondition = requestingOwnData
     ? ''
     : `
-       AND EXISTS (
+      EXISTS (
         SELECT
           1
         FROM
@@ -83,27 +100,53 @@ export const queryOpinionsByUserId = (
             ${followsOtherUserCondition}
           )
           AND uo.user_id = $1
-      )
+      ) AND
     `;
+
+  const requesterHasReactedToOpinion = parameters.followerId
+    ? `
+      LEFT JOIN (
+        SELECT opinion_id,
+          user_id,
+          reaction,
+          comment IS NOT NULL AS commented
+        FROM user_opinion_reactions
+        WHERE user_id = ${parameters.followerId}
+      ) AS r ON uo.id = r.opinion_id
+    `
+    : '';
+
+  const groupByFields = `
+    uo.id,
+    ${parameters.followerId ? 'r.reaction, r.commented,' : ''}
+    rs.agreed,
+    rs.disagreed,
+    rs.comments
+  `;
 
   return {
     text: `
       SELECT
-        uo.id,
-        uo.type,
-        uo.file_url,
-        uo.body,
-        array_agg(t.tag) AS tags
+        ${selectFields}
       FROM
         user_opinions AS uo
       LEFT JOIN
         tags AS t ON uo.id = t.opinion_id
+      LEFT JOIN (
+        SELECT opinion_id,
+          COUNT(CASE WHEN reaction = ${OpinionReaction.Agree} THEN 1 END) AS agreed,
+          COUNT(CASE WHEN reaction = ${OpinionReaction.Disagree} THEN 1 END) AS disagreed,
+          COUNT(CASE WHEN comment IS NOT NULL THEN 1 END) AS comments
+        FROM user_opinion_reactions
+        GROUP BY opinion_id
+      ) AS rs ON uo.id = rs.opinion_id -- Query reaction statistic
+      ${requesterHasReactedToOpinion}
       WHERE
+        ${allowedByPrivacySettingsCondition}
         uo.user_id = $1
         ${olderOpinionsCondition}
-        ${allowedByPrivacySettingsCondition}
       GROUP BY
-        uo.id
+        ${groupByFields}
       ORDER BY
         uo.id DESC
       LIMIT $2
