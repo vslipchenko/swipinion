@@ -107,7 +107,6 @@ export const queryOpinionsByUserId = (
     ? `
       LEFT JOIN (
         SELECT opinion_id,
-          user_id,
           reaction,
           comment IS NOT NULL AS commented
         FROM user_opinion_reactions
