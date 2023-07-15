@@ -64,10 +64,10 @@ export const queryOpinionsByUserId = (
     uo.type,
     uo.file_url,
     uo.body,
-    rs.agreed,
-    rs.disagreed,
-    rs.comments,
-    ${parameters.followerId ? 'r.reaction, r.commented,' : ''}
+    COALESCE(rs.agreed, 0) AS agreed,
+    COALESCE(rs.disagreed, 0) AS disagreed,
+    COALESCE(rs.comments, 0) AS comments,
+    ${parameters.followerId ? 'r.reaction, COALESCE(r.commented, false) AS commented,' : ''}
     array_agg(t.tag) AS tags
   `;
 

@@ -104,6 +104,11 @@ export class AddOpinionDialogComponent {
             file_url: thumbnail,
             body,
             tags,
+            reaction: null,
+            commented: false,
+            agreed: 0,
+            disagreed: 0,
+            comments: 0,
           });
         }, this.errorSnackbar.bind(this));
 
@@ -129,6 +134,11 @@ export class AddOpinionDialogComponent {
           file_url: '',
           body,
           tags,
+          reaction: null,
+          commented: false,
+          agreed: 0,
+          disagreed: 0,
+          comments: 0,
         });
       }, this.errorSnackbar.bind(this));
   }

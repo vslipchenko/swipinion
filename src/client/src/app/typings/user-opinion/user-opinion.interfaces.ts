@@ -7,7 +7,7 @@ export interface UserOpinion {
   file_url: string;
   body: string;
   tags: Array<string>;
-  reaction: OpinionReaction;
+  reaction: OpinionReaction | null;
   commented: boolean;
   agreed: number;
   disagreed: number;
