@@ -8,7 +8,7 @@ export const userOpinionTypes = gql`
     body: String
     tags: [String]!
     reaction: Int
-    commented: Boolean!
+    commented: Boolean
     agreed: Float!
     disagreed: Float!
     comments: Float!
