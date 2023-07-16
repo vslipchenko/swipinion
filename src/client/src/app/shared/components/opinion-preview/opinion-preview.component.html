@@ -18,5 +18,8 @@
     <app-menu-items #menuItems [items]="opinionItems" [context]="id"></app-menu-items>
   </div>
   <app-opinion-stats-panel [agreed]="agreed" [disagreed]="disagreed" [comments]="comments"
+                           [highlightAgreed]="highlightAgreed"
+                           [highlightDisagreed]="highlightDisagreed"
+                           [highlightComment]="commented"
                            class="d-flex jc-around" buttonClass="py-1"></app-opinion-stats-panel>
 </div>

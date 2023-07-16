@@ -19,6 +19,9 @@ export class OpinionStatsPanelComponent implements AfterViewInit {
   @Input() public disagreed = '';
   @Input() public comments = '';
   @Input() public buttonClass = '';
+  @Input() public highlightAgreed = false;
+  @Input() public highlightDisagreed = false;
+  @Input() public highlightComment = false;
   @Input() public updateStatistic?: Subject<{
     reaction: OpinionReaction;
     commented: boolean;
@@ -26,10 +29,6 @@ export class OpinionStatsPanelComponent implements AfterViewInit {
     disagreed: number;
     comments: number;
   }>;
-
-  protected agreedWith = false;
-  protected disagreedWith = false;
-  protected commented = false;
 
   private readonly untilDestroyed = untilDestroyed();
 
@@ -41,16 +40,16 @@ export class OpinionStatsPanelComponent implements AfterViewInit {
         .pipe(this.untilDestroyed())
         .subscribe(({reaction, commented, agreed, disagreed, comments}) => {
           if (reaction === OpinionReaction.Agree) {
-            this.agreedWith = true;
+            this.highlightAgreed = true;
             this.agreed = formatStatisticNumber(agreed + 1);
           } else {
             // Assume disagree
-            this.disagreedWith = true;
+            this.highlightDisagreed = true;
             this.disagreed = formatStatisticNumber(disagreed + 1);
           }
 
           if (commented) {
-            this.commented = true;
+            this.highlightComment = true;
             this.comments = formatStatisticNumber(comments + 1);
           }
 

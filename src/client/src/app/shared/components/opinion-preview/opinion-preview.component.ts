@@ -36,21 +36,19 @@ export class OpinionPreviewComponent {
   @Input() public agreed = '';
   @Input() public disagreed = '';
   @Input() public comments = '';
-  @Input() public reaction: OpinionReaction | null = null;
   @Input() public commented = false;
   @Input() public tags: Array<string> = [];
 
-  public readonly stats = [
-    {icon: 'thumb_up', value: '12'},
-    {icon: 'thumb_down', value: '10'},
-    // {icon: 'chat_bubble', value: 10},
-    // {svgIcon: 'message-outline', value: 10},
-    // {svgIcon: 'comment', value: 10},
-    {svgIcon: 'comment-outline', value: '10'},
-    // {icon: 'visibility', value: 14},
-  ];
+  @Input()
+  public set reaction(reaction: OpinionReaction | null) {
+    if (reaction === OpinionReaction.Agree) this.highlightAgreed = true;
+    else if (reaction === OpinionReaction.Disagree) this.highlightDisagreed = true;
+  }
 
-  public readonly opinionItems: Array<MenuItem> = [
+  protected highlightAgreed = false;
+  protected highlightDisagreed = false;
+
+  protected readonly opinionItems: Array<MenuItem> = [
     {
       title: 'Copy link',
       icon: 'content_copy',
