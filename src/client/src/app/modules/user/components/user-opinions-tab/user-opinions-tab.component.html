@@ -7,14 +7,26 @@
     <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="article"
                              class="d-block mt-2-3"
                              [tip]="isProfilePath ? 'You can add new opinions through user menu\'s action «Add opinion»' : ''">
-      <ng-container *ngIf="isProfilePath; else emptyContent">
+      <ng-container *ngIf="isProfilePath; else nonProfilePath">
         <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
                     (clicked)="shareOpinion()"></app-button>
         <p class="mt-h t-center">with others!</p>
       </ng-container>
 
-      <ng-template #emptyContent>
-        <p class="mt-h t-center">User has not shared any opinions yet or access is restricted</p>
+      <ng-template #nonProfilePath>
+        <ng-container *ngIf="followToView">
+          <app-button [text]="'Follow ' + username" class="mt-1 d-flex jc-center"
+                      (clicked)="followUser()"></app-button>
+          <p class="mt-h t-center">to see their opinions!</p>
+        </ng-container>
+
+        <ng-container *ngIf="viewRestricted">
+          <p class="mt-h t-center">User has restricted access to their opinions</p>
+        </ng-container>
+
+        <ng-container *ngIf="!followToView && !viewRestricted">
+          <p class="mt-h t-center">User has not shared any opinions yet</p>
+        </ng-container>
       </ng-template>
     </app-content-placeholder>
 

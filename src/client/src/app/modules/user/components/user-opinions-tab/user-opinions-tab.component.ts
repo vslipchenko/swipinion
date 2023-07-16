@@ -7,6 +7,8 @@ import {FetchUserOpinions} from '~app/modules/user/store/user.actions';
 import {UserNavbarService} from '~app/services/user-navbar/user-navbar.service';
 import {untilDestroyed} from '~app/utilities/operator';
 import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
+import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 
 @Component({
   selector: 'app-user-opinions-tab',
@@ -15,13 +17,22 @@ import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserOpinionsTabComponent implements OnInit {
+  @Select(UserSelectors.canLoadMoreOpinions) public readonly canLoadMoreOpinions$!: Observable<boolean>;
+
   @Input() public userId = '';
+  @Input() public username = '';
   @Input() public isProfilePath = false;
 
-  @Select(UserSelectors.canLoadMoreOpinions) public readonly canLoadMoreOpinions$!: Observable<boolean>;
+  @Input()
+  public set userSettings(settings: UserSettings) {
+    if (settings.view_opinions === PrivacyCommonSettings.FollowersOnly) this.followToView = true;
+    else if (settings.view_opinions === PrivacyCommonSettings.NoOne) this.viewRestricted = true;
+  }
 
   public opinions$!: Observable<Array<UIUserOpinion>>;
   public readonly loading$ = new BehaviorSubject(true);
+  protected followToView = false;
+  protected viewRestricted = false;
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
@@ -44,8 +55,12 @@ export class UserOpinionsTabComponent implements OnInit {
     this.loading$.complete();
   }
 
-  public shareOpinion(): void {
+  protected shareOpinion(): void {
     this.userNavbarService.shareOpinion$.next();
+  }
+
+  protected followUser(): void {
+    // TODO
   }
 
   protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {

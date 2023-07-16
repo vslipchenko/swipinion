@@ -11,6 +11,7 @@ import {UserContentTabIndex, UserRole} from '~app/typings/user/user.enums';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
 import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
 import {MessageAccordionService} from '~app/services/message-accordion/message-accordion.service';
+import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 
 @Component({
   selector: 'app-user',
@@ -21,6 +22,7 @@ import {MessageAccordionService} from '~app/services/message-accordion/message-a
 export class UserComponent implements AfterViewInit {
   @Select(UserSelectors.resolvedUserData)
   public readonly profile$!: Observable<ResolvedUserData>;
+  // Do we need this to be an observable???
   @Select(AppSelectors.userRole)
   public readonly role$!: Observable<UserRole>;
 
@@ -43,6 +45,7 @@ export class UserComponent implements AfterViewInit {
     },
     {text: 'Favorites', icon: 'star'},
   ];
+  protected readonly settings: UserSettings;
 
   private readonly untilDestroyed = untilDestroyed();
 
@@ -53,7 +56,9 @@ export class UserComponent implements AfterViewInit {
   ) {
     const profileSnapshot = this.profileSnapshot;
     this.userId = profileSnapshot.id;
+    this.username = profileSnapshot.username;
     this.isProfilePath = profileSnapshot.isProfilePath;
+    this.settings = this.store.selectSnapshot(UserSelectors.settings);
   }
 
   public ngAfterViewInit(): void {

@@ -45,7 +45,8 @@
     <div *ngIf="{value: activeTab$ | async} as activeTab" class="content"
          [class.pb-extended]="data.showBottomBar">
       <app-user-opinions-tab *ngIf="activeTab.value === userContentTabIndex.Opinions" [userId]="userId"
-                             [isProfilePath]="isProfilePath"></app-user-opinions-tab>
+                             [username]="username"
+                             [isProfilePath]="isProfilePath" [userSettings]="settings"></app-user-opinions-tab>
       <app-user-reactions-tab *ngIf="activeTab.value === userContentTabIndex.Reactions"></app-user-reactions-tab>
       <app-user-favorites-tab *ngIf="activeTab.value === userContentTabIndex.Favorites"
                               [userId]="userId"></app-user-favorites-tab>
