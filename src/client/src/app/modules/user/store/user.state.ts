@@ -11,6 +11,7 @@ import {
   FetchUserOpinions,
   FollowUser,
   PrependUserOpinion,
+  ResetUserOpinions,
   SetUserSettings,
   UnfollowUser,
   UpdateResolvedUserData,
@@ -145,6 +146,14 @@ export class UserState {
     }));
   }
 
+  @Action(ResetUserOpinions)
+  private resetUserOpinions(context: StateContext<UserStateModel>): void {
+    context.setState((state) => ({
+      ...state,
+      userOpinions: [],
+    }));
+  }
+
   @Action(DeleteUserOpinion)
   private deleteUserOpinion(
     context: StateContext<UserStateModel>,
@@ -197,6 +206,7 @@ export class UserState {
         context.setState((state) => ({
           ...state,
           following: false,
+          pending: false,
         }));
       }),
     );

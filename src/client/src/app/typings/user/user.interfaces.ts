@@ -108,3 +108,8 @@ export interface ResolvedUserEssentials {
   username: string;
   thumbnail: string;
 }
+
+export interface UserFollowingStatus {
+  following: boolean;
+  pending: boolean;
+}

@@ -14,18 +14,26 @@
       </ng-container>
 
       <ng-template #nonProfilePath>
-        <ng-container *ngIf="followToView">
-          <app-button [text]="'Follow ' + username" class="mt-1 d-flex jc-center"
-                      (clicked)="followUser()"></app-button>
-          <p class="mt-h t-center">to see their opinions!</p>
-        </ng-container>
+        <ng-container *ngIf="followingStatus$ | async as followingStatus">
+          <ng-container *ngIf="followToView && !followingStatus.following">
+            <app-button [text]="'Follow ' + username" class="mt-1 d-flex jc-center"
+                        (clicked)="followUser()"></app-button>
+            <p class="mt-h t-center">to see their opinions!</p>
+          </ng-container>
 
-        <ng-container *ngIf="viewRestricted">
-          <p class="mt-h t-center">User has restricted access to their opinions</p>
-        </ng-container>
+          <ng-container *ngIf="followToView && pendingFollowRequest">
+            <p class="mt-h t-center">See user's opinions once follow request is accepted</p>
+          </ng-container>
 
-        <ng-container *ngIf="!followToView && !viewRestricted">
-          <p class="mt-h t-center">User has not shared any opinions yet</p>
+          <!--
+             Use generic placeholder if opinions are private or there is none.
+             It's hard to distinguish them and keep user settings in sync.
+             Without querying user settings along with user opinions it is hard to say whether some privacy settings have not changed
+             since profile loaded those causing placeholder info to be inconsistent or obsolete
+          -->
+          <ng-container *ngIf="!followToView || (followingStatus.following && !pendingFollowRequest)">
+            <p class="mt-h t-center">User has not shared any opinions yet or access is restricted</p>
+          </ng-container>
         </ng-container>
       </ng-template>
     </app-content-placeholder>

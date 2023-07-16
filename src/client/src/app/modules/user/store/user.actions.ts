@@ -21,6 +21,10 @@ export class PrependUserOpinion {
   public constructor(public payload: UserOpinion) {}
 }
 
+export class ResetUserOpinions {
+  public static readonly type = '[User] ResetUserOpinions';
+}
+
 export class DeleteUserOpinion {
   public static readonly type = '[User] DeleteUserOpinion';
 
