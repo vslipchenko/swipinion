@@ -102,3 +102,9 @@ export interface ResolvedUserData {
   following: boolean;
   pending: boolean;
 }
+
+export interface ResolvedUserEssentials {
+  id: string;
+  username: string;
+  thumbnail: string;
+}

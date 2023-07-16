@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {UnfollowUser} from '~app/modules/user/store/user.actions';
-import {ResolvedUserData} from '~app/typings/user/user.interfaces';
+import {ResolvedUserEssentials} from '~app/typings/user/user.interfaces';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {untilDestroyed} from '~app/utilities/operator';
 import {
@@ -19,7 +19,7 @@ import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-b
 })
 export class UnfollowUserDialogComponent {
   public readonly loading$ = new BehaviorSubject(false);
-  public readonly profile: ResolvedUserData;
+  public readonly profile: ResolvedUserEssentials;
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
@@ -29,7 +29,7 @@ export class UnfollowUserDialogComponent {
     private readonly dialog: MatDialogRef<UnfollowUserDialogComponent>,
     private readonly actions$: Actions,
   ) {
-    this.profile = this.store.selectSnapshot(UserSelectors.resolvedUserData);
+    this.profile = this.store.selectSnapshot(UserSelectors.resolvedUserEssentials);
 
     this.actions$.pipe(this.untilDestroyed(), ofActionSuccessful(UnfollowUser)).subscribe(() => {
       this.dialog.close();
