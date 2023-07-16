@@ -5,7 +5,6 @@ import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionsView} from '~a
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ActionCompletion, Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
-  AddOpinionToFavorites,
   FetchGeneralOpinions,
   ReactToUserOpinion,
   SetContainerSizes,
@@ -16,6 +15,7 @@ import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opi
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {untilDestroyed} from '~app/utilities/operator';
+import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-opinions',

@@ -1,6 +1,7 @@
 import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {
+  AddOpinionToFavorites,
   FetchNewUserMessages,
   FetchUserConversation,
   FetchUserMessages,
@@ -49,6 +50,9 @@ import {
 } from '~app/constants/user-messages';
 import {Messages} from '~app/typings/user-messages/user-messages.types';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
+import {AddOpinionToFavoritesFailReason} from '~app/typings/opinion/opinion.enums';
+import {OpinionsStateModel} from '~app/modules/opinions/store/opinions.state';
+import {OpinionService} from '~app/services/opinion/opinion.service';
 
 export interface AppStateModel {
   user: AuthenticatedUserEssentials;
@@ -64,6 +68,14 @@ export interface AppStateModel {
 
 const APP_STATE = new StateToken<AppStateModel>('app');
 
+// Global app state
+/*
+  TODO split app state into multiple global states so there will be:
+  app state
+  global user state
+  global user messages state
+  global user opinion state
+ */
 @State({
   name: APP_STATE,
   defaults: {
@@ -110,6 +122,7 @@ export class AppState {
     private readonly store: Store,
     private readonly userStatusService: UserStatusService,
     private readonly userMessagesService: UserMessagesService,
+    private readonly opinionService: OpinionService,
   ) {}
 
   @Action(UpdateUserEssentials)
@@ -586,5 +599,19 @@ export class AppState {
       ...state,
       unreadNotification: action.payload,
     }));
+  }
+
+  @Action(AddOpinionToFavorites)
+  private addOpinionToFavorites(
+    _: StateContext<OpinionsStateModel>,
+    action: AddOpinionToFavorites,
+  ): Observable<unknown> {
+    return this.opinionService.addOpinionToFavorites(action.payload.opinionId).pipe(
+      tap(({data}) => {
+        if (data?.addOpinionToFavorites.success === false)
+          throw new Error(AddOpinionToFavoritesFailReason.UniqueViolation); // Duplicate entry
+        else if (!data?.addOpinionToFavorites.success) throw new Error(AddOpinionToFavoritesFailReason.Other); // Other error, something went wrong
+      }),
+    );
   }
 }

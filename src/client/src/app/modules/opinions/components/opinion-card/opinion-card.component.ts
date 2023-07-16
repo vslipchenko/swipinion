@@ -4,10 +4,10 @@ import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors'
 import {Subject} from 'rxjs';
 import {Store} from '@ngxs/store';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
-import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
 import {authClickGuard} from '~app/utilities/guard';
 import {copyOpinionLink} from '~app/utilities/opinion';
 import {untilDestroyed} from '~app/utilities/operator';
+import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-opinion-card',

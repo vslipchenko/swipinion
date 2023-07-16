@@ -15,8 +15,8 @@ import {BehaviorSubject} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserRole} from '~app/typings/user/user.enums';
 import {authClickGuard} from '~app/utilities/guard';
-import {AddOpinionToFavorites} from '~app/modules/opinions/store/opinions.actions';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
+import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-opinion-preview',

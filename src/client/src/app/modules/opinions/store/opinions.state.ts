@@ -2,7 +2,6 @@ import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {
-  AddOpinionToFavorites,
   FetchGeneralOpinions,
   ReactToUserOpinion,
   RemoveTopMostOpinion,
@@ -17,7 +16,7 @@ import {OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {formatStatisticNumber} from '~app/utilities/number';
-import {AddOpinionToFavoritesFailReason, OpinionReaction} from '~app/typings/opinion/opinion.enums';
+import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {differenceBy} from 'lodash-es';
 
@@ -216,19 +215,5 @@ export class OpinionsState {
       ...state,
       prefetchInProgress: action.payload,
     }));
-  }
-
-  @Action(AddOpinionToFavorites)
-  private addOpinionToFavorites(
-    _: StateContext<OpinionsStateModel>,
-    action: AddOpinionToFavorites,
-  ): Observable<unknown> {
-    return this.opinionService.addOpinionToFavorites(action.payload.opinionId).pipe(
-      tap(({data}) => {
-        if (data?.addOpinionToFavorites.success === false)
-          throw new Error(AddOpinionToFavoritesFailReason.UniqueViolation); // Duplicate entry
-        else if (!data?.addOpinionToFavorites.success) throw new Error(AddOpinionToFavoritesFailReason.Other); // Other error, something went wrong
-      }),
-    );
   }
 }
