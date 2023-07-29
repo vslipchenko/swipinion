@@ -50,6 +50,7 @@ export const db = {
   query: (query: string | QueryConfig, params?: Array<any>): Promise<QueryResult<QueryResultRow>> =>
     pool.query(query, params),
   close: (): Promise<void> => pool.end(),
+  // Consider moving this logic to the /scripts/create-tables.ts file
   sync: function (): Promise<void> {
     const tables = [
       UsersTable,
@@ -70,15 +71,17 @@ export const db = {
         setTimeout(async () => {
           try {
             console.log(`Syncing "${table.name}" table`);
-            return await this.query(table.query);
+            await this.query(table.query);
+
+            const lastTable = index === tables.length - 1;
+
+            if (lastTable) resolve(); // Resolve when last table was synced meaning all other were synced as well
           } catch (error) {
             console.error(`Error happened during creation of "${table.name}": `, error);
             reject();
           }
         }, index * 500); // Delay is needed in order to prevent relation error
       });
-
-      resolve();
     });
   },
 };

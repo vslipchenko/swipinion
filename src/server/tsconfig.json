@@ -2,6 +2,8 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "dist",
+    // Revisit module resolution issue so top-level await could be used
+    // https://stackoverflow.com/a/65257652
     "module": "commonjs",
     "target": "ES2022",
     "esModuleInterop": true

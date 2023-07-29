@@ -24,8 +24,6 @@ function fastifyAppClosePlugin(app: FastifyInstance): ApolloServerPlugin {
 
 const bootstrapApplication = async (): Promise<void> => {
   console.log(environment);
-  // Synchronize all defined data to the db
-  await db.sync();
 
   // Bootstrap apollo & app server only if db connection was successfully established
   const app = fastify();
@@ -38,7 +36,7 @@ const bootstrapApplication = async (): Promise<void> => {
 
       if (authorizationHeader) {
         // E.g. Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        return {accessToken: authorizationHeader.split(/\s+/)[1]};
+        return {accessToken: authorizationHeader.split(/\s/)[1]};
       }
     },
   });
