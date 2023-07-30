@@ -1,13 +1,13 @@
-<div #wrapper *ngIf="{showBottomBar: showBottomBar$ | async} as data"
+<div #wrapper *ngIf="{showBottomBar: showBottomBar$ | async, profile: $any(profile$ | async)} as data"
      class="wrapper bg-dark h-100 d-flex">
-  <div *ngIf="profile$ | async as profile" class="relative w-100">
+  <div class="relative w-100">
     <div class="stripe absolute w-100"></div>
 
-    <div #userBlock *ngIf="role$ | async as role" class="user-block d-flex f-column ml-auto">
+    <div #userBlock class="user-block d-flex f-column ml-auto">
       <div class="relative mx-auto">
-        <app-user-image [image]="profile.thumbnail" class="user-image d-block"></app-user-image>
+        <app-user-image [image]="data.profile.thumbnail" class="user-image d-block"></app-user-image>
 
-        <app-mini-fab-button *ngIf="role === userRole.User" svgIcon="account-edit" class="edit-profile absolute"
+        <app-mini-fab-button *ngIf="data.profile.profileOwner" svgIcon="account-edit" class="edit-profile absolute"
                              (clicked)="openEditProfile()"></app-mini-fab-button>
       </div>
 
@@ -17,18 +17,18 @@
         <!--        <a routerLink="/user/john">john</a><br>-->
         <!--        <a routerLink="/user/someone">someone</a>-->
 
-        <div class="username fw-medium t-center truncate">{{profile.username}}</div>
+        <div class="username fw-medium t-center truncate">{{data.profile.username}}</div>
 
         <div class="divider mt-2 mb-1"></div>
 
-        <app-profile-action-bar [id]="profile.id" [role]="role" [username]="profile.username"
-                                [thumbnail]="profile.thumbnail"
+        <app-profile-action-bar [id]="data.profile.id" [role]="role" [username]="data.profile.username"
+                                [thumbnail]="data.profile.thumbnail"
                                 [showBottomBar]="$any(data.showBottomBar)"
                                 [wrapper]="wrapper"></app-profile-action-bar>
 
-        <div *ngIf="profile.bio" class="divider mt-1 mb-2"></div>
+        <div *ngIf="data.profile.bio" class="divider mt-1 mb-2"></div>
 
-        <div class="bio">{{profile.bio}}</div>
+        <div class="bio">{{data.profile.bio}}</div>
       </div>
     </div>
   </div>
@@ -44,13 +44,13 @@
 
     <div *ngIf="{value: activeTab$ | async} as activeTab" class="content"
          [class.pb-extended]="data.showBottomBar">
-      <app-user-opinions-tab *ngIf="activeTab.value === userContentTabIndex.Opinions" [userId]="userId"
-                             [username]="username"
-                             [profileOwner]="profileOwner"
+      <app-user-opinions-tab *ngIf="activeTab.value === userContentTabIndex.Opinions" [userId]="data.profile.id"
+                             [username]="data.profile.username"
+                             [profileOwner]="data.profile.profileOwner"
                              [viewOpinionsSetting]="settings.view_opinions"></app-user-opinions-tab>
       <app-user-reactions-tab *ngIf="activeTab.value === userContentTabIndex.Reactions"></app-user-reactions-tab>
       <app-user-favorites-tab *ngIf="activeTab.value === userContentTabIndex.Favorites"
-                              [userId]="userId"></app-user-favorites-tab>
+                              [userId]="data.profile.id"></app-user-favorites-tab>
     </div>
 
     <!-- 3 types of messages: Inbox, Sent, Saved -->

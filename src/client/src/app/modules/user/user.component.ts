@@ -22,20 +22,14 @@ import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces'
 export class UserComponent implements AfterViewInit, OnDestroy {
   @Select(UserSelectors.resolvedUserData)
   protected readonly profile$!: Observable<ResolvedUserData>;
-  // TODO Do we need this to be an observable???
-  @Select(AppSelectors.userRole)
-  protected readonly role$!: Observable<UserRole>;
 
   @ViewChild('wrapper')
   private readonly wrapper!: ElementRef<HTMLDivElement>;
   @ViewChild('userBlock') private readonly userBlock!: ElementRef<HTMLDivElement>;
 
-  protected readonly userRole = UserRole;
+  protected readonly role: UserRole;
   protected readonly showBottomBar$ = new BehaviorSubject(false);
   protected readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
-  protected readonly userId: string = '';
-  protected readonly username: string = '';
-  protected readonly profileOwner: boolean = false;
   protected readonly userContentTabIndex = UserContentTabIndex;
   protected readonly userContentTabs: Array<Tab> = [
     {text: 'Opinions', icon: 'article'},
@@ -54,10 +48,8 @@ export class UserComponent implements AfterViewInit, OnDestroy {
     private readonly dialog: MatDialog,
     private readonly messagesPanelService: MessageAccordionService,
   ) {
-    const profileSnapshot = this.profileSnapshot;
-    this.userId = profileSnapshot.id;
-    this.username = profileSnapshot.username;
-    this.profileOwner = profileSnapshot.profileOwner;
+    this.role = this.store.selectSnapshot(AppSelectors.userRole);
+
     this.settings = this.store.selectSnapshot(UserSelectors.settings);
   }
 
