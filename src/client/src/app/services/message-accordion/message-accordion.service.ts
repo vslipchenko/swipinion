@@ -5,6 +5,5 @@ import {Subject} from 'rxjs';
   providedIn: 'root',
 })
 export class MessageAccordionService {
-  public readonly collapseAccordions$ = new Subject<void>();
   public readonly liftUpConversationAccordion$ = new Subject<boolean>();
 }

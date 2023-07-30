@@ -3,7 +3,7 @@
 <app-menu-items
   #menuItems
   xPosition="after"
-  [loading]="(loading$ | async) || false"
+  [loading]="$any(loading$ | async)"
   [items]="[
         {title: '999.9k followers', svgIcon: 'account-arrow-left'},
         {title: '999.9k following', svgIcon: 'account-arrow-right'},

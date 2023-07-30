@@ -16,16 +16,16 @@ export class UserNotificationComponent {
   @Output() public decline = new EventEmitter();
   @Output() public delete = new EventEmitter();
 
-  public followRequestOptions: Array<MenuItem> = [
+  private readonly followRequestOptions: Array<MenuItem> = [
     {title: 'Accept', icon: 'done', color: 'primary', click: (): void => this.accept.emit()},
     {title: 'Decline', icon: 'close', color: 'warn', click: (): void => this.decline.emit()},
   ];
 
-  public defaultOptions: Array<MenuItem> = [
+  private readonly defaultOptions: Array<MenuItem> = [
     {title: 'Delete notification', icon: 'delete', color: 'warn', click: (): void => this.delete.emit()},
   ];
 
-  public getOptions(type: NotificationType): Array<MenuItem> {
+  protected getOptions(type: NotificationType): Array<MenuItem> {
     return type === NotificationType.FollowRequest ? this.followRequestOptions : this.defaultOptions;
   }
 }

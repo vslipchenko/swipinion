@@ -30,15 +30,15 @@ export class ChipsComponent implements OnInit {
   @Input() public appearance: MatFormFieldAppearance = 'standard';
   @Input() public hint?: TemplateRef<unknown>;
 
-  public addOnBlur = true;
-  public chips: Array<string> = [];
-  public readonly separatorKeysCodes = [ENTER, COMMA];
+  protected addOnBlur = true;
+  protected chips: Array<string> = [];
+  protected readonly separatorKeysCodes = [ENTER, COMMA];
 
   public ngOnInit(): void {
     this.control.setValue(this.chips); // Reference value
   }
 
-  public add(event: MatChipInputEvent): void {
+  protected add(event: MatChipInputEvent): void {
     const validValue = this.regexp ? this.regexp.test(event.value) : true;
 
     if (validValue) this.chips.push(event.value);
@@ -46,7 +46,7 @@ export class ChipsComponent implements OnInit {
     event.chipInput.clear();
   }
 
-  public remove(index: number): void {
+  protected remove(index: number): void {
     this.chips.splice(index, 1);
   }
 }

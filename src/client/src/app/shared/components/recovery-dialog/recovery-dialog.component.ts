@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, Output} from '@angular/core';
 import {BehaviorSubject, finalize} from 'rxjs';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {
@@ -36,22 +36,22 @@ import {untilDestroyed} from '~app/utilities/operator';
     ButtonComponent,
   ],
 })
-export class RecoveryDialogComponent {
+export class RecoveryDialogComponent implements OnDestroy {
   @Output() public readonly recovered = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
-  public readonly password = new FormControl('', [
+  protected readonly password = new FormControl('', [
     Validators.required,
     Validators.minLength(PASSWORD_MIN_LENGTH),
     Validators.maxLength(PASSWORD_MAX_LENGTH),
     Validators.pattern(PASSWORD_REGEXP),
   ]);
-  public readonly repeatPassword = new FormControl('', [Validators.required, this.sameValueValidator.bind(this)]);
-  public readonly email = new FormControl('', Validators.required);
-  public readonly code = new FormControl('', Validators.required);
-  public readonly recoverStage$ = new BehaviorSubject(RecoveryStage.Email);
-  public readonly recoveryStage = RecoveryStage;
-  public readonly loading$ = new BehaviorSubject(false);
+  protected readonly repeatPassword = new FormControl('', [Validators.required, this.sameValueValidator.bind(this)]);
+  protected readonly email = new FormControl('', Validators.required);
+  protected readonly code = new FormControl('', Validators.required);
+  protected readonly recoverStage$ = new BehaviorSubject(RecoveryStage.Email);
+  protected readonly recoveryStage = RecoveryStage;
+  protected readonly loading$ = new BehaviorSubject(false);
 
   private readonly untilDestroyed = untilDestroyed();
 
@@ -65,13 +65,13 @@ export class RecoveryDialogComponent {
     this.loading$.complete();
   }
 
-  public errorMessage(errors: ValidationErrors | null): string | void {
+  protected errorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return 'Required field';
   }
 
-  public passwordErrorMessage(errors: ValidationErrors | null): string | void {
+  protected passwordErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     switch (true) {
@@ -86,7 +86,7 @@ export class RecoveryDialogComponent {
     }
   }
 
-  public repeatPasswordErrorMessage(errors: ValidationErrors | null): string | void {
+  protected repeatPasswordErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     if ('required' in errors) return 'Required field';
@@ -94,7 +94,7 @@ export class RecoveryDialogComponent {
     return 'Passwords are not the same';
   }
 
-  public recover(): void {
+  protected recover(): void {
     if (!this.email.valid) return;
 
     if (!EMAIL_REGEXP.test(this.email.value as string)) return this.showErrorSnackbar('email');
@@ -122,7 +122,7 @@ export class RecoveryDialogComponent {
       );
   }
 
-  public verifyCode(): void {
+  protected verifyCode(): void {
     this.code.markAsTouched();
     this.code.updateValueAndValidity();
 
@@ -150,7 +150,7 @@ export class RecoveryDialogComponent {
       );
   }
 
-  public setNewPassword(): void {
+  protected setNewPassword(): void {
     this.password.markAsTouched();
     this.password.updateValueAndValidity();
 
@@ -198,13 +198,4 @@ export class RecoveryDialogComponent {
       panelClass: 'snackbar-error',
     });
   }
-
-  // private get passwordValidators(): Array<Validators> {
-  //   return [
-  //     Validators.required,
-  //     Validators.minLength(PASSWORD_MIN_LENGTH),
-  //     Validators.maxLength(PASSWORD_MAX_LENGTH),
-  //     Validators.pattern(PASSWORD_REGEXP),
-  //   ]
-  // }
 }

@@ -15,7 +15,7 @@ import {REFRESH_ACCESS_TOKEN, SIGN_IN} from '~app/graphql/authentication/authent
   providedIn: 'root',
 })
 export class AuthenticationService {
-  public accessToken$ = new BehaviorSubject('');
+  public readonly accessToken$ = new BehaviorSubject('');
 
   public constructor(private readonly apollo: Apollo) {}
 

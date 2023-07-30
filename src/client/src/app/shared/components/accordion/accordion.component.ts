@@ -22,5 +22,5 @@ export class AccordionComponent {
   @Output() public afterExpand = new EventEmitter<void>();
   @Output() public afterCollapse = new EventEmitter<void>();
 
-  @ViewChild(MatExpansionPanel, {static: true}) public panel!: MatExpansionPanel;
+  @ViewChild(MatExpansionPanel, {static: true}) public readonly panel!: MatExpansionPanel;
 }

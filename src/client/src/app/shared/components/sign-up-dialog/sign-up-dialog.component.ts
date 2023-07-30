@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, Output} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, map, Observable, Subject} from 'rxjs';
@@ -36,13 +36,13 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class SignUpDialogComponent {
+export class SignUpDialogComponent implements OnDestroy {
   @Output() public readonly signedUp = new EventEmitter<string>();
   @Output() public readonly cancel = new EventEmitter();
 
-  public readonly loading$ = new BehaviorSubject(false);
-  public readonly renderUsername$ = new Subject<void>();
-  public readonly renderEmail$ = new Subject<void>();
+  protected readonly loading$ = new BehaviorSubject(false);
+  protected readonly renderUsername$ = new Subject<void>();
+  protected readonly renderEmail$ = new Subject<void>();
   private readonly signUpForm = this.signUpFormGroup;
   private readonly untilDestroyed = untilDestroyed();
 
@@ -66,7 +66,7 @@ export class SignUpDialogComponent {
     this.renderEmail$.complete();
   }
 
-  public signUp(): void {
+  protected signUp(): void {
     this.signUpForm.markAllAsTouched();
 
     this.username.updateValueAndValidity();
@@ -76,7 +76,7 @@ export class SignUpDialogComponent {
     setTimeout(this.createUser.bind(this));
   }
 
-  public usernameErrorMessage(errors: ValidationErrors | null): string | void {
+  protected usernameErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     switch (true) {
@@ -93,7 +93,7 @@ export class SignUpDialogComponent {
     }
   }
 
-  public emailErrorMessage(errors: ValidationErrors | null): string | void {
+  protected emailErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     switch (true) {
@@ -106,7 +106,7 @@ export class SignUpDialogComponent {
     }
   }
 
-  public passwordErrorMessage(errors: ValidationErrors | null): string | void {
+  protected passwordErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     switch (true) {
@@ -166,15 +166,15 @@ export class SignUpDialogComponent {
       );
   }
 
-  public get username(): FormControl {
+  protected get username(): FormControl {
     return this.signUpForm.controls['username'] as FormControl;
   }
 
-  public get email(): FormControl {
+  protected get email(): FormControl {
     return this.signUpForm.controls['email'] as FormControl;
   }
 
-  public get password(): FormControl {
+  protected get password(): FormControl {
     return this.signUpForm.controls['password'] as FormControl;
   }
 

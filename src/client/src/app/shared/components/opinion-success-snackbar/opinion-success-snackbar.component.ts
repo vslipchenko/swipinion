@@ -18,12 +18,12 @@ import {RouterLink} from '@angular/router';
 })
 export class OpinionSuccessSnackbarComponent {
   public constructor(
-    @Inject(MAT_SNACK_BAR_DATA) public readonly data: string,
-    public readonly store: Store,
-    public readonly snackbar: MatSnackBarRef<OpinionSuccessSnackbarComponent>,
+    @Inject(MAT_SNACK_BAR_DATA) protected readonly data: string,
+    private readonly store: Store,
+    protected readonly snackbar: MatSnackBarRef<OpinionSuccessSnackbarComponent>,
   ) {}
 
-  public get username(): string {
+  protected get username(): string {
     return this.store.selectSnapshot(AppSelectors.userEssentials).username;
   }
 }

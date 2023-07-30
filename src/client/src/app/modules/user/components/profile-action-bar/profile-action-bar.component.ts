@@ -29,9 +29,9 @@ export class ProfileActionBarComponent {
 
   @Select(UserSelectors.followStatus) protected readonly followStatus$!: Observable<UserFollowStatus>;
 
-  public readonly userRole = UserRole;
-  public readonly userSettings!: UserSettings;
-  public readonly profileOwner!: boolean;
+  protected readonly userRole = UserRole;
+  protected readonly userSettings!: UserSettings;
+  protected readonly profileOwner!: boolean;
 
   protected readonly userFollowStatus = UserFollowStatus;
 
@@ -42,7 +42,7 @@ export class ProfileActionBarComponent {
     this.profileOwner = this.store.selectSnapshot(UserSelectors.profileOwner);
   }
 
-  public message(): void {
+  protected message(): void {
     if (this.role === UserRole.User) {
       this.store.dispatch(
         new SetActiveConversation({
@@ -76,11 +76,11 @@ export class ProfileActionBarComponent {
     );
   }
 
-  public follow(): void {
+  protected follow(): void {
     this.store.dispatch(new FollowUser(this.id));
   }
 
-  public unfollow(pending = false): void {
+  protected unfollow(pending = false): void {
     this.dialog.open(UnfollowUserDialogComponent, {
       panelClass: ['dialog', 'small-dialog'],
       data: {
@@ -91,11 +91,11 @@ export class ProfileActionBarComponent {
     });
   }
 
-  public scrollTop(): void {
+  protected scrollTop(): void {
     this.wrapper.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  public get canMessage(): boolean {
+  protected get canMessage(): boolean {
     if (this.profileOwner) return true;
 
     const followStatus = this.store.selectSnapshot(UserSelectors.followStatus);

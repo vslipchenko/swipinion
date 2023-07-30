@@ -71,14 +71,14 @@ export class UserComponent implements AfterViewInit, OnDestroy {
     this.messagesPanelService.liftUpConversationAccordion$.next(false);
   }
 
-  public openEditProfile(): void {
+  protected openEditProfile(): void {
     this.dialog.open(EditProfileDialogComponent, {
       panelClass: ['dialog', 'small-dialog'],
       data: this.profileSnapshot,
     });
   }
 
-  public navigateTab(event: MatTabChangeEvent): void {
+  protected navigateTab(event: MatTabChangeEvent): void {
     this.activeTab$.next(event.index);
   }
 

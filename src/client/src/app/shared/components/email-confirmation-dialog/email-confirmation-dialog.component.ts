@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, Output} from '@angular/core';
 import {FormControl, ValidationErrors, Validators} from '@angular/forms';
 import {untilDestroyed} from '~app/utilities/operator';
 import {BehaviorSubject, finalize} from 'rxjs';
@@ -19,13 +19,13 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
   standalone: true,
   imports: [NgIf, AsyncPipe, MatDialogModule, InputComponent, ProgressBarComponent, ButtonComponent],
 })
-export class EmailConfirmationDialogComponent {
+export class EmailConfirmationDialogComponent implements OnDestroy {
   @Output() public readonly emailConfirmed = new EventEmitter();
   @Output() public readonly cancel = new EventEmitter();
 
   public email = '';
-  public readonly code = new FormControl('', Validators.required);
-  public readonly loading$ = new BehaviorSubject(false);
+  protected readonly code = new FormControl('', Validators.required);
+  protected readonly loading$ = new BehaviorSubject(false);
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly snackbar: MatSnackBar, private readonly userService: UserService) {}
@@ -34,13 +34,13 @@ export class EmailConfirmationDialogComponent {
     this.loading$.complete();
   }
 
-  public errorMessage(errors: ValidationErrors | null): string | void {
+  protected errorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return 'Required field';
   }
 
-  public confirm(): void {
+  protected confirm(): void {
     if (!this.code.valid) return;
 
     // const email = this.email || decodeURI(this.activatedRoute.snapshot.queryParams['email']);

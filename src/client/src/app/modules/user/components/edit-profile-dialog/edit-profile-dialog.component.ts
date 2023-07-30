@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BIO_MAX_LENGTH, FILE_URL_MAX_LENGTH, IMAGE_EXTENSION, MAX_IMAGE_SIZE_MB} from '~app/constants/validation';
 import {BehaviorSubject, finalize, switchMap, throwError} from 'rxjs';
@@ -24,10 +24,10 @@ import {EditUserProfile} from '~app/modules/user/store/user.actions';
   styleUrls: ['./edit-profile-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditProfileDialogComponent {
-  public readonly editProfileForm = this.editProfileFormGroup;
+export class EditProfileDialogComponent implements OnDestroy {
+  protected readonly editProfileForm = this.editProfileFormGroup;
 
-  public readonly loading$ = new BehaviorSubject(false);
+  protected readonly loading$ = new BehaviorSubject(false);
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
@@ -47,7 +47,7 @@ export class EditProfileDialogComponent {
     this.loading$.complete();
   }
 
-  public imageUrlErrorMessage(errors: ValidationErrors | null): string | void {
+  protected imageUrlErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     if ('url' in errors) return 'Invalid image url';
@@ -59,13 +59,13 @@ export class EditProfileDialogComponent {
     return `${FILE_URL_MAX_LENGTH} characters at max. Consider to use url shortener`;
   }
 
-  public bioErrorMessage(errors: ValidationErrors | null): string | void {
+  protected bioErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return `${BIO_MAX_LENGTH} characters at max`;
   }
 
-  public save(): void {
+  protected save(): void {
     const validControls = this.file.valid && this.imageUrl.valid && this.bio.valid;
 
     if (!validControls) return;
@@ -161,15 +161,15 @@ export class EditProfileDialogComponent {
     return null;
   }
 
-  public get imageUrl(): FormControl {
+  protected get imageUrl(): FormControl {
     return this.editProfileForm.controls['imageUrl'] as FormControl;
   }
 
-  public get bio(): FormControl {
+  protected get bio(): FormControl {
     return this.editProfileForm.controls['bio'] as FormControl;
   }
 
-  public get file(): FormControl {
+  protected get file(): FormControl {
     return this.editProfileForm.controls['file'] as FormControl;
   }
 

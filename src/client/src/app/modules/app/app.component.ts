@@ -17,13 +17,13 @@ import {AuthenticationService} from '~app/services/authentication/authentication
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  public readonly recover$ = new Subject<void>();
+  protected readonly recover$ = new Subject<void>();
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
-    public readonly authenticationService: AuthenticationService,
-    public readonly headerService: HeaderService,
-    public readonly showMessagesService: ShowMessagesService,
+    protected readonly headerService: HeaderService,
+    protected readonly showMessagesService: ShowMessagesService,
+    private readonly authenticationService: AuthenticationService,
     private readonly store: Store,
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer,

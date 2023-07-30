@@ -25,5 +25,5 @@ export class AuthClickDirective implements OnInit, OnDestroy {
     this.removeClickListener();
   }
 
-  public removeClickListener = (): void => {};
+  private removeClickListener = (): void => {};
 }

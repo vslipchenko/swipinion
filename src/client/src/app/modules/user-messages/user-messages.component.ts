@@ -17,7 +17,7 @@ import {ActiveConversationType} from '~app/typings/user-conversations/user-conve
 export class UserMessagesComponent implements OnInit {
   @Select(AppSelectors.conversation) protected readonly conversation$!: Observable<ActiveConversation>;
 
-  public showAccordion = false;
+  protected showAccordion = false;
 
   public constructor(protected readonly messagesDirective: MessagesDirective, private readonly store: Store) {}
 
@@ -25,13 +25,13 @@ export class UserMessagesComponent implements OnInit {
     this.messagesDirective.initializeMessages();
   }
 
-  public closeConversation(): void {
+  protected closeConversation(): void {
     this.showAccordion = false;
 
     this.store.dispatch(new SetActiveConversation(null)); // Reset active conversation
   }
 
-  protected newConversation(): void {
+  protected startNewConversation(): void {
     this.store.dispatch(
       new SetActiveConversation({
         edgeId: '',

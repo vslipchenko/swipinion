@@ -1,4 +1,4 @@
-import {Directive, OnInit} from '@angular/core';
+import {Directive, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, take} from 'rxjs';
 import {Actions, ofActionCompleted, Store} from '@ngxs/store';
 import {FetchUserMessages, UserStatusUpdatedBeforeMessagesInitialFetch} from '~app/modules/app/store/app.actions';
@@ -10,7 +10,7 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
   selector: '[appMessages]',
   standalone: true,
 })
-export class MessagesDirective implements OnInit {
+export class MessagesDirective implements OnInit, OnDestroy {
   public readonly loading$ = new BehaviorSubject(false);
   private readonly untilDestroyed = untilDestroyed();
 

@@ -17,7 +17,7 @@ export class SettingsAccordionComponent {
   @Output() public closed = new EventEmitter();
   @Output() public save = new EventEmitter();
 
-  @ViewChild(AccordionComponent) public accordion?: AccordionComponent;
+  @ViewChild(AccordionComponent) private readonly accordion?: AccordionComponent;
 
   public cancel(): void {
     this.accordion?.panel?.close();

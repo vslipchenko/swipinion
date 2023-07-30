@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {BehaviorSubject, debounceTime, filter, finalize, Subscription, switchMap, tap} from 'rxjs';
 import {UserSearchService} from '~app/services/user-search/user-search.service';
@@ -31,7 +31,7 @@ import {USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from '~app/constants/validatio
     ThumbnailComponent,
   ],
 })
-export class ConversationUserSearchComponent {
+export class ConversationUserSearchComponent implements OnDestroy {
   protected readonly searchControl = new FormControl();
   protected readonly loading$ = new BehaviorSubject(false);
 

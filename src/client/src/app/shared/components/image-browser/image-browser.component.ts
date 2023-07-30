@@ -21,8 +21,8 @@ export class ImageBrowserComponent implements OnDestroy {
   @Input() public errorMessage!: (errors: ValidationErrors | null) => string | void;
   @Input() public extendClass = '';
 
-  public imagePreview: SafeUrl | null = '';
-  public recentObjectUrl = '';
+  protected imagePreview: SafeUrl | null = '';
+  private recentObjectUrl = '';
 
   public constructor(private readonly domSanitizer: DomSanitizer) {}
 
@@ -30,7 +30,7 @@ export class ImageBrowserComponent implements OnDestroy {
     URL.revokeObjectURL(this.recentObjectUrl);
   }
 
-  public setImagePreview(file: File | void): void {
+  protected setImagePreview(file: File | void): void {
     this.file.markAsDirty();
 
     if (file) {
@@ -43,20 +43,16 @@ export class ImageBrowserComponent implements OnDestroy {
     this.imagePreview = null;
   }
 
-  public resetImageUrl(): void {
+  protected resetImageUrl(): void {
     this.imageUrl.setValue(null);
     this.imageUrl.markAsDirty();
   }
 
-  public get valueSet(): boolean {
-    return this.imageUrl.value || this.imagePreview;
-  }
-
-  public get imageUrlSet(): boolean {
+  protected get imageUrlSet(): boolean {
     return this.imageUrl.value && this.imageUrl.valid;
   }
 
-  public get imageSet(): boolean {
+  protected get imageSet(): boolean {
     return Boolean(this.imagePreview) || this.imageUrlSet;
   }
 }

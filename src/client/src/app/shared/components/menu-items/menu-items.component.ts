@@ -24,5 +24,5 @@ export class MenuItemsComponent {
   @Input() public loading = false;
   @Input() public context: any;
 
-  @ViewChild('menu', {static: true}) public menu?: MatMenuPanel;
+  @ViewChild('menu', {static: true}) public readonly menu?: MatMenuPanel;
 }

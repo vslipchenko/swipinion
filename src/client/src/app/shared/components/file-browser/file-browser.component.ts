@@ -23,12 +23,12 @@ export class FileBrowserComponent implements OnDestroy {
     this.fileInput.remove();
   }
 
-  public browse(): void {
+  protected browse(): void {
     this.reinstantiateFileInput(); // Fixes onchange triggering for the same image upload on subsequent reset
     this.fileInput.click();
   }
 
-  public reset(): void {
+  protected reset(): void {
     this.control.setValue(null);
     this.fileChange.emit();
   }

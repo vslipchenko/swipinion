@@ -70,19 +70,19 @@ export class UserNotificationsComponent implements OnInit, OnDestroy {
     this.loading$.complete();
   }
 
-  public acceptFollowRequest(notification: UINotification): void {
+  protected acceptFollowRequest(notification: UINotification): void {
     this.loading$.next(true);
 
     this.store.dispatch(new AcceptFollowRequest(notification.follower_record_id));
   }
 
-  public declineFollowRequest(notification: UINotification): void {
+  protected declineFollowRequest(notification: UINotification): void {
     this.loading$.next(true);
 
     this.store.dispatch(new DeclineFollowRequest(notification.follower_record_id));
   }
 
-  public deleteNotification(notification: UINotification): void {
+  protected deleteNotification(notification: UINotification): void {
     this.loading$.next(true);
 
     this.store.dispatch(new DeleteNotification(notification.id));

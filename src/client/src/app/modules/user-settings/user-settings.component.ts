@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
+import {BehaviorSubject, finalize, Subject, takeUntil} from 'rxjs';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_REGEXP} from '~app/constants/validation';
-import {Actions, ofActionErrored, ofActionSuccessful, Select, Store} from '@ngxs/store';
+import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {UserSettingsSelectors} from '~app/modules/user-settings/store/user-settings.selectors';
@@ -20,9 +20,8 @@ import {untilDestroyed} from '~app/utilities/operator';
 })
 export class UserSettingsComponent implements OnDestroy {
   // TODO consider adding Change username functionality
-  @Select(UserSettingsSelectors.settings) public settings$!: Observable<UserSettings>;
 
-  public readonly privacyForm = new FormGroup({
+  protected readonly privacyForm = new FormGroup({
     follow: new FormControl(FollowSettings.Everyone),
     view_following: new FormControl(PrivacyCommonSettings.Everyone),
     message: new FormControl(PrivacyCommonSettings.Everyone),
@@ -31,12 +30,12 @@ export class UserSettingsComponent implements OnDestroy {
     view_favorites: new FormControl(PrivacyCommonSettings.Everyone),
   });
 
-  public followSettings = [
+  protected readonly followSettings = [
     {title: 'To anyone', value: FollowSettings.Everyone},
     {title: 'By approve', value: FollowSettings.ByApprove},
   ];
 
-  public otherSettings = [
+  protected readonly otherSettings = [
     {title: 'Everyone', value: PrivacyCommonSettings.Everyone},
     {title: 'Followers only', value: PrivacyCommonSettings.FollowersOnly},
     {
@@ -45,7 +44,7 @@ export class UserSettingsComponent implements OnDestroy {
     },
   ];
 
-  public readonly changePasswordForm = new FormGroup({
+  protected readonly changePasswordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
     newPassword: new FormControl('', [
       Validators.required,
@@ -94,7 +93,7 @@ export class UserSettingsComponent implements OnDestroy {
     this.loading$.complete();
   }
 
-  public cancelPrivacy(): void {
+  protected cancelPrivacy(): void {
     const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
       UserSettingsSelectors.settings,
     );
@@ -103,18 +102,18 @@ export class UserSettingsComponent implements OnDestroy {
     this.cancelPrivacy$.next();
   }
 
-  public updatePrivacySettings(): void {
+  protected updatePrivacySettings(): void {
     this.loading$.next(true);
 
     this.store.dispatch(new UpdateProfileSettings(this.privacyForm.value as UserSettings));
   }
 
-  public cancelPasswordChange(): void {
+  protected cancelPasswordChange(): void {
     this.changePasswordForm.reset();
     this.cancelPasswordChange$.next();
   }
 
-  public changePassword(): void {
+  protected changePassword(): void {
     this.changePasswordForm.markAllAsTouched();
     this.currentPassword.updateValueAndValidity();
     this.newPassword.updateValueAndValidity();
@@ -154,7 +153,7 @@ export class UserSettingsComponent implements OnDestroy {
       );
   }
 
-  public passwordErrorMessage(errors: ValidationErrors | null): string | void {
+  protected passwordErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     switch (true) {
@@ -189,35 +188,35 @@ export class UserSettingsComponent implements OnDestroy {
     return control.value === this.currentPassword.value ? {duplicate: true} : null;
   }
 
-  public get follow(): FormControl {
+  protected get follow(): FormControl {
     return this.privacyForm.controls['follow'] as FormControl;
   }
 
-  public get viewFollowing(): FormControl {
+  protected get viewFollowing(): FormControl {
     return this.privacyForm.controls['view_following'] as FormControl;
   }
 
-  public get message(): FormControl {
+  protected get message(): FormControl {
     return this.privacyForm.controls['message'] as FormControl;
   }
 
-  public get viewOpinions(): FormControl {
+  protected get viewOpinions(): FormControl {
     return this.privacyForm.controls['view_opinions'] as FormControl;
   }
 
-  public get viewReactions(): FormControl {
+  protected get viewReactions(): FormControl {
     return this.privacyForm.controls['view_reactions'] as FormControl;
   }
 
-  public get viewFavorites(): FormControl {
+  protected get viewFavorites(): FormControl {
     return this.privacyForm.controls['view_favorites'] as FormControl;
   }
 
-  public get currentPassword(): FormControl {
+  protected get currentPassword(): FormControl {
     return this.changePasswordForm?.controls['currentPassword'] as FormControl;
   }
 
-  public get newPassword(): FormControl {
+  protected get newPassword(): FormControl {
     return this.changePasswordForm.controls['newPassword'] as FormControl;
   }
 }

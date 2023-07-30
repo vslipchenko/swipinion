@@ -12,7 +12,7 @@ import {
 })
 export class OpinionFailSnackbarComponent {
   public constructor(
-    @Inject(MAT_SNACK_BAR_DATA) public readonly data: string, // html string
+    @Inject(MAT_SNACK_BAR_DATA) protected readonly data: string, // html string
     protected readonly snackbar: MatSnackBarRef<OpinionFailSnackbarComponent>,
   ) {}
 }

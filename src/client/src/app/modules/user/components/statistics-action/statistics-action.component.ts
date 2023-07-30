@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({
@@ -7,8 +7,8 @@ import {BehaviorSubject} from 'rxjs';
   styleUrls: ['./statistics-action.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatisticsActionComponent {
-  public readonly loading$ = new BehaviorSubject(false);
+export class StatisticsActionComponent implements OnDestroy {
+  protected readonly loading$ = new BehaviorSubject(false);
 
   public ngOnDestroy(): void {
     this.loading$.complete();

@@ -57,7 +57,7 @@ export class InputComponent implements OnInit {
     if (this.type === 'password') this.hide = !this.hide;
   }
 
-  public get inputType(): InputType {
+  protected get inputType(): InputType {
     return this.type === 'password' && !this.hide ? 'text' : this.type;
   }
 }

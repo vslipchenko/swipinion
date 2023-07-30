@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {BehaviorSubject, finalize, map, Observable, startWith, switchMap, throwError} from 'rxjs';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {untilDestroyed} from '~app/utilities/operator';
@@ -37,11 +37,10 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class AddOpinionDialogComponent {
-  public readonly loading$ = new BehaviorSubject(false);
-  public readonly hashtagRegexp = TAG_REGEXP;
-  // public readonly titleMaxLength = TITLE_MAX_LENGTH;
-  public readonly bodyMaxLength = OPINION_BODY_MAX_LENGTH;
+export class AddOpinionDialogComponent implements OnDestroy {
+  protected readonly loading$ = new BehaviorSubject(false);
+  protected readonly hashtagRegexp = TAG_REGEXP;
+  protected readonly bodyMaxLength = OPINION_BODY_MAX_LENGTH;
   protected readonly disableAddOpinion$: Observable<boolean>;
   private readonly addOpinionForm = this.addOpinionFormGroup;
   private readonly untilDestroyed = untilDestroyed();
@@ -63,7 +62,7 @@ export class AddOpinionDialogComponent {
     this.loading$.complete();
   }
 
-  public addOpinion(): void {
+  protected addOpinion(): void {
     this.addOpinionForm.markAllAsTouched();
 
     if (!this.addOpinionForm.valid) return;
@@ -143,13 +142,13 @@ export class AddOpinionDialogComponent {
       }, this.errorSnackbar.bind(this));
   }
 
-  public bodyErrorMessage(errors: ValidationErrors | null): string | void {
+  protected bodyErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return `${this.bodyMaxLength} characters at max`; // Assume 'maxlength'
   }
 
-  public imageFileErrorMessage(errors: ValidationErrors | null): string | void {
+  protected imageFileErrorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return `Invalid image. File size exceeds ${MAX_IMAGE_SIZE_MB}MB`;
@@ -178,19 +177,15 @@ export class AddOpinionDialogComponent {
     this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
   }
 
-  public get title(): FormControl {
-    return this.addOpinionForm.controls['title'] as FormControl;
-  }
-
-  public get file(): FormControl {
+  protected get file(): FormControl {
     return this.addOpinionForm.controls['file'] as FormControl;
   }
 
-  public get body(): FormControl {
+  protected get body(): FormControl {
     return this.addOpinionForm.controls['body'] as FormControl;
   }
 
-  public get tags(): FormControl {
+  protected get tags(): FormControl {
     return this.addOpinionForm.controls['tags'] as FormControl;
   }
 

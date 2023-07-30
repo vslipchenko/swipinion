@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Actions, ofActionErrored, ofActionSuccessful, Store} from '@ngxs/store';
 import {UnfollowUser} from '~app/modules/user/store/user.actions';
@@ -17,13 +17,13 @@ import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-b
   styleUrls: ['./unfollow-user-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UnfollowUserDialogComponent {
-  public readonly loading$ = new BehaviorSubject(false);
-  public readonly profile: ResolvedUserEssentials;
+export class UnfollowUserDialogComponent implements OnDestroy {
+  protected readonly loading$ = new BehaviorSubject(false);
+  protected readonly profile: ResolvedUserEssentials;
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
-    @Inject(MAT_DIALOG_DATA) public readonly data: {title: string; body: string; action: string},
+    @Inject(MAT_DIALOG_DATA) protected readonly data: {title: string; body: string; action: string},
     private readonly store: Store,
     private readonly snackbar: MatSnackBar,
     private readonly dialog: MatDialogRef<UnfollowUserDialogComponent>,
@@ -45,7 +45,7 @@ export class UnfollowUserDialogComponent {
     this.loading$.complete();
   }
 
-  public unfollow(): void {
+  protected unfollow(): void {
     this.loading$.next(true);
 
     this.store.dispatch(new UnfollowUser(this.profile.id));

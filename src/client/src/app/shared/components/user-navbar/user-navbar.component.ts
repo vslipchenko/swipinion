@@ -91,7 +91,7 @@ export class UserNavbarComponent implements OnInit {
     });
   }
 
-  public addOpinion(): void {
+  protected addOpinion(): void {
     this.dialog.open(AddOpinionDialogComponent, {panelClass: ['dialog', 'small-dialog']});
   }
 

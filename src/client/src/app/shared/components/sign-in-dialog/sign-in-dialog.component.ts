@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize} from 'rxjs';
@@ -36,15 +36,15 @@ import {ButtonComponent} from '~app/shared/components/button/button.component';
     ButtonComponent,
   ],
 })
-export class SignInDialogComponent implements OnInit {
+export class SignInDialogComponent implements OnInit, OnDestroy {
   @Output() public readonly authenticated = new EventEmitter();
   @Output() public readonly recover = new EventEmitter();
   @Output() public readonly signUp = new EventEmitter();
   @Output() public readonly confirm = new EventEmitter<SignIn>();
   @Output() public readonly cancel = new EventEmitter();
 
-  public readonly loading$ = new BehaviorSubject(false);
-  public readonly rememberMe = new FormControl(false);
+  protected readonly loading$ = new BehaviorSubject(false);
+  protected readonly rememberMe = new FormControl(false);
   private readonly signInForm = this.signInFormGroup;
   private readonly untilDestroyed = untilDestroyed();
 
@@ -63,7 +63,7 @@ export class SignInDialogComponent implements OnInit {
     this.loading$.complete();
   }
 
-  public signIn(): void {
+  protected signIn(): void {
     const valid = this.validateForm();
 
     if (!valid) return this.showErrorSnackbar();
@@ -71,7 +71,7 @@ export class SignInDialogComponent implements OnInit {
     this.authenticateUser(this.signInForm.value);
   }
 
-  public errorMessage(errors: ValidationErrors | null): string | void {
+  protected errorMessage(errors: ValidationErrors | null): string | void {
     if (!errors) return;
 
     return 'Required field';
@@ -126,11 +126,11 @@ export class SignInDialogComponent implements OnInit {
     });
   }
 
-  public get email(): FormControl {
+  protected get email(): FormControl {
     return this.signInForm.controls['email'] as FormControl;
   }
 
-  public get password(): FormControl {
+  protected get password(): FormControl {
     return this.signInForm.controls['password'] as FormControl;
   }
 

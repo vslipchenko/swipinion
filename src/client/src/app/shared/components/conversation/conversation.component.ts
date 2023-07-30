@@ -25,7 +25,6 @@ import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {untilDestroyed} from '~app/utilities/operator';
 import {BehaviorSubject, map, Observable, of, skip, skipWhile, startWith, Subscription, timer} from 'rxjs';
 import {getInterlocutorId} from '~app/utilities/user-messages';
-import {USER_CONVERSATION_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {USER_STATUS_POLLING_INTERVAL} from '~app/constants/user-status';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
@@ -71,12 +70,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
   @Select(AppSelectors.unreadMessages) private readonly unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   // public disableSendButton = false;
-  public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
-  public canLoadMore$: Observable<boolean> = of(true);
-  public interlocutorId = '';
-  public readonly messagesFetchLimit = USER_CONVERSATION_MESSAGES_FETCH_LIMIT;
-  public readonly updating$ = new BehaviorSubject(false);
-  public readonly loading$ = new BehaviorSubject(false);
+  protected conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);
+  protected canLoadMore$: Observable<boolean> = of(true);
+  protected interlocutorId = '';
+  protected readonly updating$ = new BehaviorSubject(false);
+  protected readonly loading$ = new BehaviorSubject(false);
   protected definedUsername = '';
   protected unreadMessagesSubscription!: Subscription;
   protected messageStatusCheckSubscription!: Subscription;
@@ -131,7 +129,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.loading$.complete();
   }
 
-  public spinnerInView(inView: boolean, messages: Array<UIUserConversationMessage>): void {
+  protected spinnerInView(inView: boolean, messages: Array<UIUserConversationMessage>): void {
     if (!inView) return;
 
     const edgeId = messages[messages.length - 1].id;
@@ -139,7 +137,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.savedMessages ? this.fetchSavedMessages(edgeId) : this.fetchUserConversation(edgeId);
   }
 
-  public sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
+  protected sendMessage(textarea: TextareaComponent, messages: Array<UIUserConversationMessage>): void {
     // this.disableSendButton = true;
     textarea.control.disable();
 

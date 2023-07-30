@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {timer} from 'rxjs';
 import {untilDestroyed} from '~app/utilities/operator';
 
@@ -9,7 +9,7 @@ import {untilDestroyed} from '~app/utilities/operator';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class OpinionPlaceholderComponent {
+export class OpinionPlaceholderComponent implements OnInit {
   @Output() public pollNewContent = new EventEmitter<void>();
 
   private readonly untilDestroyed = untilDestroyed();

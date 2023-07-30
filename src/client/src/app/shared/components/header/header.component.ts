@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   @Input() public showSignUp = of<void>();
   @Input() public showPasswordRecovery = of<void>();
 
-  public readonly authenticated: boolean = false;
+  protected readonly authenticated: boolean = false;
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(
@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  public signIn(changeLocation: boolean, data?: {email: string; password: string}): void {
+  protected signIn(changeLocation: boolean, data?: {email: string; password: string}): void {
     if (changeLocation) this.location.go('/sign-in');
 
     const dialog = this.dialog.open(SignInDialogComponent, {panelClass: ['dialog', 'small-dialog'], data});
@@ -107,7 +107,7 @@ export class HeaderComponent implements OnInit {
     this.listenDialogClose(dialog);
   }
 
-  public signUp(changeLocation: boolean): void {
+  protected signUp(changeLocation: boolean): void {
     if (changeLocation) this.location.go('/sign-up');
 
     const dialog = this.dialog.open(SignUpDialogComponent, {panelClass: ['dialog', 'small-dialog']});
@@ -201,7 +201,7 @@ export class HeaderComponent implements OnInit {
     }, USER_STATUS_POLLING_INTERVAL);
   }
 
-  public get isHomepageScope(): boolean {
+  protected get isHomepageScope(): boolean {
     return ['/', '/sign-in', '/sign-up', '/recovery'].includes(this.router.url);
   }
 }
