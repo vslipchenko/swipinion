@@ -35,7 +35,21 @@ import {MessagesPanelComponent} from '~app/shared/components/messages-panel/mess
     HttpClientModule,
     RouterModule,
     AppRoutingModule,
-    NgxsModule.forRoot([AppState], {developmentMode: !environment.production}),
+    NgxsModule.forRoot([AppState], {
+      developmentMode: !environment.production,
+      selectorOptions: {
+        // These Selector Settings are recommended in preparation for NGXS v4
+        suppressErrors: false,
+        injectContainerState: false,
+      },
+      /*
+        Set this to true in order to enable support for pages where a Strict Content Security Policy has been enabled.
+        This setting circumvent some optimisations that violate a strict CSP through the use of new Function(...)
+       */
+      // compatibility: {
+      //   strictContentSecurityPolicy: true,
+      // },
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot({disabled: environment.production}),
     // Following modules considered global as they available across the app, mostly because of being used in the header or on multiple pages
     MatSnackBarModule,
