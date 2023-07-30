@@ -56,8 +56,9 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     thumbnail: '',
     settings: {
       follow: FollowSettings.Everyone,
-      view_following: PrivacyCommonSettings.Everyone,
       message: PrivacyCommonSettings.Everyone,
+      view_followers: PrivacyCommonSettings.Everyone,
+      view_following: PrivacyCommonSettings.Everyone,
       view_opinions: PrivacyCommonSettings.Everyone,
       view_reactions: PrivacyCommonSettings.Everyone,
       view_favorites: PrivacyCommonSettings.Everyone,

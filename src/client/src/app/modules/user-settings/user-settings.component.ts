@@ -23,8 +23,9 @@ export class UserSettingsComponent implements OnDestroy {
 
   protected readonly privacyForm = new FormGroup({
     follow: new FormControl(FollowSettings.Everyone),
-    view_following: new FormControl(PrivacyCommonSettings.Everyone),
     message: new FormControl(PrivacyCommonSettings.Everyone),
+    view_followers: new FormControl(PrivacyCommonSettings.Everyone),
+    view_following: new FormControl(PrivacyCommonSettings.Everyone),
     view_opinions: new FormControl(PrivacyCommonSettings.Everyone),
     view_reactions: new FormControl(PrivacyCommonSettings.Everyone),
     view_favorites: new FormControl(PrivacyCommonSettings.Everyone),
@@ -67,11 +68,19 @@ export class UserSettingsComponent implements OnDestroy {
     private readonly snackbar: MatSnackBar,
     private readonly actions$: Actions,
   ) {
-    const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
-      UserSettingsSelectors.settings,
-    );
+    const {follow, message, view_followers, view_following, view_opinions, view_reactions, view_favorites} =
+      this.store.selectSnapshot(UserSettingsSelectors.settings);
+
     // Set initial values;
-    this.privacyForm.setValue({follow, view_following, message, view_opinions, view_reactions, view_favorites});
+    this.privacyForm.setValue({
+      follow,
+      message,
+      view_followers,
+      view_following,
+      view_opinions,
+      view_reactions,
+      view_favorites,
+    });
 
     this.actions$.pipe(this.untilDestroyed(), ofActionSuccessful(UpdateProfileSettings)).subscribe(() => {
       this.loading$.next(false);
@@ -94,11 +103,18 @@ export class UserSettingsComponent implements OnDestroy {
   }
 
   protected cancelPrivacy(): void {
-    const {follow, view_following, message, view_opinions, view_reactions, view_favorites} = this.store.selectSnapshot(
-      UserSettingsSelectors.settings,
-    );
+    const {follow, message, view_followers, view_following, view_opinions, view_reactions, view_favorites} =
+      this.store.selectSnapshot(UserSettingsSelectors.settings);
     // Reset to current values
-    this.privacyForm.reset({follow, view_following, message, view_opinions, view_reactions, view_favorites});
+    this.privacyForm.reset({
+      follow,
+      message,
+      view_followers,
+      view_following,
+      view_opinions,
+      view_reactions,
+      view_favorites,
+    });
     this.cancelPrivacy$.next();
   }
 
@@ -192,12 +208,16 @@ export class UserSettingsComponent implements OnDestroy {
     return this.privacyForm.controls['follow'] as FormControl;
   }
 
-  protected get viewFollowing(): FormControl {
-    return this.privacyForm.controls['view_following'] as FormControl;
-  }
-
   protected get message(): FormControl {
     return this.privacyForm.controls['message'] as FormControl;
+  }
+
+  protected get viewFollowers(): FormControl {
+    return this.privacyForm.controls['view_followers'] as FormControl;
+  }
+
+  protected get viewFollowing(): FormControl {
+    return this.privacyForm.controls['view_following'] as FormControl;
   }
 
   protected get viewOpinions(): FormControl {

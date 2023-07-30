@@ -73,15 +73,19 @@ export const queryUserCreate = ({
   accessKey,
   confirmationCode,
   language,
-}: CreateUser & {accessKey: string; confirmationCode: string; language: Language}): QueryConfig => ({
+}: CreateUser & {
+  accessKey: string;
+  confirmationCode: string;
+  language: Language;
+}): QueryConfig => ({
   text: `
     WITH record AS (
       INSERT INTO users (username, email, password, access_key, confirmation_code, language)
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING id
     )
-    INSERT INTO user_settings (user_id, follow, view_following, message, view_opinions, view_reactions, view_favorites)
-    VALUES ((SELECT id FROM record), ${FollowSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone})
+    INSERT INTO user_settings (user_id, follow, message, view_followers, view_following, view_opinions, view_reactions, view_favorites)
+    VALUES ((SELECT id FROM record), ${FollowSettings.Everyone}, ${FollowSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone}, ${PrivacyCommonSettings.Everyone})
   `,
   values: [username, email, password, accessKey, confirmationCode, language],
 });
