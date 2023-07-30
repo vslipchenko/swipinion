@@ -33,7 +33,7 @@ export class UserProfileResolver implements Resolve<unknown> {
           username,
           bio: profile.bio,
           thumbnail: profile.thumbnail,
-          isProfilePath: true,
+          profileOwner: true,
           followStatus: UserFollowStatus.DoesNotFollow,
         }),
       );
@@ -53,7 +53,7 @@ export class UserProfileResolver implements Resolve<unknown> {
             username,
             bio: data.userProfile.bio,
             thumbnail: data.userProfile.thumbnail,
-            isProfilePath: navigatingProfile,
+            profileOwner: navigatingProfile,
             followStatus: data.userProfile.follower_id
               ? data.userProfile.pending
                 ? UserFollowStatus.Pending

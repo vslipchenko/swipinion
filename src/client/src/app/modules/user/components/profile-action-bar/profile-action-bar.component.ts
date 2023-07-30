@@ -32,7 +32,7 @@ export class ProfileActionBarComponent {
 
   public readonly userRole = UserRole;
   public readonly userSettings!: UserSettings;
-  public readonly isProfilePath!: boolean;
+  public readonly profileOwner!: boolean;
 
   protected readonly userFollowStatus = UserFollowStatus;
 
@@ -40,7 +40,7 @@ export class ProfileActionBarComponent {
 
   public constructor(private readonly store: Store, private readonly dialog: MatDialog) {
     this.userSettings = this.store.selectSnapshot(UserSelectors.settings);
-    this.isProfilePath = this.store.selectSnapshot(UserSelectors.isProfilePath);
+    this.profileOwner = this.store.selectSnapshot(UserSelectors.profileOwner);
   }
 
   public message(): void {
@@ -97,7 +97,7 @@ export class ProfileActionBarComponent {
   }
 
   public get canMessage(): boolean {
-    if (this.isProfilePath) return true;
+    if (this.profileOwner) return true;
 
     const followStatus = this.store.selectSnapshot(UserSelectors.followStatus);
 

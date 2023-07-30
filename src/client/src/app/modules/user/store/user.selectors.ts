@@ -10,7 +10,7 @@ export class UserSelectors {
       username: state.username,
       thumbnail: state.thumbnail,
       bio: state.bio,
-      isProfilePath: state.isProfilePath,
+      profileOwner: state.profileOwner,
       followStatus: state.followStatus,
     };
   });
@@ -62,8 +62,8 @@ export class UserSelectors {
     return state.settings;
   });
 
-  public static isProfilePath = createSelector([UserState], (state: UserStateModel) => {
-    return state.isProfilePath;
+  public static profileOwner = createSelector([UserState], (state: UserStateModel) => {
+    return state.profileOwner;
   });
 
   public static followStatus = createSelector([UserState], (state: UserStateModel): UserFollowStatus => {

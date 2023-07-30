@@ -1,7 +1,7 @@
 export interface FetchUserFavoritesPayload {
   userId: string;
   edgeId?: string;
-  isProfilePath: boolean;
+  profileOwner: boolean;
 }
 
 export interface GetUserFavorites {

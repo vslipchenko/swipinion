@@ -12,7 +12,7 @@ import {Observable} from 'rxjs';
 export class UserReactionsTabComponent {
   @Select(UserSelectors.canLoadMoreReactions) public readonly canLoadMoreReactions$!: Observable<boolean>;
 
-  protected readonly profile = this.store.selectSnapshot(UserSelectors.isProfilePath);
+  protected readonly profile = this.store.selectSnapshot(UserSelectors.profileOwner);
 
   public constructor(private readonly store: Store) {}
 }

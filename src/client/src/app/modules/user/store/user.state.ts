@@ -38,7 +38,7 @@ export interface UserStateModel {
   profileOpinions: Array<UIUserOpinion>; // Authed user opinions
   userFavorites: Array<unknown>; // Resolved user reactions
   profileFavorites: Array<unknown>; // Authed user reactions
-  isProfilePath: boolean; // Used to discern /profile and /user/foo pages
+  profileOwner: boolean; // Whether current profile belongs to authed user
   followStatus: UserFollowStatus;
   canLoadMoreOpinions: boolean;
   canLoadMoreReactions: boolean;
@@ -66,7 +66,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     profileOpinions: [],
     userFavorites: [],
     profileFavorites: [],
-    isProfilePath: false,
+    profileOwner: false,
     followStatus: UserFollowStatus.DoesNotFollow,
     canLoadMoreOpinions: false,
     canLoadMoreReactions: false,
@@ -118,7 +118,7 @@ export class UserState {
               ...state,
               canLoadMoreOpinions: opinions.length === USER_OPINION_FETCH_LIMIT,
             };
-            const stateKey = action.payload.isProfilePath ? 'profileOpinions' : 'userOpinions';
+            const stateKey = action.payload.profileOwner ? 'profileOpinions' : 'userOpinions';
 
             nextState[stateKey] = action.payload.edgeId ? [...state[stateKey], ...opinions] : opinions; // EdgeId check prevents duplicating when navigating back and forth between /profile and /user/:username paths
 
@@ -230,7 +230,7 @@ export class UserState {
               canLoadMoreFavorites: favorites.length === USER_FAVORITES_FETCH_LIMIT,
             };
 
-            const stateKey = action.payload.isProfilePath ? 'profileFavorites' : 'userFavorites';
+            const stateKey = action.payload.profileOwner ? 'profileFavorites' : 'userFavorites';
 
             nextState[stateKey] = action.payload.edgeId ? [...state[stateKey], ...favorites] : favorites;
 

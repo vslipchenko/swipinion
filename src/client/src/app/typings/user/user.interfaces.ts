@@ -99,7 +99,7 @@ export interface ResolvedUserData {
   username: string;
   bio: string;
   thumbnail: string;
-  isProfilePath: boolean;
+  profileOwner: boolean;
   followStatus: UserFollowStatus;
 }
 

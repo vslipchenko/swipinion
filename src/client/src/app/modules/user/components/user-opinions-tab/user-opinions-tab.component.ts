@@ -22,7 +22,7 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
 
   @Input() public userId = '';
   @Input() public username = '';
-  @Input() public isProfilePath = false;
+  @Input() public profileOwner = false;
   @Input()
   public viewOpinionsSetting = PrivacyCommonSettings.NoOne;
 
@@ -45,9 +45,9 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.opinions$ = this.store.select(this.isProfilePath ? UserSelectors.profileOpinions : UserSelectors.userOpinions);
+    this.opinions$ = this.store.select(this.profileOwner ? UserSelectors.profileOpinions : UserSelectors.userOpinions);
 
-    if (this.isProfilePath || this.viewOpinionsSetting === PrivacyCommonSettings.Everyone)
+    if (this.profileOwner || this.viewOpinionsSetting === PrivacyCommonSettings.Everyone)
       return this.fetchUserOpinions(true);
 
     if (this.viewOpinionsSetting === PrivacyCommonSettings.NoOne) return;
@@ -85,7 +85,7 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
 
     const payload: FetchUserOpinionsPayload = {
       userId: this.userId,
-      isProfilePath: this.isProfilePath,
+      profileOwner: this.profileOwner,
     };
 
     if (edgeId) payload.edgeId = edgeId;

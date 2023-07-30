@@ -4,7 +4,7 @@
 <ng-template #content>
   <ng-container *ngIf="followStatus$ | async as followStatus">
     <ng-container *ngIf="
-      isProfilePath || viewOpinionsSetting === privacyCommonSettings.Everyone || followStatus === userFollowStatus.Follows;
+      profileOwner || viewOpinionsSetting === privacyCommonSettings.Everyone || followStatus === userFollowStatus.Follows;
       else privateOpinionsOrPendingFollow
     ">
       <ng-container *ngIf="opinions$ | async as opinions">
@@ -29,7 +29,7 @@
         <ng-template #emptyOpinions>
           <ng-container [ngTemplateOutlet]="contentPlaceholder"
                         [ngTemplateOutletContext]="{
-                          tip: isProfilePath ? 'You can add new opinions through user menu\'s action «Add opinion»' : '',
+                          tip: profileOwner ? 'You can add new opinions through user menu\'s action «Add opinion»' : '',
                           templateOutlet: privateOrEmptyOpinionsPlaceholder
                         }"></ng-container>
         </ng-template>

@@ -31,7 +31,7 @@ export interface CreateOpinion {
 export interface FetchUserOpinionsPayload {
   userId: string;
   edgeId?: string;
-  isProfilePath: boolean;
+  profileOwner: boolean;
 }
 
 export interface GetOpinionsByUserIdQueryResult {

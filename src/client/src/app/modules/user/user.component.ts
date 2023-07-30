@@ -35,7 +35,7 @@ export class UserComponent implements AfterViewInit {
   public readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
   public readonly userId: string = '';
   public readonly username: string = '';
-  public readonly isProfilePath: boolean = false;
+  public readonly profileOwner: boolean = false;
   public readonly userContentTabIndex = UserContentTabIndex;
   public readonly userContentTabs: Array<Tab> = [
     {text: 'Opinions', icon: 'article'},
@@ -57,7 +57,7 @@ export class UserComponent implements AfterViewInit {
     const profileSnapshot = this.profileSnapshot;
     this.userId = profileSnapshot.id;
     this.username = profileSnapshot.username;
-    this.isProfilePath = profileSnapshot.isProfilePath;
+    this.profileOwner = profileSnapshot.profileOwner;
     this.settings = this.store.selectSnapshot(UserSelectors.settings);
   }
 

@@ -15,13 +15,13 @@ import {FetchUserFavoritesPayload} from '~app/typings/user-favorites/user-favori
 })
 export class UserFavoritesTabComponent implements OnInit {
   @Input() public userId = '';
-  @Input() public isProfilePath = false;
+  @Input() public profileOwner = false;
 
   @Select(UserSelectors.canLoadMoreFavorites) public readonly canLoadMoreFavorites$!: Observable<boolean>;
 
   public favorites$!: Observable<Array<any>>; // TODO replace any
   public readonly loading$ = new BehaviorSubject(true);
-  protected readonly profile = this.store.selectSnapshot(UserSelectors.isProfilePath);
+  protected readonly profile = this.store.selectSnapshot(UserSelectors.profileOwner);
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(private readonly store: Store, private readonly actions$: Actions) {
@@ -32,7 +32,7 @@ export class UserFavoritesTabComponent implements OnInit {
 
   public ngOnInit(): void {
     this.favorites$ = this.store.select(
-      this.isProfilePath ? UserSelectors.profileFavorites : UserSelectors.userFavorites,
+      this.profileOwner ? UserSelectors.profileFavorites : UserSelectors.userFavorites,
     );
 
     this.fetchUserFavorites();
@@ -49,7 +49,7 @@ export class UserFavoritesTabComponent implements OnInit {
   private fetchUserFavorites(edgeId = ''): void {
     const payload: FetchUserFavoritesPayload = {
       userId: this.userId,
-      isProfilePath: this.isProfilePath,
+      profileOwner: this.profileOwner,
     };
 
     if (edgeId) payload.edgeId = edgeId;
