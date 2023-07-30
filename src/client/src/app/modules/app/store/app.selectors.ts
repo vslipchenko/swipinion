@@ -75,7 +75,7 @@ export class AppSelectors {
     return createSelector([AppState], (state: AppStateModel) => {
       const conversationKey = defineConversationKey(state.conversations, userId1, userId2);
 
-      return state.conversations[conversationKey].messages;
+      return state.conversations[conversationKey]?.messages;
     });
   };
 
