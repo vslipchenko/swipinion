@@ -46,7 +46,8 @@
          [class.pb-extended]="data.showBottomBar">
       <app-user-opinions-tab *ngIf="activeTab.value === userContentTabIndex.Opinions" [userId]="userId"
                              [username]="username"
-                             [isProfilePath]="isProfilePath" [userSettings]="settings"></app-user-opinions-tab>
+                             [isProfilePath]="isProfilePath"
+                             [viewOpinionsSetting]="settings.view_opinions"></app-user-opinions-tab>
       <app-user-reactions-tab *ngIf="activeTab.value === userContentTabIndex.Reactions"></app-user-reactions-tab>
       <app-user-favorites-tab *ngIf="activeTab.value === userContentTabIndex.Favorites"
                               [userId]="userId"></app-user-favorites-tab>

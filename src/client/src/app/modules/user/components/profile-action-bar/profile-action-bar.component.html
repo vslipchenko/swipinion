@@ -22,30 +22,44 @@
 
 <ng-template #followActions let-showMessageOnFollowing>
   <ng-container *ngIf="role !== userRole.User">
-    <ng-container *ngIf="{followingState: followingStatus$ | async} as state">
-      <app-icon-button *ngIf="!state.followingState?.following" icon="person_add" [appAuthClick]="follow.bind(this)"
+    <ng-container *ngIf="followStatus$ | async as followStatus">
+      <app-icon-button *ngIf="followStatus === userFollowStatus.DoesNotFollow" icon="person_add"
+                       [appAuthClick]="follow.bind(this)"
                        color="primary"></app-icon-button>
 
-      <ng-container *ngIf="state.followingState?.following">
-        <!-- Assume authed -->
+      <ng-container *ngIf="followStatus === userFollowStatus.Follows">
+        <!-- This logic belongs to the fixed bottom userbar -->
         <ng-container *ngIf="showMessageOnFollowing">
           <app-icon-button *ngIf="canMessage" icon="email"
                            (clicked)="message()"></app-icon-button>
 
           <ng-container *ngIf="!canMessage">
-            <ng-container *ngIf="pendingFollowing" [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
-
-            <ng-container *ngIf="!pendingFollowing" [ngTemplateOutlet]="arrowUpAction"></ng-container>
+            <ng-container [ngTemplateOutlet]="arrowUpAction"></ng-container>
           </ng-container>
         </ng-container>
 
+        <!-- This logic belongs to the main user profile panel -->
         <ng-container *ngIf="!showMessageOnFollowing">
-          <ng-container *ngIf="state.followingState?.pending"
-                        [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
-
-          <app-icon-button *ngIf="!state.followingState?.pending" svgIcon="account-check"
+          <app-icon-button svgIcon="account-check"
                            (clicked)="unfollow()"
           ></app-icon-button>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="followStatus === userFollowStatus.Pending">
+        <!-- This logic relates to the fixed bottom userbar -->
+        <ng-container *ngIf="showMessageOnFollowing">
+          <app-icon-button *ngIf="canMessage" icon="email"
+                           (clicked)="message()"></app-icon-button>
+
+          <ng-container *ngIf="!canMessage">
+            <ng-container
+              [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
+          </ng-container>
+        </ng-container>
+        <!-- This logic belongs to the main user profile panel -->
+        <ng-container *ngIf="!showMessageOnFollowing">
+          <ng-container [ngTemplateOutlet]="pendingFollowingAction"></ng-container>
         </ng-container>
       </ng-container>
     </ng-container>

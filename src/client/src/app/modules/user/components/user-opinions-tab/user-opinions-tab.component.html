@@ -2,58 +2,84 @@
                       class="d-flex jc-center ai-center spinner mt-3"></app-progress-spinner>
 
 <ng-template #content>
-  <ng-container *ngIf="opinions$ | async as opinions">
-    <!-- TODO: Add trackBy -->
-    <app-content-placeholder *ngIf="!opinions.length; else opinionList" icon="article"
-                             class="d-block mt-2-3"
-                             [tip]="isProfilePath ? 'You can add new opinions through user menu\'s action «Add opinion»' : ''">
-      <ng-container *ngIf="isProfilePath; else nonProfilePath">
-        <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
-                    (clicked)="shareOpinion()"></app-button>
-        <p class="mt-h t-center">with others!</p>
+  <ng-container *ngIf="followStatus$ | async as followStatus">
+    <ng-container *ngIf="
+      isProfilePath || viewOpinionsSetting === privacyCommonSettings.Everyone || followStatus === userFollowStatus.Follows;
+      else privateOpinionsOrPendingFollow
+    ">
+      <ng-container *ngIf="opinions$ | async as opinions">
+        <ng-container *ngIf="opinions.length; else emptyOpinions">
+          <!-- TODO: Add trackBy -->
+          <app-opinion-preview *ngFor="let opinion of opinions" [id]="opinion.id"
+                               [body]="opinion.body" [fileUrl]="opinion.file_url"
+                               [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"
+                               [agreed]="opinion.formattedAgreed"
+                               [disagreed]="opinion.formattedDisagreed"
+                               [comments]="opinion.formattedComments"
+                               [reaction]="opinion.reaction"
+                               [commented]="opinion.commented"
+          ></app-opinion-preview>
+
+          <app-progress-spinner
+            *ngIf="canLoadMoreOpinions$ | async"
+            (appInView)="spinnerInView($event, opinions)"
+            class="d-flex jc-center ai-center list-spinner"></app-progress-spinner>
+        </ng-container>
+
+        <ng-template #emptyOpinions>
+          <ng-container [ngTemplateOutlet]="contentPlaceholder"
+                        [ngTemplateOutletContext]="{
+                          tip: isProfilePath ? 'You can add new opinions through user menu\'s action «Add opinion»' : '',
+                          templateOutlet: privateOrEmptyOpinionsPlaceholder
+                        }"></ng-container>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #privateOpinionsOrPendingFollow>
+      <ng-container *ngIf="viewOpinionsSetting === privacyCommonSettings.FollowersOnly; else privateOpinions">
+        <ng-container *ngIf="pendingFollowRequestPlaceholder; else doesNotFollow"
+                      [ngTemplateOutlet]="contentPlaceholder"
+                      [ngTemplateOutletContext]="{
+                          templateOutlet: pendingFollowRequestPlaceholder
+                      }"></ng-container>
+
+        <ng-template #doesNotFollow>
+          <ng-container [ngTemplateOutlet]="contentPlaceholder"
+                        [ngTemplateOutletContext]="{
+                          templateOutlet: followUserToSeeOpinionsPlaceholder
+                        }"></ng-container>
+        </ng-template>
       </ng-container>
 
-      <ng-template #nonProfilePath>
-        <ng-container *ngIf="followingStatus$ | async as followingStatus">
-          <ng-container *ngIf="followToView && !followingStatus.following">
-            <app-button [text]="'Follow ' + username" class="mt-1 d-flex jc-center"
-                        (clicked)="followUser()"></app-button>
-            <p class="mt-h t-center">to see their opinions!</p>
-          </ng-container>
-
-          <ng-container *ngIf="followToView && pendingFollowRequest">
-            <p class="mt-h t-center">See user's opinions once follow request is accepted</p>
-          </ng-container>
-
-          <!--
-             Use generic placeholder if opinions are private or there is none.
-             It's hard to distinguish them and keep user settings in sync.
-             Without querying user settings along with user opinions it is hard to say whether some privacy settings have not changed
-             since profile loaded those causing placeholder info to be inconsistent or obsolete
-          -->
-          <ng-container *ngIf="!followToView || (followingStatus.following && !pendingFollowRequest)">
-            <p class="mt-h t-center">User has not shared any opinions yet or access is restricted</p>
-          </ng-container>
-        </ng-container>
+      <ng-template #privateOpinions>
+        <ng-container [ngTemplateOutlet]="contentPlaceholder"
+                      [ngTemplateOutletContext]="{
+                          templateOutlet: privateOrEmptyOpinionsPlaceholder
+                      }"></ng-container>
       </ng-template>
-    </app-content-placeholder>
-
-    <ng-template #opinionList>
-      <app-opinion-preview *ngFor="let opinion of opinions" [id]="opinion.id"
-                           [body]="opinion.body" [fileUrl]="opinion.file_url"
-                           [tags]="opinion.tags" class="opinion-preview d-block mt-2-3"
-                           [agreed]="opinion.formattedAgreed"
-                           [disagreed]="opinion.formattedDisagreed"
-                           [comments]="opinion.formattedComments"
-                           [reaction]="opinion.reaction"
-                           [commented]="opinion.commented"
-      ></app-opinion-preview>
-
-      <app-progress-spinner
-        *ngIf="canLoadMoreOpinions$ | async"
-        (appInView)="spinnerInView($event, opinions)"
-        class="d-flex jc-center ai-center list-spinner"></app-progress-spinner>
     </ng-template>
   </ng-container>
 </ng-template>
 
+<ng-template #contentPlaceholder let-tip="tip" let-templateOutlet="templateOutlet">
+  <app-content-placeholder icon="article"
+                           class="d-block mt-2-3"
+                           [tip]="tip">
+    <ng-container [ngTemplateOutlet]="templateOutlet"></ng-container>
+  </app-content-placeholder>
+</ng-template>
+
+<ng-template #privateOrEmptyOpinionsPlaceholder>
+  <p class="mt-h t-center">User has not shared any opinions yet or access is restricted</p>
+</ng-template>
+
+<ng-template #followUserToSeeOpinionsPlaceholder>
+  <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
+              (clicked)="shareOpinion()"></app-button>
+  <p class="mt-h t-center">with others!</p>
+</ng-template>
+
+<ng-template #pendingFollowRequestPlaceholder>
+  <p class="mt-h t-center">See user's opinions once follow request is accepted</p>
+</ng-template>

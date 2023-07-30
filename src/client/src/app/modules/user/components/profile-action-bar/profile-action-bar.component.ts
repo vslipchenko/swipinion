@@ -11,6 +11,7 @@ import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.en
 import {SetActiveConversation} from '~app/modules/app/store/app.actions';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
+import {UserFollowStatus} from '~app/typings/follow/follow.enums';
 
 @Component({
   selector: 'app-profile-action-bar',
@@ -27,11 +28,13 @@ export class ProfileActionBarComponent {
   @Input() public wrapper!: HTMLDivElement;
 
   // @Select(UserSelectors.following) public following$!: Observable<boolean>;
-  @Select(UserSelectors.followingStatus) public followingStatus$!: Observable<{following: boolean; pending: boolean}>;
+  @Select(UserSelectors.followStatus) protected readonly followStatus$!: Observable<UserFollowStatus>;
 
   public readonly userRole = UserRole;
   public readonly userSettings!: UserSettings;
   public readonly isProfilePath!: boolean;
+
+  protected readonly userFollowStatus = UserFollowStatus;
 
   // public readonly privacyCommonSettings = PrivacyCommonSettings;
 
@@ -96,21 +99,15 @@ export class ProfileActionBarComponent {
   public get canMessage(): boolean {
     if (this.isProfilePath) return true;
 
-    const followingStatus = this.store.selectSnapshot(UserSelectors.followingStatus); // TODO rename to following status
-
-    if (followingStatus.pending) return false;
+    const followStatus = this.store.selectSnapshot(UserSelectors.followStatus);
 
     switch (this.userSettings.message) {
       case PrivacyCommonSettings.FollowersOnly:
-        return followingStatus.following;
+        return followStatus === UserFollowStatus.Follows;
       case PrivacyCommonSettings.NoOne:
         return false;
       default:
         return true;
     }
-  }
-
-  public get pendingFollowing(): boolean {
-    return this.store.selectSnapshot(UserSelectors.followingStatus).pending;
   }
 }

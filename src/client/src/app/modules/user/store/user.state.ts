@@ -11,7 +11,6 @@ import {
   FetchUserOpinions,
   FollowUser,
   PrependUserOpinion,
-  ResetUserOpinions,
   SetUserSettings,
   UnfollowUser,
   UpdateResolvedUserData,
@@ -21,12 +20,13 @@ import {Observable, tap} from 'rxjs';
 import {MutationResult} from 'apollo-angular';
 import {USER_FAVORITES_FETCH_LIMIT, USER_OPINION_FETCH_LIMIT} from '~app/constants/opinions';
 import {FollowerService} from '~app/services/follower/follower.service';
-import {FollowUserMutationResult} from '~app/typings/follower/follower.interfaces';
+import {FollowUserMutationResult} from '~app/typings/follow/follow.interfaces';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
 import {FollowSettings, PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {UserFavoritesService} from '~app/services/user-favorites/user-favorites.service';
 import {formatStatisticNumber} from '~app/utilities/number';
 import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
+import {UserFollowStatus} from '~app/typings/follow/follow.enums';
 
 export interface UserStateModel {
   id: string; // Resolved user id
@@ -39,8 +39,7 @@ export interface UserStateModel {
   userFavorites: Array<unknown>; // Resolved user reactions
   profileFavorites: Array<unknown>; // Authed user reactions
   isProfilePath: boolean; // Used to discern /profile and /user/foo pages
-  following: boolean; // Whether authed user follows resolved
-  pending: boolean; // Pending following
+  followStatus: UserFollowStatus;
   canLoadMoreOpinions: boolean;
   canLoadMoreReactions: boolean;
   canLoadMoreFavorites: boolean;
@@ -68,8 +67,7 @@ const USER_STATE = new StateToken<UserStateModel>('user');
     userFavorites: [],
     profileFavorites: [],
     isProfilePath: false,
-    following: false,
-    pending: false,
+    followStatus: UserFollowStatus.DoesNotFollow,
     canLoadMoreOpinions: false,
     canLoadMoreReactions: false,
     canLoadMoreFavorites: false,
@@ -146,14 +144,6 @@ export class UserState {
     }));
   }
 
-  @Action(ResetUserOpinions)
-  private resetUserOpinions(context: StateContext<UserStateModel>): void {
-    context.setState((state) => ({
-      ...state,
-      userOpinions: [],
-    }));
-  }
-
   @Action(DeleteUserOpinion)
   private deleteUserOpinion(
     context: StateContext<UserStateModel>,
@@ -171,14 +161,6 @@ export class UserState {
     );
   }
 
-  // @Action(UpdateFollowingStatus)
-  // private updateFollowingStatus(context: StateContext<UserStateModel>, action: UpdateFollowingStatus): void {
-  //   context.setState((state) => ({
-  //     ...state,
-  //     following: action.payload,
-  //   }));
-  // }
-
   @Action(FollowUser)
   private followUser(
     context: StateContext<UserStateModel>,
@@ -190,8 +172,7 @@ export class UserState {
 
         context.setState((state) => ({
           ...state,
-          following: true,
-          pending: data.followUser.pending,
+          followStatus: data.followUser.pending ? UserFollowStatus.Pending : UserFollowStatus.Follows,
         }));
       }),
     );
@@ -205,8 +186,7 @@ export class UserState {
 
         context.setState((state) => ({
           ...state,
-          following: false,
-          pending: false,
+          followStatus: UserFollowStatus.DoesNotFollow,
         }));
       }),
     );

@@ -1,5 +1,6 @@
 import {Language} from '~app/typings/i18n/i18n.types';
 import {ExistsResponse, SuccessResponse} from '~app/typings/response/response.interfaces';
+import {UserFollowStatus} from '~app/typings/follow/follow.enums';
 
 export interface CreateUser {
   username: string;
@@ -99,17 +100,11 @@ export interface ResolvedUserData {
   bio: string;
   thumbnail: string;
   isProfilePath: boolean;
-  following: boolean;
-  pending: boolean;
+  followStatus: UserFollowStatus;
 }
 
 export interface ResolvedUserEssentials {
   id: string;
   username: string;
   thumbnail: string;
-}
-
-export interface UserFollowingStatus {
-  following: boolean;
-  pending: boolean;
 }

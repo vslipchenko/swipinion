@@ -1,6 +1,7 @@
 import {createSelector} from '@ngxs/store';
 import {UserState, UserStateModel} from '~app/modules/user/store/user.state';
-import {ResolvedUserData, ResolvedUserEssentials, UserFollowingStatus} from '~app/typings/user/user.interfaces';
+import {ResolvedUserData, ResolvedUserEssentials} from '~app/typings/user/user.interfaces';
+import {UserFollowStatus} from '~app/typings/follow/follow.enums';
 
 export class UserSelectors {
   public static resolvedUserData = createSelector([UserState], (state: UserStateModel): ResolvedUserData => {
@@ -10,8 +11,7 @@ export class UserSelectors {
       thumbnail: state.thumbnail,
       bio: state.bio,
       isProfilePath: state.isProfilePath,
-      following: state.following,
-      pending: state.pending,
+      followStatus: state.followStatus,
     };
   });
 
@@ -66,7 +66,7 @@ export class UserSelectors {
     return state.isProfilePath;
   });
 
-  public static followingStatus = createSelector([UserState], (state: UserStateModel): UserFollowingStatus => {
-    return {following: state.following, pending: state.pending};
+  public static followStatus = createSelector([UserState], (state: UserStateModel): UserFollowStatus => {
+    return state.followStatus;
   });
 }

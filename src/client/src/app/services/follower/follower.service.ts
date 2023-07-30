@@ -6,7 +6,7 @@ import {
   DeclineFollowRequestMutationResult,
   FollowUserMutationResult,
   UnfollowUserMutationResult,
-} from '~app/typings/follower/follower.interfaces';
+} from '~app/typings/follow/follow.interfaces';
 import {
   ACCEPT_FOLLOW_REQUEST,
   DECLINE_FOLLOW_REQUEST,

@@ -8,6 +8,7 @@ import {SetUserSettings, UpdateResolvedUserData} from '~app/modules/user/store/u
 import {UserSettingsService} from '~app/services/user-settings/user-settings.service';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {GetUserSettingsQueryResult} from '~app/typings/user-settings/user-settings.interfaces';
+import {UserFollowStatus} from '~app/typings/follow/follow.enums';
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +34,7 @@ export class UserProfileResolver implements Resolve<unknown> {
           bio: profile.bio,
           thumbnail: profile.thumbnail,
           isProfilePath: true,
-          following: false,
-          pending: false,
+          followStatus: UserFollowStatus.DoesNotFollow,
         }),
       );
     }
@@ -54,8 +54,11 @@ export class UserProfileResolver implements Resolve<unknown> {
             bio: data.userProfile.bio,
             thumbnail: data.userProfile.thumbnail,
             isProfilePath: navigatingProfile,
-            following: Boolean(data.userProfile.follower_id),
-            pending: data.userProfile.pending,
+            followStatus: data.userProfile.follower_id
+              ? data.userProfile.pending
+                ? UserFollowStatus.Pending
+                : UserFollowStatus.Follows
+              : UserFollowStatus.DoesNotFollow,
           }),
         );
 
