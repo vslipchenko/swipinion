@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   FetchUserConversationPayload,
   UIUserConversationMessage,
@@ -44,9 +53,7 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
     InViewDirective,
   ],
 })
-export class ConversationComponent implements OnInit {
-  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
-
+export class ConversationComponent implements OnInit, OnDestroy {
   @Input() public username = '';
   @Input() public thumbnail = '';
   @Input() public userId1 = '';
@@ -59,7 +66,9 @@ export class ConversationComponent implements OnInit {
   @Output() public back = new EventEmitter<void>();
   // @Output() public loadStart = new EventEmitter<void>();
   // @Output() public loadEnd = new EventEmitter<void>();
-  @ViewChild('textarea') public textarea!: TextareaComponent;
+  @ViewChild('textarea') private readonly textarea!: TextareaComponent;
+
+  @Select(AppSelectors.unreadMessages) private readonly unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   // public disableSendButton = false;
   public conversationMessages$: Observable<Array<UIUserConversationMessage>> = of([]);

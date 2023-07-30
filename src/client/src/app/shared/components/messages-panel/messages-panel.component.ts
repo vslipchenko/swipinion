@@ -17,7 +17,7 @@ import {ConversationAccordionComponent} from '~app/shared/components/conversatio
   imports: [NgIf, AsyncPipe, ConversationAccordionComponent, MessagesComponent],
 })
 export class MessagesPanelComponent {
-  @Select(AppSelectors.conversation) protected conversation$!: Observable<ActiveConversation>;
+  @Select(AppSelectors.conversation) protected readonly conversation$!: Observable<ActiveConversation>;
 
   public constructor(protected readonly messagesPanelService: MessageAccordionService) {}
 

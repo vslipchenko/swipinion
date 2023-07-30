@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Actions, ofActionCompleted, ofActionErrored, Select, Store} from '@ngxs/store';
 import {
@@ -19,11 +19,13 @@ import {UserStatusPingService} from '~app/services/user-status-ping/user-status-
   styleUrls: ['./user-notifications.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserNotificationsComponent implements OnInit {
-  @Select(UserNotificationsSelectors.notifications) public notifications$!: Observable<Array<UINotification>>;
-  @Select(UserNotificationsSelectors.canLoadMore) public canLoadMore$!: Observable<boolean>;
+export class UserNotificationsComponent implements OnInit, OnDestroy {
+  @Select(UserNotificationsSelectors.notifications) protected readonly notifications$!: Observable<
+    Array<UINotification>
+  >;
+  @Select(UserNotificationsSelectors.canLoadMore) protected readonly canLoadMore$!: Observable<boolean>;
 
-  public readonly loading$ = new BehaviorSubject(true);
+  protected readonly loading$ = new BehaviorSubject(true);
   private readonly untilDestroyed = untilDestroyed();
 
   public constructor(

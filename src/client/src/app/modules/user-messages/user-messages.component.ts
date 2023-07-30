@@ -15,7 +15,7 @@ import {ActiveConversationType} from '~app/typings/user-conversations/user-conve
   hostDirectives: [MessagesDirective],
 })
 export class UserMessagesComponent implements OnInit {
-  @Select(AppSelectors.conversation) protected conversation$!: Observable<ActiveConversation>;
+  @Select(AppSelectors.conversation) protected readonly conversation$!: Observable<ActiveConversation>;
 
   public showAccordion = false;
 

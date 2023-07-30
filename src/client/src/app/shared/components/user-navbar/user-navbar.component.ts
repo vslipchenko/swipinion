@@ -26,10 +26,10 @@ import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.com
 })
 export class UserNavbarComponent implements OnInit {
   @Select(AppSelectors.userEssentials)
-  public readonly authedUserProfileTeaser$!: Observable<UserProfile>;
-  @Select(AppSelectors.userStatus) public readonly status$!: Observable<UserStatus>; // TODO provide typing
+  protected readonly authedUserProfileTeaser$!: Observable<UserProfile>;
+  @Select(AppSelectors.userStatus) protected readonly status$!: Observable<UserStatus>;
 
-  public readonly navbarItems$ = new BehaviorSubject([
+  protected readonly navbarItems$ = new BehaviorSubject([
     {
       id: UserNavbarMenuItem.ShareOpinion,
       title: 'Add opinion',
@@ -54,7 +54,7 @@ export class UserNavbarComponent implements OnInit {
       click: (): void => this.authenticationService.logout(),
     },
   ] as Array<MenuItem>);
-  public indicatorClass = '';
+  protected indicatorClass = '';
 
   private readonly untilDestroyed = untilDestroyed();
 

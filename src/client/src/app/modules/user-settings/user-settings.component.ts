@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {UserService} from '~app/services/user/user.service';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {BehaviorSubject, finalize, Observable, Subject, takeUntil} from 'rxjs';
@@ -18,7 +18,7 @@ import {untilDestroyed} from '~app/utilities/operator';
   styleUrls: ['./user-settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserSettingsComponent {
+export class UserSettingsComponent implements OnDestroy {
   // TODO consider adding Change username functionality
   @Select(UserSettingsSelectors.settings) public settings$!: Observable<UserSettings>;
 
@@ -45,10 +45,6 @@ export class UserSettingsComponent {
     },
   ];
 
-  public readonly loading$ = new BehaviorSubject(false);
-  public readonly cancelPasswordChange$ = new Subject<void>();
-  public readonly cancelPrivacy$ = new Subject<void>();
-
   public readonly changePasswordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
     newPassword: new FormControl('', [
@@ -59,6 +55,10 @@ export class UserSettingsComponent {
       this.duplicatePasswordValidator.bind(this),
     ]),
   });
+
+  protected readonly loading$ = new BehaviorSubject(false);
+  private readonly cancelPasswordChange$ = new Subject<void>();
+  private readonly cancelPrivacy$ = new Subject<void>();
 
   private readonly untilDestroyed = untilDestroyed();
 

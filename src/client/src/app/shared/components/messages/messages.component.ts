@@ -4,7 +4,6 @@ import {SetActiveConversation} from '~app/modules/app/store/app.actions';
 import {Observable} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UnreadMessage} from '~app/typings/user-messages/user-messages.interfaces';
-import {USER_MESSAGES_FETCH_LIMIT} from '~app/constants/user-messages';
 import {ActiveConversationType} from '~app/typings/user-conversations/user-conversations.enums';
 import {AccordionComponent} from '~app/shared/components/accordion/accordion.component';
 import {MessagesDirective} from '~app/shared/directives/messages/messages.directive';
@@ -32,13 +31,8 @@ import {MessageListComponent} from '~app/shared/components/message-list/message-
   hostDirectives: [MessagesDirective],
 })
 export class MessagesComponent {
-  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
-
-  @ViewChild(AccordionComponent, {static: true}) public accordion!: AccordionComponent;
-
-  public showConversation = false;
-
-  public readonly messagesFetchLimit = USER_MESSAGES_FETCH_LIMIT;
+  @ViewChild(AccordionComponent, {static: true}) public readonly accordion!: AccordionComponent;
+  @Select(AppSelectors.unreadMessages) protected readonly unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   public constructor(protected readonly messagesDirective: MessagesDirective, private readonly store: Store) {}
 

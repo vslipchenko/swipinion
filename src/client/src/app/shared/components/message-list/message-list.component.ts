@@ -28,12 +28,12 @@ import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive'
   ],
 })
 export class MessageListComponent {
-  @Select(AppSelectors.savedMessage) public savedMessage$!: Observable<UIUserMessage>;
-  @Select(AppSelectors.messages) public messages$!: Observable<Array<UIUserMessage>>;
-  @Select(AppSelectors.canLoadMoreMessages) public canLoadMore$!: Observable<boolean>;
-
   @Input() public messageClass = '';
   @Input() public gradientPlaceholder = false;
+
+  @Select(AppSelectors.savedMessage) protected readonly savedMessage$!: Observable<UIUserMessage>;
+  @Select(AppSelectors.messages) protected readonly messages$!: Observable<Array<UIUserMessage>>;
+  @Select(AppSelectors.canLoadMoreMessages) protected readonly canLoadMore$!: Observable<boolean>;
 
   protected userId = '';
 

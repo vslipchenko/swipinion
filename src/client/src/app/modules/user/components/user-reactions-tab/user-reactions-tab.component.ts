@@ -10,7 +10,7 @@ import {Observable} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserReactionsTabComponent {
-  @Select(UserSelectors.canLoadMoreReactions) public readonly canLoadMoreReactions$!: Observable<boolean>;
+  @Select(UserSelectors.canLoadMoreReactions) protected readonly canLoadMoreReactions$!: Observable<boolean>;
 
   protected readonly profile = this.store.selectSnapshot(UserSelectors.profileOwner);
 

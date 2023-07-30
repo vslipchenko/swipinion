@@ -12,11 +12,11 @@ import {OpinionsContainerSizes} from '~app/typings/opinions/opinions.interfaces'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextBackgroundFillerComponent implements AfterViewInit {
-  @Select(OpinionsSelectors.containerSizes) public containerSizes!: Observable<OpinionsContainerSizes>;
-
   @Input() public text = '';
 
   @ViewChild('canvas', {static: true}) private readonly canvasElement!: ElementRef<HTMLCanvasElement>;
+
+  @Select(OpinionsSelectors.containerSizes) private readonly containerSizes!: Observable<OpinionsContainerSizes>;
 
   private readonly untilDestroyed = untilDestroyed();
   // Canvas Properties

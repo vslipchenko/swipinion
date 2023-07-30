@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {BehaviorSubject, fromEvent, Observable} from 'rxjs';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
@@ -19,25 +19,25 @@ import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces'
   styleUrls: ['./user.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserComponent implements AfterViewInit {
+export class UserComponent implements AfterViewInit, OnDestroy {
   @Select(UserSelectors.resolvedUserData)
-  public readonly profile$!: Observable<ResolvedUserData>;
-  // Do we need this to be an observable???
+  protected readonly profile$!: Observable<ResolvedUserData>;
+  // TODO Do we need this to be an observable???
   @Select(AppSelectors.userRole)
-  public readonly role$!: Observable<UserRole>;
+  protected readonly role$!: Observable<UserRole>;
 
   @ViewChild('wrapper')
   private readonly wrapper!: ElementRef<HTMLDivElement>;
   @ViewChild('userBlock') private readonly userBlock!: ElementRef<HTMLDivElement>;
 
-  public readonly userRole = UserRole;
-  public readonly showBottomBar$ = new BehaviorSubject(false);
-  public readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
-  public readonly userId: string = '';
-  public readonly username: string = '';
-  public readonly profileOwner: boolean = false;
-  public readonly userContentTabIndex = UserContentTabIndex;
-  public readonly userContentTabs: Array<Tab> = [
+  protected readonly userRole = UserRole;
+  protected readonly showBottomBar$ = new BehaviorSubject(false);
+  protected readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
+  protected readonly userId: string = '';
+  protected readonly username: string = '';
+  protected readonly profileOwner: boolean = false;
+  protected readonly userContentTabIndex = UserContentTabIndex;
+  protected readonly userContentTabs: Array<Tab> = [
     {text: 'Opinions', icon: 'article'},
     {
       text: 'Reactions',

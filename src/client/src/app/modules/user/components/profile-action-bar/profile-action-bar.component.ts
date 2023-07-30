@@ -27,7 +27,6 @@ export class ProfileActionBarComponent {
   @Input() public showBottomBar = false;
   @Input() public wrapper!: HTMLDivElement;
 
-  // @Select(UserSelectors.following) public following$!: Observable<boolean>;
   @Select(UserSelectors.followStatus) protected readonly followStatus$!: Observable<UserFollowStatus>;
 
   public readonly userRole = UserRole;

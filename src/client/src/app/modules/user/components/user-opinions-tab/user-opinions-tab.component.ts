@@ -17,16 +17,16 @@ import {UserFollowStatus} from '~app/typings/follow/follow.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserOpinionsTabComponent implements OnInit, OnDestroy {
-  @Select(UserSelectors.canLoadMoreOpinions) public readonly canLoadMoreOpinions$!: Observable<boolean>;
-  @Select(UserSelectors.followStatus) public readonly followStatus$!: Observable<UserFollowStatus>;
-
   @Input() public userId = '';
   @Input() public username = '';
   @Input() public profileOwner = false;
   @Input()
   public viewOpinionsSetting = PrivacyCommonSettings.NoOne;
 
-  public opinions$!: Observable<Array<UIUserOpinion>>;
+  @Select(UserSelectors.canLoadMoreOpinions) protected readonly canLoadMoreOpinions$!: Observable<boolean>;
+  @Select(UserSelectors.followStatus) protected readonly followStatus$!: Observable<UserFollowStatus>;
+
+  protected opinions$!: Observable<Array<UIUserOpinion>>;
 
   protected readonly userFollowStatus = UserFollowStatus;
   protected readonly privacyCommonSettings = PrivacyCommonSettings;

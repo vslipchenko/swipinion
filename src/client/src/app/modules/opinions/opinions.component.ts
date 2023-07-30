@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable} from 'rxjs';
 import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionsView} from '~app/typings/opinion/opinion.enums';
@@ -23,16 +23,16 @@ import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
   styleUrls: ['./opinions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionsComponent implements OnInit, AfterViewInit {
+export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
   @Select(OpinionsSelectors.nothingToShow)
-  public readonly nothingToShow$!: Observable<boolean>;
+  protected readonly nothingToShow$!: Observable<boolean>;
   @Select(OpinionsSelectors.opinions)
-  public readonly opinions$!: Observable<Array<CarouselOpinion>>;
-
-  public readonly loading$ = new BehaviorSubject(true);
-  public readonly polling$ = new BehaviorSubject(false);
+  protected readonly opinions$!: Observable<Array<CarouselOpinion>>;
 
   protected readonly showLoading$!: Observable<boolean>;
+
+  private readonly loading$ = new BehaviorSubject(true);
+  private readonly polling$ = new BehaviorSubject(false);
 
   private readonly view: OpinionsView;
   private readonly untilDestroyed = untilDestroyed();

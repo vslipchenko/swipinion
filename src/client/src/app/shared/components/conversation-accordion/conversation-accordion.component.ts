@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
   ViewChild,
@@ -40,9 +41,7 @@ import {untilDestroyed} from '~app/utilities/operator';
     ConversationComponent,
   ],
 })
-export class ConversationAccordionComponent implements AfterViewInit, OnChanges {
-  @Select(AppSelectors.unreadMessages) public unreadMessages$!: Observable<Array<UnreadMessage>>;
-
+export class ConversationAccordionComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() public conversation!: ActiveConversation;
   @Input() public collapsable = false;
   @Input() public outline = false;
@@ -51,6 +50,8 @@ export class ConversationAccordionComponent implements AfterViewInit, OnChanges 
   @Output() public afterClose = new EventEmitter<void>();
 
   @ViewChild(AccordionComponent, {static: true}) protected readonly accordion!: AccordionComponent;
+
+  @Select(AppSelectors.unreadMessages) private readonly unreadMessages$!: Observable<Array<UnreadMessage>>;
 
   protected readonly renderUi$ = new BehaviorSubject(true);
   protected readonly unread$ = new BehaviorSubject(false);

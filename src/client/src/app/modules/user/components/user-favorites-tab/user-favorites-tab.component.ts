@@ -17,10 +17,10 @@ export class UserFavoritesTabComponent implements OnInit {
   @Input() public userId = '';
   @Input() public profileOwner = false;
 
-  @Select(UserSelectors.canLoadMoreFavorites) public readonly canLoadMoreFavorites$!: Observable<boolean>;
+  @Select(UserSelectors.canLoadMoreFavorites) protected readonly canLoadMoreFavorites$!: Observable<boolean>;
 
-  public favorites$!: Observable<Array<any>>; // TODO replace any
-  public readonly loading$ = new BehaviorSubject(true);
+  protected favorites$!: Observable<Array<any>>; // TODO replace any
+  protected readonly loading$ = new BehaviorSubject(true);
   protected readonly profile = this.store.selectSnapshot(UserSelectors.profileOwner);
   private readonly untilDestroyed = untilDestroyed();
 
