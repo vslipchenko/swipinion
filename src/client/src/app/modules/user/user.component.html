@@ -50,7 +50,8 @@
                              [viewOpinionsSetting]="settings.view_opinions"></app-user-opinions-tab>
       <app-user-reactions-tab *ngIf="activeTab.value === userContentTab.Reactions"></app-user-reactions-tab>
       <app-user-favorites-tab *ngIf="activeTab.value === userContentTab.Favorites"
-                              [userId]="data.profile.id"></app-user-favorites-tab>
+                              [userId]="data.profile.id"
+                              [profileOwner]="data.profile.profileOwner"></app-user-favorites-tab>
     </div>
 
     <!-- 3 types of messages: Inbox, Sent, Saved -->
