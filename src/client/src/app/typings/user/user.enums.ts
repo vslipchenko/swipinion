@@ -4,7 +4,7 @@ export enum UserRole {
   User, // Authed read / write permissions
 }
 
-export enum UserContentTabIndex {
+export enum UserContentTab {
   Opinions,
   Reactions,
   Favorites,

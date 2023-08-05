@@ -9,6 +9,9 @@ import {untilDestroyed} from '~app/utilities/operator';
 import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
 import {PrivacyCommonSettings} from '~app/typings/user-settings/user-settings.enums';
 import {UserFollowStatus} from '~app/typings/follow/follow.enums';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {DeleteDialogComponent} from '~app/modules/user/components/delete-dialog/delete-dialog.component';
+import {UserContentTab} from '~app/typings/user/user.enums';
 
 @Component({
   selector: 'app-user-opinions-tab',
@@ -38,6 +41,7 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
     private readonly store: Store,
     private readonly userNavbarService: UserNavbarService,
     private readonly actions$: Actions,
+    private readonly dialog: MatDialog,
   ) {
     this.actions$.pipe(this.untilDestroyed(), ofActionCompleted(FetchUserOpinions)).subscribe(() => {
       this.loading$.next(false);
@@ -70,6 +74,13 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
 
   protected followUser(): void {
     // TODO
+  }
+
+  protected showDeleteDialog(opinionId: string): void {
+    this.dialog.open(DeleteDialogComponent, {
+      panelClass: ['dialog', 'small-dialog'],
+      data: {id: opinionId, tab: UserContentTab.Opinions},
+    });
   }
 
   protected spinnerInView(inView: boolean, opinions: Array<UserOpinion>): void {

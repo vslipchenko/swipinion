@@ -1,7 +1,6 @@
-import {ChangeDetectionStrategy, Component, Injector, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output} from '@angular/core';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {Store} from '@ngxs/store';
-import {DeleteUserOpinion} from '~app/modules/user/store/user.actions';
 import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {CardTagsComponent} from '~app/shared/components/card-tags/card-tags.component';
@@ -36,6 +35,8 @@ import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
   ],
 })
 export class OpinionPreviewComponent {
+  @Output() public deleteOpinion = new EventEmitter<string>();
+
   @Input() public id = '';
   @Input() public type: OpinionType = OpinionType.Text;
   @Input() public body = '';
@@ -67,10 +68,6 @@ export class OpinionPreviewComponent {
     this.store.dispatch(new AddOpinionToFavorites({opinionId: this.id, username}));
   }
 
-  private deleteOpinion(opinionId: string): void {
-    this.store.dispatch(new DeleteUserOpinion(opinionId));
-  }
-
   private get opinionMenuItemsInitialValue(): Array<MenuItem> {
     const menuItems: Array<MenuItem> = [
       {
@@ -94,7 +91,7 @@ export class OpinionPreviewComponent {
         title: 'Delete opinion',
         icon: 'delete',
         color: 'warn',
-        click: this.deleteOpinion.bind(this),
+        click: () => this.deleteOpinion.emit(this.id),
       });
 
     return menuItems;

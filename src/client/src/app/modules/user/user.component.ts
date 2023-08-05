@@ -7,7 +7,7 @@ import {EditProfileDialogComponent} from '~app/modules/user/components/edit-prof
 import {untilDestroyed} from '~app/utilities/operator';
 import {ResolvedUserData} from '~app/typings/user/user.interfaces';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
-import {UserContentTabIndex, UserRole} from '~app/typings/user/user.enums';
+import {UserContentTab, UserRole} from '~app/typings/user/user.enums';
 import {Tab} from '~app/typings/tabs/tabs.interfaces';
 import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
 import {MessageAccordionService} from '~app/services/message-accordion/message-accordion.service';
@@ -29,8 +29,8 @@ export class UserComponent implements AfterViewInit, OnDestroy {
 
   protected readonly role: UserRole;
   protected readonly showBottomBar$ = new BehaviorSubject(false);
-  protected readonly activeTab$ = new BehaviorSubject(UserContentTabIndex.Opinions);
-  protected readonly userContentTabIndex = UserContentTabIndex;
+  protected readonly activeTab$ = new BehaviorSubject(UserContentTab.Opinions);
+  protected readonly userContentTab = UserContentTab;
   protected readonly userContentTabs: Array<Tab> = [
     {text: 'Opinions', icon: 'article'},
     {
