@@ -29,6 +29,7 @@ import {TextareaComponent} from '~app/shared/components/textarea/textarea.compon
 import {InViewDirective} from '~app/shared/directives/in-view/in-view.directive';
 import {ThumbnailComponent} from '~app/shared/components/thumbnail/thumbnail.component';
 import {UserImageComponent} from '~app/shared/components/user-image/user-image.component';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {UserImageComponent} from '~app/shared/components/user-image/user-image.c
     UserOpinionsTabComponent,
     UserReactionsTabComponent,
     UserFavoritesTabComponent,
+    DeleteDialogComponent,
   ],
   imports: [
     CommonModule,
