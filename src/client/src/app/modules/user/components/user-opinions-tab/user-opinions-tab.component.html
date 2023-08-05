@@ -30,8 +30,8 @@
         <ng-template #emptyOpinions>
           <ng-container [ngTemplateOutlet]="contentPlaceholder"
                         [ngTemplateOutletContext]="{
-                          tip: profileOwner ? 'You can add new opinions through user menu\'s action «Add opinion»' : '',
-                          templateOutlet: privateOrEmptyOpinionsPlaceholder
+                          tip: profileOwner ? 'You can also add new opinions through the user menu action «Add opinion»' : '',
+                          templateOutlet: profileOwner ? emptyOpinionsPlaceholder : privateOrEmptyOpinionsPlaceholder
                         }"></ng-container>
         </ng-template>
       </ng-container>
@@ -71,14 +71,20 @@
   </app-content-placeholder>
 </ng-template>
 
-<ng-template #privateOrEmptyOpinionsPlaceholder>
-  <p class="mt-h t-center">User has not shared any opinions yet or access is restricted</p>
-</ng-template>
-
-<ng-template #followUserToSeeOpinionsPlaceholder>
+<ng-template #emptyOpinionsPlaceholder>
   <app-button text="Share your opinion" class="mt-1 d-flex jc-center"
               (clicked)="shareOpinion()"></app-button>
   <p class="mt-h t-center">with others!</p>
+</ng-template>
+
+<ng-template #privateOrEmptyOpinionsPlaceholder>
+  <p class="mt-h t-center">User has not shared any opinions yet or viewing is restricted</p>
+</ng-template>
+
+<ng-template #followUserToSeeOpinionsPlaceholder>
+  <app-button [text]="'Follow ' + username" class="mt-1 d-flex jc-center"
+              (clicked)="followUser()"></app-button>
+  <p class="mt-h t-center">to see their opinions!</p>
 </ng-template>
 
 <ng-template #pendingFollowRequestPlaceholder>
