@@ -16,4 +16,4 @@ export const fetchUserConversationValidator = Joi.object<FetchUserConversationPa
   markRead: booleanValidator,
 });
 
-export const fetchNewUserMessagesValidator = Joi.array().items(bigintValidator);
+export const fetchNewUserMessagesValidator = Joi.array().items(bigintValidator).min(1);
