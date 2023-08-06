@@ -1,5 +1,6 @@
 import {gql} from 'apollo-angular';
 
+// TODO fetch reaction if user authed
 export const GET_FAVORITES_BY_USER_ID = gql`
   query ($input: GetUserFavorites!) {
     getFavoritesByUserId(input: $input) {

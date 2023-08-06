@@ -14,7 +14,7 @@ import {
 } from '../constants/validation';
 import {getStringEnumValues} from '../utilities/enum';
 import {LanguageLabel} from '../typings/i18n/i18n.enums';
-
+// TODO rename to bigIntValidator
 export const bigintValidator = Joi.string().regex(BIGINT_REGEXP);
 export const usernameValidator = Joi.string().regex(USERNAME_REGEXP).min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH);
 export const emailValidator = Joi.string().regex(EMAIL_REGEXP);

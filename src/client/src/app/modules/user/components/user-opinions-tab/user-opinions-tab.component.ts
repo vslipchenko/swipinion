@@ -73,7 +73,7 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
   }
 
   protected followUser(): void {
-    // TODO
+    // TODO write logic, plus add auth click guard
   }
 
   protected showDeleteDialog(opinionId: string): void {
