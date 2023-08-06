@@ -53,12 +53,14 @@ export const queryOpinionDelete = (userId: string, opinionId: string): QueryConf
 });
 
 export const queryOpinionsByUserId = (
-  {parameters, values}: QueryPayload<{edgeId: string; followerId: string}>,
+  {parameters, values}: QueryPayload<{userId: string; edgeId: string; followerId: string}>,
   // requestingOwnData used to differentiate whether user is requesting own or other user's data,
   // but parameters.followerId rather used for checking requester authed or not because requestingOwnData,
   // can be falsy but this does not mean user is not authed
   requestingOwnData: boolean,
 ): QueryConfig => {
+  const requesterAuthenticated = parameters.followerId || requestingOwnData;
+
   const selectFields = `
     uo.id,
     uo.type,
@@ -68,6 +70,7 @@ export const queryOpinionsByUserId = (
     COALESCE(rs.disagreed, 0) AS disagreed,
     COALESCE(rs.comments, 0) AS comments,
     ${parameters.followerId ? 'r.reaction, COALESCE(r.commented, false) AS commented,' : ''}
+    ${requesterAuthenticated ? 'f.opinion_id IS NOT NULL AS favorite,' : ''}
     array_agg(t.tag) AS tags
   `;
 
@@ -115,9 +118,20 @@ export const queryOpinionsByUserId = (
     `
     : '';
 
+  const requesterHasAddedOpinionToFavorites = requesterAuthenticated
+    ? `
+        LEFT JOIN (
+          SELECT opinion_id
+          FROM user_favorite_opinions
+          WHERE user_id = ${parameters.followerId || parameters.userId}
+        ) AS f ON uo.id = f.opinion_id
+      `
+    : '';
+
   const groupByFields = `
     uo.id,
     ${parameters.followerId ? 'r.reaction, r.commented,' : ''}
+    ${requesterAuthenticated ? 'f.opinion_id,' : ''}
     rs.agreed,
     rs.disagreed,
     rs.comments
@@ -140,6 +154,7 @@ export const queryOpinionsByUserId = (
         GROUP BY opinion_id
       ) AS rs ON uo.id = rs.opinion_id -- Query reaction statistic
       ${requesterHasReactedToOpinion}
+      ${requesterHasAddedOpinionToFavorites}
       WHERE
         ${allowedByPrivacySettingsCondition}
         uo.user_id = $1
