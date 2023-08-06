@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Injector, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {Store} from '@ngxs/store';
 import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
@@ -34,7 +43,7 @@ import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
     AsyncPipe,
   ],
 })
-export class OpinionPreviewComponent {
+export class OpinionPreviewComponent implements OnChanges {
   @Output() public deleteOpinion = new EventEmitter<string>();
 
   @Input() public id = '';
@@ -45,6 +54,7 @@ export class OpinionPreviewComponent {
   @Input() public disagreed = '';
   @Input() public comments = '';
   @Input() public commented = false;
+  @Input() public favorite = false; // Whether user has added opinion to his favorites
   @Input() public tags: Array<string> = [];
 
   @Input()
@@ -56,11 +66,15 @@ export class OpinionPreviewComponent {
   protected highlightAgreed = false;
   protected highlightDisagreed = false;
 
-  protected readonly opinionItems$: BehaviorSubject<Array<MenuItem>> = new BehaviorSubject(
-    this.opinionMenuItemsInitialValue,
-  );
+  protected readonly opinionItems$ = new BehaviorSubject([] as Array<MenuItem>);
 
   public constructor(private readonly store: Store, private readonly injector: Injector) {}
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (!('favorite' in changes)) return;
+
+    this.opinionItems$.next(this.opinionMenuItems);
+  }
 
   private addToFavorites(): void {
     const username = this.store.selectSnapshot(UserSelectors.resolvedUserUsername);
@@ -68,13 +82,21 @@ export class OpinionPreviewComponent {
     this.store.dispatch(new AddOpinionToFavorites({opinionId: this.id, username}));
   }
 
-  private get opinionMenuItemsInitialValue(): Array<MenuItem> {
+  private get opinionMenuItems(): Array<MenuItem> {
+    const favoritesMenuItem = this.favorite
+      ? {
+          title: 'Remove from Favorites',
+          icon: 'star',
+          click: (): void => {}, // TODO
+        }
+      : {
+          title: 'Add to Favorites',
+          icon: 'star_outlined',
+          click: authClickGuard(this.addToFavorites.bind(this), this.injector),
+        };
+
     const menuItems: Array<MenuItem> = [
-      {
-        title: 'Add to Favorites',
-        icon: 'star_outlined',
-        click: authClickGuard(this.addToFavorites.bind(this), this.injector),
-      },
+      favoritesMenuItem,
       {
         title: 'Copy link',
         icon: 'content_copy',

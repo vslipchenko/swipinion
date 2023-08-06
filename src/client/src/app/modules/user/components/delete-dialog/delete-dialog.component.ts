@@ -45,7 +45,7 @@ export class DeleteDialogComponent {
     this.actions$
       .pipe(takeUntil(this.dialog.afterClosed()), ofActionCompleted(DeleteUserOpinion))
       .subscribe((completion) => {
-        if (!completion.result.error) return this.dialog.close(); // Assume success
+        if (!completion.result.error) return this.dialog.close(); // Assume success; We don't need to set loading to false as dialog will be closed anyway
 
         this.loading$.next(false);
         this.showErrorSnackbar();
