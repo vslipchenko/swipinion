@@ -108,6 +108,7 @@ export class AddOpinionDialogComponent implements OnDestroy {
             agreed: 0,
             disagreed: 0,
             comments: 0,
+            favorite: false,
           });
         }, this.errorSnackbar.bind(this));
 
@@ -138,6 +139,7 @@ export class AddOpinionDialogComponent implements OnDestroy {
           agreed: 0,
           disagreed: 0,
           comments: 0,
+          favorite: false,
         });
       }, this.errorSnackbar.bind(this));
   }

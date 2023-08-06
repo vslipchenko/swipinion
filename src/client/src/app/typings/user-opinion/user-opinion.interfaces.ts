@@ -12,6 +12,7 @@ export interface UserOpinion {
   agreed: number;
   disagreed: number;
   comments: number;
+  favorite: boolean;
 }
 
 export interface CreateOpinionMutationResult {

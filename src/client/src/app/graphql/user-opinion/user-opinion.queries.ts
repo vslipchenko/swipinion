@@ -13,6 +13,7 @@ export const GET_OPINIONS_BY_USER_ID = gql`
       agreed
       disagreed
       comments
+      favorite
     }
   }
 `;

@@ -12,6 +12,7 @@ export const userOpinionTypes = gql`
     agreed: Float!
     disagreed: Float!
     comments: Float!
+    favorite: Boolean!
   }
 
   type CreateOpinionResult {
