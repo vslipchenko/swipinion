@@ -1,5 +1,5 @@
-import {gql} from 'apollo-server-core';
-import {authenticationGuard} from '../../../utilities/guard';
+import {ApolloError, gql} from 'apollo-server-core';
+import {authenticationGuard, expiredAccessTokenError} from '../../../utilities/guard';
 import {db} from '../../../data';
 import {USER_OPINION_FETCH_LIMIT} from '../../../constants/opinions';
 import {queryFavoritesByUserId} from '../../../data/queries/user-favorites';
@@ -16,12 +16,15 @@ const getFavoritesByUserId = async (
   _: unknown,
   {input}: {input: {userId: string; edgeId: string}},
   {accessToken}: {accessToken: string},
-): Promise<{exists: boolean} | null | Array<unknown>> => {
+): Promise<{exists: boolean} | null | Array<unknown> | ApolloError> => {
   const {error} = getUserRecordsValidator.validate(input);
 
   if (error) return null;
 
-  const {tokenData} = authenticationGuard(accessToken);
+  const {error: authenticationError, tokenData} = authenticationGuard(accessToken);
+
+  // Expired access token guard
+  if (expiredAccessTokenError(authenticationError)) return authenticationError;
 
   const getFollowerId = (): string | undefined => {
     if (tokenData?.userId && tokenData.userId !== input.userId) return tokenData.userId;
