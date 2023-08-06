@@ -39,7 +39,7 @@
 
     <ng-template #privateOpinionsOrPendingFollow>
       <ng-container *ngIf="viewOpinionsSetting === privacyCommonSettings.FollowersOnly; else privateOpinions">
-        <ng-container *ngIf="pendingFollowRequestPlaceholder; else doesNotFollow"
+        <ng-container *ngIf="followStatus === userFollowStatus.Pending; else doesNotFollow"
                       [ngTemplateOutlet]="contentPlaceholder"
                       [ngTemplateOutletContext]="{
                           templateOutlet: pendingFollowRequestPlaceholder
