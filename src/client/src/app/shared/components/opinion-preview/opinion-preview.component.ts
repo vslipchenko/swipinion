@@ -23,8 +23,7 @@ import {BehaviorSubject} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserRole} from '~app/typings/user/user.enums';
 import {authClickGuard} from '~app/utilities/guard';
-import {UserSelectors} from '~app/modules/user/store/user.selectors';
-import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
+import {AddUserOpinionToFavorites, RemoveUserOpinionFromFavorites} from '~app/modules/user/store/user.actions';
 
 @Component({
   selector: 'app-opinion-preview',
@@ -77,9 +76,11 @@ export class OpinionPreviewComponent implements OnChanges {
   }
 
   private addToFavorites(): void {
-    const username = this.store.selectSnapshot(UserSelectors.resolvedUserUsername);
-    // TODO fix not being dispatched
-    this.store.dispatch(new AddOpinionToFavorites({opinionId: this.id, username}));
+    this.store.dispatch(new AddUserOpinionToFavorites(this.id));
+  }
+
+  private removeFromFavorites(): void {
+    this.store.dispatch(new RemoveUserOpinionFromFavorites(this.id));
   }
 
   private get opinionMenuItems(): Array<MenuItem> {
@@ -87,7 +88,7 @@ export class OpinionPreviewComponent implements OnChanges {
       ? {
           title: 'Remove from Favorites',
           icon: 'star',
-          click: (): void => {}, // TODO
+          click: this.removeFromFavorites.bind(this),
         }
       : {
           title: 'Add to Favorites',

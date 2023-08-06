@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
-import {Select, Store} from '@ngxs/store';
+import {Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {BehaviorSubject, fromEvent, Observable} from 'rxjs';
 import {UserSelectors} from '~app/modules/user/store/user.selectors';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
@@ -12,6 +12,8 @@ import {Tab} from '~app/typings/tabs/tabs.interfaces';
 import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
 import {MessageAccordionService} from '~app/services/message-accordion/message-accordion.service';
 import {UserSettings} from '~app/typings/user-settings/user-settings.interfaces';
+import {AddUserOpinionToFavorites, RemoveUserOpinionFromFavorites} from '~app/modules/user/store/user.actions';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 
 @Component({
   selector: 'app-user',
@@ -47,10 +49,28 @@ export class UserComponent implements AfterViewInit, OnDestroy {
     private readonly store: Store,
     private readonly dialog: MatDialog,
     private readonly messagesPanelService: MessageAccordionService,
+    private readonly snackbar: MatSnackBar,
+    private readonly actions$: Actions,
   ) {
     this.role = this.store.selectSnapshot(AppSelectors.userRole);
 
     this.settings = this.store.selectSnapshot(UserSelectors.settings);
+
+    this.actions$
+      .pipe(this.untilDestroyed(), ofActionCompleted(AddUserOpinionToFavorites, RemoveUserOpinionFromFavorites))
+      .subscribe((completion) => {
+        if (completion.result.error) {
+          this.snackbar.open('Something went wrong. Please try again later', 'OK', {panelClass: 'snackbar-error'});
+          return;
+        }
+
+        // TODO consider be spicifc with else condition if ofActionCompleted would include more actions
+        const action = completion.action instanceof AddUserOpinionToFavorites ? 'added to' : 'removed from';
+
+        this.snackbar.open(`Opinion was ${action} Favorites`, 'OK', {
+          panelClass: 'snackbar-success',
+        });
+      });
   }
 
   public ngAfterViewInit(): void {

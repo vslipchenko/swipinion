@@ -62,3 +62,15 @@ export class SetUserSettings {
 
   public constructor(public payload: UserSettings) {}
 }
+
+export class AddUserOpinionToFavorites {
+  public static readonly type = '[Opinions] AddUserOpinionToFavorites';
+
+  public constructor(public payload: string) {}
+}
+
+export class RemoveUserOpinionFromFavorites {
+  public static readonly type = '[Opinions] RemoveUserOpinionFromFavorites';
+
+  public constructor(public payload: string) {}
+}

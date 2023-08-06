@@ -15,3 +15,11 @@ export const ADD_OPINION_TO_FAVORITES = gql`
     }
   }
 `;
+
+export const REMOVE_OPINION_FROM_FAVORITES = gql`
+  mutation ($opinionId: String!) {
+    removeOpinionFromFavorites(opinionId: $opinionId) {
+      success
+    }
+  }
+`;

@@ -140,3 +140,12 @@ export const queryAddOpinionToFavorites = (opinionId: string, userId: string): Q
   `,
   values: [opinionId, userId],
 });
+
+export const queryRemoveOpinionFromFavorites = (opinionId: string, userId: string): QueryConfig => ({
+  text: `
+    DELETE FROM
+        user_favorite_opinions
+    WHERE opinion_id = $1 AND user_id = $2
+  `,
+  values: [opinionId, userId],
+});

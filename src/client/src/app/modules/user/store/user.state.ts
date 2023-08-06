@@ -5,12 +5,14 @@ import {
   GetOpinionsByUserIdQueryResult,
 } from '~app/typings/user-opinion/user-opinion.interfaces';
 import {
+  AddUserOpinionToFavorites,
   DeleteUserOpinion,
   EditUserProfile,
   FetchUserFavorites,
   FetchUserOpinions,
   FollowUser,
   PrependUserOpinion,
+  RemoveUserOpinionFromFavorites,
   SetUserSettings,
   UnfollowUser,
   UpdateResolvedUserData,
@@ -27,6 +29,8 @@ import {UserFavoritesService} from '~app/services/user-favorites/user-favorites.
 import {formatStatisticNumber} from '~app/utilities/number';
 import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
 import {UserFollowStatus} from '~app/typings/follow/follow.enums';
+import {OpinionService} from '~app/services/opinion/opinion.service';
+import {toggleFavoriteOpinion} from '~app/utilities/opinion';
 
 export interface UserStateModel {
   id: string; // Resolved user id
@@ -80,6 +84,7 @@ export class UserState {
     private readonly userOpinionService: UserOpinionService,
     private readonly followerService: FollowerService,
     private readonly userFavoritesService: UserFavoritesService,
+    private readonly opinionService: OpinionService,
   ) {}
 
   @Action(UpdateResolvedUserData)
@@ -239,5 +244,33 @@ export class UserState {
           });
         }),
       );
+  }
+
+  @Action(AddUserOpinionToFavorites)
+  private addUserOpinionToFavorites(
+    context: StateContext<UserStateModel>,
+    action: AddUserOpinionToFavorites,
+  ): Observable<unknown> {
+    return this.opinionService.addOpinionToFavorites(action.payload).pipe(
+      tap(({data}) => {
+        if (!data?.addOpinionToFavorites.success) throw new Error();
+
+        toggleFavoriteOpinion(context, action.payload, true);
+      }),
+    );
+  }
+
+  @Action(RemoveUserOpinionFromFavorites)
+  private removeUserOpinionFromFavorites(
+    context: StateContext<UserStateModel>,
+    action: RemoveUserOpinionFromFavorites,
+  ): Observable<unknown> {
+    return this.opinionService.removeOpinionFromFavorites(action.payload).pipe(
+      tap((result) => {
+        if (!result.data?.removeOpinionFromFavorites) throw new Error();
+
+        toggleFavoriteOpinion(context, action.payload, false);
+      }),
+    );
   }
 }

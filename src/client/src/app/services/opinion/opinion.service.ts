@@ -8,8 +8,13 @@ import {
   GetGeneralOpinionsQueryResult,
   ReactToOpinion,
   ReactToOpinionMutationResult,
+  RemoveOpinionFromFavoritesMutationResult,
 } from '~app/typings/opinion/opinion.interfaces';
-import {ADD_OPINION_TO_FAVORITES, REACT_TO_OPINION} from '~app/graphql/opinion/opinion.mutations';
+import {
+  ADD_OPINION_TO_FAVORITES,
+  REACT_TO_OPINION,
+  REMOVE_OPINION_FROM_FAVORITES,
+} from '~app/graphql/opinion/opinion.mutations';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +40,15 @@ export class OpinionService {
   public addOpinionToFavorites(opinionId: string): Observable<MutationResult<AddOpinionToFavoritesMutationResult>> {
     return this.apollo.mutate<AddOpinionToFavoritesMutationResult>({
       mutation: ADD_OPINION_TO_FAVORITES,
+      variables: {opinionId},
+    });
+  }
+
+  public removeOpinionFromFavorites(
+    opinionId: string,
+  ): Observable<MutationResult<RemoveOpinionFromFavoritesMutationResult>> {
+    return this.apollo.mutate<RemoveOpinionFromFavoritesMutationResult>({
+      mutation: REMOVE_OPINION_FROM_FAVORITES,
       variables: {opinionId},
     });
   }

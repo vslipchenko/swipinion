@@ -34,6 +34,10 @@ export interface AddOpinionToFavoritesMutationResult {
   addOpinionToFavorites: SuccessResponse;
 }
 
+export interface RemoveOpinionFromFavoritesMutationResult {
+  removeOpinionFromFavorites: SuccessResponse;
+}
+
 export interface OpinionStatistic {
   formattedAgreed: string;
   formattedDisagreed: string;
