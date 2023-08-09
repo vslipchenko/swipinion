@@ -16,7 +16,8 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
        array_agg(tags.tag) AS tags,
        COALESCE(reactions.agreed, 0) AS agreed,
        COALESCE(reactions.disagreed, 0) AS disagreed,
-       COALESCE(reactions.comments, 0) AS comments
+       COALESCE(reactions.comments, 0) AS comments,
+       user_favorite_opinions.opinion_id IS NOT NULL AS favorite
     FROM user_opinions
     LEFT JOIN (
       SELECT opinion_id,
@@ -30,6 +31,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
     LEFT JOIN users ON user_opinions.user_id = users.id
     LEFT JOIN user_settings ON user_opinions.user_id = user_settings.user_id
     LEFT JOIN user_followers ON user_opinions.user_id = user_followers.user_id
+    LEFT JOIN user_favorite_opinions ON user_opinions.id = user_favorite_opinions.opinion_id AND user_favorite_opinions.user_id = $1
     WHERE
       (
         ${edgeId ? 'user_opinions.id < $3 AND' : ''}
@@ -52,7 +54,7 @@ export const queryGeneralOpinionsForAuthorizedUser = (userId: string, edgeId?: s
           )
         )
       )
-    GROUP BY user_opinions.id, users.username, users.thumbnail, reactions.agreed, reactions.disagreed, reactions.comments
+    GROUP BY user_opinions.id, users.username, users.thumbnail, agreed, disagreed, comments, favorite
     ORDER BY user_opinions.id DESC
     LIMIT $2
   `,

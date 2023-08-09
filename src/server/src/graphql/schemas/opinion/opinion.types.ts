@@ -13,5 +13,6 @@ export const opinionTypes = gql`
     disagreed: Float
     comments: Float
     tags: [String]!
+    favorite: Boolean!
   }
 `;
