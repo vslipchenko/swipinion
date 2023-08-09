@@ -196,6 +196,9 @@ export class OpinionCarouselComponent {
     if (!this.authenticationService.authenticated) return; // Skip prefetch step for unauthenticated users
 
     if (this.data.length <= OPINION_LIMIT_BEFORE_PREFETCH) {
+      // Optimal prefetch condition is when data.length = 2 or less,
+      // because if it will be more than that then it will run prefetch on each swipe so some sort of interval or condition will be needed
+      // P.S. this.data holds previous value at this point (use setTimeout or select from the store to get a relevant one)
       const prefetchInProgress = this.store.selectSnapshot(OpinionsSelectors.prefetchInProgress);
 
       if (!prefetchInProgress) this.prefetchOpinions.next();

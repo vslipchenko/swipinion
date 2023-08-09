@@ -1,17 +1,20 @@
-<app-opinion-card
-  *ngFor="let item of data"
-  class="h-100 w-100 absolute"
-  [id]="item.id"
-  [type]="item.type"
-  [username]="item.username"
-  [thumbnail]="item.thumbnail"
-  [fileUrl]="item.file_url"
-  [body]="item.body"
-  [agreed]="item.formattedAgreed"
-  [disagreed]="item.formattedDisagreed"
-  [comments]="item.formattedComments"
-  [tags]="item.tags"
-></app-opinion-card>
+<ng-container *ngFor="let item of data; let index = index">
+  <!-- Reason for having ngIf: do not render more than 2 cards at once as it impacts material controls performance greatly -->
+  <app-opinion-card
+    *ngIf="index > data.length - 3"
+    class="h-100 w-100 absolute"
+    [id]="item.id"
+    [type]="item.type"
+    [username]="item.username"
+    [thumbnail]="item.thumbnail"
+    [fileUrl]="item.file_url"
+    [body]="item.body"
+    [agreed]="item.formattedAgreed"
+    [disagreed]="item.formattedDisagreed"
+    [comments]="item.formattedComments"
+    [tags]="item.tags"
+  ></app-opinion-card>
+</ng-container>
 
 <div class="actions d-flex ai-center jc-around pb-1-2 w-100">
   <app-icon-button class="smaller-icon" svgIcon="like-n-comment" extendClass="bg-dark"
