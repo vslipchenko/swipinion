@@ -17,6 +17,7 @@
     </app-content-placeholder>
 
     <ng-template #favoritesList>
+      <!-- TODO add user badge if opinion belongs to other user or unauthed -->
       <app-opinion-preview *ngFor="let favorite of favorites" [id]="favorite.id"
                            [body]="favorite.body" [fileUrl]="favorite.file_url"
                            [tags]="favorite.tags" class="opinion-preview d-block mt-2-3"></app-opinion-preview>
