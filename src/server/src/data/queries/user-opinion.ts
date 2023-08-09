@@ -69,7 +69,7 @@ export const queryOpinionsByUserId = (
     COALESCE(rs.agreed, 0) AS agreed,
     COALESCE(rs.disagreed, 0) AS disagreed,
     COALESCE(rs.comments, 0) AS comments,
-    ${parameters.followerId ? 'r.reaction, COALESCE(r.commented, false) AS commented,' : ''}
+    ${parameters.followerId ? 'r.reaction, r.comment IS NOT NULL AS commented,' : ''}
     ${requesterAuthenticated ? 'f.opinion_id IS NOT NULL AS favorite,' : ''}
     array_agg(t.tag) AS tags
   `;
@@ -108,33 +108,25 @@ export const queryOpinionsByUserId = (
 
   const requesterHasReactedToOpinion = parameters.followerId
     ? `
-      LEFT JOIN (
-        SELECT opinion_id,
-          reaction,
-          comment IS NOT NULL AS commented
-        FROM user_opinion_reactions
-        WHERE user_id = ${parameters.followerId}
-      ) AS r ON uo.id = r.opinion_id
+      LEFT JOIN user_opinion_reactions r
+        ON uo.id = r.opinion_id AND r.user_id = ${parameters.followerId}
     `
     : '';
 
   const requesterHasAddedOpinionToFavorites = requesterAuthenticated
     ? `
-        LEFT JOIN (
-          SELECT opinion_id
-          FROM user_favorite_opinions
-          WHERE user_id = ${parameters.followerId || parameters.userId}
-        ) AS f ON uo.id = f.opinion_id
+      LEFT JOIN user_favorite_opinions f 
+        ON f.opinion_id = uo.id AND f.user_id = ${parameters.followerId || parameters.userId}
       `
     : '';
 
   const groupByFields = `
     uo.id,
-    ${parameters.followerId ? 'r.reaction, r.commented,' : ''}
-    ${requesterAuthenticated ? 'f.opinion_id,' : ''}
-    rs.agreed,
-    rs.disagreed,
-    rs.comments
+    ${parameters.followerId ? 'r.reaction, commented,' : ''}
+    ${requesterAuthenticated ? 'favorite,' : ''}
+    agreed,
+    disagreed,
+    comments
   `;
 
   return {
