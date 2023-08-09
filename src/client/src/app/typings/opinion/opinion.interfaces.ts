@@ -13,6 +13,7 @@ export interface Opinion {
   agreed: number;
   disagreed: number;
   comments: number;
+  favorite: boolean;
   tags: Array<string>;
 }
 

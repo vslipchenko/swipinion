@@ -14,6 +14,7 @@ export const GET_GENERAL_OPINIONS = gql`
       disagreed
       comments
       tags
+      favorite
     }
   }
 `;

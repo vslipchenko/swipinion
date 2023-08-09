@@ -25,6 +25,7 @@ export class OpinionCardComponent implements OnInit {
   @Input() public agreed = '';
   @Input() public disagreed = '';
   @Input() public comments = '';
+  @Input() public favorite = false;
   @Input() public tags: Array<string> = [];
 
   protected textContent = false;
