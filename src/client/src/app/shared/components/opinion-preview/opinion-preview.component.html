@@ -15,7 +15,7 @@
 
     <app-button *ngIf="menuItems.menu" [matMenuTriggerFor]="menuItems.menu" class="f-1" extendClass="w-100 py-1 br-0"
                 icon="menu"></app-button>
-    <app-menu-items #menuItems [items]="$any(opinionItems$ | async)"
+    <app-menu-items #menuItems [items]="opinionMenuItems"
                     [context]="id"></app-menu-items>
   </div>
   <app-opinion-stats-panel [agreed]="agreed" [disagreed]="disagreed" [comments]="comments"

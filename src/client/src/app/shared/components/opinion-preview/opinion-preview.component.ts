@@ -19,7 +19,6 @@ import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-men
 import {RouterLink} from '@angular/router';
 import {OpinionStatsPanelComponent} from '~app/shared/components/opinion-stats-panel/opinion-stats-panel.component';
 import {copyOpinionLink} from '~app/utilities/opinion';
-import {BehaviorSubject} from 'rxjs';
 import {AppSelectors} from '~app/modules/app/store/app.selectors';
 import {UserRole} from '~app/typings/user/user.enums';
 import {authClickGuard} from '~app/utilities/guard';
@@ -65,14 +64,14 @@ export class OpinionPreviewComponent implements OnChanges {
   protected highlightAgreed = false;
   protected highlightDisagreed = false;
 
-  protected readonly opinionItems$ = new BehaviorSubject([] as Array<MenuItem>);
+  protected opinionMenuItems = [] as Array<MenuItem>;
 
   public constructor(private readonly store: Store, private readonly injector: Injector) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (!changes['favorite']) return;
 
-    this.opinionItems$.next(this.opinionMenuItems);
+    this.opinionMenuItems = this.menuItems;
   }
 
   private addToFavorites(): void {
@@ -83,7 +82,7 @@ export class OpinionPreviewComponent implements OnChanges {
     this.store.dispatch(new RemoveUserOpinionFromFavorites(this.id));
   }
 
-  private get opinionMenuItems(): Array<MenuItem> {
+  private get menuItems(): Array<MenuItem> {
     const favoritesMenuItem = this.favorite
       ? {
           title: 'Remove from Favorites',
