@@ -70,7 +70,7 @@ export class OpinionPreviewComponent implements OnChanges {
   public constructor(private readonly store: Store, private readonly injector: Injector) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (!('favorite' in changes)) return;
+    if (!changes['favorite']) return;
 
     this.opinionItems$.next(this.opinionMenuItems);
   }

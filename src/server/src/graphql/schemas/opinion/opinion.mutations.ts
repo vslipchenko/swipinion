@@ -10,7 +10,6 @@ import {
   queryRemoveOpinionFromFavorites,
 } from '../../../data/queries/opinion';
 import {bigintValidator} from '../../../validators/shared';
-import {PostgresErrorCode} from '../../../typings/postgres/postgres.enums';
 
 export const opinionMutationTypeDefinitions = gql`
   type Mutation {
@@ -51,17 +50,9 @@ const addOpinionToFavorites = async (
 
   if (authenticationError) return authenticationError;
 
-  try {
-    await db.query(queryAddOpinionToFavorites(opinionId, tokenData.userId));
-    // Assume query completed successfully
-    return {success: true};
-  } catch (error: any) {
-    // TODO this could be dropped when reactive favorite status is introduced
-    // Handle duplicate error when trying to add the same opinion to favorites again
-    if (error.code === PostgresErrorCode.UniqueViolation) return {success: false};
+  const result = await db.query(queryAddOpinionToFavorites(opinionId, tokenData.userId));
 
-    return null; // Other error (is not handled on the frontend)
-  }
+  return {success: Boolean(result.rowCount)};
 };
 
 const removeOpinionFromFavorites = async (

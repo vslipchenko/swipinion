@@ -3,6 +3,7 @@ import {Location} from '@angular/common';
 import {Injector} from '@angular/core';
 import {UserStateModel} from '~app/modules/user/store/user.state';
 import {StateContext} from '@ngxs/store';
+import {OpinionsStateModel} from '~app/modules/opinions/store/opinions.state';
 
 export const copyOpinionLink = (injector: Injector, opinionId: string): boolean => {
   const location = injector.get(Location);
@@ -16,6 +17,28 @@ export const copyOpinionLink = (injector: Injector, opinionId: string): boolean 
 };
 
 export const toggleFavoriteOpinion = (
+  context: StateContext<OpinionsStateModel>,
+  opinionId: string,
+  favorite: boolean,
+): void => {
+  context.setState((state) => {
+    const opinions = state.opinions.map((opinion) =>
+      opinion.id === opinionId
+        ? {
+            ...opinion,
+            favorite,
+          }
+        : opinion,
+    );
+
+    return {
+      ...state,
+      opinions,
+    };
+  });
+};
+
+export const toggleUserFavoriteOpinion = (
   context: StateContext<UserStateModel>,
   opinionId: string,
   favorite: boolean,

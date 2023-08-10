@@ -88,9 +88,3 @@ export class SetUnreadNotification {
 
   public constructor(public payload: string) {}
 }
-
-export class AddOpinionToFavorites {
-  public static readonly type = '[Opinions] AddOpinionToFavorites';
-
-  public constructor(public payload: {opinionId: string; username: string}) {}
-}

@@ -30,7 +30,7 @@ import {formatStatisticNumber} from '~app/utilities/number';
 import {UIUserOpinion} from '~app/typings/user-opinion/user-opinion.types';
 import {UserFollowStatus} from '~app/typings/follow/follow.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
-import {toggleFavoriteOpinion} from '~app/utilities/opinion';
+import {toggleUserFavoriteOpinion} from '~app/utilities/opinion';
 
 export interface UserStateModel {
   id: string; // Resolved user id
@@ -255,7 +255,7 @@ export class UserState {
       tap(({data}) => {
         if (!data?.addOpinionToFavorites.success) throw new Error();
 
-        toggleFavoriteOpinion(context, action.payload, true);
+        toggleUserFavoriteOpinion(context, action.payload, true);
       }),
     );
   }
@@ -269,7 +269,7 @@ export class UserState {
       tap((result) => {
         if (!result.data?.removeOpinionFromFavorites) throw new Error();
 
-        toggleFavoriteOpinion(context, action.payload, false);
+        toggleUserFavoriteOpinion(context, action.payload, false);
       }),
     );
   }

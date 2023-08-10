@@ -1,12 +1,14 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable} from 'rxjs';
-import {AddOpinionToFavoritesFailReason, OpinionReaction, OpinionsView} from '~app/typings/opinion/opinion.enums';
+import {OpinionReaction, OpinionsView} from '~app/typings/opinion/opinion.enums';
 import {OpinionService} from '~app/services/opinion/opinion.service';
 import {ActionCompletion, Actions, ofActionCompleted, Select, Store} from '@ngxs/store';
 import {
+  AddOpinionToFavorites,
   FetchGeneralOpinions,
   ReactToUserOpinion,
+  RemoveOpinionFromFavorites,
   SetContainerSizes,
   TogglePrefetchInProgress,
 } from '~app/modules/opinions/store/opinions.actions';
@@ -15,7 +17,6 @@ import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opi
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {untilDestroyed} from '~app/utilities/operator';
-import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
 
 @Component({
   selector: 'app-opinions',
@@ -61,13 +62,21 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     this.actions$
-      .pipe(this.untilDestroyed(), ofActionCompleted(FetchGeneralOpinions, AddOpinionToFavorites, ReactToUserOpinion))
+      .pipe(
+        this.untilDestroyed(),
+        ofActionCompleted(FetchGeneralOpinions, ReactToUserOpinion, AddOpinionToFavorites, RemoveOpinionFromFavorites),
+      )
       .subscribe((completion) => {
         if (completion.action instanceof FetchGeneralOpinions) return this.fetchGeneralOpinionsCompleted();
-        if (completion.action instanceof AddOpinionToFavorites)
-          return this.addOpinionToFavoritesCompleted(completion as ActionCompletion<AddOpinionToFavorites>);
+
         if (completion.action instanceof ReactToUserOpinion)
           return this.reactToUserOpinionCompleted(completion as ActionCompletion<ReactToUserOpinion>);
+
+        if (completion.action instanceof AddOpinionToFavorites)
+          return this.addOpinionToFavoritesCompleted(completion as ActionCompletion<AddOpinionToFavorites>);
+
+        if (completion.action instanceof RemoveOpinionFromFavorites)
+          return this.removeOpinionFromFavoritesCompleted(completion as ActionCompletion<RemoveOpinionFromFavorites>);
       });
 
     this.view = (this.route.snapshot.data as {view: OpinionsView}).view;
@@ -135,25 +144,35 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addOpinionToFavoritesCompleted(completion: ActionCompletion<AddOpinionToFavorites>): void {
-    if (completion.result.error?.message === AddOpinionToFavoritesFailReason.UniqueViolation) {
-      // Show Opinion is already added to Favorites error
-      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-        data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion is already in Favorites`,
-        panelClass: 'snackbar-error',
-      });
-    } else if (completion.result.error) {
-      // Show generic error
+    if (completion.result.error) {
       this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
         data: `Something went wrong adding <span class="fw-medium">${completion.action.payload.username}</span>'s opinion to Favorites`,
         panelClass: 'snackbar-error',
       });
-    } else {
-      // Assume success
-      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
-        data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully added to Favorites`,
-        panelClass: 'snackbar-success',
-      });
+      return;
     }
+
+    // Assume success
+    this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+      data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully added to Favorites`,
+      panelClass: 'snackbar-success',
+    });
+  }
+
+  private removeOpinionFromFavoritesCompleted(completion: ActionCompletion<RemoveOpinionFromFavorites>): void {
+    if (completion.result.error) {
+      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+        data: `Something went wrong removing <span class="fw-medium">${completion.action.payload.username}</span>'s opinion from Favorites`,
+        panelClass: 'snackbar-error',
+      });
+      return;
+    }
+
+    // Assume success
+    this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+      data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully removed from Favorites`,
+      panelClass: 'snackbar-success',
+    });
   }
 
   private reactToUserOpinionCompleted(completion: ActionCompletion<ReactToUserOpinion>): void {

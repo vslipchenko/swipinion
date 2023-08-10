@@ -120,7 +120,7 @@ export const queryReactToOpinion = ({
     FROM user_opinions AS uo
     JOIN user_settings AS us ON uo.user_id = us.user_id
     LEFT JOIN user_followers AS uf ON uo.user_id = uf.user_id
-    WHERE uo.id = $1 AND uo.user_id != $2 -- Disallow commenting own opinions
+    WHERE uo.id = $1 AND uo.user_id != $2 -- Disallow reacting to own opinions
   `,
   values: [opinionId, userId, reaction, comment],
 });
@@ -138,7 +138,7 @@ export const queryAddOpinionToFavorites = (opinionId: string, userId: string): Q
       FROM user_opinions AS uo
       JOIN user_settings AS us ON uo.user_id = us.user_id
       LEFT JOIN user_followers AS uf ON uo.user_id = uf.user_id
-      WHERE uo.id = $1 AND uo.user_id != $2 -- Disallow adding to favorites own opinions
+      WHERE uo.id = $1
   `,
   values: [opinionId, userId],
 });

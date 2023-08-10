@@ -2,8 +2,10 @@ import {Action, State, StateContext, StateToken, Store} from '@ngxs/store';
 import {Injectable} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {
+  AddOpinionToFavorites,
   FetchGeneralOpinions,
   ReactToUserOpinion,
+  RemoveOpinionFromFavorites,
   RemoveTopMostOpinion,
   SetContainerSizes,
   TogglePrefetchInProgress,
@@ -19,6 +21,7 @@ import {formatStatisticNumber} from '~app/utilities/number';
 import {OpinionReaction} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {differenceBy} from 'lodash-es';
+import {toggleFavoriteOpinion} from '~app/utilities/opinion';
 
 export interface OpinionsStateModel {
   opinions: Array<CarouselOpinion>;
@@ -215,5 +218,33 @@ export class OpinionsState {
       ...state,
       prefetchInProgress: action.payload,
     }));
+  }
+
+  @Action(AddOpinionToFavorites)
+  private addOpinionToFavorites(
+    context: StateContext<OpinionsStateModel>,
+    action: AddOpinionToFavorites,
+  ): Observable<unknown> {
+    return this.opinionService.addOpinionToFavorites(action.payload.opinionId).pipe(
+      tap(({data}) => {
+        if (!data?.addOpinionToFavorites.success) throw new Error();
+
+        toggleFavoriteOpinion(context, action.payload.opinionId, true);
+      }),
+    );
+  }
+
+  @Action(RemoveOpinionFromFavorites)
+  private removeOpinionFromFavorites(
+    context: StateContext<OpinionsStateModel>,
+    action: AddOpinionToFavorites,
+  ): Observable<unknown> {
+    return this.opinionService.removeOpinionFromFavorites(action.payload.opinionId).pipe(
+      tap(({data}) => {
+        if (!data?.removeOpinionFromFavorites.success) throw new Error();
+
+        toggleFavoriteOpinion(context, action.payload.opinionId, false);
+      }),
+    );
   }
 }

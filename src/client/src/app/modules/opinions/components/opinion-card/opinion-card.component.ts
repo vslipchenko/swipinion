@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Injector, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Injector, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {OpinionReaction, OpinionType} from '~app/typings/opinion/opinion.enums';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
 import {Subject} from 'rxjs';
@@ -7,7 +7,7 @@ import {MenuItem} from '~app/typings/menu/menu.interfaces';
 import {authClickGuard} from '~app/utilities/guard';
 import {copyOpinionLink} from '~app/utilities/opinion';
 import {untilDestroyed} from '~app/utilities/operator';
-import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
+import {AddOpinionToFavorites, RemoveOpinionFromFavorites} from '~app/modules/opinions/store/opinions.actions';
 
 @Component({
   selector: 'app-opinion-card',
@@ -15,7 +15,7 @@ import {AddOpinionToFavorites} from '~app/modules/app/store/app.actions';
   styleUrls: ['./opinion-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionCardComponent implements OnInit {
+export class OpinionCardComponent implements OnInit, OnChanges {
   @Input() public id = '';
   @Input() public username = '';
   @Input() public thumbnail = '';
@@ -39,22 +39,7 @@ export class OpinionCardComponent implements OnInit {
     comments: number;
   }>();
 
-  protected readonly opinionMenuItems = [
-    {
-      // id: OpinionMenuItem.AddToFavorites,
-      title: 'Add to Favorites',
-      icon: 'star_outlined',
-      click: authClickGuard(this.addToFavorites.bind(this), this.injector),
-    },
-    {
-      // id: OpinionMenuItem.CopyLink,
-      title: 'Copy link',
-      icon: 'content_copy',
-      click: (): void => {
-        copyOpinionLink(this.injector, this.id);
-      },
-    },
-  ] as Array<MenuItem>;
+  protected opinionMenuItems = [] as Array<MenuItem>;
 
   // private readonly activeOpinion$!: Observable<CarouselOpinion>;
   private readonly untilDestroyed = untilDestroyed();
@@ -85,7 +70,42 @@ export class OpinionCardComponent implements OnInit {
     }
   }
 
-  protected addToFavorites(): void {
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['favorite']) return;
+
+    this.opinionMenuItems = this.menuItems;
+  }
+
+  private addToFavorites(): void {
     this.store.dispatch(new AddOpinionToFavorites({opinionId: this.id, username: this.username}));
+  }
+
+  private removeFromFavorites(): void {
+    this.store.dispatch(new RemoveOpinionFromFavorites({opinionId: this.id, username: this.username}));
+  }
+
+  private get menuItems(): Array<MenuItem> {
+    const favoritesMenuItem = this.favorite
+      ? {
+          title: 'Remove from Favorites',
+          icon: 'star',
+          click: this.removeFromFavorites.bind(this),
+        }
+      : {
+          title: 'Add to Favorites',
+          icon: 'star_outlined',
+          click: authClickGuard(this.addToFavorites.bind(this), this.injector),
+        };
+
+    return [
+      favoritesMenuItem,
+      {
+        title: 'Copy link',
+        icon: 'content_copy',
+        click: (): void => {
+          copyOpinionLink(this.injector, this.id);
+        },
+      },
+    ];
   }
 }
