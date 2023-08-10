@@ -68,6 +68,11 @@ export class UserOpinionsTabComponent implements OnInit, OnDestroy {
     this.loading$.complete();
   }
 
+  // This also fixes user thumbnail flickering if input data gets changed, e.g. adding/removing from favorites
+  protected trackOpinionsById(_: number, opinion: UIUserOpinion): string {
+    return opinion.id;
+  }
+
   protected shareOpinion(): void {
     this.userNavbarService.shareOpinion$.next();
   }
