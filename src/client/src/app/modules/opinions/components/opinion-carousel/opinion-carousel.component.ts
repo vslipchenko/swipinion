@@ -64,6 +64,11 @@ export class OpinionCarouselComponent {
     });
   }
 
+  // This also fixes user thumbnail flickering if input data gets changed, e.g. adding/removing from favorites
+  protected trackOpinionsById(_: number, opinion: CarouselOpinion): string {
+    return opinion.id;
+  }
+
   protected agree(): void {
     // Ghost-locking UI
     if (this.reactionService.reactionInProgress) return;

@@ -1,4 +1,4 @@
-<ng-container *ngFor="let item of data; let index = index">
+<ng-container *ngFor="let item of data; trackBy: trackOpinionsById; let index = index">
   <!-- Reason for having ngIf: do not render more than 2 cards at once as it impacts material controls performance greatly -->
   <app-opinion-card
     *ngIf="index > data.length - 3"
