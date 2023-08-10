@@ -5,14 +5,14 @@ import {
 } from '@angular/material/legacy-snack-bar';
 
 @Component({
-  selector: 'app-opinion-fail-snackbar',
-  templateUrl: './opinion-fail-snackbar.component.html',
-  styleUrls: ['./opinion-fail-snackbar.component.scss'],
+  selector: 'app-opinion-snackbar',
+  templateUrl: './opinion-snackbar.component.html',
+  styleUrls: ['./opinion-snackbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpinionFailSnackbarComponent {
+export class OpinionSnackbarComponent {
   public constructor(
     @Inject(MAT_SNACK_BAR_DATA) protected readonly data: string, // html string
-    protected readonly snackbar: MatSnackBarRef<OpinionFailSnackbarComponent>,
+    protected readonly snackbar: MatSnackBarRef<OpinionSnackbarComponent>,
   ) {}
 }

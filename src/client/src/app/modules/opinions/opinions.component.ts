@@ -13,7 +13,7 @@ import {
   TogglePrefetchInProgress,
 } from '~app/modules/opinions/store/opinions.actions';
 import {OpinionsSelectors} from '~app/modules/opinions/store/opinions.selectors';
-import {OpinionFailSnackbarComponent} from '~app/modules/opinions/components/opinion-fail-snackbar/opinion-fail-snackbar.component';
+import {OpinionSnackbarComponent} from '~app/modules/opinions/components/opinion-snackbar/opinion-snackbar.component';
 import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {CarouselOpinion} from '~app/typings/opinion/opinion.types';
 import {untilDestroyed} from '~app/utilities/operator';
@@ -145,7 +145,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private addOpinionToFavoritesCompleted(completion: ActionCompletion<AddOpinionToFavorites>): void {
     if (completion.result.error) {
-      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+      this.snackbar.openFromComponent(OpinionSnackbarComponent, {
         data: `Something went wrong adding <span class="fw-medium">${completion.action.payload.username}</span>'s opinion to Favorites`,
         panelClass: 'snackbar-error',
       });
@@ -153,7 +153,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Assume success
-    this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+    this.snackbar.openFromComponent(OpinionSnackbarComponent, {
       data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully added to Favorites`,
       panelClass: 'snackbar-success',
     });
@@ -161,7 +161,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private removeOpinionFromFavoritesCompleted(completion: ActionCompletion<RemoveOpinionFromFavorites>): void {
     if (completion.result.error) {
-      this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+      this.snackbar.openFromComponent(OpinionSnackbarComponent, {
         data: `Something went wrong removing <span class="fw-medium">${completion.action.payload.username}</span>'s opinion from Favorites`,
         panelClass: 'snackbar-error',
       });
@@ -169,7 +169,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Assume success
-    this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+    this.snackbar.openFromComponent(OpinionSnackbarComponent, {
       data: `<span class="fw-medium">${completion.action.payload.username}</span>'s opinion was successfully removed from Favorites`,
       panelClass: 'snackbar-success',
     });
@@ -181,7 +181,7 @@ export class OpinionsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (completion.action.payload.reaction === OpinionReaction.Skip) return; // Do not report error if reaction is Skip as user does not count it as a reaction
 
     // Handle error for regular reactions and reactions with comment
-    this.snackbar.openFromComponent(OpinionFailSnackbarComponent, {
+    this.snackbar.openFromComponent(OpinionSnackbarComponent, {
       data: `Something went wrong reacting to <span class="fw-medium">${
         completion.action.payload.username
       }</span>'s opinion ${completion.action.payload.comment ? 'with comment' : ''}`,
