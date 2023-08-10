@@ -10,7 +10,7 @@ import {MatLegacyDialogModule, MatLegacyDialogRef as MatDialogRef} from '@angula
 import {UserOpinion} from '~app/typings/user-opinion/user-opinion.interfaces';
 import {Store} from '@ngxs/store';
 import {PrependUserOpinion} from '~app/modules/user/store/user.actions';
-import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
+import {OpinionAddedSnackbarComponent} from '~app/shared/components/opinion-added-snackbar/opinion-added-snackbar.component';
 import {InputComponent} from '~app/shared/components/input/input.component';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {TextareaComponent} from '~app/shared/components/textarea/textarea.component';
@@ -165,7 +165,7 @@ export class AddOpinionDialogComponent implements OnDestroy {
   }
 
   private opinionAdded(opinion: UserOpinion): void {
-    this.snackbar.openFromComponent(OpinionSuccessSnackbarComponent, {
+    this.snackbar.openFromComponent(OpinionAddedSnackbarComponent, {
       data: opinion.id,
       panelClass: 'snackbar-success',
     });

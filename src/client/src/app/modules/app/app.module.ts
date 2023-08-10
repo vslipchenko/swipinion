@@ -18,7 +18,7 @@ import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/le
 import {AppService} from '~app/services/app/app.service';
 import {HeaderComponent} from '~app/shared/components/header/header.component';
 import {AddOpinionDialogComponent} from '~app/shared/components/add-opinion-dialog/add-opinion-dialog.component';
-import {OpinionSuccessSnackbarComponent} from '~app/shared/components/opinion-success-snackbar/opinion-success-snackbar.component';
+import {OpinionAddedSnackbarComponent} from '~app/shared/components/opinion-added-snackbar/opinion-added-snackbar.component';
 import {EmailConfirmationDialogComponent} from '~app/shared/components/email-confirmation-dialog/email-confirmation-dialog.component';
 import {RecoveryDialogComponent} from '~app/shared/components/recovery-dialog/recovery-dialog.component';
 import {SignInDialogComponent} from '~app/shared/components/sign-in-dialog/sign-in-dialog.component';
@@ -55,7 +55,7 @@ import {MessagesPanelComponent} from '~app/shared/components/messages-panel/mess
     MatSnackBarModule,
     HeaderComponent,
     AddOpinionDialogComponent,
-    OpinionSuccessSnackbarComponent,
+    OpinionAddedSnackbarComponent,
     EmailConfirmationDialogComponent,
     RecoveryDialogComponent,
     SignInDialogComponent,

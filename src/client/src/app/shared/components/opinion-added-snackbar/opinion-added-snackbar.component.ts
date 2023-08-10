@@ -10,17 +10,17 @@ import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-opinion-snackbar',
-  templateUrl: './opinion-success-snackbar.component.html',
-  styleUrls: ['./opinion-success-snackbar.component.scss'],
+  templateUrl: './opinion-added-snackbar.component.html',
+  styleUrls: ['./opinion-added-snackbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [ButtonComponent, RouterLink],
 })
-export class OpinionSuccessSnackbarComponent {
+export class OpinionAddedSnackbarComponent {
   public constructor(
     @Inject(MAT_SNACK_BAR_DATA) protected readonly data: string,
     private readonly store: Store,
-    protected readonly snackbar: MatSnackBarRef<OpinionSuccessSnackbarComponent>,
+    protected readonly snackbar: MatSnackBarRef<OpinionAddedSnackbarComponent>,
   ) {}
 
   protected get username(): string {
