@@ -1,100 +1,187 @@
---- 
-Main
----
+# Swipinion
 
-Card actions:
-Skip - X - Long press ??
-Like - Swipe to the right
-Dislike - Swipe to the left
-Like & comment - Swipe to the top
-Dislike & comment - Swipe to the bottom
+**Swipinion** is a social app for opinions you swipe through. Users post short opinions (text, an image, or both, with hashtags), and everyone else reacts by swiping cards: **agree**, **disagree** or **skip**, with an optional comment. Around that sit profiles, followers, favorites, direct messages, notifications and fine-grained privacy settings.
 
-Implement:
-Add 'subscribe to @<username>' (not just text placeholder) functionality for users opinions/reactions/favorites if view
-is restricted to followers only'
-TOPinions (recent opinions with most attention)
-Trends (shows agreed/disagreed statistic for the specific opinion tag)
-Fellow thinkers (show people with similar reactions to some opinions)
-??? Possibility to leave Audio or Video reactions ???
+> ⚠️ **Status:** work in progress.
 
 ---
-Indications
----
-User opinions:
-Owner:
-(1) For the owner nothing should be highlighted as you can't react to own opinions
-Visitor:
-(2) If viewer has reacted to any of opinions, corresponding reaction should be highlighted
 
-User reactions:
-Owner:
-(3) For the owner there will be indication of reaction similar to (2)
-Visitor:
-(4) If owner's has reaction, it will appear at the top/bottom of opinions with text like '@<username> agreed with' with
-some visual indication as well
-(5) If viewer has reacted to any of opinions, corresponding reaction should be highlighted (similar to (2))
+## Features
 
-User favorites:
-Owner:
-(6) For the owner there will be indication of reaction similar to (2)
-Visitor:
-(6) For the visitor there will be indication of reaction similar to (2)
+### Opinions feed
+- Opinion cards are shown one at a time in a carousel and loaded in batches of 20, with the next batch fetched before you run out.
+- **Swipe gestures** on touch devices: swipe a card left or right to react, with drag animations that follow your finger. Buttons do the same on desktop: 👍 agree, ✕ skip, 👎 disagree.
+- You can attach a comment to a reaction.
+- Every opinion has its own shareable page at `/opinion/:id`.
+- Opinion types: **text**, **image**, or **text + image**, with **hashtags**.
+- Each opinion shows agree and disagree statistics.
 
----
-Privacy
----
-User opinions:
-Owner:
-Has no restriction
-Visitor:
-Should take into account owner's view_opinions privacy setting.
-Visitor should see corresponding banner which provokes action. E.g. if owner
-restricted view_opinions to followers, banner should show corresponding text
-and subscribe button (behavior can be different for when owner has to accept follow request first)
+### Users and social
+- Public profiles at `/user/:username` with tabs for **Opinions**, **Reactions** and **Favorites**, plus a thumbnail and bio.
+- **Follow** and **unfollow** other users. Accounts can require follow approval, with accept and decline for requests.
+- **Favorites:** save opinions to come back to later.
+- **User search** by username.
 
-User reactions:
-Owner:
--Should take into account opinion's owner view_opinions privacy setting
-Visitor:
--Should take into account owner's view_reactions privacy setting first
--Should take into account opinion's owner view_opinions privacy setting
+### Messaging and notifications
+- **Direct messages** between users, with conversation threads and read status.
+- **Saved messages:** a personal notes-to-self thread.
+- **Notifications** for new followers and follow requests.
+- New messages and notifications are picked up by polling every 10 seconds.
 
-User favorites:
-Owner:
--Should take into account opinion's owner view_opinions privacy setting (ignore if opinion belongs to owner)
-Visitor:
--Should take into account owner's view_favorites privacy setting first
--Should take into account opinion's owner view_opinions privacy setting
+### Privacy settings
+Each user decides who can message them, follow them, and see their followers, following, opinions, reactions and favorites. The choices are **Everyone**, **Followers only** or **No one**. Follows can also be set to **Everyone** or **By approval**.
 
----
-Navigating to Opinion Page in different scenarios
----
-Clicking open/copying opinion link from User Opinions tab should:
-Open opinion page that acts as general opinions page (/) but will load new cards from user opinions pool
-Link will be different too. Possible link formats (they should be consistent):
-/opinion/:opinionId/:scope where scope in this case may be equal to 'user'
-OR
-/opinion/:opinionId?scope=user
+### Accounts
+- Sign up with email confirmation by code, sign in, password recovery and reset, and password change.
+- JWT access tokens (short-lived) and refresh tokens (long-lived). Each user has a per-user `access_key`, so their tokens can be revoked.
+- Images are uploaded through [imgbb](https://imgbb.com/).
 
-Clicking open/copying opinion link from User Reactions tab should:
-Open opinion page that acts as general opinions page (/) but will load new cards from user reactions pool
-Link will be different too. Possible link formats (they should be consistent):
-/opinion/:opinionId/:scope where scope in this case may be equal to 'reactions'
-OR
-/opinion/:opinionId?scope=reactions
+## Tech stack
 
-Clicking open/copying opinion link from User Favorites tab should:
-Open opinion page that acts as general opinions page (/) but will load new cards from user favorites pool
-Link will be different too. Possible link formats (they should be consistent):
-/opinion/:opinionId/:scope where scope in this case may be equal to 'favorites'
-OR
-/opinion/:opinionId?scope=favorites
+| Layer | Technologies |
+|---|---|
+| **Client** (`src/client`) | Angular 16, Angular Material, Apollo Angular (GraphQL), NGXS (state), RxJS, SCSS |
+| **Server** (`src/server`) | Node.js, TypeScript 5, Fastify, Apollo Server 3 (GraphQL), PostgreSQL (`pg`), Joi, bcrypt, jsonwebtoken, Nodemailer |
+| **Tooling** | ESLint, Prettier, Stylelint, Karma + Jasmine, Postman collection and environment |
 
-Copying opinion link from general opinions page should:
-Open opinion page that acts as general opinions page (/) but will load new cards from all opinions pool
-Possible link formats (they should be consistent):
-/opinion/:opinionId
+## Project structure
 
+```
+swipinion/
+├── postman/
+│   ├── Swipinion.postman_collection.json
+│   └── Swipinion.postman_environment.json
+└── src/
+    ├── client/                            # Angular app
+    │   ├── proxy.conf.json                # Proxies /graphql → http://localhost:4000
+    │   └── src/app/
+    │       ├── modules/
+    │       │   ├── opinions/              # Feed: carousel, card, comment dialog
+    │       │   ├── user/                  # Profile page and its tabs
+    │       │   ├── user-messages/         # Direct & saved messages
+    │       │   ├── user-notifications/
+    │       │   ├── user-settings/         # Privacy & account settings
+    │       │   └── page-not-found/
+    │       ├── shared/
+    │       │   ├── components/            # Dialogs, inputs, messaging UI, opinion preview, ...
+    │       │   └── directives/swipe/      # Touch swipe gesture handling
+    │       ├── graphql/                   # Queries & mutations per domain
+    │       ├── services/                  # Domain services (auth, opinion, reaction, follower, ...)
+    │       ├── guards/ resolvers/ interceptors/
+    │       └── typings/ constants/ utilities/
+    └── server/                            # GraphQL API
+        └── src/
+            ├── index.ts                   # Fastify + Apollo bootstrap
+            ├── environments/              # development / production config
+            ├── graphql/schemas/           # One folder per domain
+            ├── data/
+            │   ├── tables/                # CREATE TABLE definitions
+            │   └── queries/               # SQL query builders
+            ├── validators/                # Joi schemas
+            ├── scripts/create-tables.ts   # DB bootstrap script
+            └── constants/ typings/ utilities/
+```
 
+### Database tables
 
+`users`, `user_settings`, `user_opinions`, `tags`, `user_opinion_reactions`, `user_favorite_opinions`, `user_followers`, `user_messages`, `user_saved_messages`, `user_notifications`
 
+## Getting started
+
+### Prerequisites
+
+- **Node.js** 18+ and npm
+- **PostgreSQL**
+- An SMTP account for confirmation and recovery emails. The dev config uses [Ethereal](https://ethereal.email/), a fake SMTP service that's handy for testing.
+
+### 1. Server
+
+```bash
+cd src/server
+npm install
+```
+
+Set your values in `src/server/src/environments/development.ts`:
+
+| Key | Description |
+|---|---|
+| `APP_ORIGIN` | Client URL (default `http://localhost:4200`) |
+| `PORT` | API port (default `4000`) |
+| `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`, `DB_HOSTNAME`, `DB_PORT` | PostgreSQL connection |
+| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD` | SMTP transport |
+| `ACCESS_TOKEN_SECRET`, `REFRESH_TOKEN_SECRET`, `RECOVERY_SECRET` | JWT signing secrets |
+| `ACCESS_TOKEN_EXPIRES_IN`, `REFRESH_TOKEN_EXPIRES_IN`, `RECOVERY_KEY_EXPIRES_IN` | Token lifetimes |
+
+Create the database and its tables, then start the API:
+
+```bash
+createdb swipinion
+npm run create-tables
+npm run dev
+# 🚀 Server ready at http://localhost:4000/graphql
+```
+
+The development config loads when the server runs under `ts-node-dev`. Otherwise the server loads `production.ts`.
+
+### 2. Client
+
+Put your imgbb API key in `src/client/src/app/constants/imgbb.ts`, then:
+
+```bash
+cd src/client
+npm install
+npm run debug     # ng serve with /graphql proxied to the API
+```
+
+Open <http://localhost:4200>.
+
+## Scripts
+
+**Client** (`src/client`)
+
+| Command | Description |
+|---|---|
+| `npm start` | Dev server |
+| `npm run debug` | Dev server with the API proxy |
+| `npm run build` | Production build |
+| `npm test` | Unit tests (Karma + Jasmine) |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier + ESLint + Stylelint autofix |
+
+**Server** (`src/server`)
+
+| Command | Description |
+|---|---|
+| `npm run create-tables` | Create all database tables |
+| `npm run dev` | Run with hot reload (`ts-node-dev`) |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run format` | Prettier + ESLint autofix |
+
+## API
+
+The API is a single GraphQL endpoint at `/graphql`. Authenticated operations expect the header `Authorization: Bearer <accessToken>`.
+
+| Area | Operations |
+|---|---|
+| Auth & account | `signIn`, `refreshAccessToken`, `createUser`, `confirmEmail`, `recoverPassword`, `resetPassword`, `setNewPassword`, `changePassword`, `userWithEmailExists`, `userWithUsernameExists`, `userWithRecoveryCodeExists`, `userEssentials` |
+| Opinions | `getGeneralOpinions`, `getOpinionsByUserId`, `createOpinion`, `deleteOpinion`, `reactToOpinion` |
+| Favorites | `getFavoritesByUserId`, `addOpinionToFavorites`, `removeOpinionFromFavorites` |
+| Profile & search | `userProfile`, `editProfile`, `userSearch` |
+| Followers | `followUser`, `unfollowUser`, `acceptFollowRequest`, `declineFollowRequest` |
+| Messages | `sendUserMessage`, `fetchUserMessages`, `fetchNewUserMessages`, `fetchUserConversation`, `checkConversationMessageStatus`, `sendUserSavedMessage`, `fetchUserSavedMessages` |
+| Notifications | `userNotifications`, `deleteUserNotification`, `checkUserStatus` |
+| Settings | `userSettings`, `updateUserSettings` |
+| App | `getServerTimestamp` |
+
+To try the API, import the collection and environment from `postman/` into Postman.
+
+## Roadmap
+
+- [ ] Vertical swipes: swipe up to agree with a comment, swipe down to disagree with a comment
+- [ ] "Follow @username" call-to-action when a profile tab is restricted to followers
+- [ ] **TOPinions:** recent opinions getting the most attention
+- [ ] **Trends:** agree/disagree statistics per tag
+- [ ] **Fellow thinkers:** people who react the way you do
+- [ ] Scoped opinion links (`/opinion/:id?scope=user|reactions|favorites`) that keep browsing within that pool
+- [ ] Audio and video reactions
+- [ ] Move configuration and secrets to environment variables
